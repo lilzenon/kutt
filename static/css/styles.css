@@ -994,15 +994,21 @@ table .tab a:not(.active):hover {
     background-color: #28a745;
 }
 
+.qr-button.primary.fallback {
+    background-color: #ffc107;
+    color: #212529;
+}
+
 .qr-button.secondary {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    border: 1px solid #dee2e6;
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
 }
 
 .qr-button.secondary:hover {
-    background-color: #e9ecef;
-    color: #495057;
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
 }
 
 

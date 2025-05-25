@@ -158,36 +158,116 @@ function handleQRCode(element, id) {
     buttonsContainer.appendChild(exitButton);
 }
 
-// Copy QR code image to clipboard
+// Copy QR code image to clipboard with enhanced Safari support
 function copyQRCodeToClipboard(qrContainer) {
     const canvas = qrContainer.querySelector("canvas");
     if (!canvas) return;
 
-    canvas.toBlob(function(blob) {
-        if (navigator.clipboard && window.ClipboardItem) {
-            const item = new ClipboardItem({ "image/png": blob });
-            navigator.clipboard.write([item]).then(function() {
-                // Show success feedback
-                const copyButton = document.querySelector(".qr-button.primary");
-                if (copyButton) {
-                    const originalText = copyButton.innerHTML;
-                    copyButton.innerHTML = '<span class="button-icon">✓</span> Copied!';
-                    copyButton.classList.add("copied");
-                    setTimeout(function() {
-                        copyButton.innerHTML = originalText;
-                        copyButton.classList.remove("copied");
-                    }, 2000);
-                }
-            }).catch(function(err) {
-                console.error("Failed to copy QR code: ", err);
-                // Fallback: show error message
-                alert("Failed to copy QR code. Please try again.");
-            });
-        } else {
-            // Fallback for browsers that don't support clipboard API
-            alert("QR code copy not supported in this browser. Please screenshot the QR code.");
+    // Check if we're in a secure context (required for clipboard API)
+    if (!window.isSecureContext) {
+        showCopyFallback();
+        return;
+    }
+
+    // Enhanced clipboard support for Safari and other browsers
+    if (navigator.clipboard && window.ClipboardItem) {
+        canvas.toBlob(function(blob) {
+            try {
+                // Safari requires specific MIME type handling
+                const clipboardItem = new ClipboardItem({
+                    'image/png': blob
+                });
+
+                navigator.clipboard.write([clipboardItem]).then(function() {
+                    showCopySuccess();
+                }).catch(function(err) {
+                    console.error("Clipboard write failed: ", err);
+                    // Try alternative method for Safari
+                    tryAlternativeCopy(canvas);
+                });
+            } catch (err) {
+                console.error("ClipboardItem creation failed: ", err);
+                tryAlternativeCopy(canvas);
+            }
+        }, "image/png");
+    } else {
+        // Fallback for browsers without clipboard API
+        tryAlternativeCopy(canvas);
+    }
+}
+
+// Alternative copy method for Safari and older browsers
+function tryAlternativeCopy(canvas) {
+    try {
+        // Convert canvas to data URL
+        const dataURL = canvas.toDataURL("image/png");
+
+        // Create a temporary image element
+        const img = document.createElement("img");
+        img.src = dataURL;
+        img.style.position = "fixed";
+        img.style.left = "-9999px";
+        img.style.top = "-9999px";
+        document.body.appendChild(img);
+
+        // Try to select and copy the image
+        const range = document.createRange();
+        range.selectNode(img);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showCopySuccess();
+            } else {
+                showCopyFallback();
+            }
+        } catch (err) {
+            console.error("execCommand copy failed: ", err);
+            showCopyFallback();
         }
-    }, "image/png");
+
+        // Clean up
+        document.body.removeChild(img);
+        selection.removeAllRanges();
+
+    } catch (err) {
+        console.error("Alternative copy method failed: ", err);
+        showCopyFallback();
+    }
+}
+
+// Show copy success feedback
+function showCopySuccess() {
+    const copyButton = document.querySelector(".qr-button.primary");
+    if (copyButton) {
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = '<span class="button-icon">✓</span> Copied!';
+        copyButton.classList.add("copied");
+        setTimeout(function() {
+            copyButton.innerHTML = originalText;
+            copyButton.classList.remove("copied");
+        }, 2000);
+    }
+}
+
+// Show copy fallback message
+function showCopyFallback() {
+    const copyButton = document.querySelector(".qr-button.primary");
+    if (copyButton) {
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = '<span class="button-icon">📱</span> Long press to save';
+        copyButton.classList.add("fallback");
+        setTimeout(function() {
+            copyButton.innerHTML = originalText;
+            copyButton.classList.remove("fallback");
+        }, 3000);
+    }
+
+    // Show helpful message
+    alert("To save the QR code:\n• Desktop: Right-click and 'Save image'\n• Mobile: Long press and 'Save to Photos'");
 }
 
 // copy the link to clipboard
