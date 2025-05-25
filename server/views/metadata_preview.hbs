@@ -4,18 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Cache control for social media crawlers -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <!-- Standard meta tags -->
+  <!-- PRIORITY: Primary meta tags (must come first) -->
   <title>{{meta_title}}</title>
   <meta name="title" content="{{meta_title}}">
   <meta name="description" content="{{meta_description}}">
-  <meta name="keywords" content="{{meta_title}}, link, share">
 
-  <!-- Open Graph meta tags for Facebook, LinkedIn, etc. -->
+  <!-- PRIORITY: Open Graph meta tags (Facebook, LinkedIn, etc.) -->
   <meta property="og:title" content="{{meta_title}}">
   <meta property="og:description" content="{{meta_description}}">
   <meta property="og:image" content="{{meta_image}}">
@@ -29,7 +23,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:locale" content="en_US">
 
-  <!-- Twitter Card meta tags -->
+  <!-- PRIORITY: Twitter Card meta tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{meta_title}}">
   <meta name="twitter:description" content="{{meta_description}}">
@@ -38,12 +32,16 @@
   <meta name="twitter:url" content="{{meta_url}}">
   <meta name="twitter:domain" content="{{domain}}">
 
+  <!-- Cache control for social media crawlers -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="keywords" content="{{meta_title}}, link, share">
+
   <!-- LinkedIn specific -->
-  <meta property="og:image:type" content="image/jpeg">
   <meta name="linkedin:owner" content="{{meta_title}}">
 
   <!-- WhatsApp and Telegram specific -->
-  <meta property="og:image:alt" content="{{meta_title}}">
   <meta name="telegram:channel" content="{{meta_title}}">
 
   <!-- iOS and iMessage specific meta tags -->

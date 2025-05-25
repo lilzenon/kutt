@@ -617,6 +617,9 @@ async function redirect(req, res, next) {
             res.setHeader('Expires', '0');
             res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet');
 
+            // CRITICAL: Disable layout to prevent conflicting meta tags
+            res.locals.layout = null;
+
             // Prepare metadata with robust fallbacks and sanitization
             const metaTitle = (link.meta_title || link.description || `Shared Link`).trim();
             const metaDescription = (link.meta_description || link.description || `Check out this link: ${link.target}`).trim();
