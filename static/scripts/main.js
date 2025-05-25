@@ -136,6 +136,16 @@ function handleQRCode(element, id) {
         correctLevel: QRCode.CorrectLevel.H
     });
 
+    // Make QR code right-clickable for easy saving
+    setTimeout(function() {
+        const canvas = qrContainer.querySelector("canvas");
+        if (canvas) {
+            canvas.style.cursor = "pointer";
+            canvas.title = "Right-click to save QR code";
+            canvas.setAttribute("download", "qr-code.png");
+        }
+    }, 100);
+
     // Create buttons container
     const buttonsContainer = document.createElement("div");
     buttonsContainer.className = "qr-buttons";

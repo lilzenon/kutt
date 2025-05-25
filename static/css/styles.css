@@ -954,6 +954,15 @@ table .tab a:not(.active):hover {
     margin-bottom: 1.5rem;
 }
 
+.qr-container canvas {
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.qr-container canvas:hover {
+    transform: scale(1.02);
+}
+
 
 /* QR code buttons container */
 
