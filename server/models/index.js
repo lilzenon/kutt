@@ -5,6 +5,6 @@ module.exports = {
     ...require("./link.model"),
     ...require("./user.model"),
     ...require("./visit.model"),
-    Drop: require("./drop.model"),
-    DropSignup: require("./drop_signup.model"),
+    ...require("./drop.model"),
+    ...require("./drop_signup.model"),
 }

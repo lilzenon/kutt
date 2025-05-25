@@ -1,113 +1,65 @@
-const { Model } = require("objection");
+async function createDropTable(knex) {
+    const hasTable = await knex.schema.hasTable("drops");
+    if (!hasTable) {
+        await knex.schema.createTable("drops", table => {
+            table.increments("id").primary();
+            table.string("title", 255).notNullable();
+            table.text("description");
+            table.string("slug", 100).notNullable().unique();
+            table.string("cover_image", 2040);
+            table.string("background_color", 7).defaultTo("#ffffff");
+            table.string("text_color", 7).defaultTo("#000000");
+            table.string("button_color", 7).defaultTo("#007bff");
+            table.string("button_text", 50).defaultTo("Get Notified");
+            table.text("custom_css");
+            table.boolean("is_active").defaultTo(true);
+            table.boolean("collect_email").defaultTo(true);
+            table.boolean("collect_phone").defaultTo(false);
+            table.datetime("launch_date");
+            table.string("redirect_url", 2040);
+            table.text("thank_you_message");
+            table
+                .integer("user_id")
+                .unsigned()
+                .notNullable()
+                .references("id")
+                .inTable("users")
+                .onDelete("CASCADE");
+            table.timestamps(false, true);
 
-class Drop extends Model {
-    static get tableName() {
-        return "drops";
-    }
-
-    static get jsonSchema() {
-        return {
-            type: "object",
-            required: ["title", "slug", "user_id"],
-            properties: {
-                id: { type: "integer" },
-                title: { type: "string", minLength: 1, maxLength: 255 },
-                description: { type: ["string", "null"] },
-                slug: { type: "string", minLength: 1, maxLength: 100 },
-                cover_image: { type: ["string", "null"], maxLength: 2040 },
-                background_color: { type: "string", pattern: "^#[0-9A-Fa-f]{6}$" },
-                text_color: { type: "string", pattern: "^#[0-9A-Fa-f]{6}$" },
-                button_color: { type: "string", pattern: "^#[0-9A-Fa-f]{6}$" },
-                button_text: { type: "string", maxLength: 50 },
-                custom_css: { type: ["string", "null"] },
-                is_active: { type: "boolean" },
-                collect_email: { type: "boolean" },
-                collect_phone: { type: "boolean" },
-                launch_date: { type: ["string", "null"] },
-                redirect_url: { type: ["string", "null"], maxLength: 2040 },
-                thank_you_message: { type: ["string", "null"] },
-                user_id: { type: "integer" },
-                created_at: { type: "string" },
-                updated_at: { type: "string" }
-            }
-        };
-    }
-
-    static get relationMappings() {
-        const User = require("./user.model");
-        const DropSignup = require("./drop_signup.model");
-
-        return {
-            user: {
-                relation: Model.BelongsToOneRelation,
-                modelClass: User,
-                join: {
-                    from: "drops.user_id",
-                    to: "users.id"
-                }
-            },
-            signups: {
-                relation: Model.HasManyRelation,
-                modelClass: DropSignup,
-                join: {
-                    from: "drops.id",
-                    to: "drop_signups.drop_id"
-                }
-            }
-        };
-    }
-
-    $beforeInsert() {
-        this.created_at = new Date().toISOString();
-        this.updated_at = new Date().toISOString();
-    }
-
-    $beforeUpdate() {
-        this.updated_at = new Date().toISOString();
-    }
-
-    // Generate a unique slug from title
-    static generateSlug(title, existingSlugs = []) {
-        let slug = title
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .trim('-');
-
-        if (slug.length > 100) {
-            slug = slug.substring(0, 100).replace(/-[^-]*$/, '');
-        }
-
-        let finalSlug = slug;
-        let counter = 1;
-        
-        while (existingSlugs.includes(finalSlug)) {
-            finalSlug = `${slug}-${counter}`;
-            counter++;
-        }
-
-        return finalSlug;
-    }
-
-    // Get signup count
-    async getSignupCount() {
-        const DropSignup = require("./drop_signup.model");
-        const result = await DropSignup.query()
-            .where('drop_id', this.id)
-            .count('id as count')
-            .first();
-        return parseInt(result.count) || 0;
-    }
-
-    // Get recent signups
-    async getRecentSignups(limit = 10) {
-        const DropSignup = require("./drop_signup.model");
-        return await DropSignup.query()
-            .where('drop_id', this.id)
-            .orderBy('created_at', 'desc')
-            .limit(limit);
+            // Indexes for performance
+            table.index(["user_id"]);
+            table.index(["slug"]);
+            table.index(["is_active"]);
+        });
     }
 }
 
-module.exports = Drop;
+// Generate a unique slug from title
+function generateSlug(title, existingSlugs = []) {
+    let slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim('-');
+
+    if (slug.length > 100) {
+        slug = slug.substring(0, 100).replace(/-[^-]*$/, '');
+    }
+
+    let finalSlug = slug;
+    let counter = 1;
+
+    while (existingSlugs.includes(finalSlug)) {
+        finalSlug = `${slug}-${counter}`;
+        counter++;
+    }
+
+    return finalSlug;
+}
+
+module.exports = {
+    createDropTable,
+    generateSlug
+};
