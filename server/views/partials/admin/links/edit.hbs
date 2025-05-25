@@ -77,14 +77,13 @@
         </label>
       </div>
       <div>
-        <label class="{{#if errors.show_preview}}error{{/if}}">
+        <label class="show-preview {{#if errors.show_preview}}error{{/if}}">
           <input
             id="edit-show_preview-{{id}}"
             name="show_preview"
             type="checkbox"
             value="true"
             {{#if show_preview}}checked{{/if}}
-            hx-preserve="true"
           />
           Show preview page before redirecting
           {{#if errors.show_preview}}<p class="error">{{errors.show_preview}}</p>{{/if}}

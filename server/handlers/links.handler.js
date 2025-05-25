@@ -175,11 +175,19 @@ async function edit(req, res) {
 
     let isChanged = false;
 
-    // Handle checkbox fields specially - unchecked checkboxes don't send values
+    // Handle checkbox fields specially - unchecked checkboxes send 'false' or no value
     const checkboxFields = ['show_preview'];
     checkboxFields.forEach(field => {
-        const currentValue = link[field] || false;
-        const newValue = req.body[field] === 'true';
+        const currentValue = Boolean(link[field]);
+        let newValue = false;
+
+        // Handle different checkbox value formats
+        if (req.body[field] === 'true' || req.body[field] === true) {
+            newValue = true;
+        } else if (req.body[field] === 'false' || req.body[field] === false || req.body[field] === undefined) {
+            newValue = false;
+        }
+
         if (currentValue !== newValue) {
             req.body[field] = newValue;
             isChanged = true;
@@ -286,11 +294,19 @@ async function editAdmin(req, res) {
 
     let isChanged = false;
 
-    // Handle checkbox fields specially - unchecked checkboxes don't send values
+    // Handle checkbox fields specially - unchecked checkboxes send 'false' or no value
     const checkboxFields = ['show_preview'];
     checkboxFields.forEach(field => {
-        const currentValue = link[field] || false;
-        const newValue = req.body[field] === 'true';
+        const currentValue = Boolean(link[field]);
+        let newValue = false;
+
+        // Handle different checkbox value formats
+        if (req.body[field] === 'true' || req.body[field] === true) {
+            newValue = true;
+        } else if (req.body[field] === 'false' || req.body[field] === false || req.body[field] === undefined) {
+            newValue = false;
+        }
+
         if (currentValue !== newValue) {
             req.body[field] = newValue;
             isChanged = true;
