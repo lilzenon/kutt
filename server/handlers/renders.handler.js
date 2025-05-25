@@ -296,6 +296,32 @@ async function linkEditAdmin(req, res) {
     });
 }
 
+async function dropEdit(req, res) {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    try {
+        const drop = await query.drop.findOne({ id, user_id: userId });
+
+        if (!drop) {
+            return res.status(404).render("404", {
+                message: "Drop not found"
+            });
+        }
+
+        res.render("drop_edit", {
+            title: `Edit ${drop.title}`,
+            drop: drop,
+            domain: env.DEFAULT_DOMAIN
+        });
+    } catch (error) {
+        console.error("Error loading drop edit page:", error);
+        res.status(500).render("500", {
+            message: "Error loading drop"
+        });
+    }
+}
+
 module.exports = {
     addDomainAdmin,
     addDomainForm,
@@ -310,6 +336,7 @@ module.exports = {
     confirmUserDelete,
     createAdmin,
     createUser,
+    dropEdit,
     getSupportEmail,
     homepage,
     linkEdit,

@@ -217,4 +217,11 @@ router.get(
     asyncHandler(renders.getSupportEmail)
 );
 
+router.get(
+    "/drops/:id/edit",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    asyncHandler(renders.dropEdit)
+);
+
 module.exports = router;
