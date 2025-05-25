@@ -134,6 +134,17 @@
         </label>
       </div>
       <div class="advanced-input-wrapper">
+        <label class="show-preview {{#if errors.show_preview}}error{{/if}}">
+          <input
+            type="checkbox"
+            id="show_preview"
+            name="show_preview"
+            value="true"
+            hx-preserve="true"
+          />
+          Show preview page before redirecting
+          {{#if errors.show_preview}}<p class="error">{{errors.show_preview}}</p>{{/if}}
+        </label>
         <label class="meta-title {{#if errors.meta_title}}error{{/if}}">
           Meta Title:
           <input

@@ -24,6 +24,7 @@ const selectable = [
     "links.meta_title",
     "links.meta_description",
     "links.meta_image",
+    "links.show_preview",
     "domains.address as domain"
 ];
 
@@ -220,7 +221,8 @@ async function create(params) {
             target: params.target,
             meta_title: params.meta_title || null,
             meta_description: params.meta_description || null,
-            meta_image: params.meta_image || null
+            meta_image: params.meta_image || null,
+            show_preview: params.show_preview || false
         },
         "*"
     );

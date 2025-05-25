@@ -97,7 +97,7 @@ async function getAdmin(req, res) {
 };
 
 async function create(req, res) {
-    const { reuse, password, customurl, description, target, fetched_domain, expire_in, meta_title, meta_description, meta_image } = req.body;
+    const { reuse, password, customurl, description, target, fetched_domain, expire_in, meta_title, meta_description, meta_image, show_preview } = req.body;
     const domain_id = fetched_domain ? fetched_domain.id : null;
 
     const targetDomain = utils.removeWww(URL.parse(target).hostname);
@@ -143,6 +143,7 @@ async function create(req, res) {
         meta_title,
         meta_description,
         meta_image,
+        show_preview,
         user_id: req.user && req.user.id
     });
 
@@ -181,7 +182,8 @@ async function edit(req, res) {
         [req.body.password, "password"],
         [req.body.meta_title, "meta_title"],
         [req.body.meta_description, "meta_description"],
-        [req.body.meta_image, "meta_image"]
+        [req.body.meta_image, "meta_image"],
+        [req.body.show_preview, "show_preview"]
     ].forEach(([value, name]) => {
         if (!value) {
             if (name === "password" && link.password)
@@ -210,7 +212,7 @@ async function edit(req, res) {
         throw new CustomError("Should at least update one field.");
     }
 
-    const { address, target, description, expire_in, password, meta_title, meta_description, meta_image } = req.body;
+    const { address, target, description, expire_in, password, meta_title, meta_description, meta_image, show_preview } = req.body;
 
     const targetDomain = target && utils.removeWww(URL.parse(target).hostname);
     const domain_id = link.domain_id || null;
@@ -243,7 +245,8 @@ async function edit(req, res) {
         ...((password || password === null) && { password }),
         ...(meta_title !== undefined && { meta_title }),
         ...(meta_description !== undefined && { meta_description }),
-        ...(meta_image !== undefined && { meta_image })
+        ...(meta_image !== undefined && { meta_image }),
+        ...(show_preview !== undefined && { show_preview })
     });
 
     if (req.isHTML) {
@@ -277,7 +280,8 @@ async function editAdmin(req, res) {
         [req.body.password, "password"],
         [req.body.meta_title, "meta_title"],
         [req.body.meta_description, "meta_description"],
-        [req.body.meta_image, "meta_image"]
+        [req.body.meta_image, "meta_image"],
+        [req.body.show_preview, "show_preview"]
     ].forEach(([value, name]) => {
         if (!value) {
             if (name === "password" && link.password)
@@ -306,7 +310,7 @@ async function editAdmin(req, res) {
         throw new CustomError("Should at least update one field.");
     }
 
-    const { address, target, description, expire_in, password, meta_title, meta_description, meta_image } = req.body;
+    const { address, target, description, expire_in, password, meta_title, meta_description, meta_image, show_preview } = req.body;
 
     const targetDomain = target && utils.removeWww(URL.parse(target).hostname);
     const domain_id = link.domain_id || null;
@@ -339,7 +343,8 @@ async function editAdmin(req, res) {
         ...((password || password === null) && { password }),
         ...(meta_title !== undefined && { meta_title }),
         ...(meta_description !== undefined && { meta_description }),
-        ...(meta_image !== undefined && { meta_image })
+        ...(meta_image !== undefined && { meta_image }),
+        ...(show_preview !== undefined && { show_preview })
     });
 
     if (req.isHTML) {
@@ -538,12 +543,15 @@ async function redirect(req, res, next) {
 
     // 7. Check if this is a social media crawler/bot requesting metadata
     const userAgent = req.headers["user-agent"] || "";
-    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat/i.test(userAgent);
+    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper/i.test(userAgent);
 
-    // Always serve metadata preview if custom metadata exists, regardless of bot detection
-    // This ensures the metadata is available for social media platforms
-    if (link.meta_title || link.meta_description || link.meta_image) {
-        // Serve metadata preview page for social media crawlers
+    // Check if we should serve metadata preview
+    // Only show preview page if show_preview is enabled OR if it's a social media bot
+    const hasMetadata = link.meta_title || link.meta_description || link.meta_image;
+    const shouldShowPreview = link.show_preview || isSocialBot;
+
+    if (hasMetadata && shouldShowPreview) {
+        // Serve metadata preview page
         const domain = link.domain || env.DEFAULT_DOMAIN;
         const shortUrl = `https://${domain}/${link.address}`;
 
@@ -555,7 +563,25 @@ async function redirect(req, res, next) {
             meta_url: shortUrl,
             target: link.target,
             site_name: env.SITE_NAME || "Kutt",
-            redirect_delay: isSocialBot ? 0 : 3 // Immediate redirect for bots, 3 second delay for users
+            redirect_delay: isSocialBot ? 0 : (link.show_preview ? 3 : 0) // Immediate redirect for bots, 3 second delay for preview mode
+        });
+    }
+
+    // If we have metadata but preview is disabled, still serve metadata for social bots
+    // but redirect immediately for regular users
+    if (hasMetadata && isSocialBot && !link.show_preview) {
+        const domain = link.domain || env.DEFAULT_DOMAIN;
+        const shortUrl = `https://${domain}/${link.address}`;
+
+        return res.render("metadata_preview", {
+            title: link.meta_title || link.description || "Shortened Link",
+            meta_title: link.meta_title || link.description || "Shortened Link",
+            meta_description: link.meta_description || link.description || `Visit this link: ${link.target}`,
+            meta_image: link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`,
+            meta_url: shortUrl,
+            target: link.target,
+            site_name: env.SITE_NAME || "Kutt",
+            redirect_delay: 0 // Immediate redirect for bots when preview is disabled
         });
     }
 
