@@ -85,11 +85,11 @@
             value="true"
             {{#if show_preview}}checked{{/if}}
           />
-          Show preview page before redirecting
+          Redirect Page
           {{#if errors.show_preview}}<p class="error">{{errors.show_preview}}</p>{{/if}}
         </label>
-        <label class="{{#if errors.meta_title}}error{{/if}}">
-          Meta Title:
+        <label class="metadata-title {{#if errors.meta_title}}error{{/if}}">
+          Metadata Title:
           <input
             id="edit-meta_title-{{id}}"
             name="meta_title"
@@ -97,24 +97,26 @@
             placeholder="Custom title for social media..."
             value="{{meta_title}}"
             hx-preserve="true"
+            class="table-input"
           />
           {{#if errors.meta_title}}<p class="error">{{errors.meta_title}}</p>{{/if}}
         </label>
-        <label class="{{#if errors.meta_description}}error{{/if}}">
-          Meta Description:
+        <label class="metadata-description {{#if errors.meta_description}}error{{/if}}">
+          Metadata Description:
           <textarea
             id="edit-meta_description-{{id}}"
             name="meta_description"
             placeholder="Custom description for social media..."
             hx-preserve="true"
             rows="3"
+            class="table-input"
           >{{meta_description}}</textarea>
           {{#if errors.meta_description}}<p class="error">{{errors.meta_description}}</p>{{/if}}
         </label>
       </div>
       <div>
-        <label class="{{#if errors.meta_image}}error{{/if}}">
-          Meta Image URL:
+        <label class="metadata-image {{#if errors.meta_image}}error{{/if}}">
+          Metadata Image URL:
           <input
             id="edit-meta_image-{{id}}"
             name="meta_image"
@@ -122,6 +124,7 @@
             placeholder="https://example.com/image.jpg"
             value="{{meta_image}}"
             hx-preserve="true"
+            class="table-input"
           />
           {{#if errors.meta_image}}<p class="error">{{errors.meta_image}}</p>{{/if}}
         </label>

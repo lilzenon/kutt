@@ -656,7 +656,10 @@ label.show-preview input[type="checkbox"] {
 }
 
 
-/* Fix textarea styling for metadata fields */
+/* Enhanced metadata field styling for better responsive layout */
+
+
+/* Standard textarea styling */
 
 textarea {
     box-sizing: border-box;
@@ -681,13 +684,71 @@ textarea:focus {
     box-shadow: 0 20px 35px var(--input-hover-shadow-color);
 }
 
+
+/* Table input styling for edit forms */
+
 textarea.table-input {
-    width: auto;
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
     min-height: 60px;
     font-size: 13px;
     padding: 8px 1.5rem;
     border-radius: 3px;
     border-bottom-width: 2px;
+}
+
+
+/* Metadata field specific styling */
+
+input.table-input[name*="meta_"],
+textarea.table-input[name*="meta_"] {
+    width: 100%;
+    max-width: 350px;
+    min-width: 250px;
+}
+
+
+/* Responsive metadata field layout */
+
+@media (max-width: 768px) {
+    input.table-input[name*="meta_"],
+    textarea.table-input[name*="meta_"] {
+        max-width: 100%;
+        min-width: 200px;
+    }
+}
+
+
+/* Fix form layout for metadata fields */
+
+form div:has(label[class*="metadata"]) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+/* Ensure consistent spacing for metadata labels */
+
+label[class*="metadata"] {
+    margin-bottom: 0.75rem;
+}
+
+
+/* Fix overflow issues in table cells */
+
+table td.content form>div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    overflow: visible;
+}
+
+table td.content form>div>label {
+    width: 100%;
+    overflow: visible;
 }
 
 p.error,

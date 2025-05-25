@@ -142,11 +142,11 @@
             value="true"
             hx-preserve="true"
           />
-          Show preview page before redirecting
+          Redirect Page
           {{#if errors.show_preview}}<p class="error">{{errors.show_preview}}</p>{{/if}}
         </label>
-        <label class="meta-title {{#if errors.meta_title}}error{{/if}}">
-          Meta Title:
+        <label class="metadata-title {{#if errors.meta_title}}error{{/if}}">
+          Metadata Title:
           <input
             type="text"
             id="meta_title"
@@ -156,8 +156,8 @@
           />
           {{#if errors.meta_title}}<p class="error">{{errors.meta_title}}</p>{{/if}}
         </label>
-        <label class="meta-description {{#if errors.meta_description}}error{{/if}}">
-          Meta Description:
+        <label class="metadata-description {{#if errors.meta_description}}error{{/if}}">
+          Metadata Description:
           <textarea
             id="meta_description"
             name="meta_description"
@@ -169,8 +169,8 @@
         </label>
       </div>
       <div class="advanced-input-wrapper">
-        <label class="meta-image {{#if errors.meta_image}}error{{/if}}">
-          Meta Image URL:
+        <label class="metadata-image {{#if errors.meta_image}}error{{/if}}">
+          Metadata Image URL:
           <input
             type="url"
             id="meta_image"
