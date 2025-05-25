@@ -9,7 +9,7 @@
         </div>
       </div>
     {{/if}}
-    
+
     <div class="drop-status">
       {{#if is_active}}
         <span class="status-badge active">Active</span>
@@ -18,39 +18,39 @@
       {{/if}}
     </div>
   </div>
-  
+
   <div class="drop-card-content">
     <h3 class="drop-title">{{title}}</h3>
     {{#if description}}
       <p class="drop-description">{{description}}</p>
     {{/if}}
-    
+
     <div class="drop-stats">
       <div class="stat">
         <span class="stat-number">{{signup_count}}</span>
         <span class="stat-label">Signups</span>
       </div>
       <div class="stat">
-        <span class="stat-number">{{formatDate created_at "MMM D"}}</span>
+        <span class="stat-number">{{formatDate created_at "MMM d"}}</span>
         <span class="stat-label">Created</span>
       </div>
     </div>
-    
+
     <div class="drop-url">
       <span class="url-prefix">{{../domain}}/drop/</span>
       <span class="url-slug">{{slug}}</span>
     </div>
   </div>
-  
+
   <div class="drop-card-actions">
     <button type="button" class="button action edit" title="Edit Drop" onclick="editDrop('{{id}}')">
-      {{> icons/edit}}
+      {{> icons/pencil}}
     </button>
     <button type="button" class="button action qrcode" title="QR Code" onclick="showDropQR('{{id}}', '{{../domain}}/drop/{{slug}}')">
       {{> icons/qrcode}}
     </button>
     <button type="button" class="button action stats" title="View Stats" onclick="viewDropStats('{{id}}')">
-      {{> icons/stats}}
+      {{> icons/chart}}
     </button>
     <button type="button" class="button action delete" title="Delete Drop" onclick="deleteDrop('{{id}}', '{{title}}')">
       {{> icons/trash}}
