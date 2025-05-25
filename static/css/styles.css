@@ -1806,6 +1806,19 @@ table .short-link-wrapper {
     border-bottom-color: transparent;
 }
 
+
+/* Ensure consistent link text sizing across all screen sizes */
+
+#main-table-wrapper table td.original-url a,
+#main-table-wrapper table td.short-link a {
+    font-size: inherit;
+    line-height: 1.4;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    display: inline-block;
+    width: 100%;
+}
+
 #main-table-wrapper table .status {
     font-size: 11px;
     font-weight: bold;
@@ -2916,6 +2929,14 @@ svg.map path.active {
     table td {
         font-size: 14px;
     }
+    /* Ensure consistent link text sizing on mobile */
+    #main-table-wrapper table td.original-url a,
+    #main-table-wrapper table td.short-link a {
+        font-size: 14px !important;
+        line-height: 1.4;
+        word-break: break-all;
+        overflow-wrap: break-word;
+    }
     table tr.loading-placeholder td {
         font-size: 16px;
     }
@@ -3398,30 +3419,54 @@ svg.map path.active {
         padding-right: 0;
         margin-bottom: 0.5rem;
     }
-    /* Ensure metadata fields don't overflow */
-    input.table-input[name*="meta_"],
-    textarea.table-input[name*="meta_"] {
-        min-width: 150px;
-        max-width: 100%;
+    /* Ensure consistent link text sizing on extra small screens */
+    #main-table-wrapper table td.original-url a,
+    #main-table-wrapper table td.short-link a {
+        font-size: 13px !important;
+        line-height: 1.3;
+        word-break: break-all;
+        overflow-wrap: break-word;
     }
-    /* Table improvements for very small screens */
-    #main-table-wrapper {
-        padding: 0 0.5rem;
-        margin: 2rem 0 3rem;
-    }
-    #main-table-wrapper table th,
-    #main-table-wrapper table td {
-        padding: 0.75rem 0.5rem;
-    }
-    /* Ensure table doesn't cause horizontal scroll */
-    table {
-        min-width: 100%;
-        overflow-x: auto;
-    }
-    /* Better button spacing in table actions */
-    #main-table-wrapper table .actions a.button,
-    #main-table-wrapper table .actions button {
-        margin-right: 0.25rem;
-        margin-bottom: 0.25rem;
-    }
+}
+
+
+/* Ensure metadata fields don't overflow */
+
+input.table-input[name*="meta_"],
+textarea.table-input[name*="meta_"] {
+    min-width: 150px;
+    max-width: 100%;
+}
+
+
+/* Table improvements for very small screens */
+
+#main-table-wrapper {
+    padding: 0 0.5rem;
+    margin: 2rem 0 3rem;
+}
+
+#main-table-wrapper table th,
+#main-table-wrapper table td {
+    padding: 0.75rem 0.5rem;
+}
+
+
+/* Ensure table doesn't cause horizontal scroll */
+
+table {
+    min-width: 100%;
+    overflow-x: auto;
+}
+
+
+/* Better button spacing in table actions */
+
+#main-table-wrapper table .actions a.button,
+#main-table-wrapper table .actions button {
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+
 }
