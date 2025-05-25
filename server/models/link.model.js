@@ -54,15 +54,7 @@ async function createLinkTable(knex) {
         });
     }
 
-    // Add metadata columns for Open Graph tags
-    const hasMetaTitle = await knex.schema.hasColumn("links", "meta_title");
-    if (!hasMetaTitle) {
-        await knex.schema.alterTable("links", table => {
-            table.string("meta_title", 255);
-            table.text("meta_description");
-            table.string("meta_image", 2040);
-        });
-    }
+
 }
 
 module.exports = {
