@@ -1,0 +1,87 @@
+<section id="drops-section" class="drops-section">
+  <div class="section-header">
+    <div class="section-title">
+      <h2>Drops</h2>
+      <p class="section-description">Create landing pages to capture leads and build your audience</p>
+    </div>
+    <div class="section-actions">
+      <button type="button" class="button primary" id="create-drop-btn">
+        <span>{{> icons/plus}}</span>
+        Create Drop
+      </button>
+    </div>
+  </div>
+
+  <div id="drops-container" class="drops-container">
+    {{#if drops}}
+      <div class="drops-grid">
+        {{#each drops}}
+          {{> drops/card this}}
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="empty-state">
+        <div class="empty-icon">
+          {{> icons/drop}}
+        </div>
+        <h3>No drops yet</h3>
+        <p>Create your first drop to start capturing leads and building your audience</p>
+        <button type="button" class="button primary" id="create-first-drop-btn">
+          <span>{{> icons/plus}}</span>
+          Create Your First Drop
+        </button>
+      </div>
+    {{/if}}
+  </div>
+
+  <!-- Loading state -->
+  <div id="drops-loading" class="drops-loading" style="display: none;">
+    <div class="loading-spinner">
+      {{> icons/spinner}}
+    </div>
+    <p>Loading drops...</p>
+  </div>
+</section>
+
+<!-- Create Drop Modal -->
+<div id="create-drop-dialog" class="dialog" style="display: none;">
+  <div class="box">
+    <div class="content-wrapper">
+      <div class="content">
+        <h2>Create New Drop</h2>
+        <form id="create-drop-form">
+          <div class="form-group">
+            <label for="drop-title">Title *</label>
+            <input type="text" id="drop-title" name="title" required maxlength="255" placeholder="Enter drop title">
+          </div>
+          
+          <div class="form-group">
+            <label for="drop-description">Description</label>
+            <textarea id="drop-description" name="description" rows="3" placeholder="Describe what this drop is about"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="drop-slug">URL Slug</label>
+            <div class="slug-input-wrapper">
+              <span class="slug-prefix">{{domain}}/drop/</span>
+              <input type="text" id="drop-slug" name="slug" maxlength="100" placeholder="my-drop">
+            </div>
+            <small class="form-help">Leave empty to auto-generate from title</small>
+          </div>
+          
+          <div class="buttons">
+            <button type="button" onclick="closeDialog()">Cancel</button>
+            <button type="submit" class="primary">
+              <span>{{> icons/plus}}</span>
+              Create Drop
+            </button>
+          </div>
+        </form>
+        
+        <div id="create-drop-error" class="error" style="display: none;"></div>
+        
+        {{> icons/spinner}}
+      </div>
+    </div>
+  </div>
+</div>
