@@ -71,11 +71,20 @@ htmx.defineExtension("path-params", {
 
 // Create new drop
 function createDrop() {
+    console.log('createDrop function called');
+
+    const dialog = document.getElementById('create-drop-dialog');
+    console.log('Dialog element found:', dialog);
+
     openDialog('create-drop-dialog');
 
     // Reset form
     const form = document.getElementById('create-drop-form');
-    form.reset();
+    if (form) {
+        form.reset();
+    } else {
+        console.log('Form not found');
+    }
 
     // Auto-generate slug from title
     const titleInput = document.getElementById('drop-title');
@@ -107,10 +116,13 @@ function generateSlugFromTitle(title) {
 
 // Handle create drop form submission
 document.addEventListener('DOMContentLoaded', function() {
-    // Create drop button handlers
-    const createDropBtns = document.querySelectorAll('#create-drop-btn, #create-first-drop-btn');
-    createDropBtns.forEach(btn => {
-        btn.addEventListener('click', createDrop);
+    // Create drop button handlers - use event delegation for dynamic content
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('#create-drop-btn, #create-first-drop-btn') ||
+            e.target.closest('#create-drop-btn, #create-first-drop-btn')) {
+            e.preventDefault();
+            createDrop();
+        }
     });
 
     // Create drop form submission
