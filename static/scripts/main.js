@@ -143,7 +143,7 @@ function handleQRCode(element, id) {
 
     // Create Copy QR button
     const copyButton = document.createElement("button");
-    copyButton.innerHTML = "Copy QR";
+    copyButton.innerHTML = '<span class="button-icon">📋</span> Copy QR';
     copyButton.className = "qr-button primary";
     copyButton.onclick = function() {
         copyQRCodeToClipboard(qrContainer);
@@ -152,7 +152,7 @@ function handleQRCode(element, id) {
 
     // Create Exit button
     const exitButton = document.createElement("button");
-    exitButton.innerHTML = "Exit";
+    exitButton.innerHTML = '<span class="button-icon">✕</span> Exit';
     exitButton.className = "qr-button secondary";
     exitButton.onclick = closeDialog;
     buttonsContainer.appendChild(exitButton);
@@ -171,7 +171,7 @@ function copyQRCodeToClipboard(qrContainer) {
                 const copyButton = document.querySelector(".qr-button.primary");
                 if (copyButton) {
                     const originalText = copyButton.innerHTML;
-                    copyButton.innerHTML = "Copied!";
+                    copyButton.innerHTML = '<span class="button-icon">✓</span> Copied!';
                     copyButton.classList.add("copied");
                     setTimeout(function() {
                         copyButton.innerHTML = originalText;

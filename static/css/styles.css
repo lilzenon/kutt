@@ -1005,6 +1005,14 @@ table .tab a:not(.active):hover {
     color: #495057;
 }
 
+
+/* Button icon styling */
+
+.qr-button .button-icon {
+    margin-right: 0.5rem;
+    font-size: 16px;
+}
+
 .dialog .content-wrapper {
     display: flex;
     flex-direction: column;
