@@ -8,9 +8,12 @@ const health = require("./health.routes");
 const link = require("./link.routes");
 const user = require("./user.routes");
 const auth = require("./auth.routes");
+const drops = require("./drops.routes");
+const publicDrops = require("./public_drops.routes");
 
 const renderRouter = Router();
 renderRouter.use(renders);
+renderRouter.use("/drop", publicDrops);
 
 const apiRouter = Router();
 apiRouter.use(locals.noLayout);
@@ -19,8 +22,9 @@ apiRouter.use("/health", health);
 apiRouter.use("/links", link);
 apiRouter.use("/users", user);
 apiRouter.use("/auth", auth);
+apiRouter.use("/drops", drops);
 
 module.exports = {
-  api: apiRouter,
-  render: renderRouter,
+    api: apiRouter,
+    render: renderRouter,
 };

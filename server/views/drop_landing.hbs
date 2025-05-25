@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pageTitle}} | {{config.SITE_NAME}}</title>
+    
+    <!-- Meta tags for social sharing -->
+    <meta name="description" content="{{metaDescription}}">
+    <meta property="og:title" content="{{pageTitle}}">
+    <meta property="og:description" content="{{metaDescription}}">
+    {{#if metaImage}}
+    <meta property="og:image" content="{{metaImage}}">
+    {{/if}}
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{pageTitle}}">
+    <meta name="twitter:description" content="{{metaDescription}}">
+    {{#if metaImage}}
+    <meta name="twitter:image" content="{{metaImage}}">
+    {{/if}}
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <!-- Custom drop styles -->
+    {{#if drop.custom_css}}
+    <style>
+        {{{drop.custom_css}}}
+    </style>
+    {{/if}}
+</head>
+<body class="drop-landing-page">
+    <div class="drop-container" style="background-color: {{drop.background_color}}; color: {{drop.text_color}};">
+        <!-- Header -->
+        <header class="drop-header">
+            <div class="drop-brand">
+                <a href="/" class="brand-link">
+                    <img src="/images/logo.png" alt="{{config.SITE_NAME}}" class="brand-logo">
+                    <span class="brand-text">{{config.SITE_NAME}}</span>
+                </a>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="drop-main">
+            <div class="drop-content">
+                {{#if drop.cover_image}}
+                <div class="drop-cover-image">
+                    <img src="{{drop.cover_image}}" alt="{{drop.title}}" loading="lazy">
+                </div>
+                {{/if}}
+                
+                <div class="drop-info">
+                    <h1 class="drop-title">{{drop.title}}</h1>
+                    
+                    {{#if drop.description}}
+                    <div class="drop-description">
+                        <p>{{drop.description}}</p>
+                    </div>
+                    {{/if}}
+                    
+                    {{#if drop.signup_count}}
+                    <div class="drop-stats">
+                        <span class="signup-count">{{drop.signup_count}} people signed up</span>
+                    </div>
+                    {{/if}}
+                </div>
+                
+                <!-- Signup Form -->
+                <div class="drop-signup-section">
+                    <form id="drop-signup-form" class="signup-form">
+                        {{#if drop.collect_email}}
+                        <div class="form-group">
+                            <label for="email" class="sr-only">Email address</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                placeholder="Enter your email" 
+                                required
+                                class="form-input"
+                            >
+                        </div>
+                        {{/if}}
+                        
+                        {{#if drop.collect_phone}}
+                        <div class="form-group">
+                            <label for="phone" class="sr-only">Phone number</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                placeholder="Enter your phone number" 
+                                class="form-input"
+                            >
+                        </div>
+                        {{/if}}
+                        
+                        <div class="form-group">
+                            <label for="name" class="sr-only">Name (optional)</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                placeholder="Your name (optional)" 
+                                class="form-input"
+                            >
+                        </div>
+                        
+                        <button 
+                            type="submit" 
+                            class="signup-button"
+                            style="background-color: {{drop.button_color}};"
+                        >
+                            <span class="button-text">{{drop.button_text}}</span>
+                            <span class="button-spinner" style="display: none;">
+                                <svg class="spinner" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+                                    <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+                    
+                    <!-- Success Message -->
+                    <div id="success-message" class="success-message" style="display: none;">
+                        <div class="success-icon">✓</div>
+                        <p id="success-text"></p>
+                    </div>
+                    
+                    <!-- Error Message -->
+                    <div id="error-message" class="error-message" style="display: none;">
+                        <p id="error-text"></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="drop-footer">
+            <p>Powered by <a href="/" class="footer-link">{{config.SITE_NAME}}</a></p>
+        </footer>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('drop-signup-form');
+            const submitButton = form.querySelector('.signup-button');
+            const buttonText = submitButton.querySelector('.button-text');
+            const buttonSpinner = submitButton.querySelector('.button-spinner');
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            const successText = document.getElementById('success-text');
+            const errorText = document.getElementById('error-text');
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Reset messages
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                // Show loading state
+                submitButton.disabled = true;
+                buttonText.style.display = 'none';
+                buttonSpinner.style.display = 'inline-flex';
+                
+                try {
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+                    
+                    const response = await fetch('/api/signup/{{drop.slug}}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        // Success
+                        successText.textContent = result.message;
+                        successMessage.style.display = 'block';
+                        form.style.display = 'none';
+                    } else {
+                        // Error
+                        errorText.textContent = result.message || 'An error occurred. Please try again.';
+                        errorMessage.style.display = 'block';
+                    }
+                } catch (error) {
+                    errorText.textContent = 'Network error. Please check your connection and try again.';
+                    errorMessage.style.display = 'block';
+                } finally {
+                    // Reset button state
+                    submitButton.disabled = false;
+                    buttonText.style.display = 'inline';
+                    buttonSpinner.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

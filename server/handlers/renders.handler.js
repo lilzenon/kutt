@@ -13,8 +13,17 @@ async function homepage(req, res) {
         res.redirect("/login");
         return;
     }
+
+    let drops = [];
+    if (req.user) {
+        // Load user's drops for the homepage
+        drops = await query.drop.findByUserWithStats(req.user.id, { limit: 6 });
+    }
+
     res.render("homepage", {
         title: "Free modern URL shortener",
+        drops: drops,
+        domain: env.DEFAULT_DOMAIN
     });
 }
 
