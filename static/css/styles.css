@@ -2937,6 +2937,11 @@ svg.map path.active {
         word-break: break-all;
         overflow-wrap: break-word;
     }
+    /* Ensure consistent cell heights and alignment */
+    #main-table-wrapper table td.original-url,
+    #main-table-wrapper table td.short-link {
+        vertical-align: top;
+    }
     table tr.loading-placeholder td {
         font-size: 16px;
     }
