@@ -569,37 +569,51 @@ async function redirect(req, res, next) {
 
     // 7. Check if this is a social media crawler/bot requesting metadata
     const userAgent = req.headers["user-agent"] || "";
-    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper|imessage|messages|ios|iphone|ipad|mobile|safari/i.test(userAgent);
+    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper/i.test(userAgent);
 
-    // Special handling for iOS devices - always serve metadata if it exists
-    const isIOS = /iphone|ipad|ipod|ios|mobile.*safari/i.test(userAgent);
-    const shouldServeMetadata = isSocialBot || isIOS;
+    // Special handling for iOS devices for iMessage compatibility
+    const isIOS = /iphone|ipad|ipod|ios/i.test(userAgent);
+
+
 
     // Check if we should serve metadata preview
     const hasMetadata = link.meta_title || link.meta_description || link.meta_image;
-    const shouldShowPreview = link.show_preview || shouldServeMetadata;
 
-    if (hasMetadata && shouldShowPreview) {
-        // Serve metadata preview page
-        const domain = link.domain || env.DEFAULT_DOMAIN;
-        const shortUrl = `https://${domain}/${link.address}`;
+    if (hasMetadata) {
+        // Determine if we should show the preview page:
+        // 1. Always show for social media bots
+        // 2. Always show for iOS devices (for iMessage)
+        // 3. Show for regular users only if show_preview is enabled
+        const shouldShowPreview = isSocialBot || isIOS || link.show_preview;
 
-        // Determine redirect delay: 0 for bots, 3 for preview mode, 0 for iOS when preview disabled
-        let redirectDelay = 0;
-        if (!isSocialBot && !isIOS && link.show_preview) {
-            redirectDelay = 3;
+        if (shouldShowPreview) {
+            const domain = link.domain || env.DEFAULT_DOMAIN;
+            const shortUrl = `https://${domain}/${link.address}`;
+
+            // Determine redirect delay:
+            // - 0 for social media bots (no redirect - they just read metadata)
+            // - 1 for iOS when preview is disabled (quick redirect after metadata is read)
+            // - 3 for regular users when preview is enabled (user preview experience)
+            let redirectDelay = 0;
+            if (isSocialBot) {
+                redirectDelay = 0; // No redirect for bots
+            } else if (isIOS && !link.show_preview) {
+                redirectDelay = 1; // Quick redirect for iOS
+            } else if (link.show_preview) {
+                redirectDelay = 3; // User preview experience
+            }
+
+            return res.render("metadata_preview", {
+                title: link.meta_title || link.description || "Shortened Link",
+                meta_title: link.meta_title || link.description || "Shortened Link",
+                meta_description: link.meta_description || link.description || `Visit this link: ${link.target}`,
+                meta_image: link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`,
+                meta_url: shortUrl,
+                target: link.target,
+                site_name: env.SITE_NAME || "Kutt",
+                redirect_delay: redirectDelay
+            });
         }
-
-        return res.render("metadata_preview", {
-            title: link.meta_title || link.description || "Shortened Link",
-            meta_title: link.meta_title || link.description || "Shortened Link",
-            meta_description: link.meta_description || link.description || `Visit this link: ${link.target}`,
-            meta_image: link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`,
-            meta_url: shortUrl,
-            target: link.target,
-            site_name: env.SITE_NAME || "Kutt",
-            redirect_delay: redirectDelay
-        });
     }
 
     // 8. Create link visit
