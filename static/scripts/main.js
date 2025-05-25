@@ -121,7 +121,21 @@ function handleQRCode(element, id) {
     if (!dialogContent) return;
     openDialog(id, "qrcode");
     dialogContent.textContent = "";
-    const qrcode = new QRCode(dialogContent, {
+
+    // Add close button for better mobile UX
+    const closeButton = document.createElement("button");
+    closeButton.innerHTML = "×";
+    closeButton.className = "qr-close";
+    closeButton.setAttribute("aria-label", "Close");
+    closeButton.onclick = closeDialog;
+    dialogContent.appendChild(closeButton);
+
+    // Create QR code container
+    const qrContainer = document.createElement("div");
+    qrContainer.className = "qr-container";
+    dialogContent.appendChild(qrContainer);
+
+    const qrcode = new QRCode(qrContainer, {
         text: element.dataset.url,
         width: 200,
         height: 200,

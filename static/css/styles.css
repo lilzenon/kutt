@@ -941,6 +941,40 @@ table .tab a:not(.active):hover {
     /* Ensure QR code modal is properly sized on mobile */
     max-width: 280px;
     max-height: 90vh;
+    position: relative;
+}
+
+
+/* QR code close button styling */
+
+.qr-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.qr-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: #333;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .dialog .content-wrapper {
