@@ -540,7 +540,9 @@ async function redirect(req, res, next) {
     const userAgent = req.headers["user-agent"] || "";
     const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat/i.test(userAgent);
 
-    if (isSocialBot && (link.meta_title || link.meta_description || link.meta_image)) {
+    // Always serve metadata preview if custom metadata exists, regardless of bot detection
+    // This ensures the metadata is available for social media platforms
+    if (link.meta_title || link.meta_description || link.meta_image) {
         // Serve metadata preview page for social media crawlers
         const domain = link.domain || env.DEFAULT_DOMAIN;
         const shortUrl = `https://${domain}/${link.address}`;
@@ -552,7 +554,8 @@ async function redirect(req, res, next) {
             meta_image: link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`,
             meta_url: shortUrl,
             target: link.target,
-            redirect_delay: 0 // Immediate redirect for bots after metadata is read
+            site_name: env.SITE_NAME || "Kutt",
+            redirect_delay: isSocialBot ? 0 : 3 // Immediate redirect for bots, 3 second delay for users
         });
     }
 
