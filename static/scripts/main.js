@@ -146,21 +146,37 @@ function handleQRCode(element, id) {
         }
     }, 100);
 
+    // Detect if user is on mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+
     // Create buttons container
     const buttonsContainer = document.createElement("div");
     buttonsContainer.className = "qr-buttons";
     dialogContent.appendChild(buttonsContainer);
 
-    // Create Copy QR button
-    const copyButton = document.createElement("button");
-    copyButton.innerHTML = '<span class="button-icon">📋</span> Copy QR';
-    copyButton.className = "qr-button primary";
-    copyButton.onclick = function() {
-        copyQRCodeToClipboard(qrContainer);
-    };
-    buttonsContainer.appendChild(copyButton);
+    if (!isMobile) {
+        // Desktop: Show Copy QR button
+        const copyButton = document.createElement("button");
+        copyButton.innerHTML = '<span class="button-icon">📋</span> Copy QR';
+        copyButton.className = "qr-button primary";
+        copyButton.onclick = function() {
+            copyQRCodeToClipboard(qrContainer);
+        };
+        buttonsContainer.appendChild(copyButton);
+    } else {
+        // Mobile: Show instructional text
+        const instructionText = document.createElement("div");
+        instructionText.className = "qr-instructions";
+        instructionText.innerHTML = `
+            <div class="instruction-arrow">↑</div>
+            <p><strong>To save the QR code:</strong></p>
+            <p>Long press the QR code above and select<br><strong>"Save to Photos"</strong> or <strong>"Download Image"</strong></p>
+        `;
+        buttonsContainer.appendChild(instructionText);
+    }
 
-    // Create Exit button
+    // Create Exit button (for both desktop and mobile)
     const exitButton = document.createElement("button");
     exitButton.innerHTML = '<span class="button-icon">✕</span> Exit';
     exitButton.className = "qr-button secondary";

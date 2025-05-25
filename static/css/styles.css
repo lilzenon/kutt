@@ -1009,15 +1009,16 @@ table .tab a:not(.active):hover {
 }
 
 .qr-button.secondary {
-    background-color: #dc3545;
     color: white;
-    border: 1px solid #dc3545;
+    background: var(--button-bg-danger);
+    box-shadow: 0 5px 6px var(--button-bg-danger-box-shadow-color);
+    border: none;
+    border-radius: 100px;
 }
 
 .qr-button.secondary:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
-    color: white;
+    box-shadow: 0 6px 15px var(--button-bg-danger-box-shadow-color);
+    transform: translateY(-2px) scale(1.02, 1.02);
 }
 
 
@@ -1026,6 +1027,31 @@ table .tab a:not(.active):hover {
 .qr-button .button-icon {
     margin-right: 0.5rem;
     font-size: 16px;
+}
+
+
+/* QR code instruction text styling */
+
+.qr-instructions {
+    text-align: center;
+    padding: 1rem 0;
+    color: #6c757d;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.qr-instructions .instruction-arrow {
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.qr-instructions p {
+    margin: 0.5rem 0;
+}
+
+.qr-instructions strong {
+    color: #495057;
 }
 
 .dialog .content-wrapper {
@@ -3070,6 +3096,14 @@ svg.map path.active {
     }
     .qr-buttons {
         gap: 1rem;
+    }
+    /* Mobile instruction text styling */
+    .qr-instructions {
+        font-size: 15px;
+        padding: 1.25rem 0;
+    }
+    .qr-instructions .instruction-arrow {
+        font-size: 28px;
     }
     .dialog .loading {
         width: 20px;
