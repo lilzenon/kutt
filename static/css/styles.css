@@ -1291,13 +1291,14 @@ form#login-signup p.error {
 header {
     box-sizing: border-box;
     margin: 0;
-    width: 1232px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 1232px;
     padding: 0 32px;
     height: 102px;
     justify-content: space-between;
     align-items: center;
     display: flex;
+    overflow: hidden;
 }
 
 header .logo-wrapper {
@@ -1315,6 +1316,10 @@ header a.logo {
     border: none;
     margin: 0;
     padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 header a.logo:hover {
@@ -2947,25 +2952,48 @@ svg.map path.active {
         margin-top: 1rem;
     }
     header {
-        padding: 16px 16px 0;
-        height: 72px;
+        padding: 12px 16px;
+        height: auto;
+        min-height: 60px;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
     header a.logo {
-        font-size: 20px;
+        font-size: 18px;
+        flex-shrink: 0;
     }
     header ul.logo-links {
         display: none;
     }
     header .logo img {
         margin-right: 8px;
+        width: 20px;
+        height: 20px;
+    }
+    header .logo-wrapper {
+        flex-shrink: 0;
+        min-width: 0;
+    }
+    header nav {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+    header nav ul {
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
     header nav ul li {
-        margin-left: 0.75rem
+        margin-left: 0;
     }
     header nav ul li a.button {
-        height: 28px;
-        padding: 0 1rem;
-        font-size: 11px;
+        height: 32px;
+        padding: 0 0.75rem;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    header nav ul li a.nav {
+        font-size: 12px;
+        padding: 0.25rem 0.5rem;
     }
     form#login-signup label {
         margin-bottom: 1.5rem;
@@ -3314,5 +3342,86 @@ svg.map path.active {
     #apikey .clipboard {
         width: 22px;
         height: 22px;
+    }
+}
+
+
+/* Extra small screens - Mobile portrait */
+
+@media only screen and (max-width: 480px) {
+    header {
+        padding: 8px 12px;
+        min-height: 50px;
+    }
+    header a.logo {
+        font-size: 16px;
+    }
+    header .logo img {
+        width: 18px;
+        height: 18px;
+        margin-right: 6px;
+    }
+    header nav ul li a.button {
+        height: 28px;
+        padding: 0 0.5rem;
+        font-size: 11px;
+    }
+    header nav ul li a.nav {
+        font-size: 11px;
+        padding: 0.2rem 0.4rem;
+    }
+    /* Ensure main content doesn't overflow */
+    main {
+        padding: 0 0.75rem;
+        margin-top: 0.5rem;
+    }
+    main form input#target {
+        padding: 0 70px 0 20px;
+        font-size: 16px;
+        height: 60px;
+    }
+    main form input#target::placeholder {
+        font-size: 14px;
+    }
+    main form button.submit {
+        right: 0;
+        top: 12px;
+        margin: 0 1rem 0;
+    }
+    /* Fix advanced options on small screens */
+    .advanced-input-wrapper {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .advanced-input-wrapper label {
+        width: 100%;
+        padding-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    /* Ensure metadata fields don't overflow */
+    input.table-input[name*="meta_"],
+    textarea.table-input[name*="meta_"] {
+        min-width: 150px;
+        max-width: 100%;
+    }
+    /* Table improvements for very small screens */
+    #main-table-wrapper {
+        padding: 0 0.5rem;
+        margin: 2rem 0 3rem;
+    }
+    #main-table-wrapper table th,
+    #main-table-wrapper table td {
+        padding: 0.75rem 0.5rem;
+    }
+    /* Ensure table doesn't cause horizontal scroll */
+    table {
+        min-width: 100%;
+        overflow-x: auto;
+    }
+    /* Better button spacing in table actions */
+    #main-table-wrapper table .actions a.button,
+    #main-table-wrapper table .actions button {
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
     }
 }
