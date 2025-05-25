@@ -35,6 +35,16 @@
   <!-- iOS specific meta tags -->
   <meta name="apple-mobile-web-app-title" content="{{meta_title}}">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- iOS Safari specific -->
+  <meta name="apple-touch-fullscreen" content="yes">
+  <link rel="apple-touch-icon" href="{{meta_image}}">
+
+  <!-- iMessage specific meta tags -->
+  <meta property="al:ios:url" content="{{meta_url}}">
+  <meta property="al:ios:app_name" content="{{meta_title}}">
 
   <!-- WhatsApp and Telegram specific -->
   <meta property="og:image:alt" content="{{meta_title}}">
@@ -42,8 +52,10 @@
   <!-- LinkedIn specific -->
   <meta property="og:image:type" content="image/jpeg">
 
-  <!-- Immediate redirect for bots -->
+  <!-- Conditional redirect - only for non-zero delays -->
+  {{#if redirect_delay}}
   <meta http-equiv="refresh" content="{{redirect_delay}};url={{target}}">
+  {{/if}}
 
   <style>
     body {
@@ -64,9 +76,19 @@
     }
     .preview-image {
       width: 100%;
-      height: 300px;
+      height: 315px; /* 1.91:1 aspect ratio for social media */
       object-fit: cover;
+      object-position: center;
       background: #eee;
+      display: block;
+    }
+
+    /* iOS specific image optimization */
+    @media screen and (-webkit-min-device-pixel-ratio: 2) {
+      .preview-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
     }
     .content {
       padding: 20px;
@@ -115,11 +137,13 @@
     </div>
   </div>
 
+  {{#if redirect_delay}}
   <script>
     // Fallback redirect for browsers that don't support meta refresh
     setTimeout(function() {
       window.location.href = "{{target}}";
     }, {{redirect_delay}}000);
   </script>
+  {{/if}}
 </body>
 </html>

@@ -569,35 +569,26 @@ async function redirect(req, res, next) {
 
     // 7. Check if this is a social media crawler/bot requesting metadata
     const userAgent = req.headers["user-agent"] || "";
-    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper|imessage|messages|ios|iphone|ipad/i.test(userAgent);
+    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper|imessage|messages|ios|iphone|ipad|mobile|safari/i.test(userAgent);
+
+    // Special handling for iOS devices - always serve metadata if it exists
+    const isIOS = /iphone|ipad|ipod|ios|mobile.*safari/i.test(userAgent);
+    const shouldServeMetadata = isSocialBot || isIOS;
 
     // Check if we should serve metadata preview
-    // Only show preview page if show_preview is enabled OR if it's a social media bot
     const hasMetadata = link.meta_title || link.meta_description || link.meta_image;
-    const shouldShowPreview = link.show_preview || isSocialBot;
+    const shouldShowPreview = link.show_preview || shouldServeMetadata;
 
     if (hasMetadata && shouldShowPreview) {
         // Serve metadata preview page
         const domain = link.domain || env.DEFAULT_DOMAIN;
         const shortUrl = `https://${domain}/${link.address}`;
 
-        return res.render("metadata_preview", {
-            title: link.meta_title || link.description || "Shortened Link",
-            meta_title: link.meta_title || link.description || "Shortened Link",
-            meta_description: link.meta_description || link.description || `Visit this link: ${link.target}`,
-            meta_image: link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`,
-            meta_url: shortUrl,
-            target: link.target,
-            site_name: env.SITE_NAME || "Kutt",
-            redirect_delay: isSocialBot ? 0 : (link.show_preview ? 3 : 0) // Immediate redirect for bots, 3 second delay for preview mode
-        });
-    }
-
-    // If we have metadata but preview is disabled, still serve metadata for social bots
-    // but redirect immediately for regular users
-    if (hasMetadata && isSocialBot && !link.show_preview) {
-        const domain = link.domain || env.DEFAULT_DOMAIN;
-        const shortUrl = `https://${domain}/${link.address}`;
+        // Determine redirect delay: 0 for bots, 3 for preview mode, 0 for iOS when preview disabled
+        let redirectDelay = 0;
+        if (!isSocialBot && !isIOS && link.show_preview) {
+            redirectDelay = 3;
+        }
 
         return res.render("metadata_preview", {
             title: link.meta_title || link.description || "Shortened Link",
@@ -607,7 +598,7 @@ async function redirect(req, res, next) {
             meta_url: shortUrl,
             target: link.target,
             site_name: env.SITE_NAME || "Kutt",
-            redirect_delay: 0 // Immediate redirect for bots when preview is disabled
+            redirect_delay: redirectDelay
         });
     }
 
