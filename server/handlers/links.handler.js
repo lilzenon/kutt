@@ -567,12 +567,18 @@ async function redirect(req, res, next) {
         return;
     }
 
-    // 7. Check if this is a social media crawler/bot requesting metadata
+    // 7. Enhanced bot detection for comprehensive social media compatibility
     const userAgent = req.headers["user-agent"] || "";
-    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper/i.test(userAgent);
+    const isSocialBot = /facebookexternalhit|facebookcatalog|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper|linkpreview|previewbot|socialbot|metabot|ogbot|cardbot|sharebot/i.test(userAgent);
 
-    // Special handling for iOS devices for iMessage compatibility
-    const isIOS = /iphone|ipad|ipod|ios/i.test(userAgent);
+    // Enhanced iOS detection for iMessage and Safari compatibility
+    const isIOS = /iphone|ipad|ipod|ios|cfnetwork|darwin/i.test(userAgent);
+
+    // Check for specific preview tools and social media apps
+    const isPreviewTool = /socialsharepreview|linkpreview|previewbot|metabot|ogbot|cardbot|sharebot/i.test(userAgent);
+
+    // Enhanced detection for messaging apps
+    const isMessagingApp = /whatsapp|telegram|imessage|messages|line|wechat|viber|signal/i.test(userAgent);
 
 
 
@@ -580,37 +586,56 @@ async function redirect(req, res, next) {
     const hasMetadata = link.meta_title || link.meta_description || link.meta_image;
 
     if (hasMetadata) {
-        // Determine if we should show the preview page:
-        // 1. Always show for social media bots
-        // 2. Always show for iOS devices (for iMessage)
-        // 3. Show for regular users only if show_preview is enabled
-        const shouldShowPreview = isSocialBot || isIOS || link.show_preview;
+        // Determine if we should show the preview page with enhanced logic:
+        // 1. Always show for social media bots and crawlers
+        // 2. Always show for iOS devices (for iMessage compatibility)
+        // 3. Always show for preview tools and messaging apps
+        // 4. Show for regular users only if show_preview is enabled
+        const shouldShowPreview = isSocialBot || isIOS || isPreviewTool || isMessagingApp || link.show_preview;
 
         if (shouldShowPreview) {
             const domain = link.domain || env.DEFAULT_DOMAIN;
             const shortUrl = `https://${domain}/${link.address}`;
 
-            // Determine redirect delay:
-            // - 0 for social media bots (no redirect - they just read metadata)
+            // Enhanced redirect delay logic:
+            // - 0 for social media bots and preview tools (no redirect - they just read metadata)
+            // - 0 for messaging apps (they need to read metadata without redirect)
             // - 1 for iOS when preview is disabled (quick redirect after metadata is read)
             // - 3 for regular users when preview is enabled (user preview experience)
             let redirectDelay = 0;
-            if (isSocialBot) {
-                redirectDelay = 0; // No redirect for bots
+            if (isSocialBot || isPreviewTool || isMessagingApp) {
+                redirectDelay = 0; // No redirect for bots, tools, and messaging apps
             } else if (isIOS && !link.show_preview) {
-                redirectDelay = 1; // Quick redirect for iOS
+                redirectDelay = 1; // Quick redirect for iOS when preview disabled
             } else if (link.show_preview) {
                 redirectDelay = 3; // User preview experience
             }
 
+            // Set headers for better social media crawler compatibility
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+            res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet');
+
+            // Prepare metadata with robust fallbacks and sanitization
+            const metaTitle = (link.meta_title || link.description || `Shared Link`).trim();
+            const metaDescription = (link.meta_description || link.description || `Check out this link: ${link.target}`).trim();
+            const metaImage = link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`;
+
+            // Ensure meta title is not empty and doesn't contain site name
+            const finalMetaTitle = metaTitle.length > 0 ? metaTitle : `Shared Link`;
+            const finalMetaDescription = metaDescription.length > 0 ? metaDescription : `Check out this link: ${link.target}`;
+
             return res.render("metadata_preview", {
-                title: link.meta_title || link.description || "Shortened Link",
-                meta_title: link.meta_title || link.description || "Shortened Link",
-                meta_description: link.meta_description || link.description || `Visit this link: ${link.target}`,
-                meta_image: link.meta_image || `https://${env.DEFAULT_DOMAIN}/images/card.png`,
+                title: finalMetaTitle,
+                meta_title: finalMetaTitle,
+                meta_description: finalMetaDescription,
+                meta_image: metaImage,
                 meta_url: shortUrl,
                 target: link.target,
-                site_name: env.SITE_NAME || "Kutt",
+                site_name: finalMetaTitle, // Use the custom title as site name to override default
+                domain: env.DEFAULT_DOMAIN,
+                timestamp: new Date().toISOString(),
                 redirect_delay: redirectDelay
             });
         }
