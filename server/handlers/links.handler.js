@@ -569,7 +569,7 @@ async function redirect(req, res, next) {
 
     // 7. Check if this is a social media crawler/bot requesting metadata
     const userAgent = req.headers["user-agent"] || "";
-    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper/i.test(userAgent);
+    const isSocialBot = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper|imessage|messages|ios|iphone|ipad/i.test(userAgent);
 
     // Check if we should serve metadata preview
     // Only show preview page if show_preview is enabled OR if it's a social media bot

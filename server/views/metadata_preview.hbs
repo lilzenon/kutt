@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  
+
   <!-- Standard meta tags -->
-  <title>{{title}}</title>
+  <title>{{meta_title}}</title>
+  <meta name="title" content="{{meta_title}}">
   <meta name="description" content="{{meta_description}}">
-  
+
   <!-- Open Graph meta tags for Facebook, LinkedIn, etc. -->
   <meta property="og:title" content="{{meta_title}}">
   <meta property="og:description" content="{{meta_description}}">
@@ -15,21 +16,35 @@
   <meta property="og:url" content="{{meta_url}}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{site_name}}">
-  
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
   <!-- Twitter Card meta tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{meta_title}}">
   <meta name="twitter:description" content="{{meta_description}}">
   <meta name="twitter:image" content="{{meta_image}}">
   <meta name="twitter:url" content="{{meta_url}}">
-  
+  <meta name="twitter:site" content="{{site_name}}">
+
   <!-- Additional social media meta tags -->
   <meta property="article:author" content="{{site_name}}">
+  <meta name="author" content="{{site_name}}">
   <meta name="robots" content="noindex, nofollow">
-  
+
+  <!-- iOS specific meta tags -->
+  <meta name="apple-mobile-web-app-title" content="{{meta_title}}">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- WhatsApp and Telegram specific -->
+  <meta property="og:image:alt" content="{{meta_title}}">
+
+  <!-- LinkedIn specific -->
+  <meta property="og:image:type" content="image/jpeg">
+
   <!-- Immediate redirect for bots -->
   <meta http-equiv="refresh" content="{{redirect_delay}};url={{target}}">
-  
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -99,7 +114,7 @@
       <p class="redirect-info">You will be redirected automatically...</p>
     </div>
   </div>
-  
+
   <script>
     // Fallback redirect for browsers that don't support meta refresh
     setTimeout(function() {
