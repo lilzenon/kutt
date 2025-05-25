@@ -493,7 +493,7 @@ function openDialog(id, name) {
 }
 
 function closeDialog() {
-    const dialog = document.querySelector(".dialog");
+    const dialog = document.querySelector(".dialog.open");
     if (!dialog) return;
     while (dialog.classList.length > 0) {
         dialog.classList.remove(dialog.classList[0]);

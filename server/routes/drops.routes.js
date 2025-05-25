@@ -19,7 +19,7 @@ function validateRequest(req, res, next) {
 }
 
 // Protected routes (require authentication)
-router.use(asyncHandler(auth.jwtAuth));
+router.use(auth.jwt);
 
 // GET /api/drops - Get user's drops
 router.get(
