@@ -174,6 +174,20 @@ async function edit(req, res) {
     }
 
     let isChanged = false;
+
+    // Handle checkbox fields specially - unchecked checkboxes don't send values
+    const checkboxFields = ['show_preview'];
+    checkboxFields.forEach(field => {
+        const currentValue = link[field] || false;
+        const newValue = req.body[field] === 'true';
+        if (currentValue !== newValue) {
+            req.body[field] = newValue;
+            isChanged = true;
+        } else {
+            delete req.body[field];
+        }
+    });
+
     [
         [req.body.address, "address"],
         [req.body.target, "target"],
@@ -182,8 +196,7 @@ async function edit(req, res) {
         [req.body.password, "password"],
         [req.body.meta_title, "meta_title"],
         [req.body.meta_description, "meta_description"],
-        [req.body.meta_image, "meta_image"],
-        [req.body.show_preview, "show_preview"]
+        [req.body.meta_image, "meta_image"]
     ].forEach(([value, name]) => {
         if (!value) {
             if (name === "password" && link.password)
@@ -272,6 +285,20 @@ async function editAdmin(req, res) {
     }
 
     let isChanged = false;
+
+    // Handle checkbox fields specially - unchecked checkboxes don't send values
+    const checkboxFields = ['show_preview'];
+    checkboxFields.forEach(field => {
+        const currentValue = link[field] || false;
+        const newValue = req.body[field] === 'true';
+        if (currentValue !== newValue) {
+            req.body[field] = newValue;
+            isChanged = true;
+        } else {
+            delete req.body[field];
+        }
+    });
+
     [
         [req.body.address, "address"],
         [req.body.target, "target"],
@@ -280,8 +307,7 @@ async function editAdmin(req, res) {
         [req.body.password, "password"],
         [req.body.meta_title, "meta_title"],
         [req.body.meta_description, "meta_description"],
-        [req.body.meta_image, "meta_image"],
-        [req.body.show_preview, "show_preview"]
+        [req.body.meta_image, "meta_image"]
     ].forEach(([value, name]) => {
         if (!value) {
             if (name === "password" && link.password)

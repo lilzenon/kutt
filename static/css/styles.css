@@ -637,6 +637,21 @@ label.checkbox input[type="checkbox"] {
     margin: 0 0.75rem 2px 0;
 }
 
+
+/* Preview toggle specific styling */
+
+label.show-preview {
+    font-size: 14px !important;
+    font-weight: normal !important;
+    margin-bottom: 0.75rem !important;
+}
+
+label.show-preview input[type="checkbox"] {
+    width: 0.9rem !important;
+    height: 0.9rem !important;
+    margin: 0 0.5rem 0 0 !important;
+}
+
 p.error,
 p.success {
     display: flex;
