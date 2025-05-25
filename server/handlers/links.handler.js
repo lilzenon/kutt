@@ -572,14 +572,24 @@ async function redirect(req, res, next) {
     const userAgent = req.headers["user-agent"] || "";
     const isSocialBot = /facebookexternalhit|facebookcatalog|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|discordbot|skypebot|applebot|googlebot|bingbot|yandexbot|pinterest|instagram|snapchat|socialsharepreview|preview|crawler|bot|spider|scraper|linkpreview|previewbot|socialbot|metabot|ogbot|cardbot|sharebot/i.test(userAgent);
 
-    // Enhanced iOS detection for iMessage and Safari compatibility
-    const isIOS = /iphone|ipad|ipod|ios|cfnetwork|darwin/i.test(userAgent);
+    // Enhanced iMessage detection - more specific to actual iMessage previews
+    const isIMessagePreview = (
+        // CFNetwork is used by iOS system for link previews
+        /cfnetwork/i.test(userAgent) ||
+        // Darwin requests are often system-level
+        (/darwin/i.test(userAgent) && !/safari|chrome|firefox/i.test(userAgent)) ||
+        // iOS devices without Safari/Version (likely system requests)
+        (/iphone|ipad|ipod/i.test(userAgent) &&
+            !/safari|version|chrome|firefox|opera/i.test(userAgent) &&
+            /mobile/i.test(userAgent) &&
+            /webkit/i.test(userAgent))
+    );
 
     // Check for specific preview tools and social media apps
     const isPreviewTool = /socialsharepreview|linkpreview|previewbot|metabot|ogbot|cardbot|sharebot/i.test(userAgent);
 
-    // Enhanced detection for messaging apps
-    const isMessagingApp = /whatsapp|telegram|imessage|messages|line|wechat|viber|signal/i.test(userAgent);
+    // Enhanced detection for messaging apps (excluding iMessage which is handled separately)
+    const isMessagingApp = /whatsapp|telegram|line|wechat|viber|signal/i.test(userAgent);
 
 
 
@@ -588,11 +598,11 @@ async function redirect(req, res, next) {
 
     if (hasMetadata) {
         // Determine if we should show the preview page with enhanced logic:
-        // 1. Always show for social media bots and crawlers
-        // 2. Always show for iOS devices (for iMessage compatibility)
+        // 1. Always show for social media bots and crawlers (they need metadata)
+        // 2. Always show for iMessage previews (critical for iOS link previews)
         // 3. Always show for preview tools and messaging apps
-        // 4. Show for regular users only if show_preview is enabled
-        const shouldShowPreview = isSocialBot || isIOS || isPreviewTool || isMessagingApp || link.show_preview;
+        // 4. Show for regular users (including mobile Safari) ONLY if show_preview is enabled
+        const shouldShowPreview = isSocialBot || isIMessagePreview || isPreviewTool || isMessagingApp || link.show_preview;
 
         if (shouldShowPreview) {
             const domain = link.domain || env.DEFAULT_DOMAIN;
@@ -600,16 +610,14 @@ async function redirect(req, res, next) {
 
             // Enhanced redirect delay logic:
             // - 0 for social media bots and preview tools (no redirect - they just read metadata)
+            // - 0 for iMessage previews (they need metadata without redirect for link previews)
             // - 0 for messaging apps (they need to read metadata without redirect)
-            // - 1 for iOS when preview is disabled (quick redirect after metadata is read)
             // - 3 for regular users when preview is enabled (user preview experience)
             let redirectDelay = 0;
-            if (isSocialBot || isPreviewTool || isMessagingApp) {
-                redirectDelay = 0; // No redirect for bots, tools, and messaging apps
-            } else if (isIOS && !link.show_preview) {
-                redirectDelay = 1; // Quick redirect for iOS when preview disabled
+            if (isSocialBot || isIMessagePreview || isPreviewTool || isMessagingApp) {
+                redirectDelay = 0; // No redirect for bots, iMessage, tools, and messaging apps
             } else if (link.show_preview) {
-                redirectDelay = 3; // User preview experience
+                redirectDelay = 3; // User preview experience for regular browsers
             }
 
             // Set headers for better social media crawler compatibility
