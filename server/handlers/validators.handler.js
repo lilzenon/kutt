@@ -283,18 +283,7 @@ const deleteLink = [
     .isLength({ min: 36, max: 36 })
 ];
 
-const reportLink = [
-    body("link", "No link has been provided.")
-    .exists({
-        checkFalsy: true,
-        checkNull: true
-    })
-    .customSanitizer(utils.addProtocol)
-    .custom(
-        value => utils.removeWww(URL.parse(value).host) === env.DEFAULT_DOMAIN
-    )
-    .withMessage(`You can only report a ${env.DEFAULT_DOMAIN} link.`)
-];
+
 
 const banLink = [
     param("id", "ID is invalid.")
@@ -591,7 +580,6 @@ module.exports = {
     redirectProtected,
     removeDomain,
     removeDomainAdmin,
-    reportLink,
     resetPassword,
     signup,
     signupEmailTaken,

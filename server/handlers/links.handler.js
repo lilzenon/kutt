@@ -426,22 +426,7 @@ async function remove(req, res) {
         .send({ message: "Link has been deleted successfully." });
 };
 
-async function report(req, res) {
-    const { link } = req.body;
 
-    await transporter.sendReportEmail(link);
-
-    if (req.isHTML) {
-        res.render("partials/report/form", {
-            message: "Report was received. We'll take actions shortly."
-        });
-        return;
-    }
-
-    return res
-        .status(200)
-        .send({ message: "Thanks for the report, we'll take actions shortly." });
-};
 
 async function ban(req, res) {
     const { id } = req.params;
@@ -786,7 +771,6 @@ module.exports = {
     get,
     getAdmin,
     remove,
-    report,
     stats,
     redirect,
     redirectProtected,
