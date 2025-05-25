@@ -166,12 +166,17 @@ function closeDialog() {
     dialog.classList.add("dialog");
 }
 
-window.addEventListener("click", function(event) {
+// Handle dialog dismissal for both desktop and mobile
+function handleDialogDismissal(event) {
     const dialog = document.querySelector(".dialog");
     if (dialog && event.target === dialog) {
         closeDialog();
     }
-});
+}
+
+// Add both click and touch event listeners for cross-platform compatibility
+window.addEventListener("click", handleDialogDismissal);
+window.addEventListener("touchend", handleDialogDismissal);
 
 // handle navigation in the table of links
 function setLinksLimit(event) {

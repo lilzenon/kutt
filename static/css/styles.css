@@ -938,6 +938,9 @@ table .tab a:not(.active):hover {
 .dialog.qrcode .box {
     min-width: auto;
     padding: 2rem;
+    /* Ensure QR code modal is properly sized on mobile */
+    max-width: 280px;
+    max-height: 90vh;
 }
 
 .dialog .content-wrapper {
@@ -1815,8 +1818,7 @@ table .short-link-wrapper {
     line-height: 1.4;
     word-break: break-all;
     overflow-wrap: break-word;
-    display: inline-block;
-    width: 100%;
+    text-align: left;
 }
 
 #main-table-wrapper table .status {
@@ -2936,6 +2938,7 @@ svg.map path.active {
         line-height: 1.4;
         word-break: break-all;
         overflow-wrap: break-word;
+        text-align: left;
     }
     /* Ensure consistent cell heights and alignment */
     #main-table-wrapper table td.original-url,
@@ -2968,6 +2971,9 @@ svg.map path.active {
     }
     .dialog.qrcode .box {
         padding: 1.5rem;
+        max-width: 250px;
+        /* Improve touch target for mobile dismissal */
+        position: relative;
     }
     .dialog .loading {
         width: 20px;
@@ -3431,6 +3437,7 @@ svg.map path.active {
         line-height: 1.3;
         word-break: break-all;
         overflow-wrap: break-word;
+        text-align: left;
     }
 }
 
