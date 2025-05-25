@@ -122,14 +122,6 @@ function handleQRCode(element, id) {
     openDialog(id, "qrcode");
     dialogContent.textContent = "";
 
-    // Add close button for better mobile UX
-    const closeButton = document.createElement("button");
-    closeButton.innerHTML = "×";
-    closeButton.className = "qr-close";
-    closeButton.setAttribute("aria-label", "Close");
-    closeButton.onclick = closeDialog;
-    dialogContent.appendChild(closeButton);
-
     // Create QR code container
     const qrContainer = document.createElement("div");
     qrContainer.className = "qr-container";
@@ -143,6 +135,59 @@ function handleQRCode(element, id) {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
+
+    // Create buttons container
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.className = "qr-buttons";
+    dialogContent.appendChild(buttonsContainer);
+
+    // Create Copy QR button
+    const copyButton = document.createElement("button");
+    copyButton.innerHTML = "Copy QR";
+    copyButton.className = "qr-button primary";
+    copyButton.onclick = function() {
+        copyQRCodeToClipboard(qrContainer);
+    };
+    buttonsContainer.appendChild(copyButton);
+
+    // Create Exit button
+    const exitButton = document.createElement("button");
+    exitButton.innerHTML = "Exit";
+    exitButton.className = "qr-button secondary";
+    exitButton.onclick = closeDialog;
+    buttonsContainer.appendChild(exitButton);
+}
+
+// Copy QR code image to clipboard
+function copyQRCodeToClipboard(qrContainer) {
+    const canvas = qrContainer.querySelector("canvas");
+    if (!canvas) return;
+
+    canvas.toBlob(function(blob) {
+        if (navigator.clipboard && window.ClipboardItem) {
+            const item = new ClipboardItem({ "image/png": blob });
+            navigator.clipboard.write([item]).then(function() {
+                // Show success feedback
+                const copyButton = document.querySelector(".qr-button.primary");
+                if (copyButton) {
+                    const originalText = copyButton.innerHTML;
+                    copyButton.innerHTML = "Copied!";
+                    copyButton.classList.add("copied");
+                    setTimeout(function() {
+                        copyButton.innerHTML = originalText;
+                        copyButton.classList.remove("copied");
+                    }, 2000);
+                }
+            }).catch(function(err) {
+                console.error("Failed to copy QR code: ", err);
+                // Fallback: show error message
+                alert("Failed to copy QR code. Please try again.");
+            });
+        } else {
+            // Fallback for browsers that don't support clipboard API
+            alert("QR code copy not supported in this browser. Please screenshot the QR code.");
+        }
+    }, "image/png");
 }
 
 // copy the link to clipboard
