@@ -182,19 +182,32 @@ async function getAdmin(match, params) {
 
 async function find(match) {
     if (match.address && match.domain_id !== undefined && env.REDIS_ENABLED) {
-        const key = redis.key.link(match.address, match.domain_id);
+        // Use lowercase address for consistent cache keys
+        const key = redis.key.link(match.address.toLowerCase(), match.domain_id);
         const cachedLink = await redis.client.get(key);
         if (cachedLink) return JSON.parse(cachedLink);
     }
 
-    const link = await knex("links")
+    const query = knex("links")
         .select(...selectable)
-        .where(normalizeMatch(match))
-        .leftJoin("domains", "links.domain_id", "domains.id")
-        .first();
+        .leftJoin("domains", "links.domain_id", "domains.id");
+
+    // Handle case-insensitive address lookup for better user experience
+    const normalizedMatch = normalizeMatch(match);
+    Object.entries(normalizedMatch).forEach(([key, value]) => {
+        if (key === 'links.address') {
+            // Use case-insensitive comparison for address
+            query.whereRaw('LOWER(links.address) = LOWER(?)', [value]);
+        } else {
+            query.andWhere(key, ...(Array.isArray(value) ? value : [value]));
+        }
+    });
+
+    const link = await query.first();
 
     if (link && env.REDIS_ENABLED) {
-        const key = redis.key.link(link.address, link.domain_id);
+        // Use lowercase address for consistent cache keys
+        const key = redis.key.link(link.address.toLowerCase(), link.domain_id);
         redis.client.set(key, JSON.stringify(link), "EX", 60 * 15);
     }
 

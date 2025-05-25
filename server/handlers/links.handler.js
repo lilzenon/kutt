@@ -124,7 +124,7 @@ async function create(req, res) {
         return res.json(utils.sanitize.link(tasks[0]));
     }
 
-    // Check if custom link already exists
+    // Check if custom link already exists (case-insensitive)
     if (tasks[1]) {
         const error = "Custom URL is already in use.";
         res.locals.errors = { customurl: error };
@@ -248,8 +248,8 @@ async function edit(req, res) {
         target && validators.bannedHost(targetDomain)
     ]);
 
-    // Check if custom link already exists
-    if (tasks[0]) {
+    // Check if custom link already exists (case-insensitive)
+    if (tasks[0] && tasks[0].id !== link.id) {
         const error = "Custom URL is already in use.";
         res.locals.errors = { address: error };
         throw new CustomError("Custom URL is already in use.");
@@ -367,8 +367,8 @@ async function editAdmin(req, res) {
         target && validators.bannedHost(targetDomain)
     ]);
 
-    // Check if custom link already exists
-    if (tasks[0]) {
+    // Check if custom link already exists (case-insensitive)
+    if (tasks[0] && tasks[0].id !== link.id) {
         const error = "Custom URL is already in use.";
         res.locals.errors = { address: error };
         throw new CustomError("Custom URL is already in use.");
