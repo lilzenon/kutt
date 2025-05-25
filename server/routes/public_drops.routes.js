@@ -21,19 +21,19 @@ function validateRequest(req, res, next) {
 // GET /drop/:slug - Public drop landing page
 router.get(
     "/:slug",
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         const { slug } = req.params;
-        
+
         const foundDrop = await drop.findBySlug(slug);
         if (!foundDrop) {
             return res.status(404).render("404", {
                 message: "Drop not found"
             });
         }
-        
+
         // Get signup count for display
         const signupCount = await drop.getSignupCount(foundDrop.id);
-        
+
         res.render("drop_landing", {
             drop: {
                 ...foundDrop,
@@ -46,9 +46,9 @@ router.get(
     })
 );
 
-// POST /api/signup/:slug - Public signup endpoint
+// POST /signup/:slug - Public signup endpoint
 router.post(
-    "/api/signup/:slug",
+    "/signup/:slug",
     drops.signupValidation,
     validateRequest,
     asyncHandler(drops.createSignup)

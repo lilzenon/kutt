@@ -71,19 +71,12 @@ htmx.defineExtension("path-params", {
 
 // Create new drop
 function createDrop() {
-    console.log('createDrop function called');
-
-    const dialog = document.getElementById('create-drop-dialog');
-    console.log('Dialog element found:', dialog);
-
     openDialog('create-drop-dialog');
 
     // Reset form
     const form = document.getElementById('create-drop-form');
     if (form) {
         form.reset();
-    } else {
-        console.log('Form not found');
     }
 
     // Auto-generate slug from title

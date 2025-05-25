@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{pageTitle}} | {{config.SITE_NAME}}</title>
-    
+
     <!-- Meta tags for social sharing -->
     <meta name="description" content="{{metaDescription}}">
     <meta property="og:title" content="{{pageTitle}}">
@@ -19,13 +19,13 @@
     {{#if metaImage}}
     <meta name="twitter:image" content="{{metaImage}}">
     {{/if}}
-    
+
     <!-- Favicon -->
     <link rel="icon" href="/images/favicon.ico">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="/css/styles.css">
-    
+
     <!-- Custom drop styles -->
     {{#if drop.custom_css}}
     <style>
@@ -44,7 +44,7 @@
                 </a>
             </div>
         </header>
-        
+
         <!-- Main Content -->
         <main class="drop-main">
             <div class="drop-content">
@@ -53,66 +53,66 @@
                     <img src="{{drop.cover_image}}" alt="{{drop.title}}" loading="lazy">
                 </div>
                 {{/if}}
-                
+
                 <div class="drop-info">
                     <h1 class="drop-title">{{drop.title}}</h1>
-                    
+
                     {{#if drop.description}}
                     <div class="drop-description">
                         <p>{{drop.description}}</p>
                     </div>
                     {{/if}}
-                    
+
                     {{#if drop.signup_count}}
                     <div class="drop-stats">
                         <span class="signup-count">{{drop.signup_count}} people signed up</span>
                     </div>
                     {{/if}}
                 </div>
-                
+
                 <!-- Signup Form -->
                 <div class="drop-signup-section">
                     <form id="drop-signup-form" class="signup-form">
                         {{#if drop.collect_email}}
                         <div class="form-group">
                             <label for="email" class="sr-only">Email address</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                placeholder="Enter your email" 
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
                                 required
                                 class="form-input"
                             >
                         </div>
                         {{/if}}
-                        
+
                         {{#if drop.collect_phone}}
                         <div class="form-group">
                             <label for="phone" class="sr-only">Phone number</label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone" 
-                                placeholder="Enter your phone number" 
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="Enter your phone number"
                                 class="form-input"
                             >
                         </div>
                         {{/if}}
-                        
+
                         <div class="form-group">
                             <label for="name" class="sr-only">Name (optional)</label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                name="name" 
-                                placeholder="Your name (optional)" 
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Your name (optional)"
                                 class="form-input"
                             >
                         </div>
-                        
-                        <button 
-                            type="submit" 
+
+                        <button
+                            type="submit"
                             class="signup-button"
                             style="background-color: {{drop.button_color}};"
                         >
@@ -125,13 +125,13 @@
                             </span>
                         </button>
                     </form>
-                    
+
                     <!-- Success Message -->
                     <div id="success-message" class="success-message" style="display: none;">
                         <div class="success-icon">✓</div>
                         <p id="success-text"></p>
                     </div>
-                    
+
                     <!-- Error Message -->
                     <div id="error-message" class="error-message" style="display: none;">
                         <p id="error-text"></p>
@@ -139,13 +139,13 @@
                 </div>
             </div>
         </main>
-        
+
         <!-- Footer -->
         <footer class="drop-footer">
             <p>Powered by <a href="/" class="footer-link">{{config.SITE_NAME}}</a></p>
         </footer>
     </div>
-    
+
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -157,33 +157,33 @@
             const errorMessage = document.getElementById('error-message');
             const successText = document.getElementById('success-text');
             const errorText = document.getElementById('error-text');
-            
+
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
+
                 // Reset messages
                 successMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
-                
+
                 // Show loading state
                 submitButton.disabled = true;
                 buttonText.style.display = 'none';
                 buttonSpinner.style.display = 'inline-flex';
-                
+
                 try {
                     const formData = new FormData(form);
                     const data = Object.fromEntries(formData.entries());
-                    
-                    const response = await fetch('/api/signup/{{drop.slug}}', {
+
+                    const response = await fetch('/drop/signup/{{drop.slug}}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(data)
                     });
-                    
+
                     const result = await response.json();
-                    
+
                     if (response.ok) {
                         // Success
                         successText.textContent = result.message;
