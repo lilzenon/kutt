@@ -162,20 +162,73 @@
             </form>
         </div>
 
-        <!-- Preview Panel -->
+        <!-- Enhanced Preview Panel -->
         <div class="drop-preview-panel">
-            <h3>Preview</h3>
+            <div class="preview-header">
+                <h3>Live Preview</h3>
+                <div class="preview-controls">
+                    <button type="button" class="preview-device-btn active" data-device="desktop">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="preview-device-btn" data-device="mobile">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v14H7V4z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
             <div class="preview-container">
-                <div class="preview-drop" id="drop-preview">
-                    <div class="preview-header">
-                        <h4 id="preview-title">{{drop.title}}</h4>
-                        <p id="preview-description">{{drop.description}}</p>
+                <div class="preview-viewport" id="preview-viewport">
+                    <div class="preview-drop" id="drop-preview">
+                        <!-- Header -->
+                        <div class="preview-drop-header">
+                            <div class="preview-brand">
+                                <span class="preview-brand-text">BOUNCE2BOUNCE</span>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="preview-content">
+                            <div class="preview-cover" id="preview-cover" style="display: none;">
+                                <img id="preview-cover-image" src="" alt="Cover">
+                            </div>
+
+                            <div class="preview-info">
+                                <h4 id="preview-title">{{drop.title}}</h4>
+                                <p id="preview-description">{{drop.description}}</p>
+                                <div class="preview-stats">
+                                    <span class="preview-signup-count">42 people signed up</span>
+                                </div>
+                            </div>
+
+                            <div class="preview-form-section">
+                                <div class="preview-form">
+                                    <input type="email" placeholder="Enter your email" readonly class="preview-input">
+                                    <input type="text" placeholder="Your name (optional)" readonly class="preview-input">
+                                    <button type="button" id="preview-button">
+                                        <span id="preview-button-text">{{drop.button_text}}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="preview-footer">
+                            <p>Powered by <span class="preview-footer-link">BOUNCE2BOUNCE</span></p>
+                        </div>
                     </div>
-                    <div class="preview-form">
-                        <input type="email" placeholder="Enter your email" readonly>
-                        <button type="button" id="preview-button" style="background-color: {{drop.button_color}};">
-                            <span id="preview-button-text">{{drop.button_text}}</span>
-                        </button>
+                </div>
+            </div>
+
+            <div class="preview-info-panel">
+                <div class="preview-url">
+                    <label>Preview URL:</label>
+                    <div class="url-display">
+                        <span class="url-prefix">{{domain}}/drop/</span>
+                        <span class="url-slug" id="preview-url-slug">{{drop.slug}}</span>
                     </div>
                 </div>
             </div>
@@ -193,32 +246,116 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('drop-edit-form');
     const dropId = '{{drop.id}}';
 
-    // Real-time preview updates
+    // Enhanced real-time preview updates
     const titleInput = document.getElementById('edit-title');
     const descriptionInput = document.getElementById('edit-description');
+    const slugInput = document.getElementById('edit-slug');
     const buttonTextInput = document.getElementById('edit-button-text');
     const buttonColorInput = document.getElementById('edit-button-color');
+    const backgroundColorInput = document.getElementById('edit-background-color');
+    const textColorInput = document.getElementById('edit-text-color');
+    const coverImageInput = document.getElementById('edit-cover-image');
 
+    const previewDrop = document.getElementById('drop-preview');
     const previewTitle = document.getElementById('preview-title');
     const previewDescription = document.getElementById('preview-description');
     const previewButton = document.getElementById('preview-button');
     const previewButtonText = document.getElementById('preview-button-text');
+    const previewUrlSlug = document.getElementById('preview-url-slug');
+    const previewCover = document.getElementById('preview-cover');
+    const previewCoverImage = document.getElementById('preview-cover-image');
+    const previewViewport = document.getElementById('preview-viewport');
 
-    titleInput.addEventListener('input', () => {
+    // Initialize preview with current values
+    function initializePreview() {
+        updatePreviewColors();
+        updatePreviewContent();
+    }
+
+    // Update preview colors
+    function updatePreviewColors() {
+        const backgroundColor = backgroundColorInput.value || '#ffffff';
+        const textColor = textColorInput.value || '#000000';
+        const buttonColor = buttonColorInput.value || '#007bff';
+
+        previewDrop.style.backgroundColor = backgroundColor;
+        previewDrop.style.color = textColor;
+        previewButton.style.backgroundColor = buttonColor;
+
+        // Calculate if button text should be white or black based on button color
+        const buttonTextColor = getContrastColor(buttonColor);
+        previewButton.style.color = buttonTextColor;
+    }
+
+    // Update preview content
+    function updatePreviewContent() {
         previewTitle.textContent = titleInput.value || 'Drop Title';
-    });
-
-    descriptionInput.addEventListener('input', () => {
         previewDescription.textContent = descriptionInput.value || 'Drop description';
-    });
-
-    buttonTextInput.addEventListener('input', () => {
         previewButtonText.textContent = buttonTextInput.value || 'Get Notified';
+        previewUrlSlug.textContent = slugInput.value || 'drop-slug';
+
+        // Handle cover image
+        const coverImageUrl = coverImageInput.value;
+        if (coverImageUrl && isValidUrl(coverImageUrl)) {
+            previewCoverImage.src = coverImageUrl;
+            previewCover.style.display = 'block';
+        } else {
+            previewCover.style.display = 'none';
+        }
+    }
+
+    // Calculate contrast color for text on colored backgrounds
+    function getContrastColor(hexColor) {
+        // Remove # if present
+        const color = hexColor.replace('#', '');
+
+        // Convert to RGB
+        const r = parseInt(color.substr(0, 2), 16);
+        const g = parseInt(color.substr(2, 2), 16);
+        const b = parseInt(color.substr(4, 2), 16);
+
+        // Calculate luminance
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+        // Return white for dark colors, black for light colors
+        return luminance > 0.5 ? '#000000' : '#ffffff';
+    }
+
+    // Validate URL
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    // Event listeners for real-time updates
+    titleInput.addEventListener('input', updatePreviewContent);
+    descriptionInput.addEventListener('input', updatePreviewContent);
+    slugInput.addEventListener('input', updatePreviewContent);
+    buttonTextInput.addEventListener('input', updatePreviewContent);
+    coverImageInput.addEventListener('input', updatePreviewContent);
+
+    buttonColorInput.addEventListener('input', updatePreviewColors);
+    backgroundColorInput.addEventListener('input', updatePreviewColors);
+    textColorInput.addEventListener('input', updatePreviewColors);
+
+    // Device preview toggle
+    const deviceButtons = document.querySelectorAll('.preview-device-btn');
+    deviceButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            deviceButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const device = btn.dataset.device;
+            previewViewport.className = `preview-viewport ${device}`;
+        });
     });
 
-    buttonColorInput.addEventListener('input', () => {
-        previewButton.style.backgroundColor = buttonColorInput.value;
-    });
+    // Initialize preview
+    initializePreview();
 
     // Form submission
     form.addEventListener('submit', async function(e) {

@@ -14,7 +14,19 @@ async function create(data) {
         data.slug = generateSlug(data.title, existingSlugs);
     }
 
-    const [id] = await knex("drops").insert(data);
+    // Ensure default colors are set if not provided
+    const dropData = {
+        background_color: '#ffffff',
+        text_color: '#000000',
+        button_color: '#007bff',
+        button_text: 'Get Notified',
+        is_active: true,
+        collect_email: true,
+        collect_phone: false,
+        ...data // Override with provided data
+    };
+
+    const [id] = await knex("drops").insert(dropData);
     return await knex("drops").where("id", id).first();
 }
 
