@@ -31,6 +31,15 @@ router.get(
             });
         }
 
+        // Check if drop is active (enterprise access control)
+        if (!foundDrop.is_active) {
+            return res.status(404).render("drop_inactive", {
+                message: "This drop is currently inactive",
+                dropTitle: foundDrop.title,
+                pageTitle: "Drop Inactive"
+            });
+        }
+
         // Get signup count for display
         const signupCount = await drop.getSignupCount(foundDrop.id);
 

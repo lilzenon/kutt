@@ -81,19 +81,36 @@
                     </div>
                 </div>
 
-                <!-- Settings -->
+                <!-- Visibility & Access Control -->
                 <div class="form-section">
-                    <h2>Settings</h2>
+                    <h2>Visibility & Access Control</h2>
 
                     <div class="form-group">
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}}>
-                                <span class="checkbox-custom"></span>
-                                <span class="checkbox-text">Active (visible to public)</span>
-                            </label>
+                        <div class="setting-group">
+                            <div class="setting-header">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}}>
+                                        <span class="checkbox-custom"></span>
+                                        <span class="checkbox-text">Active Drop</span>
+                                    </label>
+                                </div>
+                                <div class="setting-status">
+                                    <span class="status-indicator {{#if drop.is_active}}active{{else}}inactive{{/if}}">
+                                        {{#if drop.is_active}}Live{{else}}Draft{{/if}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="setting-description">
+                                <p>When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Data Collection -->
+                <div class="form-section">
+                    <h2>Data Collection</h2>
 
                     <div class="form-group">
                         <div class="checkbox-group">
@@ -103,6 +120,7 @@
                                 <span class="checkbox-text">Collect email addresses</span>
                             </label>
                         </div>
+                        <small class="form-help">Required for sending notifications when the drop goes live</small>
                     </div>
 
                     <div class="form-group">
@@ -113,7 +131,13 @@
                                 <span class="checkbox-text">Collect phone numbers</span>
                             </label>
                         </div>
+                        <small class="form-help">Optional: Collect phone numbers for SMS notifications</small>
                     </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="form-section">
+                    <h2>Messages</h2>
 
                     <div class="form-group">
                         <label for="edit-thank-you-message">Thank You Message</label>

@@ -1154,13 +1154,27 @@ table .tab a:not(.active):hover {
 }
 
 .status-badge.active {
-    background: rgba(40, 167, 69, 0.9);
+    background: rgba(34, 197, 94, 0.9);
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .status-badge.inactive {
-    background: rgba(108, 117, 125, 0.9);
+    background: rgba(148, 163, 184, 0.9);
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.8;
 }
 
 .drop-card-content {
