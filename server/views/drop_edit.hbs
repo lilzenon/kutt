@@ -164,21 +164,37 @@
 
         <!-- Enhanced Preview Panel -->
         <div class="drop-preview-panel">
-            <div class="preview-header">
-                <h3>Live Preview</h3>
-                <div class="preview-controls">
-                    <button type="button" class="preview-device-btn active" data-device="desktop">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/>
+            <!-- Mobile Toggle Button (hidden on desktop) -->
+            <button type="button" class="preview-toggle" onclick="togglePreview()">
+                <span>Live Preview</span>
+                <div class="preview-toggle-actions">
+                    <a href="/drop/{{drop.slug}}" target="_blank" class="preview-quick-link" title="Open in new tab">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"/>
                         </svg>
-                    </button>
-                    <button type="button" class="preview-device-btn" data-device="mobile">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v14H7V4z"/>
-                        </svg>
-                    </button>
+                    </a>
+                    <svg class="preview-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
                 </div>
-            </div>
+            </button>
+
+            <div class="preview-collapsible">
+                <div class="preview-header">
+                    <h3>Live Preview</h3>
+                    <div class="preview-controls">
+                        <button type="button" class="preview-device-btn active" data-device="desktop">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="preview-device-btn" data-device="mobile">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v14H7V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
 
             <div class="preview-container">
                 <div class="preview-viewport" id="preview-viewport">
@@ -223,16 +239,18 @@
                 </div>
             </div>
 
-            <div class="preview-info-panel">
-                <div class="preview-url">
-                    <label>Preview URL:</label>
-                    <div class="url-display">
-                        <span class="url-prefix">{{domain}}/drop/</span>
-                        <span class="url-slug" id="preview-url-slug">{{drop.slug}}</span>
+                <div class="preview-info-panel">
+                    <div class="preview-url">
+                        <label>Preview URL:</label>
+                        <div class="url-display">
+                            <span class="url-prefix">{{domain}}/drop/</span>
+                            <span class="url-slug" id="preview-url-slug">{{drop.slug}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 
@@ -356,6 +374,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize preview
     initializePreview();
+
+    // Mobile preview toggle functionality
+    window.togglePreview = function() {
+        const toggle = document.querySelector('.preview-toggle');
+        const collapsible = document.querySelector('.preview-collapsible');
+        const icon = document.querySelector('.preview-toggle-icon');
+
+        if (collapsible.classList.contains('collapsed')) {
+            collapsible.classList.remove('collapsed');
+            toggle.classList.remove('collapsed');
+        } else {
+            collapsible.classList.add('collapsed');
+            toggle.classList.add('collapsed');
+        }
+    };
+
+    // Auto-collapse preview on mobile by default
+    if (window.innerWidth <= 768) {
+        const toggle = document.querySelector('.preview-toggle');
+        const collapsible = document.querySelector('.preview-collapsible');
+
+        if (toggle && collapsible) {
+            collapsible.classList.add('collapsed');
+            toggle.classList.add('collapsed');
+        }
+    }
 
     // Form submission
     form.addEventListener('submit', async function(e) {
