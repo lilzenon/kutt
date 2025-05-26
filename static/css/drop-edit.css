@@ -853,6 +853,22 @@
     color: inherit;
 }
 
+
+/* Ensure cover image cropping matches between preview and actual page */
+
+.preview-viewport .drop-cover-image {
+    margin-bottom: 32px;
+    border-radius: 12px;
+    overflow: hidden;
+    max-height: 200px;
+}
+
+.preview-viewport .drop-cover-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .preview-info-panel {
     padding: 20px 24px;
     border-top: 1px solid #f3f4f6;

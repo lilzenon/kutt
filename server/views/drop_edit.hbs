@@ -55,11 +55,19 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="edit-text-color">Text Color</label>
-                            <input type="color" id="edit-text-color" name="text_color"
-                                   value="{{drop.text_color}}">
+                            <label for="edit-title-color">Title Text Color</label>
+                            <input type="color" id="edit-title-color" name="title_color"
+                                   value="{{drop.title_color}}">
                         </div>
 
+                        <div class="form-group">
+                            <label for="edit-description-color">Description Text Color</label>
+                            <input type="color" id="edit-description-color" name="description_color"
+                                   value="{{drop.description_color}}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="edit-button-color">Button Color</label>
                             <input type="color" id="edit-button-color" name="button_color"
@@ -288,7 +296,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonTextInput = document.getElementById('edit-button-text');
     const buttonColorInput = document.getElementById('edit-button-color');
     const backgroundColorInput = document.getElementById('edit-background-color');
-    const textColorInput = document.getElementById('edit-text-color');
+    const titleColorInput = document.getElementById('edit-title-color');
+    const descriptionColorInput = document.getElementById('edit-description-color');
     const coverImageInput = document.getElementById('edit-cover-image');
 
     const previewDrop = document.getElementById('drop-preview');
@@ -310,16 +319,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update preview colors
     function updatePreviewColors() {
         const backgroundColor = backgroundColorInput.value || '#ffffff';
-        const textColor = textColorInput.value || '#000000';
+        const titleColor = titleColorInput.value || '#000000';
+        const descriptionColor = descriptionColorInput.value || '#666666';
         const buttonColor = buttonColorInput.value || '#007bff';
 
-        console.log('Updating preview colors:', { backgroundColor, textColor, buttonColor });
+        console.log('Updating preview colors:', { backgroundColor, titleColor, descriptionColor, buttonColor });
 
-        // Apply colors to the drop container (matches actual landing page)
+        // Apply background color to the drop container
         if (previewDrop) {
             previewDrop.style.setProperty('background-color', backgroundColor, 'important');
-            previewDrop.style.setProperty('color', textColor, 'important');
-            console.log('Applied colors to previewDrop:', { backgroundColor, textColor });
+            console.log('Applied background color to previewDrop:', backgroundColor);
+        }
+
+        // Apply title color specifically to title
+        if (previewTitle) {
+            previewTitle.style.setProperty('color', titleColor, 'important');
+            console.log('Applied title color:', titleColor);
+        }
+
+        // Apply description color specifically to description
+        if (previewDescription) {
+            previewDescription.style.setProperty('color', descriptionColor, 'important');
+            console.log('Applied description color:', descriptionColor);
         }
 
         // Apply button color
@@ -336,12 +357,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (previewViewport) {
             previewViewport.style.setProperty('background-color', backgroundColor, 'important');
         }
-
-        // Force update all text elements to use the text color
-        const textElements = previewDrop.querySelectorAll('.drop-title, .drop-description p, .brand-text, .signup-count, .drop-footer p');
-        textElements.forEach(element => {
-            element.style.setProperty('color', textColor, 'important');
-        });
     }
 
     // Update preview content
@@ -397,7 +412,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     buttonColorInput.addEventListener('input', updatePreviewColors);
     backgroundColorInput.addEventListener('input', updatePreviewColors);
-    textColorInput.addEventListener('input', updatePreviewColors);
+    titleColorInput.addEventListener('input', updatePreviewColors);
+    descriptionColorInput.addEventListener('input', updatePreviewColors);
 
     // Device preview toggle with real device simulation
     const deviceButtons = document.querySelectorAll('.preview-device-btn');

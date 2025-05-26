@@ -47,7 +47,6 @@
             display: flex;
             flex-direction: column;
             background-color: {{drop.background_color}};
-            color: {{drop.text_color}};
         }
 
         /* Header */
@@ -122,15 +121,14 @@
             font-size: 32px;
             font-weight: 700;
             line-height: 1.2;
-            color: inherit;
+            color: {{drop.title_color}};
         }
 
         .drop-description p {
             margin: 0 0 24px 0;
             font-size: 18px;
             line-height: 1.6;
-            color: inherit;
-            opacity: 0.8;
+            color: {{drop.description_color}};
         }
 
         .drop-stats {
