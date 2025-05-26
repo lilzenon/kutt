@@ -317,25 +317,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Apply colors to the drop container (matches actual landing page)
         if (previewDrop) {
-            previewDrop.style.backgroundColor = backgroundColor;
-            previewDrop.style.color = textColor;
-            console.log('Applied colors to previewDrop');
+            previewDrop.style.setProperty('background-color', backgroundColor, 'important');
+            previewDrop.style.setProperty('color', textColor, 'important');
+            console.log('Applied colors to previewDrop:', { backgroundColor, textColor });
         }
 
         // Apply button color
         if (previewButton) {
-            previewButton.style.backgroundColor = buttonColor;
+            previewButton.style.setProperty('background-color', buttonColor, 'important');
 
             // Calculate if button text should be white or black based on button color
             const buttonTextColor = getContrastColor(buttonColor);
-            previewButton.style.color = buttonTextColor;
+            previewButton.style.setProperty('color', buttonTextColor, 'important');
             console.log('Applied button colors:', { buttonColor, buttonTextColor });
         }
 
         // Also update the preview viewport background to ensure visibility
         if (previewViewport) {
-            previewViewport.style.backgroundColor = backgroundColor;
+            previewViewport.style.setProperty('background-color', backgroundColor, 'important');
         }
+
+        // Force update all text elements to use the text color
+        const textElements = previewDrop.querySelectorAll('.drop-title, .drop-description p, .brand-text, .signup-count, .drop-footer p');
+        textElements.forEach(element => {
+            element.style.setProperty('color', textColor, 'important');
+        });
     }
 
     // Update preview content
@@ -591,15 +597,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (response.ok) {
-                showSuccess('Drop updated successfully!');
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 1500);
+                showSuccessBanner('Drop updated successfully!');
+                // Update the drop data in memory if needed
+                if (result.data) {
+                    // Update any displayed data with the latest from server
+                    console.log('Drop updated:', result.data);
+                }
             } else {
-                showError(result.message || 'Failed to update drop');
+                showErrorBanner(result.message || 'Failed to update drop');
             }
         } catch (error) {
-            showError('Network error. Please try again.');
+            showErrorBanner('Network error. Please try again.');
         } finally {
             submitBtn.disabled = false;
             buttonText.style.display = 'inline';
@@ -619,6 +627,50 @@ document.addEventListener('DOMContentLoaded', function() {
         successDiv.textContent = message;
         successDiv.style.display = 'block';
         setTimeout(() => successDiv.style.display = 'none', 5000);
+    }
+
+    // Enhanced banner functions for better UX
+    function showSuccessBanner(message) {
+        createBanner(message, 'success');
+    }
+
+    function showErrorBanner(message) {
+        createBanner(message, 'error');
+    }
+
+    function createBanner(message, type) {
+        // Remove any existing banners
+        const existingBanners = document.querySelectorAll('.notification-banner');
+        existingBanners.forEach(banner => banner.remove());
+
+        // Create new banner
+        const banner = document.createElement('div');
+        banner.className = `notification-banner ${type}`;
+        banner.innerHTML = `
+            <div class="banner-content">
+                <div class="banner-icon">
+                    ${type === 'success' ? '✅' : '❌'}
+                </div>
+                <div class="banner-message">${message}</div>
+                <button class="banner-close" onclick="this.parentElement.parentElement.remove()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        // Add to page
+        document.body.appendChild(banner);
+
+        // Animate in
+        setTimeout(() => banner.classList.add('show'), 100);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            banner.classList.remove('show');
+            setTimeout(() => banner.remove(), 300);
+        }, 5000);
     }
 });
 </script>
