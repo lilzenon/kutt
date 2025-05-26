@@ -828,18 +828,25 @@
 }
 
 
-/* Ensure preview colors are applied correctly and not overridden */
+/* Ensure preview colors are applied correctly and override all other styles */
 
+.preview-container,
+.preview-viewport,
 .preview-viewport .drop-container {
-    /* Allow JavaScript to override colors */
-    background-color: inherit;
-    color: inherit;
+    /* Force background color application */
+    background-color: inherit !important;
+}
+
+.preview-viewport .drop-header,
+.preview-viewport .drop-footer {
+    /* Ensure header and footer don't override background */
+    background: transparent !important;
 }
 
 .preview-viewport .signup-button {
-    /* Allow JavaScript to override colors */
-    background-color: inherit;
-    color: inherit;
+    /* Allow JavaScript to override button colors */
+    background-color: inherit !important;
+    color: inherit !important;
 }
 
 
@@ -854,19 +861,24 @@
 }
 
 
-/* Ensure cover image cropping matches between preview and actual page */
+/* Ensure cover image cropping matches between preview and actual page - Perfect square */
 
 .preview-viewport .drop-cover-image {
     margin-bottom: 32px;
     border-radius: 12px;
     overflow: hidden;
-    max-height: 200px;
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
 }
 
 .preview-viewport .drop-cover-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 .preview-info-panel {

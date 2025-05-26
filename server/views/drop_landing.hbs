@@ -49,11 +49,94 @@
             background-color: {{drop.background_color}};
         }
 
+        /* Device-specific optimizations */
+        {{#if isMobile}}
+        /* Mobile-optimized layout */
+        .drop-container {
+            font-size: 14px;
+        }
+
+        .drop-header {
+            padding: 12px 16px !important;
+        }
+
+        .brand-text {
+            font-size: 16px !important;
+        }
+
+        .drop-main {
+            padding: 24px 16px !important;
+        }
+
+        .drop-title {
+            font-size: 24px !important;
+        }
+
+        .drop-description p {
+            font-size: 16px !important;
+        }
+
+        .form-input {
+            padding: 14px !important;
+            font-size: 16px !important; /* Prevent zoom on iOS */
+        }
+
+        .signup-button {
+            padding: 14px !important;
+            font-size: 16px !important;
+        }
+
+        .drop-cover-image {
+            width: 150px !important;
+            height: 150px !important;
+        }
+        {{else}}
+        /* Desktop-optimized layout */
+        .drop-container {
+            font-size: 16px;
+        }
+
+        .drop-header {
+            padding: 16px 24px !important;
+        }
+
+        .brand-text {
+            font-size: 18px !important;
+        }
+
+        .drop-main {
+            padding: 40px 24px !important;
+        }
+
+        .drop-title {
+            font-size: 32px !important;
+        }
+
+        .drop-description p {
+            font-size: 18px !important;
+        }
+
+        .form-input {
+            padding: 16px !important;
+            font-size: 16px !important;
+        }
+
+        .signup-button {
+            padding: 16px 32px !important;
+            font-size: 16px !important;
+        }
+
+        .drop-cover-image {
+            width: 200px !important;
+            height: 200px !important;
+        }
+        {{/if}}
+
         /* Header */
         .drop-header {
             padding: 16px 24px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.05);
+            background: transparent;
         }
 
         .drop-brand {
@@ -97,18 +180,23 @@
             margin: 0 auto;
         }
 
-        /* Cover image */
+        /* Cover image - Perfect square cropping */
         .drop-cover-image {
             margin-bottom: 32px;
             border-radius: 12px;
             overflow: hidden;
-            max-height: 200px;
+            width: 200px;
+            height: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
         }
 
         .drop-cover-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
         }
 
         /* Drop info */
@@ -245,7 +333,7 @@
             padding: 24px;
             text-align: center;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
-            background: rgba(0, 0, 0, 0.02);
+            background: transparent;
         }
 
         .drop-footer p {
@@ -455,7 +543,7 @@
     </style>
     {{/if}}
 </head>
-<body class="drop-landing-page">
+<body class="drop-landing-page {{deviceType}}-device" data-device="{{deviceType}}">
     <div class="drop-container">
         <!-- Header -->
         <header class="drop-header">

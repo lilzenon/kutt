@@ -43,6 +43,16 @@ router.get(
         // Get signup count for display
         const signupCount = await drop.getSignupCount(foundDrop.id);
 
+        // Detect mobile vs desktop for optimized experience
+        const userAgent = req.headers['user-agent'] || '';
+        const isMobile = /Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+
+        // Also check screen width from client hint if available
+        const viewportWidth = req.headers['sec-ch-viewport-width'];
+        const isMobileByWidth = viewportWidth && parseInt(viewportWidth) <= 768;
+
+        const deviceType = (isMobile || isMobileByWidth) ? 'mobile' : 'desktop';
+
         res.render("drop_landing", {
             drop: {
                 ...foundDrop,
@@ -50,7 +60,10 @@ router.get(
             },
             pageTitle: foundDrop.title,
             metaDescription: foundDrop.description || `Join ${foundDrop.title} - Get notified when this drop goes live!`,
-            metaImage: foundDrop.cover_image
+            metaImage: foundDrop.cover_image,
+            deviceType: deviceType,
+            isMobile: deviceType === 'mobile',
+            isDesktop: deviceType === 'desktop'
         });
     })
 );

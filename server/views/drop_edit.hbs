@@ -325,10 +325,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('Updating preview colors:', { backgroundColor, titleColor, descriptionColor, buttonColor });
 
-        // Apply background color to the drop container
+        // Apply background color to the drop container and body
         if (previewDrop) {
             previewDrop.style.setProperty('background-color', backgroundColor, 'important');
             console.log('Applied background color to previewDrop:', backgroundColor);
+        }
+
+        // Also apply to the preview viewport to ensure full coverage
+        if (previewViewport) {
+            previewViewport.style.setProperty('background-color', backgroundColor, 'important');
+        }
+
+        // Apply to the entire preview area
+        const previewContainer = document.querySelector('.preview-container');
+        if (previewContainer) {
+            previewContainer.style.setProperty('background-color', backgroundColor, 'important');
         }
 
         // Apply title color specifically to title
@@ -353,10 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Applied button colors:', { buttonColor, buttonTextColor });
         }
 
-        // Also update the preview viewport background to ensure visibility
-        if (previewViewport) {
-            previewViewport.style.setProperty('background-color', backgroundColor, 'important');
-        }
+
     }
 
     // Update preview content
