@@ -313,13 +313,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const textColor = textColorInput.value || '#000000';
         const buttonColor = buttonColorInput.value || '#007bff';
 
-        previewDrop.style.backgroundColor = backgroundColor;
-        previewDrop.style.color = textColor;
-        previewButton.style.backgroundColor = buttonColor;
+        console.log('Updating preview colors:', { backgroundColor, textColor, buttonColor });
 
-        // Calculate if button text should be white or black based on button color
-        const buttonTextColor = getContrastColor(buttonColor);
-        previewButton.style.color = buttonTextColor;
+        // Apply colors to the drop container (matches actual landing page)
+        if (previewDrop) {
+            previewDrop.style.backgroundColor = backgroundColor;
+            previewDrop.style.color = textColor;
+            console.log('Applied colors to previewDrop');
+        }
+
+        // Apply button color
+        if (previewButton) {
+            previewButton.style.backgroundColor = buttonColor;
+
+            // Calculate if button text should be white or black based on button color
+            const buttonTextColor = getContrastColor(buttonColor);
+            previewButton.style.color = buttonTextColor;
+            console.log('Applied button colors:', { buttonColor, buttonTextColor });
+        }
+
+        // Also update the preview viewport background to ensure visibility
+        if (previewViewport) {
+            previewViewport.style.backgroundColor = backgroundColor;
+        }
     }
 
     // Update preview content

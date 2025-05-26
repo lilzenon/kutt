@@ -828,11 +828,27 @@
 }
 
 
-/* Ensure preview inherits colors properly */
+/* Ensure preview colors are applied correctly and not overridden */
 
 .preview-viewport .drop-container {
-    background-color: inherit;
-    color: inherit;
+    background-color: inherit !important;
+    color: inherit !important;
+}
+
+.preview-viewport .signup-button {
+    background-color: inherit !important;
+    color: inherit !important;
+}
+
+
+/* Ensure all text elements inherit the text color */
+
+.preview-viewport .drop-title,
+.preview-viewport .drop-description p,
+.preview-viewport .brand-text,
+.preview-viewport .signup-count,
+.preview-viewport .drop-footer p {
+    color: inherit !important;
 }
 
 .preview-info-panel {
