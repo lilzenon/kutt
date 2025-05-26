@@ -1,6 +1,10 @@
 const knex = require("../knex");
 const { generateSlug } = require("../models/drop.model");
-const { normalizeMatch } = require("../utils");
+
+// Simple normalizeMatch function for drops
+function normalizeMatch(match) {
+    return match; // For drops, we don't need complex normalization
+}
 
 // Create a new drop
 async function create(data) {

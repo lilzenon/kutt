@@ -316,7 +316,7 @@ async function dropEdit(req, res) {
         });
     } catch (error) {
         console.error("Error loading drop edit page:", error);
-        res.status(500).render("500", {
+        res.status(500).render("404", {
             message: "Error loading drop"
         });
     }
