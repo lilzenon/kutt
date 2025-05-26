@@ -766,86 +766,33 @@
 }
 
 
-/* Mobile-specific preview styling */
+/* Device-specific preview styling - JavaScript handles exact values */
 
-.preview-viewport.mobile .preview-drop {
-    font-size: 14px;
+.preview-viewport.mobile {
+    /* Mobile device frame styling */
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
-.preview-viewport.mobile .preview-info h4 {
-    font-size: 24px !important;
-    line-height: 1.2;
-}
-
-.preview-viewport.mobile .preview-info p {
-    font-size: 16px !important;
-    line-height: 1.5;
-}
-
-.preview-viewport.mobile .preview-input {
-    padding: 14px !important;
-    font-size: 16px !important;
-    /* Prevent zoom on iOS */
-    border-radius: 8px;
-}
-
-.preview-viewport.mobile .preview-form button {
-    padding: 14px !important;
-    font-size: 16px !important;
-    border-radius: 8px;
-}
-
-.preview-viewport.mobile .preview-content {
-    padding: 24px 16px !important;
-}
-
-.preview-viewport.mobile .preview-drop-header {
-    padding: 12px 16px !important;
-}
-
-.preview-viewport.mobile .preview-footer {
-    padding: 16px !important;
+.preview-viewport.desktop {
+    /* Desktop frame styling */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 
-/* Desktop-specific preview styling */
+/* Base preview styling with transitions for smooth device switching */
 
-.preview-viewport.desktop .preview-drop {
-    font-size: 16px;
-}
-
-.preview-viewport.desktop .preview-info h4 {
-    font-size: 32px !important;
-    line-height: 1.2;
-}
-
-.preview-viewport.desktop .preview-info p {
-    font-size: 18px !important;
-    line-height: 1.6;
-}
-
-.preview-viewport.desktop .preview-input {
-    padding: 16px !important;
-    font-size: 16px !important;
-    border-radius: 8px;
-}
-
-.preview-viewport.desktop .preview-form button {
-    padding: 16px 32px !important;
-    font-size: 16px !important;
-    border-radius: 8px;
-}
-
-.preview-viewport.desktop .preview-content {
-    padding: 40px 24px !important;
-}
-
-.preview-viewport.desktop .preview-drop-header {
-    padding: 16px 24px !important;
-}
-
-.preview-viewport.desktop .preview-footer {
-    padding: 24px !important;
+.preview-drop,
+.preview-info h4,
+.preview-info p,
+.preview-input,
+.preview-form button,
+.preview-content,
+.preview-drop-header,
+.preview-footer,
+.preview-brand-text {
+    transition: all 0.3s ease;
 }
 
 .preview-drop-header {

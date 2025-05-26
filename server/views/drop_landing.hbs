@@ -280,42 +280,172 @@
             border: 0;
         }
 
-        /* Mobile responsive */
+        /* Enterprise Responsive Design */
+
+        /* Tablet and Mobile Landscape (768px and below) */
         @media (max-width: 768px) {
             .drop-header {
-                padding: 16px;
+                padding: 12px 16px;
+            }
+
+            .brand-text {
+                font-size: 16px;
             }
 
             .drop-main {
                 padding: 24px 16px;
             }
 
+            .drop-content {
+                max-width: 100%;
+            }
+
             .drop-title {
                 font-size: 24px;
+                margin-bottom: 12px;
             }
 
             .drop-description p {
                 font-size: 16px;
+                margin-bottom: 20px;
             }
 
-            .form-input,
+            .signup-count {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .form-input {
+                padding: 14px;
+                font-size: 16px; /* Prevent zoom on iOS */
+                border-radius: 8px;
+            }
+
             .signup-button {
                 padding: 14px;
-                font-size: 14px;
+                font-size: 16px; /* Prevent zoom on iOS */
+                border-radius: 8px;
+            }
+
+            .drop-footer {
+                padding: 16px;
+            }
+
+            .drop-footer p {
+                font-size: 13px;
             }
         }
 
+        /* Mobile Portrait (480px and below) */
         @media (max-width: 480px) {
+            .drop-header {
+                padding: 10px 12px;
+            }
+
+            .brand-logo {
+                width: 20px;
+                height: 20px;
+            }
+
+            .brand-text {
+                font-size: 14px;
+            }
+
             .drop-main {
                 padding: 20px 12px;
             }
 
             .drop-title {
                 font-size: 20px;
+                margin-bottom: 10px;
             }
 
             .drop-description p {
                 font-size: 14px;
+                margin-bottom: 16px;
+            }
+
+            .signup-count {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+
+            .form-input {
+                padding: 12px;
+                font-size: 16px; /* Maintain 16px to prevent zoom */
+            }
+
+            .signup-button {
+                padding: 12px;
+                font-size: 16px; /* Maintain 16px for consistency */
+            }
+
+            .drop-footer {
+                padding: 12px;
+            }
+
+            .drop-footer p {
+                font-size: 12px;
+            }
+        }
+
+        /* Large Mobile (375px and below) */
+        @media (max-width: 375px) {
+            .drop-main {
+                padding: 16px 10px;
+            }
+
+            .drop-title {
+                font-size: 18px;
+            }
+
+            .drop-description p {
+                font-size: 13px;
+            }
+
+            .form-input,
+            .signup-button {
+                padding: 10px;
+            }
+        }
+
+        /* Desktop Optimization (1024px and above) */
+        @media (min-width: 1024px) {
+            .drop-content {
+                max-width: 500px;
+            }
+
+            .drop-title {
+                font-size: 36px;
+            }
+
+            .drop-description p {
+                font-size: 20px;
+            }
+
+            .form-input,
+            .signup-button {
+                padding: 18px;
+                font-size: 18px;
+            }
+        }
+
+        /* Large Desktop (1440px and above) */
+        @media (min-width: 1440px) {
+            .drop-main {
+                padding: 60px 24px;
+            }
+
+            .drop-content {
+                max-width: 600px;
+            }
+
+            .drop-title {
+                font-size: 40px;
+            }
+
+            .drop-description p {
+                font-size: 22px;
             }
         }
     </style>
