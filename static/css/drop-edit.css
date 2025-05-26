@@ -674,11 +674,25 @@
     background: #f9fafb;
 }
 
+.preview-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .preview-header h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
     color: #111827;
+}
+
+.preview-device-indicator {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .preview-controls {
@@ -728,11 +742,17 @@
 .preview-viewport.desktop {
     max-width: 100%;
     margin: 0 auto;
+    min-height: 600px;
 }
 
 .preview-viewport.mobile {
     max-width: 375px;
     margin: 0 auto;
+    min-height: 500px;
+    /* Simulate mobile device frame */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .preview-drop {
@@ -742,6 +762,90 @@
     display: flex;
     flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: all 0.3s ease;
+}
+
+
+/* Mobile-specific preview styling */
+
+.preview-viewport.mobile .preview-drop {
+    font-size: 14px;
+}
+
+.preview-viewport.mobile .preview-info h4 {
+    font-size: 24px !important;
+    line-height: 1.2;
+}
+
+.preview-viewport.mobile .preview-info p {
+    font-size: 16px !important;
+    line-height: 1.5;
+}
+
+.preview-viewport.mobile .preview-input {
+    padding: 14px !important;
+    font-size: 16px !important;
+    /* Prevent zoom on iOS */
+    border-radius: 8px;
+}
+
+.preview-viewport.mobile .preview-form button {
+    padding: 14px !important;
+    font-size: 16px !important;
+    border-radius: 8px;
+}
+
+.preview-viewport.mobile .preview-content {
+    padding: 24px 16px !important;
+}
+
+.preview-viewport.mobile .preview-drop-header {
+    padding: 12px 16px !important;
+}
+
+.preview-viewport.mobile .preview-footer {
+    padding: 16px !important;
+}
+
+
+/* Desktop-specific preview styling */
+
+.preview-viewport.desktop .preview-drop {
+    font-size: 16px;
+}
+
+.preview-viewport.desktop .preview-info h4 {
+    font-size: 32px !important;
+    line-height: 1.2;
+}
+
+.preview-viewport.desktop .preview-info p {
+    font-size: 18px !important;
+    line-height: 1.6;
+}
+
+.preview-viewport.desktop .preview-input {
+    padding: 16px !important;
+    font-size: 16px !important;
+    border-radius: 8px;
+}
+
+.preview-viewport.desktop .preview-form button {
+    padding: 16px 32px !important;
+    font-size: 16px !important;
+    border-radius: 8px;
+}
+
+.preview-viewport.desktop .preview-content {
+    padding: 40px 24px !important;
+}
+
+.preview-viewport.desktop .preview-drop-header {
+    padding: 16px 24px !important;
+}
+
+.preview-viewport.desktop .preview-footer {
+    padding: 24px !important;
 }
 
 .preview-drop-header {

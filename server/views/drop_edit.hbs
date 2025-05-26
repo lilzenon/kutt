@@ -181,14 +181,17 @@
 
             <div class="preview-collapsible">
                 <div class="preview-header">
-                    <h3>Live Preview</h3>
+                    <div class="preview-title-section">
+                        <h3>Live Preview</h3>
+                        <span class="preview-device-indicator" id="device-indicator">Desktop View</span>
+                    </div>
                     <div class="preview-controls">
-                        <button type="button" class="preview-device-btn active" data-device="desktop">
+                        <button type="button" class="preview-device-btn active" data-device="desktop" title="Desktop View">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/>
                             </svg>
                         </button>
-                        <button type="button" class="preview-device-btn" data-device="mobile">
+                        <button type="button" class="preview-device-btn" data-device="mobile" title="Mobile View">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v14H7V4z"/>
                             </svg>
@@ -360,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function() {
     backgroundColorInput.addEventListener('input', updatePreviewColors);
     textColorInput.addEventListener('input', updatePreviewColors);
 
-    // Device preview toggle
+    // Device preview toggle with real device simulation
     const deviceButtons = document.querySelectorAll('.preview-device-btn');
     deviceButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -368,12 +371,96 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.classList.add('active');
 
             const device = btn.dataset.device;
-            previewViewport.className = `preview-viewport ${device}`;
+            updateDevicePreview(device);
         });
     });
 
+    // Function to update device preview to match real experience
+    function updateDevicePreview(device) {
+        previewViewport.className = `preview-viewport ${device}`;
+
+        // Update device indicator
+        const deviceIndicator = document.getElementById('device-indicator');
+        if (deviceIndicator) {
+            deviceIndicator.textContent = device === 'mobile' ? 'Mobile View' : 'Desktop View';
+        }
+
+        // Update preview to match actual device experience
+        if (device === 'mobile') {
+            // Mobile-specific styling to match actual mobile experience
+            previewDrop.style.fontSize = '14px';
+            previewTitle.style.fontSize = '24px';
+            previewDescription.style.fontSize = '16px';
+
+            // Adjust form inputs for mobile
+            const inputs = previewDrop.querySelectorAll('.preview-input');
+            inputs.forEach(input => {
+                input.style.padding = '14px';
+                input.style.fontSize = '16px'; // Prevent zoom on iOS
+            });
+
+            // Adjust button for mobile
+            previewButton.style.padding = '14px';
+            previewButton.style.fontSize = '16px';
+
+            // Mobile-specific layout adjustments
+            const previewContent = previewDrop.querySelector('.preview-content');
+            if (previewContent) {
+                previewContent.style.padding = '24px 16px';
+            }
+
+        } else {
+            // Desktop styling to match actual desktop experience
+            previewDrop.style.fontSize = '16px';
+            previewTitle.style.fontSize = '32px';
+            previewDescription.style.fontSize = '18px';
+
+            // Adjust form inputs for desktop
+            const inputs = previewDrop.querySelectorAll('.preview-input');
+            inputs.forEach(input => {
+                input.style.padding = '16px';
+                input.style.fontSize = '16px';
+            });
+
+            // Adjust button for desktop
+            previewButton.style.padding = '16px 32px';
+            previewButton.style.fontSize = '16px';
+
+            // Desktop-specific layout adjustments
+            const previewContent = previewDrop.querySelector('.preview-content');
+            if (previewContent) {
+                previewContent.style.padding = '40px 24px';
+            }
+        }
+    }
+
+    // Auto-detect user's current device and set appropriate preview
+    function detectAndSetDevicePreview() {
+        const isMobile = window.innerWidth <= 768;
+        const defaultDevice = isMobile ? 'mobile' : 'desktop';
+
+        // Set the appropriate device button as active
+        deviceButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.device === defaultDevice) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Update preview to match user's actual device
+        updateDevicePreview(defaultDevice);
+    }
+
     // Initialize preview
     initializePreview();
+
+    // Set device preview based on user's actual device
+    detectAndSetDevicePreview();
+
+    // Update device preview when window is resized
+    window.addEventListener('resize', () => {
+        detectAndSetDevicePreview();
+    });
 
     // Mobile preview toggle functionality
     window.togglePreview = function() {
