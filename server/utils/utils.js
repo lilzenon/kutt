@@ -340,6 +340,25 @@ function removeWww(host) {
     return host.replace("www.", "");
 };
 
+// Calculate contrast color for text on colored backgrounds
+function getContrastColor(hexColor) {
+    if (!hexColor) return '#ffffff';
+
+    // Remove # if present
+    const color = hexColor.replace('#', '');
+
+    // Convert to RGB
+    const r = parseInt(color.substr(0, 2), 16);
+    const g = parseInt(color.substr(2, 2), 16);
+    const b = parseInt(color.substr(4, 2), 16);
+
+    // Calculate luminance
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    // Return white for dark colors, black for light colors
+    return luminance > 0.5 ? '#000000' : '#ffffff';
+}
+
 function registerHandlebarsHelpers() {
     hbs.registerHelper("ifEquals", function(arg1, arg2, options) {
         return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
@@ -353,6 +372,10 @@ function registerHandlebarsHelpers() {
         if (!date) return "";
         const parsedDate = parseDatetime(date);
         return format(parsedDate, formatString);
+    });
+
+    hbs.registerHelper("getContrastColor", function(hexColor) {
+        return getContrastColor(hexColor);
     });
 
     const blocks = {};
@@ -406,6 +429,7 @@ module.exports = {
     dateToUTC,
     deleteCurrentToken,
     generateId,
+    getContrastColor,
     getCustomCSSFileNames,
     getDifferenceFunction,
     getInitStats,

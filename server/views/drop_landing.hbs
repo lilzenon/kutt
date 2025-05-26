@@ -26,6 +26,300 @@
     <!-- Styles -->
     <link rel="stylesheet" href="/css/styles.css">
 
+    <!-- Drop Landing Page Styles -->
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body.drop-landing-page {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .drop-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: {{drop.background_color}};
+            color: {{drop.text_color}};
+        }
+
+        /* Header */
+        .drop-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .drop-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: opacity 0.2s ease;
+        }
+
+        .brand-link:hover {
+            opacity: 0.8;
+        }
+
+        .brand-logo {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        .brand-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: inherit;
+        }
+
+        /* Main content */
+        .drop-main {
+            flex: 1;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .drop-content {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Cover image */
+        .drop-cover-image {
+            margin-bottom: 32px;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 200px;
+        }
+
+        .drop-cover-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Drop info */
+        .drop-info {
+            margin-bottom: 40px;
+        }
+
+        .drop-title {
+            margin: 0 0 16px 0;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: inherit;
+        }
+
+        .drop-description p {
+            margin: 0 0 24px 0;
+            font-size: 18px;
+            line-height: 1.6;
+            color: inherit;
+            opacity: 0.8;
+        }
+
+        .drop-stats {
+            margin-bottom: 16px;
+        }
+
+        .signup-count {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: inherit;
+        }
+
+        /* Signup form */
+        .drop-signup-section {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin: 0;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #374151;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .signup-button {
+            width: 100%;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: {{drop.button_color}};
+            color: {{getContrastColor drop.button_color}};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .signup-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .signup-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .success-message,
+        .error-message {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            color: #166534;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .success-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* Footer */
+        .drop-footer {
+            padding: 24px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .drop-footer p {
+            margin: 0;
+            font-size: 14px;
+            color: inherit;
+            opacity: 0.6;
+        }
+
+        .footer-link {
+            color: inherit;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .drop-header {
+                padding: 16px;
+            }
+
+            .drop-main {
+                padding: 24px 16px;
+            }
+
+            .drop-title {
+                font-size: 24px;
+            }
+
+            .drop-description p {
+                font-size: 16px;
+            }
+
+            .form-input,
+            .signup-button {
+                padding: 14px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .drop-main {
+                padding: 20px 12px;
+            }
+
+            .drop-title {
+                font-size: 20px;
+            }
+
+            .drop-description p {
+                font-size: 14px;
+            }
+        }
+    </style>
+
     <!-- Custom drop styles -->
     {{#if drop.custom_css}}
     <style>
@@ -34,13 +328,13 @@
     {{/if}}
 </head>
 <body class="drop-landing-page">
-    <div class="drop-container" style="background-color: {{drop.background_color}}; color: {{drop.text_color}};">
+    <div class="drop-container">
         <!-- Header -->
         <header class="drop-header">
             <div class="drop-brand">
                 <a href="/" class="brand-link">
-                    <img src="/images/logo.png" alt="{{config.SITE_NAME}}" class="brand-logo">
-                    <span class="brand-text">{{config.SITE_NAME}}</span>
+                    <img src="/images/logo.png" alt="BOUNCE2BOUNCE" class="brand-logo">
+                    <span class="brand-text">BOUNCE2BOUNCE</span>
                 </a>
             </div>
         </header>
@@ -114,7 +408,6 @@
                         <button
                             type="submit"
                             class="signup-button"
-                            style="background-color: {{drop.button_color}};"
                         >
                             <span class="button-text">{{drop.button_text}}</span>
                             <span class="button-spinner" style="display: none;">
@@ -142,7 +435,7 @@
 
         <!-- Footer -->
         <footer class="drop-footer">
-            <p>Powered by <a href="/" class="footer-link">{{config.SITE_NAME}}</a></p>
+            <p>Powered by <a href="/" class="footer-link">BOUNCE2BOUNCE</a></p>
         </footer>
     </div>
 
