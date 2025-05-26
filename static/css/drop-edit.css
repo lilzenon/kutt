@@ -795,136 +795,44 @@
     transition: all 0.3s ease;
 }
 
-.preview-drop-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-}
 
-.preview-brand {
-    display: flex;
-    align-items: center;
-}
+/* Preview now uses the same CSS as the actual drop landing page */
 
-.preview-brand-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: inherit;
-}
 
-.preview-content {
-    flex: 1;
-    padding: 40px 24px;
-    text-align: center;
-}
+/* All styling is handled by the existing drop landing page CSS classes */
 
-.preview-cover {
-    margin-bottom: 32px;
-    border-radius: 12px;
+
+/* Preview-specific overrides to ensure proper display within viewport */
+
+.preview-viewport .drop-container {
+    min-height: 500px;
+    height: auto;
+    border-radius: inherit;
     overflow: hidden;
-    max-height: 200px;
 }
 
-.preview-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.preview-viewport .brand-link {
+    pointer-events: none;
+    /* Disable clicks in preview */
 }
 
-.preview-info {
-    margin-bottom: 40px;
+.preview-viewport .signup-button {
+    pointer-events: none;
+    /* Disable clicks in preview */
+    cursor: default;
 }
 
-.preview-info h4 {
-    margin: 0 0 16px 0;
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1.2;
+.preview-viewport .form-input {
+    pointer-events: none;
+    /* Disable interaction in preview */
+}
+
+
+/* Ensure preview inherits colors properly */
+
+.preview-viewport .drop-container {
+    background-color: inherit;
     color: inherit;
-}
-
-.preview-info p {
-    margin: 0 0 24px 0;
-    font-size: 18px;
-    line-height: 1.6;
-    color: inherit;
-    opacity: 0.8;
-}
-
-.preview-stats {
-    margin-bottom: 16px;
-}
-
-.preview-signup-count {
-    display: inline-block;
-    padding: 8px 16px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    color: inherit;
-}
-
-.preview-form-section {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.preview-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.preview-input {
-    padding: 16px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #374151;
-    transition: border-color 0.2s ease;
-}
-
-.preview-input:focus {
-    outline: none;
-    border-color: rgba(0, 0, 0, 0.3);
-}
-
-.preview-form button {
-    padding: 16px 32px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background: #007bff;
-    color: white;
-}
-
-.preview-form button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.preview-footer {
-    padding: 24px;
-    text-align: center;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.preview-footer p {
-    margin: 0;
-    font-size: 14px;
-    color: inherit;
-    opacity: 0.6;
-}
-
-.preview-footer-link {
-    color: inherit;
-    font-weight: 500;
 }
 
 .preview-info-panel {
