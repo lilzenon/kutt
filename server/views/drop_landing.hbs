@@ -96,6 +96,26 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+
+        /* 🎯 ENSURE PERFECT FORM LAYOUT CONSISTENCY */
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .form-group {
+            position: relative;
+            width: 100%;
+            margin: 0;
+        }
+
+        /* CRITICAL: Ensure form field color variables work on live page */
+        .form-input {
+            background: var(--drop-form-field-color, #ffffff) !important;
+        }
     </style>
 
     <!-- Custom drop styles -->
