@@ -127,6 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
 
+            // Clear any previous errors
+            hideDropError();
+
             // Show loading state
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
@@ -134,6 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
 
             try {
+                console.log('🚀 Creating drop with data:', data);
+
                 const response = await fetch('/api/drops', {
                     method: 'POST',
                     headers: {
@@ -142,21 +147,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(data)
                 });
 
-                const result = await response.json();
+                console.log('📡 Response status:', response.status, response.statusText);
 
-                if (response.ok) {
-                    // Success - reload page to show new drop
-                    window.location.reload();
+                // Parse response
+                let result;
+                try {
+                    result = await response.json();
+                    console.log('📦 Response data:', result);
+                } catch (parseError) {
+                    console.error('❌ Failed to parse response JSON:', parseError);
+                    throw new Error('Invalid response from server');
+                }
+
+                // Check for success
+                if (response.ok && result.success) {
+                    console.log('✅ Drop created successfully:', result.data);
+
+                    // Show success message briefly before redirect
+                    showDropSuccess('Drop created successfully! Redirecting...');
+
+                    // Close modal and reload page after short delay
+                    setTimeout(() => {
+                        closeDialog();
+                        window.location.reload();
+                    }, 1000);
                 } else {
-                    // Show error
-                    showDropError(result.message || 'Failed to create drop');
+                    // Show error message
+                    const errorMessage = result.message || result.error || 'Failed to create drop';
+                    console.error('❌ Drop creation failed:', errorMessage);
+                    showDropError(errorMessage);
                 }
             } catch (error) {
-                showDropError('Network error. Please try again.');
+                console.error('❌ Network error during drop creation:', error);
+                showDropError('Network error. Please check your connection and try again.');
             } finally {
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
+                // Reset button (only if we're not redirecting)
+                if (!document.querySelector('.success-message:not([style*="display: none"])')) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
             }
         });
     }
@@ -168,12 +197,39 @@ function showDropError(message) {
     if (errorDiv) {
         errorDiv.textContent = message;
         errorDiv.style.display = 'block';
+        errorDiv.className = 'error';
 
-        // Hide after 5 seconds
+        // Hide after 8 seconds
         setTimeout(() => {
             errorDiv.style.display = 'none';
-        }, 5000);
+        }, 8000);
     }
+    console.error('🔴 Drop Error:', message);
+}
+
+// Hide drop error message
+function hideDropError() {
+    const errorDiv = document.getElementById('create-drop-error');
+    if (errorDiv) {
+        errorDiv.style.display = 'none';
+    }
+}
+
+// Show drop success message
+function showDropSuccess(message) {
+    const errorDiv = document.getElementById('create-drop-error');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        errorDiv.className = 'success-message';
+
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+            errorDiv.className = 'error'; // Reset to error class
+        }, 3000);
+    }
+    console.log('🟢 Drop Success:', message);
 }
 
 // Edit drop function
