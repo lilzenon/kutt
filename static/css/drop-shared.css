@@ -326,8 +326,8 @@ body {
     /* OPTIMAL: Perfect line height for readability */
     line-height: 1.7;
     font-weight: 450;
-    /* BEAUTIFUL: Enhanced color with better contrast */
-    color: var(--preview-drop-description-color, var(--drop-description-color, #6b7280));
+    /* FIXED: Proper CSS variable priority for preview synchronization */
+    color: var(--drop-description-color, var(--preview-drop-description-color, #6b7280)) !important;
     /* MODERN: Better text rendering */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -424,7 +424,7 @@ body {
 }
 
 
-/* FIXED: Ensure all input types have consistent styling */
+/* FIXED: Ensure all input types have consistent styling and form field color */
 
 input[type="email"].form-input,
 input[type="tel"].form-input,
@@ -433,10 +433,19 @@ input[type="text"].form-input {
     padding: 16px;
     font-size: 16px;
     line-height: 1.4;
+    /* FIXED: Ensure form field color applies to all input types */
+    background: var(--preview-drop-form-field-color, var(--drop-form-field-color, #ffffff)) !important;
     /* FIXED: Remove browser-specific styling for tel inputs */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+
+/* ADDITIONAL: Ensure preview inputs get the form field color */
+
+.preview-input {
+    background: var(--preview-drop-form-field-color, var(--drop-form-field-color, #ffffff)) !important;
 }
 
 

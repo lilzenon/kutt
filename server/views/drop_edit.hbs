@@ -560,6 +560,14 @@ document.addEventListener('DOMContentLoaded', function() {
         documentRoot.style.setProperty('--preview-drop-button-color', buttonColor);
         documentRoot.style.setProperty('--preview-drop-form-field-color', formFieldColor);
 
+        // FIXED: Also set the standard variables for better compatibility
+        documentRoot.style.setProperty('--drop-background-color', backgroundColor);
+        documentRoot.style.setProperty('--drop-card-color', cardColor);
+        documentRoot.style.setProperty('--drop-title-color', titleColor);
+        documentRoot.style.setProperty('--drop-description-color', descriptionColor);
+        documentRoot.style.setProperty('--drop-button-color', buttonColor);
+        documentRoot.style.setProperty('--drop-form-field-color', formFieldColor);
+
         // Calculate and set button text color with intelligent contrast
         const buttonTextColor = getContrastColor(buttonColor);
         documentRoot.style.setProperty('--preview-drop-button-text-color', buttonTextColor);
