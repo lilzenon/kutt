@@ -251,6 +251,76 @@ function viewDropStats(dropId) {
     window.location.href = `/drops/${dropId}/stats`;
 }
 
+// Copy drop URL function
+function copyDropUrl(url) {
+    if (navigator.clipboard && window.isSecureContext) {
+        // Modern clipboard API
+        navigator.clipboard.writeText(url).then(() => {
+            showCopyFeedback('URL copied to clipboard!');
+        }).catch(() => {
+            fallbackCopyUrl(url);
+        });
+    } else {
+        // Fallback for older browsers or non-secure contexts
+        fallbackCopyUrl(url);
+    }
+}
+
+// Fallback copy function
+function fallbackCopyUrl(url) {
+    const textArea = document.createElement('textarea');
+    textArea.value = url;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        document.execCommand('copy');
+        showCopyFeedback('URL copied to clipboard!');
+    } catch (err) {
+        showCopyFeedback('Failed to copy URL');
+    }
+
+    document.body.removeChild(textArea);
+}
+
+// Show copy feedback
+function showCopyFeedback(message) {
+    // Create or update feedback element
+    let feedback = document.getElementById('copy-feedback');
+    if (!feedback) {
+        feedback = document.createElement('div');
+        feedback.id = 'copy-feedback';
+        feedback.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        `;
+        document.body.appendChild(feedback);
+    }
+
+    feedback.textContent = message;
+    feedback.style.transform = 'translateX(0)';
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+        feedback.style.transform = 'translateX(100%)';
+    }, 3000);
+}
+
 // Delete drop function
 function deleteDrop(dropId, dropTitle) {
     if (confirm(`Are you sure you want to delete the drop "${dropTitle}"? This action cannot be undone.`)) {
@@ -268,12 +338,14 @@ async function deleteDropConfirmed(dropId) {
         const result = await response.json();
 
         if (response.ok) {
-            // Remove the drop card from the UI
+            // Remove the drop card from the UI with modern animation
             const dropCard = document.querySelector(`[data-drop-id="${dropId}"]`);
             if (dropCard) {
-                dropCard.style.transition = 'all 0.3s ease';
+                // Modern card removal animation
+                dropCard.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
                 dropCard.style.opacity = '0';
-                dropCard.style.transform = 'scale(0.9)';
+                dropCard.style.transform = 'scale(0.8) translateY(-20px)';
+                dropCard.style.filter = 'blur(4px)';
 
                 setTimeout(() => {
                     dropCard.remove();
@@ -283,8 +355,11 @@ async function deleteDropConfirmed(dropId) {
                     if (dropsGrid && dropsGrid.children.length === 0) {
                         location.reload(); // Reload to show empty state
                     }
-                }, 300);
+                }, 400);
             }
+
+            // Show success feedback
+            showCopyFeedback('Drop deleted successfully');
         } else {
             alert(result.message || 'Failed to delete drop');
         }

@@ -1,65 +1,103 @@
-<div class="drop-card" data-drop-id="{{id}}">
-  <div class="drop-card-header">
+<!-- MODERN DROP CARD - RESEARCH-BASED DESIGN -->
+<div class="modern-drop-card" data-drop-id="{{id}}">
+  <!-- Card Header with Cover & Status -->
+  <div class="card-header">
     {{#if cover_image}}
-      <div class="drop-cover" style="background-image: url('{{cover_image}}')"></div>
+      <div class="card-cover" style="background-image: url('{{cover_image}}')">
+        <div class="cover-overlay"></div>
+      </div>
     {{else}}
-      <div class="drop-cover drop-cover-default" style="background-color: {{background_color}}">
-        <div class="drop-icon">
+      <div class="card-cover card-cover-default" style="background: linear-gradient(135deg, {{background_color}} 0%, {{background_color}}dd 100%)">
+        <div class="cover-pattern"></div>
+        <div class="cover-icon">
           {{> icons/drop}}
         </div>
       </div>
     {{/if}}
 
-    <div class="drop-status">
+    <!-- Status Badge -->
+    <div class="status-indicator">
       {{#if is_active}}
-        <span class="status-badge active">
-          <span class="status-dot"></span>
-          Live
+        <span class="status-badge status-live">
+          <span class="status-pulse"></span>
+          <span class="status-text">Live</span>
         </span>
       {{else}}
-        <span class="status-badge inactive">
+        <span class="status-badge status-draft">
           <span class="status-dot"></span>
-          Draft
+          <span class="status-text">Draft</span>
         </span>
       {{/if}}
     </div>
-  </div>
 
-  <div class="drop-card-content">
-    <h3 class="drop-title">{{title}}</h3>
-    {{#if description}}
-      <p class="drop-description">{{description}}</p>
-    {{/if}}
-
-    <div class="drop-stats">
-      <div class="stat">
-        <span class="stat-number">{{signup_count}}</span>
-        <span class="stat-label">Signups</span>
-      </div>
-      <div class="stat">
-        <span class="stat-number">{{formatDate created_at "MMM d"}}</span>
-        <span class="stat-label">Created</span>
-      </div>
-    </div>
-
-    <div class="drop-url">
-      <span class="url-prefix">{{../domain}}/drop/</span>
-      <span class="url-slug">{{slug}}</span>
+    <!-- Quick Actions Overlay -->
+    <div class="quick-actions">
+      <button type="button" class="quick-action primary" title="Edit Drop" onclick="editDrop('{{id}}')">
+        {{> icons/pencil}}
+      </button>
+      <button type="button" class="quick-action secondary" title="View Stats" onclick="viewDropStats('{{id}}')">
+        {{> icons/chart}}
+      </button>
     </div>
   </div>
 
-  <div class="drop-card-actions">
-    <button type="button" class="button action edit" title="Edit Drop" onclick="editDrop('{{id}}')">
-      {{> icons/pencil}}
-    </button>
-    <button type="button" class="button action qrcode" title="QR Code" onclick="showDropQR('{{id}}', '{{../domain}}/drop/{{slug}}')">
-      {{> icons/qrcode}}
-    </button>
-    <button type="button" class="button action stats" title="View Stats" onclick="viewDropStats('{{id}}')">
-      {{> icons/chart}}
-    </button>
-    <button type="button" class="button action delete" title="Delete Drop" onclick="deleteDrop('{{id}}', '{{title}}')">
-      {{> icons/trash}}
-    </button>
+  <!-- Card Content -->
+  <div class="card-content">
+    <!-- Title & Description -->
+    <div class="content-header">
+      <h3 class="card-title">{{title}}</h3>
+      {{#if description}}
+        <p class="card-description">{{description}}</p>
+      {{/if}}
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">{{signup_count}}</div>
+        <div class="stat-label">Signups</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{formatDate created_at "MMM d"}}</div>
+        <div class="stat-label">Created</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{#if is_active}}Active{{else}}Draft{{/if}}</div>
+        <div class="stat-label">Status</div>
+      </div>
+    </div>
+
+    <!-- URL Display -->
+    <div class="url-display">
+      <div class="url-container">
+        <span class="url-domain">{{../domain}}/drop/</span>
+        <span class="url-slug">{{slug}}</span>
+      </div>
+      <button type="button" class="copy-url-btn" title="Copy URL" onclick="copyDropUrl('{{../domain}}/drop/{{slug}}')">
+        {{> icons/copy}}
+      </button>
+    </div>
+  </div>
+
+  <!-- Card Actions -->
+  <div class="card-actions">
+    <div class="action-group primary-actions">
+      <button type="button" class="action-btn edit" title="Edit Drop" onclick="editDrop('{{id}}')">
+        {{> icons/pencil}}
+        <span>Edit</span>
+      </button>
+      <button type="button" class="action-btn stats" title="View Stats" onclick="viewDropStats('{{id}}')">
+        {{> icons/chart}}
+        <span>Stats</span>
+      </button>
+    </div>
+    <div class="action-group secondary-actions">
+      <button type="button" class="action-btn qr" title="QR Code" onclick="showDropQR('{{id}}', '{{../domain}}/drop/{{slug}}')">
+        {{> icons/qrcode}}
+      </button>
+      <button type="button" class="action-btn delete" title="Delete Drop" onclick="deleteDrop('{{id}}', '{{title}}')">
+        {{> icons/trash}}
+      </button>
+    </div>
   </div>
 </div>
