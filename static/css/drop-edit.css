@@ -847,7 +847,7 @@
 }
 
 
-/* Force preview to use shared CSS system exactly */
+/* MODERN PREVIEW SYSTEM - MOBILE-FIRST RESPONSIVE */
 
 
 /* Mobile preview - force mobile layout */
@@ -855,11 +855,14 @@
 .preview-viewport.mobile {
     /* Force mobile breakpoint behavior */
     width: 375px;
+    max-width: 375px;
     /* Simulate mobile width */
 }
 
 .preview-viewport.mobile .drop-page-wrapper {
     padding: 0 !important;
+    /* BEAUTIFUL: Modern gradient background */
+    background: linear-gradient(135deg, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 0%, color-mix(in srgb, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 85%, #ffffff) 100%) !important;
 }
 
 .preview-viewport.mobile .drop-container {
@@ -868,6 +871,9 @@
     box-shadow: none !important;
     border-radius: 0 !important;
     min-height: 100vh !important;
+    /* Modern: Subtle backdrop blur effect */
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
 }
 
 
@@ -876,26 +882,34 @@
 .preview-viewport.desktop {
     /* Force desktop breakpoint behavior */
     width: 100%;
-    min-width: 769px;
-    /* Ensure desktop breakpoint */
+    min-width: 1024px;
+    /* Ensure desktop breakpoint matches new system */
 }
 
 .preview-viewport.desktop .drop-page-wrapper {
     padding: 40px 20px !important;
     min-height: 100vh !important;
     display: flex !important;
-    align-items: flex-start !important;
+    align-items: center !important;
     justify-content: center !important;
+    /* BEAUTIFUL: Modern gradient background */
+    background: linear-gradient(135deg, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 0%, color-mix(in srgb, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 85%, #ffffff) 100%) !important;
 }
 
 .preview-viewport.desktop .drop-container {
     max-width: 600px !important;
     width: 100% !important;
     margin: 0 !important;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15) !important;
-    border-radius: 16px !important;
-    overflow: hidden !important;
+    border-radius: 20px !important;
+    /* BEAUTIFUL: Modern layered shadows */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    /* Modern: Subtle border */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     min-height: auto !important;
+    overflow: hidden !important;
+    /* Modern: Subtle backdrop blur effect */
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
 }
 
 

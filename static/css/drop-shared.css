@@ -1,66 +1,102 @@
 /*
- * SHARED DROP STYLES - FUTURE-PROOF MODULAR SYSTEM
+ * MODERN DROP STYLES - MOBILE-FIRST RESPONSIVE DESIGN
+ * Beautiful, modern styling with research-based best practices
  * Used by both preview and live drop pages to ensure consistency
  */
 
 
-/* ===== CORE LAYOUT SYSTEM ===== */
+/* ===== MODERN MOBILE-FIRST CORE SYSTEM ===== */
 
 .drop-page-wrapper {
     min-height: 100vh;
-    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
-    background-color: var(--preview-drop-background-color, var(--drop-background-color, #ffffff));
+    /* BEAUTIFUL: Modern gradient background with CSS variables */
+    background: linear-gradient(135deg, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 0%, color-mix(in srgb, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 85%, #ffffff) 100%);
     padding: 0;
     margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    /* Mobile-first: Start with mobile layout */
 }
 
 .drop-container {
-    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
-    background-color: var(--preview-drop-card-color, var(--drop-card-color, #ffffff));
+    /* BEAUTIFUL: Modern card design with subtle shadows */
+    background: var(--preview-drop-card-color, var(--drop-card-color, #ffffff));
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
+    /* Mobile-first: Full width on mobile */
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+    /* Modern: Subtle backdrop blur effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 
-/* ===== DEVICE-SPECIFIC LAYOUTS ===== */
+/* ===== MODERN RESPONSIVE BREAKPOINTS ===== */
 
 
-/* Mobile Layout (768px and below) */
+/* MOBILE-FIRST: Base styles are mobile (default above) */
 
-@media (max-width: 768px) {
+
+/* Mobile styles are already defined in base .drop-container */
+
+
+/* TABLET: Medium screens (768px and up) */
+
+@media (min-width: 768px) {
     .drop-page-wrapper {
-        padding: 0;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .drop-container {
-        max-width: 100%;
+        max-width: 500px;
+        width: 100%;
         margin: 0;
-        box-shadow: none;
-        border-radius: 0;
-        min-height: 100vh;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        min-height: auto;
+        overflow: hidden;
     }
 }
 
 
-/* Desktop Layout (769px and above) */
+/* DESKTOP: Large screens (1024px and up) */
 
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
     .drop-page-wrapper {
         padding: 40px 20px;
         min-height: 100vh;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
     }
     .drop-container {
         max-width: 600px;
         width: 100%;
         margin: 0;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
-        border-radius: 16px;
-        overflow: hidden;
+        border-radius: 20px;
+        /* BEAUTIFUL: Modern layered shadows */
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        /* Modern: Subtle border */
+        border: 1px solid rgba(255, 255, 255, 0.2);
         min-height: auto;
+        overflow: hidden;
+    }
+}
+
+
+/* LARGE DESKTOP: Extra large screens (1440px and up) */
+
+@media (min-width: 1440px) {
+    .drop-container {
+        max-width: 700px;
+        border-radius: 24px;
     }
 }
 
@@ -142,19 +178,32 @@
 
 .drop-title {
     margin: 0 0 16px 0;
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1.2;
-    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
-    color: var(--preview-drop-title-color, var(--drop-title-color, #000000));
+    /* MOBILE-FIRST: Start with mobile typography */
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    /* BEAUTIFUL: Modern gradient text effect */
+    background: linear-gradient(135deg, var(--preview-drop-title-color, var(--drop-title-color, #1f2937)) 0%, color-mix(in srgb, var(--preview-drop-title-color, var(--drop-title-color, #1f2937)) 80%, #6366f1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Fallback for browsers that don't support background-clip: text */
+    color: var(--preview-drop-title-color, var(--drop-title-color, #1f2937));
 }
 
 .drop-description p {
     margin: 0 0 24px 0;
-    font-size: 18px;
+    /* MOBILE-FIRST: Start with mobile typography */
+    font-size: 16px;
     line-height: 1.6;
-    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
-    color: var(--preview-drop-description-color, var(--drop-description-color, #666666));
+    font-weight: 400;
+    /* BEAUTIFUL: Subtle color with better contrast */
+    color: var(--preview-drop-description-color, var(--drop-description-color, #6b7280));
+    /* Modern: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .drop-stats {
@@ -211,32 +260,68 @@
 
 .signup-button {
     width: 100%;
-    padding: 16px 32px;
+    /* MOBILE-FIRST: Start with mobile button sizing */
+    padding: 16px 24px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
-    background-color: var(--preview-drop-button-color, var(--drop-button-color, #007bff)) !important;
+    /* BEAUTIFUL: Modern smooth transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* STUNNING: Modern gradient button with CSS variables */
+    background: linear-gradient(135deg, var(--preview-drop-button-color, var(--drop-button-color, #3b82f6)) 0%, color-mix(in srgb, var(--preview-drop-button-color, var(--drop-button-color, #3b82f6)) 85%, #1d4ed8) 100%) !important;
     color: var(--preview-drop-button-text-color, var(--drop-button-text-color, #ffffff)) !important;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     box-sizing: border-box;
+    /* MODERN: Beautiful shadows */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    /* Modern: Subtle border */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Modern: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow: hidden;
+}
+
+.signup-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.signup-button:hover::before {
+    left: 100%;
 }
 
 .signup-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+.signup-button:active {
+    transform: translateY(0) scale(0.98);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .signup-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.signup-button:disabled::before {
+    display: none;
 }
 
 
@@ -267,41 +352,79 @@
 }
 
 
-/* ===== MOBILE RESPONSIVE OVERRIDES ===== */
+/* ===== MODERN RESPONSIVE TYPOGRAPHY ===== */
 
-@media (max-width: 768px) {
-    .drop-header {
-        padding: 12px 16px;
-    }
-    .brand-text {
-        font-size: 16px;
-    }
-    .drop-main {
-        padding: 24px 16px;
-    }
+
+/* TABLET: Enhanced typography (768px and up) */
+
+@media (min-width: 768px) {
     .drop-title {
-        font-size: 24px;
-        margin-bottom: 12px;
+        font-size: 32px;
+        margin-bottom: 20px;
+        letter-spacing: -0.03em;
     }
     .drop-description p {
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-    .form-input {
-        padding: 14px;
-        font-size: 16px;
-        /* Prevent zoom on iOS */
+        font-size: 18px;
+        margin-bottom: 28px;
+        line-height: 1.7;
     }
     .signup-button {
-        padding: 14px;
-        font-size: 16px;
+        padding: 18px 32px;
+        font-size: 17px;
+        border-radius: 14px;
     }
     .drop-cover-image {
-        width: 150px;
-        height: 150px;
+        width: 180px;
+        height: 180px;
     }
-    .drop-footer {
-        padding: 16px;
+}
+
+
+/* DESKTOP: Premium typography (1024px and up) */
+
+@media (min-width: 1024px) {
+    .drop-title {
+        font-size: 40px;
+        margin-bottom: 24px;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+    }
+    .drop-description p {
+        font-size: 20px;
+        margin-bottom: 32px;
+        line-height: 1.8;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .signup-button {
+        padding: 20px 40px;
+        font-size: 18px;
+        border-radius: 16px;
+        font-weight: 700;
+    }
+    .drop-cover-image {
+        width: 220px;
+        height: 220px;
+    }
+}
+
+
+/* LARGE DESKTOP: Luxurious typography (1440px and up) */
+
+@media (min-width: 1440px) {
+    .drop-title {
+        font-size: 48px;
+        margin-bottom: 28px;
+    }
+    .drop-description p {
+        font-size: 22px;
+        margin-bottom: 36px;
+        max-width: 600px;
+    }
+    .drop-cover-image {
+        width: 240px;
+        height: 240px;
     }
 }
 
