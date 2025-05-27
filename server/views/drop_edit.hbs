@@ -36,6 +36,12 @@
                         </svg>
                         <span>Advanced</span>
                     </button>
+                    <button type="button" class="tab-btn" data-tab="analytics">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M16,8H18V15H16V8M12,2H14V15H12V2M8,13H10V15H8V13M4,8H6V15H4V8Z"/>
+                        </svg>
+                        <span>Analytics</span>
+                    </button>
                     <button type="button" class="tab-btn" data-tab="sharing">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"/>
@@ -276,6 +282,20 @@
                             <textarea id="edit-thank-you-message" name="thank_you_message" rows="3"
                                       placeholder="Thank you for signing up! You'll be notified when this drop goes live.">{{drop.thank_you_message}}</textarea>
                             <small class="form-help">Message shown after successful signup</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ANALYTICS TAB CONTENT -->
+                <div class="tab-content" data-tab-content="analytics">
+                    <div class="tab-placeholder">
+                        <div class="placeholder-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" class="placeholder-icon">
+                                <path d="M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M16,8H18V15H16V8M12,2H14V15H12V2M8,13H10V15H8V13M4,8H6V15H4V8Z"/>
+                            </svg>
+                            <h3>Analytics</h3>
+                            <p>View detailed insights, conversion rates, and performance metrics for your drop.</p>
+                            <span class="coming-soon-badge">Coming Soon</span>
                         </div>
                     </div>
                 </div>
