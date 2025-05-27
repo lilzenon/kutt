@@ -15,157 +15,282 @@
 
     <div class="drop-edit-content">
         <div class="drop-edit-form-container">
+            <!-- MODERN TAB NAVIGATION -->
+            <div class="tab-navigation">
+                <div class="tab-nav-container">
+                    <button type="button" class="tab-btn active" data-tab="page">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        </svg>
+                        <span>Page</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="messaging">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H6L4,18V4H20V16Z"/>
+                        </svg>
+                        <span>Messaging</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="advanced">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+                        </svg>
+                        <span>Advanced</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="sharing">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"/>
+                        </svg>
+                        <span>Sharing</span>
+                    </button>
+                </div>
+            </div>
+
             <form id="drop-edit-form" class="drop-form">
-                <!-- Basic Information -->
-                <div class="form-section">
-                    <h2>Basic Information</h2>
-
-                    <div class="form-group">
-                        <label for="edit-title">Title *</label>
-                        <input type="text" id="edit-title" name="title" required maxlength="255"
-                               value="{{drop.title}}" placeholder="Enter drop title">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-description">Description</label>
-                        <textarea id="edit-description" name="description" rows="4"
-                                  placeholder="Describe what this drop is about">{{drop.description}}</textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-slug">URL Slug</label>
-                        <div class="slug-input-wrapper">
-                            <span class="slug-prefix">{{domain}}/drop/</span>
-                            <input type="text" id="edit-slug" name="slug" maxlength="100"
-                                   value="{{drop.slug}}" placeholder="my-drop">
-                        </div>
-                        <small class="form-help">This will be your drop's public URL</small>
-                    </div>
-                </div>
-
-                <!-- Appearance -->
-                <div class="form-section">
-                    <h2>Appearance</h2>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="edit-background-color">Background Color</label>
-                            <input type="color" id="edit-background-color" name="background_color"
-                                   value="{{drop.background_color}}">
+                <!-- PAGE TAB CONTENT -->
+                <div class="tab-content active" data-tab-content="page">
+                    <!-- Details Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Details</h2>
+                            <p class="section-description">Configure the basic information for your drop page</p>
                         </div>
 
                         <div class="form-group">
-                            <label for="edit-card-color">Card Color</label>
-                            <input type="color" id="edit-card-color" name="card_color"
-                                   value="{{drop.card_color}}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="edit-title-color">Title Text Color</label>
-                            <input type="color" id="edit-title-color" name="title_color"
-                                   value="{{drop.title_color}}">
+                            <label for="edit-title">Title *</label>
+                            <input type="text" id="edit-title" name="title" required maxlength="255"
+                                   value="{{drop.title}}" placeholder="Enter drop title">
                         </div>
 
                         <div class="form-group">
-                            <label for="edit-description-color">Description Text Color</label>
-                            <input type="color" id="edit-description-color" name="description_color"
-                                   value="{{drop.description_color}}">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="edit-button-color">Button Color</label>
-                            <input type="color" id="edit-button-color" name="button_color"
-                                   value="{{drop.button_color}}">
+                            <label for="edit-description">Description</label>
+                            <textarea id="edit-description" name="description" rows="4"
+                                      placeholder="Describe what this drop is about">{{drop.description}}</textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="edit-form-field-color">Form Field Color</label>
-                            <input type="color" id="edit-form-field-color" name="form_field_color"
-                                   value="{{drop.form_field_color}}">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-button-text">Button Text</label>
-                        <input type="text" id="edit-button-text" name="button_text" maxlength="50"
-                               value="{{drop.button_text}}" placeholder="Get Notified">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edit-cover-image">Cover Image URL</label>
-                        <input type="url" id="edit-cover-image" name="cover_image"
-                               value="{{drop.cover_image}}" placeholder="https://example.com/image.jpg">
-                        <small class="form-help">Optional: Add a cover image for your drop</small>
-                    </div>
-                </div>
-
-                <!-- Visibility & Access Control -->
-                <div class="form-section">
-                    <h2>Visibility & Access Control</h2>
-
-                    <div class="form-group">
-                        <div class="setting-group">
-                            <div class="setting-header">
-                                <div class="checkbox-group">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}}>
-                                        <span class="checkbox-custom"></span>
-                                        <span class="checkbox-text">Active Drop</span>
-                                    </label>
-                                </div>
-                                <div class="setting-status">
-                                    <span class="status-indicator {{#if drop.is_active}}active{{else}}inactive{{/if}}">
-                                        {{#if drop.is_active}}Live{{else}}Draft{{/if}}
-                                    </span>
-                                </div>
+                            <label for="edit-slug">URL Slug</label>
+                            <div class="slug-input-wrapper">
+                                <span class="slug-prefix">{{domain}}/drop/</span>
+                                <input type="text" id="edit-slug" name="slug" maxlength="100"
+                                       value="{{drop.slug}}" placeholder="my-drop">
                             </div>
-                            <div class="setting-description">
-                                <p>When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</p>
+                            <small class="form-help">This will be your drop's public URL</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-button-text">Button Text</label>
+                            <input type="text" id="edit-button-text" name="button_text" maxlength="50"
+                                   value="{{drop.button_text}}" placeholder="Get Notified">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-cover-image">Cover Image URL</label>
+                            <input type="url" id="edit-cover-image" name="cover_image"
+                                   value="{{drop.cover_image}}" placeholder="https://example.com/image.jpg">
+                            <small class="form-help">Optional: Add a cover image for your drop</small>
+                        </div>
+                    </div>
+
+                    <!-- Styling Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Styling</h2>
+                            <p class="section-description">Customize the visual appearance of your drop page</p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="edit-background-color">Background Color</label>
+                                <input type="color" id="edit-background-color" name="background_color"
+                                       value="{{drop.background_color}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-card-color">Card Color</label>
+                                <input type="color" id="edit-card-color" name="card_color"
+                                       value="{{drop.card_color}}">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="edit-title-color">Title Text Color</label>
+                                <input type="color" id="edit-title-color" name="title_color"
+                                       value="{{drop.title_color}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-description-color">Description Text Color</label>
+                                <input type="color" id="edit-description-color" name="description_color"
+                                       value="{{drop.description_color}}">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="edit-button-color">Button Color</label>
+                                <input type="color" id="edit-button-color" name="button_color"
+                                       value="{{drop.button_color}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-form-field-color">Form Field Color</label>
+                                <input type="color" id="edit-form-field-color" name="form_field_color"
+                                       value="{{drop.form_field_color}}">
                             </div>
                         </div>
                     </div>
+
+                    <!-- Platform Links Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Platform Links</h2>
+                            <p class="section-description">Add links to your other platforms and social media</p>
+                        </div>
+
+                        <div class="platform-links-container">
+                            <div class="form-group">
+                                <label for="edit-website-link">Website</label>
+                                <input type="url" id="edit-website-link" name="website_link"
+                                       placeholder="https://yourwebsite.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-instagram-link">Instagram</label>
+                                <input type="url" id="edit-instagram-link" name="instagram_link"
+                                       placeholder="https://instagram.com/yourusername">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-twitter-link">Twitter/X</label>
+                                <input type="url" id="edit-twitter-link" name="twitter_link"
+                                       placeholder="https://twitter.com/yourusername">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-youtube-link">YouTube</label>
+                                <input type="url" id="edit-youtube-link" name="youtube_link"
+                                       placeholder="https://youtube.com/@yourusername">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-spotify-link">Spotify</label>
+                                <input type="url" id="edit-spotify-link" name="spotify_link"
+                                       placeholder="https://open.spotify.com/artist/...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-tiktok-link">TikTok</label>
+                                <input type="url" id="edit-tiktok-link" name="tiktok_link"
+                                       placeholder="https://tiktok.com/@yourusername">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Data Collection -->
-                <div class="form-section">
-                    <h2>Data Collection</h2>
-
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="collect_email" {{#if drop.collect_email}}checked{{/if}}>
-                                <span class="checkbox-custom"></span>
-                                <span class="checkbox-text">Collect email addresses</span>
-                            </label>
+                <!-- MESSAGING TAB CONTENT -->
+                <div class="tab-content" data-tab-content="messaging">
+                    <div class="tab-placeholder">
+                        <div class="placeholder-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" class="placeholder-icon">
+                                <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H6L4,18V4H20V16Z"/>
+                            </svg>
+                            <h3>Messaging</h3>
+                            <p>Configure email templates, SMS messages, and notification settings.</p>
+                            <span class="coming-soon-badge">Coming Soon</span>
                         </div>
-                        <small class="form-help">Required for sending notifications when the drop goes live</small>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="collect_phone" {{#if drop.collect_phone}}checked{{/if}}>
-                                <span class="checkbox-custom"></span>
-                                <span class="checkbox-text">Collect phone numbers</span>
-                            </label>
-                        </div>
-                        <small class="form-help">Optional: Collect phone numbers for SMS notifications</small>
                     </div>
                 </div>
 
-                <!-- Messages -->
-                <div class="form-section">
-                    <h2>Messages</h2>
+                <!-- ADVANCED TAB CONTENT -->
+                <div class="tab-content" data-tab-content="advanced">
+                    <!-- Visibility & Access Control -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Visibility & Access Control</h2>
+                            <p class="section-description">Control who can access your drop and when it's live</p>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="edit-thank-you-message">Thank You Message</label>
-                        <textarea id="edit-thank-you-message" name="thank_you_message" rows="3"
-                                  placeholder="Thank you for signing up! You'll be notified when this drop goes live.">{{drop.thank_you_message}}</textarea>
-                        <small class="form-help">Message shown after successful signup</small>
+                        <div class="form-group">
+                            <div class="setting-group">
+                                <div class="setting-header">
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}}>
+                                            <span class="checkbox-custom"></span>
+                                            <span class="checkbox-text">Active Drop</span>
+                                        </label>
+                                    </div>
+                                    <div class="setting-status">
+                                        <span class="status-indicator {{#if drop.is_active}}active{{else}}inactive{{/if}}">
+                                            {{#if drop.is_active}}Live{{else}}Draft{{/if}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="setting-description">
+                                    <p>When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Collection -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Data Collection</h2>
+                            <p class="section-description">Configure what information to collect from users</p>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="collect_email" {{#if drop.collect_email}}checked{{/if}}>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">Collect email addresses</span>
+                                </label>
+                            </div>
+                            <small class="form-help">Required for sending notifications when the drop goes live</small>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="collect_phone" {{#if drop.collect_phone}}checked{{/if}}>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">Collect phone numbers</span>
+                                </label>
+                            </div>
+                            <small class="form-help">Optional: Collect phone numbers for SMS notifications</small>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Messages</h2>
+                            <p class="section-description">Customize messages shown to users</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-thank-you-message">Thank You Message</label>
+                            <textarea id="edit-thank-you-message" name="thank_you_message" rows="3"
+                                      placeholder="Thank you for signing up! You'll be notified when this drop goes live.">{{drop.thank_you_message}}</textarea>
+                            <small class="form-help">Message shown after successful signup</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SHARING TAB CONTENT -->
+                <div class="tab-content" data-tab-content="sharing">
+                    <div class="tab-placeholder">
+                        <div class="placeholder-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" class="placeholder-icon">
+                                <path d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"/>
+                            </svg>
+                            <h3>Sharing</h3>
+                            <p>Configure social sharing, embed codes, and promotional tools.</p>
+                            <span class="coming-soon-badge">Coming Soon</span>
+                        </div>
                     </div>
                 </div>
 
@@ -556,6 +681,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log(`Initial device detection: ${defaultDevice} (window width: ${window.innerWidth}px)`);
     }
+
+    // MODERN TAB SYSTEM - Inspired by Laylo's design patterns
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // Tab switching functionality
+    function switchTab(targetTab) {
+        // Remove active class from all tabs and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Add active class to selected tab and content
+        const activeButton = document.querySelector(`[data-tab="${targetTab}"]`);
+        const activeContent = document.querySelector(`[data-tab-content="${targetTab}"]`);
+
+        if (activeButton && activeContent) {
+            activeButton.classList.add('active');
+            activeContent.classList.add('active');
+
+            console.log(`Switched to tab: ${targetTab}`);
+        }
+    }
+
+    // Add click listeners to tab buttons
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.dataset.tab;
+            switchTab(targetTab);
+        });
+    });
+
+    // Initialize with first tab active (Page)
+    switchTab('page');
 
     // Initialize preview
     initializePreview();
