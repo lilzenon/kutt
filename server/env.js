@@ -27,6 +27,9 @@ if (process.argv.includes("--production")) {
 }
 
 const spec = {
+    // 🌍 NODE ENVIRONMENT
+    NODE_ENV: str({ choices: ["development", "production", "test"], default: "development" }),
+
     PORT: num({ default: 3000 }),
     SITE_NAME: str({ example: "Kutt", default: "Kutt" }),
     DEFAULT_DOMAIN: str({ example: "kutt.it", default: "localhost:3000" }),
