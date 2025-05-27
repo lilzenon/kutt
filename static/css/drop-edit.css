@@ -1054,48 +1054,126 @@
     line-height: 1.5;
 }
 
+
+/* 🚀 ENTERPRISE-GRADE FORM ACTIONS */
+
 .form-actions {
+    /* DESKTOP: Traditional right-aligned layout */
     padding: 24px;
-    background: #f9fafb;
+    background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid #e5e7eb;
+    /* FUTURE-PROOF: Smooth transitions */
+    transition: all 0.3s ease;
+    /* ENTERPRISE: Subtle shadow for depth */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
 }
+
+
+/* 🎯 RESEARCH-BASED ENTERPRISE BUTTONS */
 
 .button {
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
+    /* ACCESSIBILITY: 44px minimum touch target */
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 10px;
     text-decoration: none;
-    border: 1px solid transparent;
+    border: 2px solid;
+    /* ACCESSIBILITY: Minimum touch target */
+    min-height: 48px;
+    min-width: 120px;
+    /* ENTERPRISE: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* ACCESSIBILITY: Focus outline */
+    outline: none;
+    position: relative;
+    overflow: hidden;
 }
 
+
+/* ACCESSIBILITY: Focus state */
+
+.button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+
+/* SECONDARY BUTTON - Research-based neutral design */
+
 .button.secondary {
-    background: white;
-    color: #374151;
-    border-color: #d1d5db;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    color: #475569;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .button.secondary:hover {
-    background: #f9fafb;
-    border-color: #9ca3af;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-color: #94a3b8;
+    color: #334155;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+.button.secondary:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+/* PRIMARY BUTTON - Research-based blue system */
+
 .button.primary {
-    background: #3b82f6;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
     border-color: #3b82f6;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .button.primary:hover {
-    background: #2563eb;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4), 0 4px 8px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.button.primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* LOADING STATE */
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.button-spinner {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .button:disabled {
@@ -1276,19 +1354,52 @@
     .form-row {
         grid-template-columns: 1fr;
     }
+    /* 🚀 ENTERPRISE MOBILE BUTTON SYSTEM */
     .form-actions {
-        flex-direction: column-reverse;
-        position: sticky;
+        /* RESEARCH-BASED: Sticky footer with proper spacing */
+        position: fixed;
         bottom: 0;
-        background: white;
-        border-top: 1px solid #e5e7eb;
-        margin: 0 -16px;
-        padding: 16px;
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        /* ENTERPRISE: Modern gradient background */
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        /* ACCESSIBILITY: Proper spacing and layout */
+        padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        /* ENTERPRISE: Premium shadow system */
+        border-top: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12), 0 -4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        /* FUTURE-PROOF: Smooth transitions */
+        transition: all 0.3s ease;
     }
+    /* RESEARCH-BASED: Optimal button sizing for mobile */
     .button {
-        width: 100%;
-        justify-content: center;
+        /* ACCESSIBILITY: Full-width touch targets */
+        flex: 1;
+        /* ENTERPRISE: Optimal mobile sizing */
+        padding: 16px 20px;
+        font-size: 16px;
+        font-weight: 700;
+        min-height: 52px;
+        /* MODERN: Better border radius for mobile */
+        border-radius: 14px;
+        /* ACCESSIBILITY: Better touch feedback */
+        -webkit-tap-highlight-color: transparent;
+    }
+    /* ENTERPRISE: Secondary button gets less visual weight */
+    .button.secondary {
+        flex: 0.8;
+        order: 1;
+    }
+    /* ENTERPRISE: Primary button gets more visual weight */
+    .button.primary {
+        flex: 1.2;
+        order: 2;
     }
     .slug-prefix {
         font-size: 12px;
@@ -1392,9 +1503,20 @@
         padding: 16px;
         margin-bottom: 16px;
     }
+    /* 🚀 SMALL MOBILE: Enhanced button system */
     .form-actions {
-        padding: 12px;
-        margin: 0 -12px;
+        /* ENTERPRISE: Optimized for small screens */
+        padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+        gap: 10px;
+        /* ACCESSIBILITY: Slightly smaller but still compliant */
+        box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.1), 0 -3px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .button {
+        /* SMALL MOBILE: Optimized sizing */
+        padding: 14px 16px;
+        font-size: 15px;
+        min-height: 48px;
+        border-radius: 12px;
     }
     .drop-preview-panel {
         padding: 0;
@@ -2192,6 +2314,8 @@
     }
     .drop-edit-container {
         padding: 16px;
+        /* ENTERPRISE: Prevent content overlap with sticky footer */
+        padding-bottom: calc(100px + env(safe-area-inset-bottom));
     }
     .drop-edit-content {
         grid-template-columns: 1fr;
