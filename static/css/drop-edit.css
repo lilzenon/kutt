@@ -847,6 +847,21 @@
     /* Allow JavaScript to override button colors */
     background-color: inherit !important;
     color: inherit !important;
+    border: none !important;
+}
+
+
+/* Fix the white card issue - make drop container transparent */
+
+.preview-viewport .drop-container {
+    background: transparent !important;
+}
+
+
+/* Ensure the preview drop itself inherits the background */
+
+.preview-drop {
+    background: transparent !important;
 }
 
 

@@ -325,22 +325,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('Updating preview colors:', { backgroundColor, titleColor, descriptionColor, buttonColor });
 
-        // Apply background color to the drop container and body
+        // Apply background color with comprehensive coverage
         if (previewDrop) {
             previewDrop.style.setProperty('background-color', backgroundColor, 'important');
+            previewDrop.style.setProperty('background', backgroundColor, 'important');
             console.log('Applied background color to previewDrop:', backgroundColor);
         }
 
-        // Also apply to the preview viewport to ensure full coverage
+        // Apply to the preview viewport to ensure full coverage
         if (previewViewport) {
             previewViewport.style.setProperty('background-color', backgroundColor, 'important');
+            previewViewport.style.setProperty('background', backgroundColor, 'important');
         }
 
         // Apply to the entire preview area
         const previewContainer = document.querySelector('.preview-container');
         if (previewContainer) {
             previewContainer.style.setProperty('background-color', backgroundColor, 'important');
+            previewContainer.style.setProperty('background', backgroundColor, 'important');
         }
+
+        // Apply to drop container specifically
+        const dropContainer = previewDrop.querySelector('.drop-container');
+        if (dropContainer) {
+            dropContainer.style.setProperty('background-color', backgroundColor, 'important');
+            dropContainer.style.setProperty('background', backgroundColor, 'important');
+        }
+
+        // Force apply to all potential background elements
+        const backgroundElements = previewDrop.querySelectorAll('.drop-container, .drop-main, .drop-header, .drop-footer');
+        backgroundElements.forEach(element => {
+            element.style.setProperty('background-color', backgroundColor, 'important');
+            element.style.setProperty('background', backgroundColor, 'important');
+        });
 
         // Apply title color specifically to title
         if (previewTitle) {
@@ -354,15 +371,25 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Applied description color:', descriptionColor);
         }
 
-        // Apply button color
+        // Apply button color with multiple targeting approaches
         if (previewButton) {
             previewButton.style.setProperty('background-color', buttonColor, 'important');
+            previewButton.style.setProperty('background', buttonColor, 'important');
 
             // Calculate if button text should be white or black based on button color
             const buttonTextColor = getContrastColor(buttonColor);
             previewButton.style.setProperty('color', buttonTextColor, 'important');
             console.log('Applied button colors:', { buttonColor, buttonTextColor });
         }
+
+        // Also target all signup buttons in preview (fallback)
+        const allPreviewButtons = previewDrop.querySelectorAll('.signup-button, button[type="button"]');
+        allPreviewButtons.forEach(btn => {
+            btn.style.setProperty('background-color', buttonColor, 'important');
+            btn.style.setProperty('background', buttonColor, 'important');
+            const btnTextColor = getContrastColor(buttonColor);
+            btn.style.setProperty('color', btnTextColor, 'important');
+        });
 
 
     }
