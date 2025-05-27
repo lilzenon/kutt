@@ -116,23 +116,24 @@
     overflow: hidden;
 }
 
+
+/* RESEARCH-BASED HEADER LAYOUT */
+
 .fans-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "title controls";
+    align-items: start;
+    gap: 24px;
     padding: 24px 32px;
     border-bottom: 1px solid #e2e8f0;
     background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
-    gap: 24px;
-    min-height: 100px;
 }
 
 .fans-title {
-    flex: 1;
+    grid-area: title;
     min-width: 0;
-    /* Allows text to wrap properly */
-    max-width: 60%;
-    /* Prevents title from taking too much space */
+    /* Allows text to wrap */
 }
 
 .fans-title h2 {
@@ -148,18 +149,14 @@
     color: #64748b;
     margin: 0;
     line-height: 1.5;
-    word-wrap: break-word;
-    max-width: 100%;
 }
 
 .fans-controls {
+    grid-area: controls;
     display: flex;
     align-items: center;
     gap: 16px;
-    flex-shrink: 0;
-    /* Prevents controls from shrinking */
-    min-width: 320px;
-    /* Ensures minimum space for controls */
+    flex-wrap: wrap;
     justify-content: flex-end;
 }
 
@@ -275,22 +272,14 @@
 }
 
 
-/* Desktop Table View */
+/* ===== RESEARCH-BASED RESPONSIVE TABLE SYSTEM ===== */
 
-.fans-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    background: white;
-    table-layout: fixed;
-    /* Ensures consistent column alignment */
-}
+
+/* Desktop Table - Default View */
 
 .table-desktop {
     display: block;
     overflow-x: auto;
-    width: 100%;
-    /* Ensure proper scrolling behavior */
     -webkit-overflow-scrolling: touch;
 }
 
@@ -311,6 +300,19 @@
 .table-desktop::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
 }
+
+.fans-table {
+    width: 100%;
+    min-width: 800px;
+    /* Minimum width for proper display */
+    border-collapse: collapse;
+    font-size: 14px;
+    background: white;
+    table-layout: fixed;
+}
+
+
+/* Mobile Cards - Hidden by default */
 
 .table-mobile {
     display: none;
@@ -333,47 +335,46 @@
 }
 
 
-/* ===== COLUMN ALIGNMENT SYSTEM ===== */
+/* ===== SIMPLIFIED COLUMN SYSTEM ===== */
 
 
-/* Research-based approach: Fixed table layout with exact column widths */
-
-
-/* Header and Body Column Alignment - Exact Width Matching */
+/* Contact Column - 40% */
 
 .fans-table thead th:nth-child(1),
 .fans-table tbody td:nth-child(1) {
-    width: 40%;
-    min-width: 280px;
-    max-width: 40%;
+    width: 320px;
 }
+
+
+/* Location Column - 20% */
 
 .fans-table thead th:nth-child(2),
 .fans-table tbody td:nth-child(2) {
-    width: 20%;
-    min-width: 140px;
-    max-width: 20%;
+    width: 160px;
 }
+
+
+/* Date Column - 15% */
 
 .fans-table thead th:nth-child(3),
 .fans-table tbody td:nth-child(3) {
-    width: 15%;
-    min-width: 120px;
-    max-width: 15%;
+    width: 120px;
 }
+
+
+/* Channel Column - 15% */
 
 .fans-table thead th:nth-child(4),
 .fans-table tbody td:nth-child(4) {
-    width: 15%;
-    min-width: 120px;
-    max-width: 15%;
+    width: 120px;
 }
+
+
+/* RSVP Column - 10% */
 
 .fans-table thead th:nth-child(5),
 .fans-table tbody td:nth-child(5) {
-    width: 10%;
-    min-width: 80px;
-    max-width: 10%;
+    width: 80px;
     text-align: center;
 }
 
@@ -951,40 +952,25 @@
         margin-bottom: 24px;
     }
     .fans-header {
-        flex-direction: column;
-        align-items: stretch;
+        grid-template-columns: 1fr;
+        grid-template-areas: "title" "controls";
         gap: 20px;
         padding: 20px;
-        min-height: auto;
-    }
-    .fans-title {
-        max-width: 100%;
-        text-align: left;
     }
     .fans-title h2 {
         font-size: 20px;
-        margin-bottom: 8px;
-    }
-    .fans-title p {
-        font-size: 14px;
-        line-height: 1.6;
     }
     .fans-controls {
+        justify-content: stretch;
         flex-direction: column;
         gap: 12px;
-        min-width: auto;
-        width: 100%;
     }
     .search-container {
         min-width: auto;
-        width: 100%;
     }
-    .search-input {
-        width: 100%;
-    }
+    .search-input,
     .sort-select {
         width: 100%;
-        min-width: auto;
     }
     /* Hide desktop table, show mobile cards */
     .table-desktop {
