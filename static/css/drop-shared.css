@@ -396,56 +396,70 @@ body {
     margin: 0;
 }
 
+
+/* 🎯 RESEARCH-BASED UNIFIED FORM INPUT SYSTEM */
+
 .form-input {
+    /* LAYOUT: Full width with proper box-sizing */
     width: 100%;
-    padding: 16px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    font-size: 16px;
-    /* BEAUTIFUL: Use CSS variables for form field background */
-    background: var(--preview-drop-form-field-color, var(--drop-form-field-color, #ffffff));
-    color: #374151;
-    transition: all 0.2s ease;
     box-sizing: border-box;
-    /* Modern: Subtle shadow for depth */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    /* FIXED: Ensure consistent height across all input types */
+    /* SPACING: Research-based padding for optimal touch targets */
+    padding: 16px 20px;
     height: 56px;
+    /* TYPOGRAPHY: 16px prevents iOS zoom, optimal readability */
+    font-size: 16px;
+    font-weight: 400;
     line-height: 1.4;
-    /* FIXED: Remove browser-specific styling */
+    color: #374151;
+    /* STYLING: Modern, accessible design */
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    background: var(--drop-form-field-color, var(--preview-drop-form-field-color, #ffffff));
+    /* INTERACTION: Smooth transitions */
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    /* ACCESSIBILITY: Remove browser styling */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    /* VISUAL: Subtle depth */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* MOBILE: Prevent zoom and improve UX */
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
+
+
+/* RESEARCH-BASED FOCUS STATES */
 
 .form-input:focus {
     outline: none;
-    border-color: rgba(0, 0, 0, 0.3);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-input:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
-/* FIXED: Ensure all input types have consistent styling and form field color */
+/* UNIFIED INPUT TYPE CONSISTENCY */
 
 input[type="email"].form-input,
 input[type="tel"].form-input,
 input[type="text"].form-input {
-    height: 56px;
-    padding: 16px;
-    font-size: 16px;
-    line-height: 1.4;
-    /* FIXED: Ensure form field color applies to all input types */
-    background: var(--preview-drop-form-field-color, var(--drop-form-field-color, #ffffff)) !important;
-    /* FIXED: Remove browser-specific styling for tel inputs */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    /* INHERIT: All properties from .form-input */
+    /* This ensures 100% consistency across all input types */
 }
 
 
-/* ADDITIONAL: Ensure preview inputs get the form field color */
+/* PREVIEW INPUT CONSISTENCY */
 
 .preview-input {
-    background: var(--preview-drop-form-field-color, var(--drop-form-field-color, #ffffff)) !important;
+    /* INHERIT: All properties from .form-input */
+    /* Additional override for background color */
+    background: var(--drop-form-field-color, var(--preview-drop-form-field-color, #ffffff)) !important;
 }
 
 

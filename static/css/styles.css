@@ -3072,36 +3072,12 @@ table .tab a:not(.active):hover {
     backdrop-filter: blur(10px);
 }
 
-.signup-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
 
-.form-group {
-    position: relative;
-}
+/* 🎯 FORM STYLES MOVED TO drop-shared.css FOR CONSISTENCY */
 
-.form-input {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    background: white;
-    color: #333;
-}
 
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
-}
-
-.form-input::placeholder {
-    color: #6c757d;
-}
+/* All form styling is now unified in drop-shared.css to ensure
+   perfect consistency between preview and live drop pages */
 
 .signup-button {
     width: 100%;
