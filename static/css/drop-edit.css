@@ -42,10 +42,10 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.6) 100%);
     border: 1px solid rgba(226, 232, 240, 0.6);
     /* GENEROUS: Premium spacing */
-    padding: 16px 24px 18px 24px;
+    padding: 16px 20px 18px 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 14px;
     font-weight: 600;
     color: #64748b;
@@ -55,6 +55,8 @@
     position: relative;
     /* RESEARCH-BASED: Optimal touch target size */
     min-height: 56px;
+    /* FIXED: Minimum width to prevent icon squishing */
+    min-width: 120px;
     /* PREMIUM: Subtle shadow */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     /* MODERN: Better text rendering */
@@ -119,9 +121,11 @@
 }
 
 .tab-btn svg {
-    /* HUGE ICONS: Much larger for perfect visibility */
-    width: 32px !important;
-    height: 32px !important;
+    /* FIXED: Large icons with consistent sizing */
+    width: 24px !important;
+    height: 24px !important;
+    /* FIXED: Prevent shrinking */
+    flex-shrink: 0;
     opacity: 0.8;
     transition: all 0.3s ease;
     position: relative;
@@ -140,12 +144,14 @@
 }
 
 
-/* DESKTOP: HUGE icons for desktop visibility */
+/* DESKTOP: Large icons with proper sizing */
 
 @media (min-width: 769px) {
     .tab-btn svg {
-        width: 36px !important;
-        height: 36px !important;
+        width: 28px !important;
+        height: 28px !important;
+        /* FIXED: Ensure icons don't shrink */
+        flex-shrink: 0;
     }
     .tab-btn:hover svg {
         transform: scale(1.08);
@@ -355,10 +361,12 @@
 }
 
 .form-section {
-    /* PREMIUM: Generous spacing for luxury feel */
-    padding: 40px 48px;
+    /* RESEARCH-BASED: 8px grid system with optimal spacing */
+    padding: 32px 40px;
     border-bottom: 1px solid rgba(243, 244, 246, 0.8);
     position: relative;
+    /* OPTIMIZED: Consistent spacing between sections */
+    margin-bottom: 8px;
 }
 
 .form-section::before {
@@ -366,14 +374,15 @@
     content: '';
     position: absolute;
     bottom: 0;
-    left: 48px;
-    right: 48px;
+    left: 40px;
+    right: 40px;
     height: 1px;
     background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%);
 }
 
 .form-section:last-child {
     border-bottom: none;
+    margin-bottom: 0;
 }
 
 .form-section:last-child::before {
@@ -381,7 +390,8 @@
 }
 
 .form-section h2 {
-    margin: 0 0 24px 0;
+    /* RESEARCH-BASED: Optimal title spacing */
+    margin: 0 0 16px 0;
     font-size: 20px;
     font-weight: 700;
     color: #1e293b;
@@ -490,7 +500,10 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
     border: 1px solid rgba(226, 232, 240, 0.6);
     border-radius: 16px;
+    /* RESEARCH-BASED: Optimal card padding using 8px grid */
     padding: 24px;
+    /* OPTIMIZED: Consistent spacing between cards */
+    margin-bottom: 16px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -1685,6 +1698,20 @@
     border-radius: 6px;
     font-size: 13px;
     font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.url-display.clickable-url {
+    cursor: pointer;
+    gap: 8px;
+}
+
+.url-display.clickable-url:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 }
 
 .url-prefix {
@@ -1694,6 +1721,19 @@
 .url-slug {
     color: #3b82f6;
     font-weight: 600;
+}
+
+.external-link-icon {
+    color: #6b7280;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.url-display.clickable-url:hover .external-link-icon {
+    color: #3b82f6;
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 
@@ -1855,12 +1895,12 @@
         min-width: 105px;
     }
     .form-section {
-        /* MOBILE: Reduced but still premium spacing */
-        padding: 32px 24px;
+        /* MOBILE: Optimized spacing using 8px grid */
+        padding: 24px 20px;
     }
     .form-section::before {
-        left: 24px;
-        right: 24px;
+        left: 20px;
+        right: 20px;
     }
     .platform-links-container {
         grid-template-columns: 1fr;
