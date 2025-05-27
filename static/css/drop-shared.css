@@ -227,12 +227,12 @@ body {
 }
 
 
-/* ===== MOBILE-FIRST MAIN CONTENT SYSTEM ===== */
+/* ===== MODERN MOBILE-FIRST MAIN CONTENT SYSTEM ===== */
 
 .drop-main {
     flex: 1;
-    /* MOBILE-FIRST: Proper mobile padding to prevent width issues */
-    padding: 24px 16px;
+    /* MODERN: 8px grid system padding */
+    padding: 32px 24px;
     text-align: center;
     /* RESEARCH-BASED: Prevent horizontal overflow */
     width: 100%;
@@ -241,7 +241,8 @@ body {
 }
 
 .drop-content {
-    max-width: 400px;
+    /* RESEARCH-BASED: Optimal content width for readability */
+    max-width: 500px;
     margin: 0 auto;
     /* MOBILE: Ensure content doesn't overflow */
     width: 100%;
@@ -249,17 +250,33 @@ body {
 }
 
 
-/* ===== COVER IMAGE SYSTEM ===== */
+/* ===== MODERN COVER IMAGE SYSTEM ===== */
 
 .drop-cover-image {
-    margin-bottom: 32px;
-    border-radius: 12px;
+    /* MODERN: 8px grid system spacing */
+    margin-bottom: 40px;
+    /* STUNNING: Modern border radius with subtle shadow */
+    border-radius: 20px;
     overflow: hidden;
-    width: 200px;
-    height: 200px;
+    /* MOBILE-FIRST: Larger, more impactful sizing */
+    width: 280px;
+    height: 280px;
     margin-left: auto;
     margin-right: auto;
     position: relative;
+    /* BEAUTIFUL: Modern layered shadows for depth */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    /* MODERN: Subtle backdrop blur effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* SMOOTH: Beautiful transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drop-cover-image:hover {
+    /* INTERACTIVE: Subtle hover effect */
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .drop-cover-image img {
@@ -267,53 +284,98 @@ body {
     height: 100%;
     object-fit: cover;
     object-position: center;
+    /* MODERN: Better image rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 
-/* ===== TEXT SYSTEM ===== */
+/* ===== MODERN TYPOGRAPHY SYSTEM ===== */
 
 .drop-title {
-    margin: 0 0 16px 0;
-    /* MOBILE-FIRST: Start with mobile typography */
-    font-size: 28px;
-    font-weight: 800;
+    /* MODERN: 8px grid system spacing */
+    margin: 0 0 24px 0;
+    /* MOBILE-FIRST: Larger, more impactful typography */
+    font-size: 32px;
+    font-weight: 900;
+    /* RESEARCH-BASED: Optimal line height for readability */
     line-height: 1.1;
-    letter-spacing: -0.025em;
-    /* BEAUTIFUL: Modern gradient text effect */
-    background: linear-gradient(135deg, var(--preview-drop-title-color, var(--drop-title-color, #1f2937)) 0%, color-mix(in srgb, var(--preview-drop-title-color, var(--drop-title-color, #1f2937)) 80%, #6366f1) 100%);
+    letter-spacing: -0.02em;
+    /* MODERN: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* STUNNING: Enhanced gradient text effect */
+    background: linear-gradient(135deg, var(--preview-drop-title-color, var(--drop-title-color, #1f2937)) 0%, color-mix(in srgb, var(--preview-drop-title-color, var(--drop-title-color, #1f2937)) 85%, #6366f1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     /* Fallback for browsers that don't support background-clip: text */
     color: var(--preview-drop-title-color, var(--drop-title-color, #1f2937));
+    /* BEAUTIFUL: Subtle text shadow for depth */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* MODERN: Better word spacing */
+    word-spacing: 0.1em;
 }
 
 .drop-description p {
-    margin: 0 0 24px 0;
-    /* MOBILE-FIRST: Start with mobile typography */
-    font-size: 16px;
-    line-height: 1.6;
-    font-weight: 400;
-    /* BEAUTIFUL: Subtle color with better contrast */
+    /* MODERN: 8px grid system spacing */
+    margin: 0 0 32px 0;
+    /* RESEARCH-BASED: Larger, more readable typography */
+    font-size: 18px;
+    /* OPTIMAL: Perfect line height for readability */
+    line-height: 1.7;
+    font-weight: 450;
+    /* BEAUTIFUL: Enhanced color with better contrast */
     color: var(--preview-drop-description-color, var(--drop-description-color, #6b7280));
-    /* Modern: Better text rendering */
+    /* MODERN: Better text rendering */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* RESEARCH-BASED: Optimal character spacing */
+    letter-spacing: 0.01em;
+    /* MODERN: Better word spacing for readability */
+    word-spacing: 0.05em;
+    /* BEAUTIFUL: Subtle text shadow for depth */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    /* RESPONSIVE: Optimal max-width for readability */
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .drop-stats {
-    margin-bottom: 16px;
+    /* MODERN: 8px grid system spacing */
+    margin-bottom: 24px;
 }
 
 .signup-count {
     display: inline-block;
-    padding: 8px 16px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
+    /* MODERN: 8px grid system padding */
+    padding: 12px 20px;
+    /* BEAUTIFUL: Modern glass morphism effect */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    /* RESEARCH-BASED: Optimal font sizing */
+    font-size: 15px;
+    font-weight: 600;
     color: inherit;
+    /* MODERN: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* BEAUTIFUL: Subtle shadow for depth */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* SMOOTH: Beautiful transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.signup-count:hover {
+    /* INTERACTIVE: Subtle hover effect */
+    transform: translateY(-1px);
+    box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -458,14 +520,16 @@ body {
 
 @media (min-width: 768px) {
     .drop-title {
-        font-size: 32px;
-        margin-bottom: 20px;
-        letter-spacing: -0.03em;
+        /* RESEARCH-BASED: Larger, more impactful tablet typography */
+        font-size: 40px;
+        margin-bottom: 32px;
+        letter-spacing: -0.025em;
     }
     .drop-description p {
-        font-size: 18px;
-        margin-bottom: 28px;
-        line-height: 1.7;
+        /* OPTIMAL: Better tablet readability */
+        font-size: 20px;
+        margin-bottom: 40px;
+        line-height: 1.75;
     }
     .signup-button {
         padding: 18px 32px;
@@ -473,8 +537,13 @@ body {
         border-radius: 14px;
     }
     .drop-cover-image {
-        width: 180px;
-        height: 180px;
+        /* LARGER: More impactful tablet sizing */
+        width: 320px;
+        height: 320px;
+    }
+    .drop-main {
+        /* MODERN: Enhanced tablet spacing */
+        padding: 48px 32px;
     }
 }
 
@@ -483,16 +552,18 @@ body {
 
 @media (min-width: 1024px) {
     .drop-title {
-        font-size: 40px;
-        margin-bottom: 24px;
-        letter-spacing: -0.04em;
+        /* STUNNING: Large, impactful desktop typography */
+        font-size: 48px;
+        margin-bottom: 40px;
+        letter-spacing: -0.03em;
         line-height: 1.05;
     }
     .drop-description p {
-        font-size: 20px;
-        margin-bottom: 32px;
+        /* OPTIMAL: Premium desktop readability */
+        font-size: 22px;
+        margin-bottom: 48px;
         line-height: 1.8;
-        max-width: 500px;
+        max-width: 650px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -503,8 +574,13 @@ body {
         font-weight: 700;
     }
     .drop-cover-image {
-        width: 220px;
-        height: 220px;
+        /* LARGE: Impressive desktop sizing */
+        width: 360px;
+        height: 360px;
+    }
+    .drop-main {
+        /* PREMIUM: Luxurious desktop spacing */
+        padding: 64px 40px;
     }
 }
 
@@ -513,17 +589,24 @@ body {
 
 @media (min-width: 1440px) {
     .drop-title {
-        font-size: 48px;
-        margin-bottom: 28px;
+        /* LUXURIOUS: Maximum impact typography */
+        font-size: 56px;
+        margin-bottom: 48px;
     }
     .drop-description p {
-        font-size: 22px;
-        margin-bottom: 36px;
-        max-width: 600px;
+        /* PREMIUM: Ultimate readability */
+        font-size: 24px;
+        margin-bottom: 56px;
+        max-width: 700px;
     }
     .drop-cover-image {
-        width: 240px;
-        height: 240px;
+        /* MASSIVE: Show-stopping image size */
+        width: 400px;
+        height: 400px;
+    }
+    .drop-main {
+        /* LUXURIOUS: Maximum spacing */
+        padding: 80px 48px;
     }
 }
 

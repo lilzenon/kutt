@@ -933,13 +933,21 @@
 }
 
 .preview-viewport.mobile .drop-title {
-    font-size: 24px !important;
-    margin-bottom: 12px !important;
+    /* MODERN: Match new mobile typography */
+    font-size: 32px !important;
+    margin-bottom: 24px !important;
 }
 
 .preview-viewport.mobile .drop-description p {
-    font-size: 16px !important;
-    margin-bottom: 20px !important;
+    /* ENHANCED: Match new mobile typography */
+    font-size: 18px !important;
+    margin-bottom: 32px !important;
+}
+
+.preview-viewport.mobile .drop-cover-image {
+    /* LARGER: Match new mobile image sizing */
+    width: 280px !important;
+    height: 280px !important;
 }
 
 .preview-viewport.mobile .form-input {
@@ -978,13 +986,21 @@
 }
 
 .preview-viewport.desktop .drop-title {
-    font-size: 32px !important;
-    margin-bottom: 16px !important;
+    /* STUNNING: Match new desktop typography */
+    font-size: 48px !important;
+    margin-bottom: 40px !important;
 }
 
 .preview-viewport.desktop .drop-description p {
-    font-size: 18px !important;
-    margin-bottom: 24px !important;
+    /* PREMIUM: Match new desktop typography */
+    font-size: 22px !important;
+    margin-bottom: 48px !important;
+}
+
+.preview-viewport.desktop .drop-cover-image {
+    /* IMPRESSIVE: Match new desktop image sizing */
+    width: 360px !important;
+    height: 360px !important;
 }
 
 .preview-viewport.desktop .form-input {
