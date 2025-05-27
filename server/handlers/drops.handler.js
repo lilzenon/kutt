@@ -215,7 +215,18 @@ async function createSignup(req, res) {
     };
 
     try {
+        // Create signup in main database
         await drop.createSignup(foundDrop.id, signupData);
+
+        // 🚀 OPTIONAL CRM INTEGRATION (graceful fallback if CRM not available)
+        try {
+            const contactService = require('../services/crm/contact.service');
+            await contactService.createFromDropSignup(signupData, foundDrop.id);
+            console.log('✅ Contact created in CRM for drop signup');
+        } catch (crmError) {
+            console.warn('⚠️ CRM integration failed (continuing without CRM):', crmError.message);
+            // Continue without CRM - don't fail the signup
+        }
 
         res.status(201).json({
             success: true,

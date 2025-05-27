@@ -1,10 +1,14 @@
 const { crmDb } = require("../../config/crm-database");
 const { normalizePhoneNumber, validateEmail, generateUUID } = require("../../utils/crm-utils");
-const eventService = require("./event.service");
+
+// Graceful handling if CRM database is not available
+if (!crmDb) {
+    console.warn('⚠️ CRM Database not available - CRM features disabled');
+}
 
 /**
  * 🎯 CONTACT SERVICE - CORE CRM OPERATIONS
- * 
+ *
  * FEATURES:
  * - Contact creation and deduplication
  * - GDPR-compliant data management
@@ -21,13 +25,18 @@ class ContactService {
      * Create or update contact from drop signup
      */
     async createFromDropSignup(dropSignupData, dropId) {
+        // Check if CRM database is available
+        if (!crmDb) {
+            throw new Error('CRM Database not configured');
+        }
+
         try {
             const contactData = {
-                email: dropSignupData.email?.toLowerCase().trim(),
+                email: dropSignupData.email ? .toLowerCase().trim(),
                 phone: dropSignupData.phone ? normalizePhoneNumber(dropSignupData.phone) : null,
                 first_name: dropSignupData.name ? this.extractFirstName(dropSignupData.name) : null,
                 last_name: dropSignupData.name ? this.extractLastName(dropSignupData.name) : null,
-                full_name: dropSignupData.name?.trim(),
+                full_name: dropSignupData.name ? .trim(),
                 source: 'drop',
                 source_drop_id: dropId,
                 ip_address: dropSignupData.ip_address,
@@ -45,7 +54,7 @@ class ContactService {
 
             // Check for existing contact
             const existingContact = await this.findExistingContact(contactData.email, contactData.phone);
-            
+
             if (existingContact) {
                 // Update existing contact
                 return await this.updateContact(existingContact.id, contactData);
@@ -76,10 +85,10 @@ class ContactService {
 
             // Generate UUID
             contactData.uuid = generateUUID();
-            
+
             // Calculate data quality score
             contactData.data_quality_score = this.calculateDataQualityScore(contactData);
-            
+
             // Set timestamps
             contactData.created_at = new Date();
             contactData.updated_at = new Date();
@@ -87,26 +96,31 @@ class ContactService {
 
             // Insert contact
             const [contact] = await crmDb("contacts").insert(contactData).returning("*");
-            
-            // Track creation event
-            await eventService.trackEvent({
-                event_name: "contact_created",
-                event_category: "crm",
-                event_source: contactData.source || "manual",
-                contact_id: contact.id,
-                source_drop_id: contactData.source_drop_id,
-                event_properties: {
-                    lifecycle_stage: contact.lifecycle_stage,
-                    lead_status: contact.lead_status,
-                    has_email: !!contact.email,
-                    has_phone: !!contact.phone,
-                    data_quality_score: contact.data_quality_score
-                }
-            });
+
+            // Track creation event (if event service available)
+            try {
+                const eventService = require("./event.service");
+                await eventService.trackEvent({
+                    event_name: "contact_created",
+                    event_category: "crm",
+                    event_source: contactData.source || "manual",
+                    contact_id: contact.id,
+                    source_drop_id: contactData.source_drop_id,
+                    event_properties: {
+                        lifecycle_stage: contact.lifecycle_stage,
+                        lead_status: contact.lead_status,
+                        has_email: !!contact.email,
+                        has_phone: !!contact.phone,
+                        data_quality_score: contact.data_quality_score
+                    }
+                });
+            } catch (eventError) {
+                console.warn('⚠️ Event tracking failed:', eventError.message);
+            }
 
             console.log(`✅ Created contact: ${contact.uuid}`);
             return contact;
-            
+
         } catch (error) {
             console.error("🚨 Error creating contact:", error);
             throw error;
@@ -120,14 +134,14 @@ class ContactService {
         try {
             // Remove system fields that shouldn't be updated directly
             const { id, uuid, created_at, ...safeUpdateData } = updateData;
-            
+
             // Set updated timestamp
             safeUpdateData.updated_at = new Date();
             safeUpdateData.last_activity_date = new Date();
-            
+
             // Recalculate data quality score
             const existingContact = await this.getContactById(contactId);
-            const mergedData = { ...existingContact, ...safeUpdateData };
+            const mergedData = {...existingContact, ...safeUpdateData };
             safeUpdateData.data_quality_score = this.calculateDataQualityScore(mergedData);
 
             // Update contact
@@ -150,7 +164,7 @@ class ContactService {
 
             console.log(`✅ Updated contact: ${updatedContact.uuid}`);
             return updatedContact;
-            
+
         } catch (error) {
             console.error("🚨 Error updating contact:", error);
             throw error;
@@ -163,7 +177,7 @@ class ContactService {
     async findExistingContact(email, phone) {
         try {
             let query = crmDb("contacts").where("is_active", true);
-            
+
             if (email && phone) {
                 query = query.where(function() {
                     this.where("email", email).orWhere("phone", phone);
@@ -209,7 +223,7 @@ class ContactService {
             }
 
             const oldStage = contact.lifecycle_stage;
-            
+
             await this.updateContact(contactId, {
                 lifecycle_stage: newStage,
                 lead_status: this.getDefaultLeadStatus(newStage)
@@ -229,7 +243,7 @@ class ContactService {
             });
 
             console.log(`✅ Updated lifecycle stage for contact ${contact.uuid}: ${oldStage} → ${newStage}`);
-            
+
         } catch (error) {
             console.error("🚨 Error updating lifecycle stage:", error);
             throw error;
@@ -242,7 +256,7 @@ class ContactService {
     async handleSMSOptOut(phone, optOutType = "STOP", campaignId = null) {
         try {
             const normalizedPhone = normalizePhoneNumber(phone);
-            
+
             // Find contact by phone
             const contact = await crmDb("contacts")
                 .where("phone", normalizedPhone)
@@ -273,7 +287,7 @@ class ContactService {
 
             // Record in opt-out table
             await crmDb("sms_opt_outs").insert({
-                contact_id: contact?.id,
+                contact_id: contact ? .id,
                 phone: normalizedPhone,
                 opt_out_type: optOutType,
                 campaign_id: campaignId,
@@ -282,7 +296,7 @@ class ContactService {
             });
 
             console.log(`✅ Processed SMS opt-out for ${normalizedPhone}`);
-            
+
         } catch (error) {
             console.error("🚨 Error handling SMS opt-out:", error);
             throw error;
@@ -294,37 +308,37 @@ class ContactService {
      */
     calculateDataQualityScore(contactData) {
         let score = 0;
-        
+
         // Email presence and validity (25 points)
         if (contactData.email) {
             score += 20;
             if (contactData.email_verified) score += 5;
         }
-        
+
         // Phone presence and validity (25 points)
         if (contactData.phone) {
             score += 20;
             if (contactData.phone_verified) score += 5;
         }
-        
+
         // Name information (20 points)
         if (contactData.first_name) score += 10;
         if (contactData.last_name) score += 10;
-        
+
         // Company information (10 points)
         if (contactData.company) score += 10;
-        
+
         // Geographic information (10 points)
         if (contactData.country) score += 5;
         if (contactData.city) score += 5;
-        
+
         // Engagement (10 points)
         if (contactData.last_activity_date) {
             const daysSinceActivity = (new Date() - new Date(contactData.last_activity_date)) / (1000 * 60 * 60 * 24);
             if (daysSinceActivity <= 30) score += 10;
             else if (daysSinceActivity <= 90) score += 5;
         }
-        
+
         return Math.min(score, 100);
     }
 
@@ -358,7 +372,7 @@ class ContactService {
             'customer': 'connected',
             'evangelist': 'connected'
         };
-        
+
         return statusMap[lifecycleStage] || 'new';
     }
 }

@@ -33,17 +33,17 @@ class BuildInfo {
                 branch: this.getBranch(),
                 commitDate: this.getCommitDate(),
                 commitMessage: this.getCommitMessage(),
-                
+
                 // Build information
                 buildDate: new Date().toISOString(),
                 nodeVersion: process.version,
-                
+
                 // Repository information
                 repoUrl: this.getRepoUrl(),
-                
+
                 // Status
                 isDirty: this.isWorkingDirectoryDirty(),
-                
+
                 // Display information
                 displayText: this.generateDisplayText(),
                 githubUrl: this.generateGitHubUrl()
@@ -151,9 +151,9 @@ class BuildInfo {
         const shortHash = this.getCommitHashShort();
         const branch = this.getBranch();
         const isDirty = this.isWorkingDirectoryDirty();
-        
+
         if (!shortHash) return 'Build info unavailable';
-        
+
         let text = `${shortHash}`;
         if (branch && branch !== 'HEAD') {
             text += ` (${branch})`;
@@ -161,7 +161,7 @@ class BuildInfo {
         if (isDirty) {
             text += ' *';
         }
-        
+
         return text;
     }
 
@@ -171,9 +171,9 @@ class BuildInfo {
     generateGitHubUrl() {
         const repoUrl = this.getRepoUrl();
         const commitHash = this.getCommitHash();
-        
+
         if (!repoUrl || !commitHash) return null;
-        
+
         return `${repoUrl}/commit/${commitHash}`;
     }
 
@@ -181,6 +181,10 @@ class BuildInfo {
      * Fallback build info when Git is not available
      */
     getFallbackBuildInfo() {
+        // Check if we're in production environment
+        const isProduction = process.env.NODE_ENV === 'production';
+        const buildTime = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+
         return {
             commitHash: null,
             commitHashShort: null,
@@ -189,10 +193,10 @@ class BuildInfo {
             commitMessage: null,
             buildDate: new Date().toISOString(),
             nodeVersion: process.version,
-            repoUrl: null,
+            repoUrl: 'https://github.com/lilzenon/kutt',
             isDirty: false,
-            displayText: 'Development build',
-            githubUrl: null
+            displayText: isProduction ? `Production ${buildTime}` : 'Development build',
+            githubUrl: 'https://github.com/lilzenon/kutt'
         };
     }
 
@@ -201,7 +205,7 @@ class BuildInfo {
      */
     getFormattedBuildInfo() {
         const info = this.getBuildInfo();
-        
+
         return {
             text: info.displayText,
             url: info.githubUrl,
@@ -215,24 +219,24 @@ class BuildInfo {
      */
     generateTooltip(info) {
         const parts = [];
-        
+
         if (info.commitMessage) {
             parts.push(`Commit: ${info.commitMessage}`);
         }
-        
+
         if (info.commitDate) {
             const date = new Date(info.commitDate);
             parts.push(`Date: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`);
         }
-        
+
         if (info.branch) {
             parts.push(`Branch: ${info.branch}`);
         }
-        
+
         if (info.isDirty) {
             parts.push('⚠️ Working directory has uncommitted changes');
         }
-        
+
         return parts.join('\n');
     }
 
