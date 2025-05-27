@@ -328,9 +328,7 @@ async function createSegmentMembershipTable(knex) {
             // Indexes and constraints
             table.index(["segment_id", "is_active"]);
             table.index(["contact_id", "is_active"]);
-            table.unique(["segment_id", "contact_id"], {
-                predicate: knex.where("is_active", true)
-            });
+            table.unique(["segment_id", "contact_id"]);
         });
 
         console.log("✅ Created segment_memberships table");
