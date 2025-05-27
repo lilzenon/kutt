@@ -400,20 +400,30 @@
                                     <p>Loading fans...</p>
                                 </div>
 
-                                <table class="fans-table" id="fans-table" style="display: none;">
-                                    <thead>
-                                        <tr>
-                                            <th>Contact</th>
-                                            <th>Location</th>
-                                            <th>Joined On</th>
-                                            <th>Acq. Channel</th>
-                                            <th>RSVPs</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="fans-table-body">
-                                        <!-- Dynamic content loaded here -->
-                                    </tbody>
-                                </table>
+                                <!-- Desktop Table View -->
+                                <div class="table-desktop">
+                                    <table class="fans-table" id="fans-table" style="display: none;">
+                                        <thead>
+                                            <tr>
+                                                <th>Contact</th>
+                                                <th>Location</th>
+                                                <th>Joined On</th>
+                                                <th>Acq. Channel</th>
+                                                <th>RSVPs</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="fans-table-body">
+                                            <!-- Dynamic content loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Mobile Card View -->
+                                <div class="table-mobile">
+                                    <div class="fans-cards" id="fans-cards" style="display: none;">
+                                        <!-- Dynamic cards loaded here -->
+                                    </div>
+                                </div>
 
                                 <div class="table-pagination" id="fans-pagination" style="display: none;">
                                     <div class="pagination-info">
@@ -584,6 +594,99 @@
 
 <div id="edit-error" class="error-message" style="display: none;"></div>
 <div id="edit-success" class="success-message" style="display: none;"></div>
+
+<!-- Fan Details Modal -->
+<div class="fan-modal" id="fan-modal">
+    <div class="fan-modal-content">
+        <div class="fan-modal-header">
+            <div class="fan-modal-title">
+                <h3>Fan Details</h3>
+                <button type="button" class="fan-modal-close" onclick="closeFanModal()">&times;</button>
+            </div>
+            <div class="fan-modal-contact">
+                <div class="fan-modal-avatar" id="fan-modal-avatar">
+                    <!-- Avatar initials will be inserted here -->
+                </div>
+                <div class="fan-modal-contact-info">
+                    <h4 id="fan-modal-name">Loading...</h4>
+                    <p id="fan-modal-email">Loading...</p>
+                    <p id="fan-modal-phone" style="display: none;">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="fan-modal-body">
+            <!-- Contact Information Section -->
+            <div class="fan-modal-section">
+                <div class="fan-modal-section-title">
+                    <svg class="fan-modal-section-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 4V6L21 9ZM3 9L9 6V4L3 7V9ZM15 18V20L21 17V15L15 18ZM3 15V17L9 20V18L3 15ZM12 7C14.21 7 16 8.79 16 11C16 13.21 14.21 15 12 15C9.79 15 8 13.21 8 11C8 8.79 9.79 7 12 7Z"/>
+                    </svg>
+                    Contact Information
+                </div>
+                <div class="fan-modal-grid">
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">Email Address</div>
+                        <div class="fan-modal-field-value" id="fan-modal-detail-email">Loading...</div>
+                    </div>
+                    <div class="fan-modal-field" id="fan-modal-phone-field" style="display: none;">
+                        <div class="fan-modal-field-label">Phone Number</div>
+                        <div class="fan-modal-field-value" id="fan-modal-detail-phone">Loading...</div>
+                    </div>
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">Location</div>
+                        <div class="fan-modal-field-value" id="fan-modal-location">Loading...</div>
+                    </div>
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">Acquisition Channel</div>
+                        <div class="fan-modal-field-value" id="fan-modal-channel">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Information Section -->
+            <div class="fan-modal-section">
+                <div class="fan-modal-section-title">
+                    <svg class="fan-modal-section-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9,17H7V10H9V17M13,17H11V7H13V17M17,17H15V13H17V17M19.5,19.1H4.5V5H19.5V19.1Z"/>
+                    </svg>
+                    Activity & Engagement
+                </div>
+                <div class="fan-modal-grid">
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">First Signup</div>
+                        <div class="fan-modal-field-value" id="fan-modal-first-signup">Loading...</div>
+                    </div>
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">Total RSVPs</div>
+                        <div class="fan-modal-field-value" id="fan-modal-total-rsvps">Loading...</div>
+                    </div>
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">User Agent</div>
+                        <div class="fan-modal-field-value" id="fan-modal-user-agent">Loading...</div>
+                    </div>
+                    <div class="fan-modal-field">
+                        <div class="fan-modal-field-label">IP Address</div>
+                        <div class="fan-modal-field-value" id="fan-modal-ip">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drop History Section -->
+            <div class="fan-modal-section">
+                <div class="fan-modal-section-title">
+                    <svg class="fan-modal-section-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z"/>
+                    </svg>
+                    Drop History
+                </div>
+                <div class="fan-modal-drops-list" id="fan-modal-drops">
+                    <!-- Drop history will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {{> footer}}
 
@@ -1377,6 +1480,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderFansTable(fans);
                     renderPagination(pagination);
                     tableElement.style.display = 'table';
+
+                    // Show mobile cards
+                    const cardsElement = document.getElementById('fans-cards');
+                    cardsElement.style.display = 'flex';
+
                     paginationElement.style.display = 'flex';
                 }
             } else {
@@ -1391,45 +1499,111 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderFansTable(fans) {
         const tbody = document.getElementById('fans-table-body');
+        const cardsContainer = document.getElementById('fans-cards');
+
+        // Clear both table and cards
         tbody.innerHTML = '';
+        cardsContainer.innerHTML = '';
 
         fans.forEach(fan => {
-            const row = document.createElement('tr');
-            row.className = fan.is_repeat_fan ? 'repeat-fan' : '';
+            // Render desktop table row
+            renderDesktopTableRow(fan, tbody);
 
-            // Format join date
-            const joinDate = new Date(fan.join_date).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            });
-
-            // Create contact cell with name and email
-            const contactName = fan.name || 'Anonymous';
-            const contactEmail = fan.email;
-
-            row.innerHTML = `
-                <td class="contact-cell">
-                    <div class="contact-info">
-                        <div class="contact-name">${escapeHtml(contactName)}</div>
-                        <div class="contact-email">${escapeHtml(contactEmail)}</div>
-                        ${fan.phone ? `<div class="contact-phone">${escapeHtml(fan.phone)}</div>` : ''}
-                    </div>
-                    ${fan.is_repeat_fan ? '<span class="repeat-badge">Repeat Fan</span>' : ''}
-                </td>
-                <td class="location-cell">${escapeHtml(fan.location || 'Unknown')}</td>
-                <td class="date-cell">${joinDate}</td>
-                <td class="channel-cell">
-                    <span class="channel-badge channel-${fan.acquisition_channel.toLowerCase().replace(/[^a-z0-9]/g, '')}">${escapeHtml(fan.acquisition_channel)}</span>
-                </td>
-                <td class="rsvp-cell">
-                    <span class="rsvp-count">${fan.total_rsvps}</span>
-                    ${fan.total_rsvps > 1 ? `<span class="rsvp-drops">${fan.fan_drops.length} drops</span>` : ''}
-                </td>
-            `;
-
-            tbody.appendChild(row);
+            // Render mobile card
+            renderMobileCard(fan, cardsContainer);
         });
+    }
+
+    function renderDesktopTableRow(fan, tbody) {
+        const row = document.createElement('tr');
+        row.className = fan.is_repeat_fan ? 'repeat-fan' : '';
+        row.style.cursor = 'pointer';
+
+        // Add click handler for modal
+        row.addEventListener('click', () => openFanModal(fan));
+
+        // Format join date
+        const joinDate = new Date(fan.join_date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
+        // Create contact cell with name and email
+        const contactName = fan.name || 'Anonymous';
+        const contactEmail = fan.email;
+
+        row.innerHTML = `
+            <td class="contact-cell">
+                <div class="contact-info">
+                    <div class="contact-name">${escapeHtml(contactName)}</div>
+                    <div class="contact-email">${escapeHtml(contactEmail)}</div>
+                    ${fan.phone ? `<div class="contact-phone">${escapeHtml(fan.phone)}</div>` : ''}
+                </div>
+                ${fan.is_repeat_fan ? '<span class="repeat-badge">Repeat Fan</span>' : ''}
+            </td>
+            <td class="location-cell">${escapeHtml(fan.location || 'Unknown')}</td>
+            <td class="date-cell">${joinDate}</td>
+            <td class="channel-cell">
+                <span class="channel-badge channel-${(fan.acquisition_channel || 'direct').toLowerCase().replace(/[^a-z0-9]/g, '')}">${escapeHtml(fan.acquisition_channel || 'Direct')}</span>
+            </td>
+            <td class="rsvp-cell">
+                <span class="rsvp-count">${fan.total_rsvps || 1}</span>
+                ${fan.total_rsvps > 1 ? `<span class="rsvp-drops">${fan.fan_drops ? fan.fan_drops.length : 1} drops</span>` : ''}
+            </td>
+        `;
+
+        tbody.appendChild(row);
+    }
+
+    function renderMobileCard(fan, container) {
+        const card = document.createElement('div');
+        card.className = `fan-card ${fan.is_repeat_fan ? 'repeat-fan' : ''}`;
+
+        // Add click handler for modal
+        card.addEventListener('click', () => openFanModal(fan));
+
+        // Format join date
+        const joinDate = new Date(fan.join_date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
+        const contactName = fan.name || 'Anonymous';
+        const contactEmail = fan.email;
+
+        card.innerHTML = `
+            <div class="fan-card-header">
+                <div class="fan-card-contact">
+                    <div class="fan-card-name">${escapeHtml(contactName)}</div>
+                    <div class="fan-card-email">${escapeHtml(contactEmail)}</div>
+                    ${fan.phone ? `<div class="fan-card-phone">${escapeHtml(fan.phone)}</div>` : ''}
+                </div>
+                <div class="fan-card-badges">
+                    ${fan.is_repeat_fan ? '<span class="repeat-badge">Repeat Fan</span>' : ''}
+                    <span class="rsvp-count">${fan.total_rsvps || 1} RSVPs</span>
+                </div>
+            </div>
+            <div class="fan-card-details">
+                <div class="fan-card-detail">
+                    <div class="fan-card-detail-label">Location</div>
+                    <div class="fan-card-detail-value">${escapeHtml(fan.location || 'Unknown')}</div>
+                </div>
+                <div class="fan-card-detail">
+                    <div class="fan-card-detail-label">Joined On</div>
+                    <div class="fan-card-detail-value">${joinDate}</div>
+                </div>
+                <div class="fan-card-detail">
+                    <div class="fan-card-detail-label">Acq. Channel</div>
+                    <div class="fan-card-detail-value">
+                        <span class="channel-badge channel-${(fan.acquisition_channel || 'direct').toLowerCase().replace(/[^a-z0-9]/g, '')}">${escapeHtml(fan.acquisition_channel || 'Direct')}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
     }
 
     function renderPagination(pagination) {
@@ -1495,6 +1669,145 @@ document.addEventListener('DOMContentLoaded', function() {
         div.textContent = text;
         return div.innerHTML;
     }
+
+    // 🎯 RESEARCH-BASED FAN MODAL SYSTEM
+    // Based on HubSpot, Salesforce, and modern CRM best practices
+
+    async function openFanModal(fan) {
+        const modal = document.getElementById('fan-modal');
+        currentFanModal = fan;
+
+        // Show modal with loading state
+        modal.classList.add('active');
+
+        // Populate basic info immediately
+        populateModalBasicInfo(fan);
+
+        // Load detailed CRM data
+        await loadFanCRMData(fan);
+    }
+
+    function populateModalBasicInfo(fan) {
+        // Generate avatar initials
+        const name = fan.name || fan.email || 'Anonymous';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+
+        // Populate header
+        document.getElementById('fan-modal-avatar').textContent = initials;
+        document.getElementById('fan-modal-name').textContent = fan.name || 'Anonymous Fan';
+        document.getElementById('fan-modal-email').textContent = fan.email;
+
+        // Show/hide phone
+        const phoneElement = document.getElementById('fan-modal-phone');
+        const phoneFieldElement = document.getElementById('fan-modal-phone-field');
+        if (fan.phone) {
+            phoneElement.textContent = fan.phone;
+            phoneElement.style.display = 'block';
+            phoneFieldElement.style.display = 'block';
+        } else {
+            phoneElement.style.display = 'none';
+            phoneFieldElement.style.display = 'none';
+        }
+
+        // Populate basic fields
+        document.getElementById('fan-modal-detail-email').textContent = fan.email;
+        document.getElementById('fan-modal-detail-phone').textContent = fan.phone || 'Not provided';
+        document.getElementById('fan-modal-location').textContent = fan.location || 'Unknown';
+        document.getElementById('fan-modal-channel').textContent = fan.acquisition_channel || 'Direct';
+
+        // Format and populate activity info
+        const joinDate = new Date(fan.join_date).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        document.getElementById('fan-modal-first-signup').textContent = joinDate;
+        document.getElementById('fan-modal-total-rsvps').textContent = fan.total_rsvps || 1;
+        document.getElementById('fan-modal-user-agent').textContent = fan.user_agent || 'Unknown';
+        document.getElementById('fan-modal-ip').textContent = fan.ip_address || 'Unknown';
+    }
+
+    async function loadFanCRMData(fan) {
+        try {
+            // Load comprehensive fan data including drop history
+            const response = await fetch(`/api/fans/${encodeURIComponent(fan.email)}/details`);
+
+            if (response.ok) {
+                const fanDetails = await response.json();
+                populateModalCRMData(fanDetails);
+            } else {
+                // Fallback to basic data if CRM not available
+                populateModalDropHistory(fan);
+            }
+        } catch (error) {
+            console.warn('Could not load CRM data:', error);
+            populateModalDropHistory(fan);
+        }
+    }
+
+    function populateModalCRMData(fanDetails) {
+        // Update with comprehensive CRM data
+        if (fanDetails.drops && fanDetails.drops.length > 0) {
+            populateModalDropHistory({ fan_drops: fanDetails.drops });
+        }
+
+        // Add any additional CRM fields here
+        if (fanDetails.totalValue) {
+            // Could add revenue/value information
+        }
+    }
+
+    function populateModalDropHistory(fan) {
+        const dropsContainer = document.getElementById('fan-modal-drops');
+
+        if (fan.fan_drops && fan.fan_drops.length > 0) {
+            dropsContainer.innerHTML = fan.fan_drops.map(drop => {
+                const dropDate = new Date(drop.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                return `
+                    <div class="fan-modal-drop-item">
+                        <div class="fan-modal-drop-name">${escapeHtml(drop.title)}</div>
+                        <div class="fan-modal-drop-date">${dropDate}</div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            dropsContainer.innerHTML = `
+                <div class="fan-modal-drop-item">
+                    <div class="fan-modal-drop-name">Current Drop</div>
+                    <div class="fan-modal-drop-date">Active signup</div>
+                </div>
+            `;
+        }
+    }
+
+    // Global modal functions
+    window.closeFanModal = function() {
+        const modal = document.getElementById('fan-modal');
+        modal.classList.remove('active');
+        currentFanModal = null;
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', (e) => {
+        const modal = document.getElementById('fan-modal');
+        if (e.target === modal) {
+            closeFanModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && currentFanModal) {
+            closeFanModal();
+        }
+    });
 
 });
 </script>
