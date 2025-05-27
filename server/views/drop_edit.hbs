@@ -55,6 +55,14 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="edit-card-color">Card Color</label>
+                            <input type="color" id="edit-card-color" name="card_color"
+                                   value="{{drop.card_color}}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
                             <label for="edit-title-color">Title Text Color</label>
                             <input type="color" id="edit-title-color" name="title_color"
                                    value="{{drop.title_color}}">
@@ -296,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonTextInput = document.getElementById('edit-button-text');
     const buttonColorInput = document.getElementById('edit-button-color');
     const backgroundColorInput = document.getElementById('edit-background-color');
+    const cardColorInput = document.getElementById('edit-card-color');
     const titleColorInput = document.getElementById('edit-title-color');
     const descriptionColorInput = document.getElementById('edit-description-color');
     const coverImageInput = document.getElementById('edit-cover-image');
@@ -319,45 +328,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update preview colors
     function updatePreviewColors() {
         const backgroundColor = backgroundColorInput.value || '#ffffff';
+        const cardColor = cardColorInput.value || '#ffffff';
         const titleColor = titleColorInput.value || '#000000';
         const descriptionColor = descriptionColorInput.value || '#666666';
         const buttonColor = buttonColorInput.value || '#007bff';
 
-        console.log('Updating preview colors:', { backgroundColor, titleColor, descriptionColor, buttonColor });
+        console.log('Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor });
 
-        // Apply background color with comprehensive coverage
-        if (previewDrop) {
-            previewDrop.style.setProperty('background-color', backgroundColor, 'important');
-            previewDrop.style.setProperty('background', backgroundColor, 'important');
-            console.log('Applied background color to previewDrop:', backgroundColor);
-        }
-
-        // Apply to the preview viewport to ensure full coverage
+        // Apply BACKGROUND color (page background - behind the card)
         if (previewViewport) {
             previewViewport.style.setProperty('background-color', backgroundColor, 'important');
             previewViewport.style.setProperty('background', backgroundColor, 'important');
         }
 
-        // Apply to the entire preview area
+        // Apply to the entire preview area (page background)
         const previewContainer = document.querySelector('.preview-container');
         if (previewContainer) {
             previewContainer.style.setProperty('background-color', backgroundColor, 'important');
             previewContainer.style.setProperty('background', backgroundColor, 'important');
         }
 
-        // Apply to drop container specifically
-        const dropContainer = previewDrop.querySelector('.drop-container');
-        if (dropContainer) {
-            dropContainer.style.setProperty('background-color', backgroundColor, 'important');
-            dropContainer.style.setProperty('background', backgroundColor, 'important');
+        // Apply CARD color (the actual content card)
+        if (previewDrop) {
+            previewDrop.style.setProperty('background-color', cardColor, 'important');
+            previewDrop.style.setProperty('background', cardColor, 'important');
+            console.log('Applied card color to previewDrop:', cardColor);
         }
 
-        // Force apply to all potential background elements
-        const backgroundElements = previewDrop.querySelectorAll('.drop-container, .drop-main, .drop-header, .drop-footer');
-        backgroundElements.forEach(element => {
-            element.style.setProperty('background-color', backgroundColor, 'important');
-            element.style.setProperty('background', backgroundColor, 'important');
+        // Apply card color to drop container specifically
+        const dropContainer = previewDrop.querySelector('.drop-container');
+        if (dropContainer) {
+            dropContainer.style.setProperty('background-color', cardColor, 'important');
+            dropContainer.style.setProperty('background', cardColor, 'important');
+        }
+
+        // Apply card color to main content areas (not header/footer)
+        const cardElements = previewDrop.querySelectorAll('.drop-main');
+        cardElements.forEach(element => {
+            element.style.setProperty('background-color', cardColor, 'important');
+            element.style.setProperty('background', cardColor, 'important');
         });
+
+        console.log('Applied background color:', backgroundColor, 'and card color:', cardColor);
 
         // Apply title color specifically to title
         if (previewTitle) {
@@ -447,6 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     buttonColorInput.addEventListener('input', updatePreviewColors);
     backgroundColorInput.addEventListener('input', updatePreviewColors);
+    cardColorInput.addEventListener('input', updatePreviewColors);
     titleColorInput.addEventListener('input', updatePreviewColors);
     descriptionColorInput.addEventListener('input', updatePreviewColors);
 

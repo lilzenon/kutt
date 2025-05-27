@@ -20,6 +20,10 @@ const createDropValidation = [
     .optional()
     .matches(/^#[0-9A-Fa-f]{6}$/)
     .withMessage("Background color must be a valid hex color"),
+    body("card_color")
+    .optional()
+    .matches(/^#[0-9A-Fa-f]{6}$/)
+    .withMessage("Card color must be a valid hex color"),
     body("title_color")
     .optional()
     .matches(/^#[0-9A-Fa-f]{6}$/)

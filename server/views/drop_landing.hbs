@@ -42,18 +42,33 @@
             padding: 0;
         }
 
+        /* Page background (behind the card) */
+        body {
+            background-color: {{drop.background_color}};
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
         .drop-container {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: {{drop.background_color}};
+            background-color: {{drop.card_color}};
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         /* Device-specific optimizations */
         {{#if isMobile}}
-        /* Mobile-optimized layout */
+        /* Mobile-optimized layout with card structure */
         .drop-container {
             font-size: 14px;
+            max-width: 100%;
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
         }
 
         .drop-header {
@@ -91,9 +106,14 @@
             height: 150px !important;
         }
         {{else}}
-        /* Desktop-optimized layout */
+        /* Desktop-optimized layout with card structure */
         .drop-container {
             font-size: 16px;
+            max-width: 600px;
+            margin: 40px auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            overflow: hidden;
         }
 
         .drop-header {

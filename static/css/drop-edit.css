@@ -828,13 +828,42 @@
 }
 
 
-/* Ensure preview colors are applied correctly and override all other styles */
+/* Ensure preview matches live page structure exactly */
 
 .preview-container,
-.preview-viewport,
-.preview-viewport .drop-container {
-    /* Force background color application */
+.preview-viewport {
+    /* Page background (behind the card) */
     background-color: inherit !important;
+}
+
+.preview-viewport .drop-container {
+    /* Card background and structure to match live page */
+    background-color: inherit !important;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+
+/* Mobile preview adjustments to match live page */
+
+.preview-viewport.mobile .drop-container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+
+/* Desktop preview adjustments to match live page */
+
+.preview-viewport.desktop .drop-container {
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
 }
 
 .preview-viewport .drop-header,
