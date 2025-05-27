@@ -339,12 +339,12 @@
                     </div>
                 </div>
 
-                <!-- Actions -->
-                <div class="form-actions">
-                    <button type="button" class="button secondary" onclick="window.history.back()">
-                        Cancel
+                <!-- Smart Actions - Only show when changes made -->
+                <div class="form-actions" id="form-actions" style="display: none;">
+                    <button type="button" class="button secondary" id="cancel-btn">
+                        Cancel Changes
                     </button>
-                    <button type="submit" class="button primary">
+                    <button type="submit" class="button primary" id="save-btn">
                         <span class="button-text">Save Changes</span>
                         <span class="button-spinner" style="display: none;">
                             {{> icons/spinner}}
@@ -825,6 +825,147 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize status indicator
     initializeStatusIndicator();
+
+    // 🎯 SMART CHANGE DETECTION SYSTEM
+    let originalFormData = {};
+    let hasChanges = false;
+
+    // Capture original form state
+    function captureOriginalState() {
+        const formData = new FormData(form);
+        originalFormData = {};
+
+        // Capture all form fields
+        for (let [key, value] of formData.entries()) {
+            originalFormData[key] = value;
+        }
+
+        // Also capture checkbox states
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            originalFormData[checkbox.name] = checkbox.checked;
+        });
+
+        console.log('📸 Original form state captured:', originalFormData);
+    }
+
+    // Check if form has changes
+    function checkForChanges() {
+        const currentFormData = new FormData(form);
+        let currentData = {};
+
+        // Capture current form fields
+        for (let [key, value] of currentFormData.entries()) {
+            currentData[key] = value;
+        }
+
+        // Also capture current checkbox states
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            currentData[checkbox.name] = checkbox.checked;
+        });
+
+        // Compare with original
+        const changed = Object.keys(originalFormData).some(key => {
+            return originalFormData[key] !== currentData[key];
+        }) || Object.keys(currentData).some(key => {
+            return originalFormData[key] !== currentData[key];
+        });
+
+        if (changed !== hasChanges) {
+            hasChanges = changed;
+            updateActionButtons();
+            console.log('🔄 Form changes detected:', hasChanges);
+        }
+    }
+
+    // Update action buttons visibility and state
+    function updateActionButtons() {
+        const formActions = document.getElementById('form-actions');
+        const saveBtn = document.getElementById('save-btn');
+
+        if (hasChanges) {
+            // Show buttons with smooth animation
+            formActions.style.display = 'flex';
+            formActions.style.opacity = '0';
+            formActions.style.transform = 'translateY(20px)';
+
+            // Animate in
+            setTimeout(() => {
+                formActions.style.transition = 'all 0.3s ease';
+                formActions.style.opacity = '1';
+                formActions.style.transform = 'translateY(0)';
+            }, 10);
+
+            // Light up save button
+            saveBtn.classList.add('changes-detected');
+        } else {
+            // Hide buttons with smooth animation
+            formActions.style.transition = 'all 0.3s ease';
+            formActions.style.opacity = '0';
+            formActions.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                formActions.style.display = 'none';
+            }, 300);
+
+            // Remove save button highlight
+            saveBtn.classList.remove('changes-detected');
+        }
+    }
+
+    // Cancel changes functionality
+    function cancelChanges() {
+        // Reset all form fields to original values
+        Object.keys(originalFormData).forEach(key => {
+            const field = form.querySelector(`[name="${key}"]`);
+            if (field) {
+                if (field.type === 'checkbox') {
+                    field.checked = originalFormData[key];
+                } else {
+                    field.value = originalFormData[key];
+                }
+
+                // Trigger change event to update preview
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+                field.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+
+        // Update preview
+        updatePreviewColors();
+        updatePreviewContent();
+
+        // Reset change detection
+        hasChanges = false;
+        updateActionButtons();
+
+        console.log('↩️ Changes cancelled, form reset to original state');
+    }
+
+    // Add event listeners for change detection
+    function initializeChangeDetection() {
+        // Capture original state
+        captureOriginalState();
+
+        // Add listeners to all form inputs
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', checkForChanges);
+            input.addEventListener('change', checkForChanges);
+        });
+
+        // Cancel button functionality
+        const cancelBtn = document.getElementById('cancel-btn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', cancelChanges);
+        }
+
+        console.log('✅ Smart change detection initialized');
+    }
+
+    // Initialize change detection
+    initializeChangeDetection();
 
     // FIXED: Keep preview mobile-focused (no auto-switching)
     window.addEventListener('resize', () => {

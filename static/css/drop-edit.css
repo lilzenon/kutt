@@ -1179,6 +1179,34 @@
 .button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* 🎯 CHANGES DETECTED STATE - Smart highlighting */
+
+.button.primary.changes-detected {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4), 0 3px 8px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: changesDetectedPulse 2s ease-in-out infinite;
+}
+
+.button.primary.changes-detected:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-color: #059669;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5), 0 4px 10px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+@keyframes changesDetectedPulse {
+    0%,
+    100% {
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4), 0 3px 8px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.6), 0 4px 10px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
 }
 
 .button-spinner {
@@ -2321,10 +2349,19 @@
         grid-template-columns: 1fr;
         gap: 16px;
     }
+    /* 🚀 MOBILE UX: Preview at top for easy access when collapsed */
     .drop-preview-panel {
+        order: 1;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        margin-bottom: 20px;
+        border-radius: 0 0 16px 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .drop-edit-main {
         order: 2;
-        position: static;
-        margin-top: 20px;
     }
     .notification-banner {
         left: 16px;
