@@ -318,9 +318,9 @@ async function getFanSummaryStats(userId, dropId = null) {
             .having(knex.raw("COUNT(*) > 1"))
             .then(results => results.length);
 
-        // Recent signups (last 7 days)
+        // Recent signups (last 7 days) - PostgreSQL compatible
         const recentSignupsResult = await baseQuery.clone()
-            .where("ds.created_at", ">=", knex.raw("DATE_SUB(NOW(), INTERVAL 7 DAY)"))
+            .where("ds.created_at", ">=", knex.raw("NOW() - INTERVAL '7 days'"))
             .count("ds.id as count")
             .first();
         const recentSignups = parseInt(recentSignupsResult.count) || 0;
@@ -344,11 +344,11 @@ async function getFanSummaryStats(userId, dropId = null) {
             .orderBy("count", "desc")
             .limit(5);
 
-        // Growth trend (last 30 days)
+        // Growth trend (last 30 days) - PostgreSQL compatible
         const growthTrend = await baseQuery.clone()
             .select(knex.raw("DATE(ds.created_at) as date"))
             .count("ds.id as signups")
-            .where("ds.created_at", ">=", knex.raw("DATE_SUB(NOW(), INTERVAL 30 DAY)"))
+            .where("ds.created_at", ">=", knex.raw("NOW() - INTERVAL '30 days'"))
             .groupBy("date")
             .orderBy("date", "asc");
 

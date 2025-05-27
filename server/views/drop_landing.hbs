@@ -303,7 +303,21 @@
                         errorMessage.style.display = 'block';
                     }
                 } catch (error) {
-                    errorText.textContent = 'Network error. Please check your connection and try again.';
+                    console.error('🚨 Form submission error:', error);
+
+                    // More specific error messages
+                    if (error.message.includes('HTTP 404')) {
+                        errorText.textContent = 'Drop not found. Please check the URL and try again.';
+                    } else if (error.message.includes('HTTP 400')) {
+                        errorText.textContent = 'Invalid form data. Please check your information and try again.';
+                    } else if (error.message.includes('HTTP 500')) {
+                        errorText.textContent = 'Server error. Please try again in a few moments.';
+                    } else if (error.message.includes('Failed to fetch') || error.message.includes('Network')) {
+                        errorText.textContent = 'Network error. Please check your connection and try again.';
+                    } else {
+                        errorText.textContent = error.message || 'An unexpected error occurred. Please try again.';
+                    }
+
                     errorMessage.style.display = 'block';
                 } finally {
                     // Reset button state
