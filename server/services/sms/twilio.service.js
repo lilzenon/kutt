@@ -67,13 +67,20 @@ class TwilioService {
                 throw new Error('Invalid phone number format');
             }
 
-            // Prepare message options
+            // Prepare message options - only include valid options
             const messageOptions = {
                 body: message,
                 from: env.TWILIO_PHONE_NUMBER,
-                to: cleanedNumber,
-                ...options
+                to: cleanedNumber
             };
+
+            // Add optional parameters only if they have valid values
+            Object.keys(options).forEach(key => {
+                const value = options[key];
+                if (value !== null && value !== undefined && value !== '') {
+                    messageOptions[key] = value;
+                }
+            });
 
             // Add compliance footer if not present
             if (!message.includes('Reply STOP to opt out')) {
@@ -81,6 +88,10 @@ class TwilioService {
             }
 
             console.log(`📱 Sending SMS to ${cleanedNumber}...`);
+            console.log(`📋 Message options:`, {
+                ...messageOptions,
+                body: messageOptions.body.substring(0, 50) + '...' // Truncate for logging
+            });
 
             // Send message via Twilio
             const result = await this.client.messages.create(messageOptions);

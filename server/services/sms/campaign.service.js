@@ -1,12 +1,12 @@
 /**
  * 🚀 ENTERPRISE SMS CAMPAIGN MANAGEMENT SERVICE
- * 
+ *
  * Research-based implementation following industry best practices from:
  * - HubSpot Marketing Hub
  * - Salesforce Marketing Cloud
  * - Mailchimp Transactional
  * - Twilio SendGrid Marketing Campaigns
- * 
+ *
  * FEATURES:
  * - Campaign lifecycle management
  * - A/B testing and optimization
@@ -58,14 +58,19 @@ class SMSCampaignService {
             });
 
             const message = this.generateDropSignupMessage(userInfo, dropInfo);
-            
-            const result = await twilioService.sendSMS(userInfo.phone, message, {
-                // Add campaign tracking
-                messagingServiceSid: env.TWILIO_MESSAGING_SERVICE_SID,
+
+            // Build options object with only valid values
+            const options = {
                 statusCallback: this.getStatusCallbackUrl(),
-                // Custom parameters for tracking
                 provideFeedback: true
-            });
+            };
+
+            // Only add messaging service SID if it's configured
+            if (env.TWILIO_MESSAGING_SERVICE_SID && env.TWILIO_MESSAGING_SERVICE_SID.trim()) {
+                options.messagingServiceSid = env.TWILIO_MESSAGING_SERVICE_SID;
+            }
+
+            const result = await twilioService.sendSMS(userInfo.phone, message, options);
 
             if (result.success) {
                 await this.trackMessageSent(campaign.id, {
@@ -101,7 +106,7 @@ class SMSCampaignService {
 
             // Get subscribers for this drop
             const subscribers = await this.getDropSubscribers(dropInfo.id, options.segmentId);
-            
+
             console.log(`📱 Starting drop announcement campaign for ${subscribers.length} subscribers`);
 
             // Send in batches to respect rate limits
@@ -159,9 +164,9 @@ class SMSCampaignService {
         };
 
         const [newCampaign] = await crmDb('sms_campaigns').insert(campaign).returning('*');
-        
+
         console.log(`📊 Created SMS campaign: ${newCampaign.name} (ID: ${newCampaign.id})`);
-        
+
         return newCampaign;
     }
 
@@ -185,11 +190,11 @@ class SMSCampaignService {
     generateDropSignupMessage(userInfo, dropInfo) {
         const userName = userInfo.name ? userInfo.name.split(' ')[0] : 'there';
         const dropTitle = dropInfo.title || 'our drop';
-        
+
         return `🎉 Hey ${userName}! You're confirmed for ${dropTitle}. ` +
-               `We'll text you when it goes live. ` +
-               `Thanks for joining BOUNCE2BOUNCE!\n\n` +
-               `Reply STOP to opt out.`;
+            `We'll text you when it goes live. ` +
+            `Thanks for joining BOUNCE2BOUNCE!\n\n` +
+            `Reply STOP to opt out.`;
     }
 
     /**
@@ -199,10 +204,10 @@ class SMSCampaignService {
         const userName = userInfo.name ? userInfo.name.split(' ')[0] : 'there';
         const dropTitle = dropInfo.title || 'our drop';
         const dropUrl = `${env.SITE_URL}/drop/${dropInfo.slug}`;
-        
+
         return `🚀 ${userName}, ${dropTitle} is LIVE! ` +
-               `Check it out now: ${dropUrl}\n\n` +
-               `Reply STOP to opt out.`;
+            `Check it out now: ${dropUrl}\n\n` +
+            `Reply STOP to opt out.`;
     }
 
     /**
@@ -229,9 +234,9 @@ class SMSCampaignService {
             }
 
             const subscribers = await query;
-            
+
             console.log(`📊 Found ${subscribers.length} eligible subscribers for drop ${dropId}`);
-            
+
             return subscribers;
 
         } catch (error) {
@@ -249,11 +254,19 @@ class SMSCampaignService {
         for (const subscriber of subscribers) {
             try {
                 const message = this.generateDropAnnouncementMessage(subscriber, dropInfo);
-                
-                const result = await twilioService.sendSMS(subscriber.phone, message, {
+
+                // Build options object with only valid values
+                const options = {
                     statusCallback: this.getStatusCallbackUrl(),
                     provideFeedback: true
-                });
+                };
+
+                // Only add messaging service SID if it's configured
+                if (env.TWILIO_MESSAGING_SERVICE_SID && env.TWILIO_MESSAGING_SERVICE_SID.trim()) {
+                    options.messagingServiceSid = env.TWILIO_MESSAGING_SERVICE_SID;
+                }
+
+                const result = await twilioService.sendSMS(subscriber.phone, message, options);
 
                 if (result.success) {
                     await this.trackMessageSent(campaignId, {
@@ -362,7 +375,7 @@ class SMSCampaignService {
                 delivered: messages.filter(m => m.status === 'delivered').length,
                 failed: messages.filter(m => m.status === 'failed').length,
                 pending: messages.filter(m => m.status === 'sent').length,
-                deliveryRate: messages.length > 0 ? 
+                deliveryRate: messages.length > 0 ?
                     (messages.filter(m => m.status === 'delivered').length / messages.length * 100).toFixed(2) : 0
             };
 
