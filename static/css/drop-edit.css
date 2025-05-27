@@ -550,13 +550,16 @@
 }
 
 
-/* PIXEL-PERFECT iOS TOGGLE SWITCH REPLICA */
+/* PREMIUM MODERN TOGGLE SWITCH - OPTIMIZED */
 
 .modern-toggle {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    /* iOS EXACT: No additional styling on container */
+    /* PREMIUM: Subtle hover area */
+    padding: 4px;
+    border-radius: 32px;
+    transition: all 0.3s ease;
 }
 
 .modern-toggle input[type="checkbox"] {
@@ -564,120 +567,131 @@
     width: 0;
     height: 0;
     position: absolute;
-    /* iOS EXACT: Hidden input */
 }
 
 .toggle-slider {
     position: relative;
     display: block;
-    /* iOS EXACT DIMENSIONS: 51px x 31px */
-    width: 51px;
-    height: 31px;
-    /* iOS EXACT: Gray background when off */
-    background-color: #E5E5EA;
-    border-radius: 31px;
-    /* iOS EXACT: 0.2s ease-in-out animation */
-    transition: background-color 0.2s ease-in-out;
-    /* iOS EXACT: No border, clean design */
-    border: none;
-    /* iOS EXACT: Subtle inner shadow */
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* OPTIMIZED: Perfect proportions */
+    width: 54px;
+    height: 32px;
+    /* PREMIUM: Beautiful gradient background */
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-radius: 32px;
+    /* OPTIMIZED: Smooth cubic-bezier animation */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* PREMIUM: Layered shadows for depth */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    /* OPTIMIZED: Subtle border */
+    border: 1px solid rgba(203, 213, 225, 0.6);
 }
 
 .toggle-thumb {
     position: absolute;
-    /* iOS EXACT: 2px from edges when off */
-    top: 2px;
-    left: 2px;
-    /* iOS EXACT: 27px diameter thumb */
-    width: 27px;
-    height: 27px;
-    /* iOS EXACT: Pure white thumb */
-    background-color: #FFFFFF;
+    /* OPTIMIZED: Perfect positioning */
+    top: 3px;
+    left: 3px;
+    /* OPTIMIZED: Ideal thumb size */
+    width: 24px;
+    height: 24px;
+    /* PREMIUM: Gradient thumb with glass effect */
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border-radius: 50%;
-    /* iOS EXACT: 0.2s ease-in-out animation */
-    transition: transform 0.2s ease-in-out;
-    /* iOS EXACT: Subtle drop shadow */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04);
-    /* iOS EXACT: No border on thumb */
-    border: none;
+    /* OPTIMIZED: Smooth animation */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* PREMIUM: Beautiful drop shadow */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    /* OPTIMIZED: Clean border */
+    border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 
-/* iOS EXACT CHECKED STATE */
+/* PREMIUM CHECKED STATE - OPTIMIZED */
 
 .modern-toggle input[type="checkbox"]:checked+.toggle-slider {
-    /* iOS EXACT: System green color */
-    background-color: #34C759;
-    /* iOS EXACT: No additional shadows or borders */
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* PREMIUM: Beautiful blue gradient */
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    /* OPTIMIZED: Enhanced shadows for active state */
+    box-shadow: inset 0 2px 4px rgba(59, 130, 246, 0.2), 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 6px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    /* PREMIUM: Blue border */
+    border-color: rgba(59, 130, 246, 0.8);
 }
 
 .modern-toggle input[type="checkbox"]:checked+.toggle-slider .toggle-thumb {
-    /* iOS EXACT: Move thumb 22px to the right (51px - 27px - 2px = 22px) */
-    transform: translateX(22px);
-    /* iOS EXACT: Same white background */
-    background-color: #FFFFFF;
-    /* iOS EXACT: Same shadow as unchecked state */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* OPTIMIZED: Perfect thumb movement (54px - 24px - 6px = 24px) */
+    transform: translateX(24px);
+    /* PREMIUM: Enhanced thumb for active state */
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    /* OPTIMIZED: Beautiful active shadow */
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    /* PREMIUM: Subtle blue border */
+    border-color: rgba(59, 130, 246, 0.2);
 }
 
 
-/* iOS EXACT HOVER STATES */
+/* PREMIUM HOVER STATES - OPTIMIZED */
+
+.modern-toggle:hover {
+    /* PREMIUM: Subtle container hover effect */
+    background: rgba(59, 130, 246, 0.05);
+}
 
 .modern-toggle:hover .toggle-slider {
-    /* iOS EXACT: Subtle opacity change on hover */
-    opacity: 0.8;
-    /* iOS EXACT: No scaling or transforms */
+    /* OPTIMIZED: Subtle scale and enhanced shadows */
+    transform: scale(1.02);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .modern-toggle:hover input[type="checkbox"]:not(:checked)+.toggle-slider {
-    /* iOS EXACT: Slightly darker gray on hover */
-    background-color: #D1D1D6;
+    /* PREMIUM: Enhanced gray gradient on hover */
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-color: rgba(148, 163, 184, 0.8);
 }
 
 .modern-toggle:hover input[type="checkbox"]:checked+.toggle-slider {
-    /* iOS EXACT: Slightly darker green on hover */
-    background-color: #30B454;
+    /* PREMIUM: Enhanced blue gradient on hover */
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: inset 0 2px 4px rgba(59, 130, 246, 0.3), 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 
-/* iOS EXACT FOCUS STATES */
+/* PREMIUM FOCUS STATES - OPTIMIZED */
 
 .modern-toggle input[type="checkbox"]:focus+.toggle-slider {
-    /* iOS EXACT: Focus ring with system blue */
-    outline: 2px solid #007AFF;
-    outline-offset: 2px;
-    /* iOS EXACT: No additional shadows */
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* OPTIMIZED: Beautiful focus ring */
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(59, 130, 246, 0.3), 0 2px 6px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .modern-toggle input[type="checkbox"]:focus:checked+.toggle-slider {
-    /* iOS EXACT: Same focus ring for checked state */
-    outline: 2px solid #007AFF;
-    outline-offset: 2px;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* PREMIUM: Enhanced focus for checked state */
+    box-shadow: inset 0 2px 4px rgba(59, 130, 246, 0.2), 0 0 0 4px rgba(59, 130, 246, 0.3), 0 4px 12px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 
-/* iOS EXACT DISABLED STATE */
+/* PREMIUM DISABLED STATE - OPTIMIZED */
 
 .modern-toggle input[type="checkbox"]:disabled+.toggle-slider {
-    /* iOS EXACT: Disabled gray */
-    background-color: #F2F2F7;
+    /* PREMIUM: Disabled gradient */
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
     opacity: 0.6;
     cursor: not-allowed;
+    /* OPTIMIZED: Reduced shadows */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-color: rgba(203, 213, 225, 0.4);
 }
 
 .modern-toggle input[type="checkbox"]:disabled+.toggle-slider .toggle-thumb {
-    /* iOS EXACT: Disabled thumb */
-    background-color: #FFFFFF;
+    /* PREMIUM: Disabled thumb styling */
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
     opacity: 0.8;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(203, 213, 225, 0.4);
 }
 
 .modern-toggle input[type="checkbox"]:disabled:checked+.toggle-slider {
-    /* iOS EXACT: Disabled checked state */
-    background-color: #34C759;
+    /* PREMIUM: Disabled checked state */
+    background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
     opacity: 0.6;
 }
 
@@ -1869,20 +1883,20 @@
         justify-content: space-between;
         align-items: center;
     }
-    /* iOS MOBILE: Slightly smaller but proportional */
+    /* PREMIUM MOBILE: Optimized proportions */
     .toggle-slider {
-        width: 47px;
-        height: 29px;
+        width: 50px;
+        height: 30px;
     }
     .toggle-thumb {
-        width: 25px;
-        height: 25px;
-        top: 2px;
-        left: 2px;
+        width: 22px;
+        height: 22px;
+        top: 3px;
+        left: 3px;
     }
     .modern-toggle input[type="checkbox"]:checked+.toggle-slider .toggle-thumb {
-        /* iOS MOBILE: Adjusted for smaller toggle (47px - 25px - 2px = 20px) */
-        transform: translateX(20px);
+        /* OPTIMIZED MOBILE: Perfect movement (50px - 22px - 6px = 22px) */
+        transform: translateX(22px);
     }
     .setting-title {
         font-size: 15px;
