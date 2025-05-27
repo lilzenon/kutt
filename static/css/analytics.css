@@ -281,6 +281,8 @@
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
 }
 
 .table-desktop::-webkit-scrollbar {
@@ -303,12 +305,11 @@
 
 .fans-table {
     width: 100%;
-    min-width: 800px;
-    /* Minimum width for proper display */
     border-collapse: collapse;
     font-size: 14px;
     background: white;
-    table-layout: fixed;
+    table-layout: auto;
+    /* Let browser calculate optimal widths */
 }
 
 
@@ -318,64 +319,51 @@
     display: none;
 }
 
-.fans-table thead th {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    padding: 20px 24px;
-    text-align: left;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 2px solid #e2e8f0;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+
+/* Header styling moved to avoid conflicts */
 
 
-/* ===== SIMPLIFIED COLUMN SYSTEM ===== */
+/* ===== RESPONSIVE COLUMN SYSTEM ===== */
 
 
-/* Contact Column - 40% */
+/* Desktop: Use percentage-based widths for proper scaling */
 
-.fans-table thead th:nth-child(1),
-.fans-table tbody td:nth-child(1) {
-    width: 320px;
-}
-
-
-/* Location Column - 20% */
-
-.fans-table thead th:nth-child(2),
-.fans-table tbody td:nth-child(2) {
-    width: 160px;
-}
-
-
-/* Date Column - 15% */
-
-.fans-table thead th:nth-child(3),
-.fans-table tbody td:nth-child(3) {
-    width: 120px;
-}
-
-
-/* Channel Column - 15% */
-
-.fans-table thead th:nth-child(4),
-.fans-table tbody td:nth-child(4) {
-    width: 120px;
-}
-
-
-/* RSVP Column - 10% */
-
-.fans-table thead th:nth-child(5),
-.fans-table tbody td:nth-child(5) {
-    width: 80px;
-    text-align: center;
+@media (min-width: 769px) {
+    .fans-table {
+        min-width: 900px;
+        /* Minimum width for desktop readability */
+    }
+    /* Contact Column - 40% */
+    .fans-table thead th:nth-child(1),
+    .fans-table tbody td:nth-child(1) {
+        width: 40%;
+        min-width: 300px;
+    }
+    /* Location Column - 20% */
+    .fans-table thead th:nth-child(2),
+    .fans-table tbody td:nth-child(2) {
+        width: 20%;
+        min-width: 150px;
+    }
+    /* Date Column - 15% */
+    .fans-table thead th:nth-child(3),
+    .fans-table tbody td:nth-child(3) {
+        width: 15%;
+        min-width: 120px;
+    }
+    /* Channel Column - 15% */
+    .fans-table thead th:nth-child(4),
+    .fans-table tbody td:nth-child(4) {
+        width: 15%;
+        min-width: 120px;
+    }
+    /* RSVP Column - 10% */
+    .fans-table thead th:nth-child(5),
+    .fans-table tbody td:nth-child(5) {
+        width: 10%;
+        min-width: 80px;
+        text-align: center;
+    }
 }
 
 .fans-table tbody tr {
@@ -400,11 +388,32 @@
 }
 
 .fans-table tbody td {
-    padding: 20px 24px;
+    padding: 16px 20px;
     vertical-align: middle;
     word-wrap: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 0;
+    /* Forces text-overflow to work */
+}
+
+
+/* ===== TABLE HEADER STYLING ===== */
+
+.fans-table thead th {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 2px solid #e2e8f0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 
