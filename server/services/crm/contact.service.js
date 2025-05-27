@@ -32,11 +32,11 @@ class ContactService {
 
         try {
             const contactData = {
-                email: dropSignupData.email ? .toLowerCase().trim(),
+                email: dropSignupData.email ? dropSignupData.email.toLowerCase().trim() : null,
                 phone: dropSignupData.phone ? normalizePhoneNumber(dropSignupData.phone) : null,
                 first_name: dropSignupData.name ? this.extractFirstName(dropSignupData.name) : null,
                 last_name: dropSignupData.name ? this.extractLastName(dropSignupData.name) : null,
-                full_name: dropSignupData.name ? .trim(),
+                full_name: dropSignupData.name ? dropSignupData.name.trim() : null,
                 source: 'drop',
                 source_drop_id: dropId,
                 ip_address: dropSignupData.ip_address,
@@ -151,16 +151,21 @@ class ContactService {
                 .returning("*");
 
             // Track update event
-            await eventService.trackEvent({
-                event_name: "contact_updated",
-                event_category: "crm",
-                event_source: "system",
-                contact_id: contactId,
-                event_properties: {
-                    updated_fields: Object.keys(safeUpdateData),
-                    data_quality_score: updatedContact.data_quality_score
-                }
-            });
+            try {
+                const eventService = require("./event.service");
+                await eventService.trackEvent({
+                    event_name: "contact_updated",
+                    event_category: "crm",
+                    event_source: "system",
+                    contact_id: contactId,
+                    event_properties: {
+                        updated_fields: Object.keys(safeUpdateData),
+                        data_quality_score: updatedContact.data_quality_score
+                    }
+                });
+            } catch (eventError) {
+                console.warn('⚠️ Event tracking failed:', eventError.message);
+            }
 
             console.log(`✅ Updated contact: ${updatedContact.uuid}`);
             return updatedContact;
@@ -230,17 +235,22 @@ class ContactService {
             });
 
             // Track lifecycle stage change
-            await eventService.trackEvent({
-                event_name: "lifecycle_stage_changed",
-                event_category: "crm",
-                event_source: "system",
-                contact_id: contactId,
-                event_properties: {
-                    old_stage: oldStage,
-                    new_stage: newStage,
-                    reason: reason
-                }
-            });
+            try {
+                const eventService = require("./event.service");
+                await eventService.trackEvent({
+                    event_name: "lifecycle_stage_changed",
+                    event_category: "crm",
+                    event_source: "system",
+                    contact_id: contactId,
+                    event_properties: {
+                        old_stage: oldStage,
+                        new_stage: newStage,
+                        reason: reason
+                    }
+                });
+            } catch (eventError) {
+                console.warn('⚠️ Event tracking failed:', eventError.message);
+            }
 
             console.log(`✅ Updated lifecycle stage for contact ${contact.uuid}: ${oldStage} → ${newStage}`);
 
@@ -272,22 +282,27 @@ class ContactService {
                 });
 
                 // Track opt-out event
-                await eventService.trackEvent({
-                    event_name: "sms_opt_out",
-                    event_category: "sms",
-                    event_source: "twilio",
-                    contact_id: contact.id,
-                    event_properties: {
-                        opt_out_type: optOutType,
-                        campaign_id: campaignId,
-                        phone: normalizedPhone
-                    }
-                });
+                try {
+                    const eventService = require("./event.service");
+                    await eventService.trackEvent({
+                        event_name: "sms_opt_out",
+                        event_category: "sms",
+                        event_source: "twilio",
+                        contact_id: contact.id,
+                        event_properties: {
+                            opt_out_type: optOutType,
+                            campaign_id: campaignId,
+                            phone: normalizedPhone
+                        }
+                    });
+                } catch (eventError) {
+                    console.warn('⚠️ Event tracking failed:', eventError.message);
+                }
             }
 
             // Record in opt-out table
             await crmDb("sms_opt_outs").insert({
-                contact_id: contact ? .id,
+                contact_id: contact ? contact.id : null,
                 phone: normalizedPhone,
                 opt_out_type: optOutType,
                 campaign_id: campaignId,

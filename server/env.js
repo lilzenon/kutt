@@ -65,6 +65,9 @@ const spec = {
     SMS_ENABLED: bool({ default: false }),
     SMS_FROM_NAME: str({ default: "BOUNCE2BOUNCE" }),
     SMS_OPT_OUT_KEYWORDS: str({ default: "STOP,UNSUBSCRIBE,QUIT,END,CANCEL" }),
+
+    // 🌐 SITE CONFIGURATION
+    SITE_URL: str({ example: "https://your-domain.com", default: "http://localhost:3000" }),
     REDIS_ENABLED: bool({ default: false }),
     REDIS_HOST: str({ default: "127.0.0.1" }),
     REDIS_PORT: num({ default: 6379 }),
