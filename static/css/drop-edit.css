@@ -440,11 +440,161 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+
+/* ===== MODERN COLOR PICKER DESIGN ===== */
+
 .form-group input[type="color"] {
-    width: 60px;
-    height: 40px;
-    padding: 4px;
+    /* RESEARCH-BASED: Modern color picker design */
+    width: 80px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
     cursor: pointer;
+    background: white;
+    transition: all 0.2s ease;
+    /* MODERN: Remove default styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* PREMIUM: Beautiful shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.form-group input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+}
+
+.form-group input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: 10px;
+}
+
+.form-group input[type="color"]:hover {
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.form-group input[type="color"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+
+/* ===== MODERN COLOR PICKER GRID SYSTEM ===== */
+
+.color-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    /* RESEARCH-BASED: Optimal spacing for color pickers */
+    margin-top: 8px;
+}
+
+.color-picker-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.color-picker-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    /* RESEARCH-BASED: Optimal label spacing */
+    margin-bottom: 0;
+    padding: 8px 0;
+    transition: color 0.2s ease;
+}
+
+.color-picker-label:hover {
+    color: #1f2937;
+}
+
+.color-label-text {
+    flex: 1;
+}
+
+.color-preview-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    /* MODERN: Use CSS custom property for dynamic color */
+    background-color: var(--preview-color, #e5e7eb);
+    flex-shrink: 0;
+}
+
+.color-picker-label:hover .color-preview-dot {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.modern-color-input {
+    /* ENHANCED: Modern color input styling */
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.2s ease;
+    /* MODERN: Remove default styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* PREMIUM: Beautiful shadow */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-color-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+}
+
+.modern-color-input::-webkit-color-swatch {
+    border: none;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.modern-color-input::-moz-color-swatch {
+    border: none;
+    border-radius: 10px;
+}
+
+.modern-color-input:hover {
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.modern-color-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .slug-input-wrapper {
@@ -1913,6 +2063,25 @@
     .modern-setting-group {
         padding: 20px;
         border-radius: 12px;
+    }
+    /* MOBILE: Color picker grid adjustments */
+    .color-picker-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .color-picker-group {
+        gap: 6px;
+    }
+    .color-picker-label {
+        padding: 6px 0;
+        font-size: 13px;
+    }
+    .color-preview-dot {
+        width: 18px;
+        height: 18px;
+    }
+    .modern-color-input {
+        height: 44px;
     }
     .setting-header {
         flex-direction: column;

@@ -104,45 +104,59 @@
                             <p class="section-description">Customize the visual appearance of your drop page</p>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="edit-background-color">Background Color</label>
+                        <div class="color-picker-grid">
+                            <div class="color-picker-group">
+                                <label for="edit-background-color" class="color-picker-label">
+                                    <span class="color-label-text">Background Color</span>
+                                    <span class="color-preview-dot" data-color="{{drop.background_color}}"></span>
+                                </label>
                                 <input type="color" id="edit-background-color" name="background_color"
-                                       value="{{drop.background_color}}">
+                                       value="{{drop.background_color}}" class="modern-color-input">
                             </div>
 
-                            <div class="form-group">
-                                <label for="edit-card-color">Card Color</label>
+                            <div class="color-picker-group">
+                                <label for="edit-card-color" class="color-picker-label">
+                                    <span class="color-label-text">Card Color</span>
+                                    <span class="color-preview-dot" data-color="{{drop.card_color}}"></span>
+                                </label>
                                 <input type="color" id="edit-card-color" name="card_color"
-                                       value="{{drop.card_color}}">
+                                       value="{{drop.card_color}}" class="modern-color-input">
                             </div>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="edit-title-color">Title Text Color</label>
+                            <div class="color-picker-group">
+                                <label for="edit-title-color" class="color-picker-label">
+                                    <span class="color-label-text">Title Text Color</span>
+                                    <span class="color-preview-dot" data-color="{{drop.title_color}}"></span>
+                                </label>
                                 <input type="color" id="edit-title-color" name="title_color"
-                                       value="{{drop.title_color}}">
+                                       value="{{drop.title_color}}" class="modern-color-input">
                             </div>
 
-                            <div class="form-group">
-                                <label for="edit-description-color">Description Text Color</label>
+                            <div class="color-picker-group">
+                                <label for="edit-description-color" class="color-picker-label">
+                                    <span class="color-label-text">Description Text Color</span>
+                                    <span class="color-preview-dot" data-color="{{drop.description_color}}"></span>
+                                </label>
                                 <input type="color" id="edit-description-color" name="description_color"
-                                       value="{{drop.description_color}}">
+                                       value="{{drop.description_color}}" class="modern-color-input">
                             </div>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="edit-button-color">Button Color</label>
+                            <div class="color-picker-group">
+                                <label for="edit-button-color" class="color-picker-label">
+                                    <span class="color-label-text">Button Color</span>
+                                    <span class="color-preview-dot" data-color="{{drop.button_color}}"></span>
+                                </label>
                                 <input type="color" id="edit-button-color" name="button_color"
-                                       value="{{drop.button_color}}">
+                                       value="{{drop.button_color}}" class="modern-color-input">
                             </div>
 
-                            <div class="form-group">
-                                <label for="edit-form-field-color">Form Field Color</label>
+                            <div class="color-picker-group">
+                                <label for="edit-form-field-color" class="color-picker-label">
+                                    <span class="color-label-text">Form Field Color</span>
+                                    <span class="color-preview-dot" data-color="{{drop.form_field_color}}"></span>
+                                </label>
                                 <input type="color" id="edit-form-field-color" name="form_field_color"
-                                       value="{{drop.form_field_color}}">
+                                       value="{{drop.form_field_color}}" class="modern-color-input">
                             </div>
                         </div>
                     </div>
@@ -706,11 +720,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize with first tab active (Page)
     switchTab('page');
 
+    // MODERN COLOR PICKER SYSTEM - Update preview dots
+    function initializeColorPreviewDots() {
+        const colorInputs = document.querySelectorAll('.modern-color-input');
+
+        colorInputs.forEach(input => {
+            const updatePreviewDot = () => {
+                const colorValue = input.value;
+                const label = input.closest('.color-picker-group').querySelector('.color-picker-label');
+                const previewDot = label.querySelector('.color-preview-dot');
+
+                if (previewDot) {
+                    previewDot.style.setProperty('--preview-color', colorValue);
+                    previewDot.style.backgroundColor = colorValue;
+                }
+            };
+
+            // Update on input change
+            input.addEventListener('input', updatePreviewDot);
+            input.addEventListener('change', updatePreviewDot);
+
+            // Initialize with current value
+            updatePreviewDot();
+        });
+
+        console.log('Color preview dots initialized');
+    }
+
     // Initialize preview
     initializePreview();
 
     // Initialize mobile-only preview
     initializeMobilePreview();
+
+    // Initialize color preview dots
+    initializeColorPreviewDots();
 
     // FIXED: Keep preview mobile-focused (no auto-switching)
     window.addEventListener('resize', () => {
