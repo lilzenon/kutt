@@ -838,7 +838,7 @@
 
 .preview-viewport .drop-container {
     /* Card background and structure to match live page */
-    background-color: inherit !important;
+    /* Remove background override - let CSS variables work */
     max-width: 600px;
     margin: 0 auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -873,25 +873,12 @@
 }
 
 .preview-viewport .signup-button {
-    /* Allow JavaScript to override button colors */
-    background-color: inherit !important;
-    color: inherit !important;
+    /* Remove overrides - let CSS variables work */
     border: none !important;
 }
 
 
-/* Fix the white card issue - make drop container transparent */
-
-.preview-viewport .drop-container {
-    background: transparent !important;
-}
-
-
-/* Ensure the preview drop itself inherits the background */
-
-.preview-drop {
-    background: transparent !important;
-}
+/* CSS variables will handle background colors automatically */
 
 
 /* Ensure all text elements inherit the text color but allow JS override */
