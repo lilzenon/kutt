@@ -48,6 +48,16 @@
             line-height: 1.6;
             margin: 0;
             padding: 0;
+            /* RESEARCH-BASED: Ensure body takes full height for proper background */
+            height: 100%;
+            overflow-x: hidden;
+            /* SAFARI FIX: Prevent bounce scrolling */
+            -webkit-overflow-scrolling: touch;
+            /* MODERN: Better box-sizing */
+            box-sizing: border-box;
+            /* CRITICAL: Apply background to body for consistent appearance */
+            background: linear-gradient(135deg, var(--drop-background-color, #f8fafc) 0%, color-mix(in srgb, var(--drop-background-color, #f8fafc) 85%, #ffffff) 100%);
+            min-height: 100vh;
         }
 
 

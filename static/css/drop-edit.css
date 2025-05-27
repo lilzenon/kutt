@@ -860,8 +860,8 @@
 }
 
 .preview-viewport.mobile .drop-page-wrapper {
-    /* RESEARCH-BASED: Match new mobile system */
-    padding: 20px !important;
+    /* RESEARCH-BASED: Match new mobile system with reduced padding */
+    padding: 10px !important;
     min-height: 100% !important;
     /* BEAUTIFUL: Modern gradient background */
     background: linear-gradient(135deg, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 0%, color-mix(in srgb, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 85%, #ffffff) 100%) !important;
@@ -892,8 +892,8 @@
 }
 
 .preview-viewport.desktop .drop-page-wrapper {
-    /* RESEARCH-BASED: Match new desktop system */
-    padding: 60px 40px !important;
+    /* RESEARCH-BASED: Match new desktop system with reduced padding */
+    padding: 40px 20px !important;
     min-height: 100vh !important;
     display: flex !important;
     align-items: center !important;

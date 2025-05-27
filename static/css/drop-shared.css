@@ -116,7 +116,7 @@ body {
 @media (min-width: 1024px) {
     .drop-page-wrapper {
         /* RESEARCH-BASED: Proper desktop spacing and centering */
-        padding: 60px 40px;
+        padding: 40px 20px;
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -565,11 +565,15 @@ body {
         overflow-x: hidden;
         width: 100%;
         max-width: 100%;
+        /* MOBILE FIX: Reduce padding to minimize white space at bottom */
+        padding: 10px !important;
     }
     .drop-container {
         overflow-x: hidden;
         width: 100%;
         max-width: 100%;
+        /* MOBILE FIX: Ensure container fills available space properly */
+        min-height: calc(100vh - 20px);
     }
 }
 
