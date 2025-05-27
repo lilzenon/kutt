@@ -250,28 +250,28 @@ async function createSignup(req, res) {
                 // Continue without CRM - don't fail the signup
             }
 
-            // 📱 ENTERPRISE SMS CONFIRMATION (graceful fallback if SMS not available)
+            // 📱 PRODUCTION SMS CONFIRMATION (graceful fallback if SMS not available)
             try {
-                const campaignService = require('../services/sms/campaign.service');
+                const twilioService = require('../services/sms/twilio.service');
 
                 if (phone) {
                     console.log(`📱 Sending SMS confirmation to ${phone}...`);
 
-                    const smsResult = await campaignService.sendDropSignupConfirmation({
-                        name,
-                        email,
-                        phone,
-                        contactId: newSignup.id // For tracking
-                    }, {
-                        id: foundDrop.id,
-                        title: foundDrop.title,
-                        slug: foundDrop.slug
-                    });
+                    // Check if phone number is opted out
+                    const isOptedOut = await twilioService.isOptedOut(phone);
 
-                    if (smsResult.success) {
-                        console.log(`✅ SMS confirmation sent successfully - SID: ${smsResult.messageSid}`);
+                    if (isOptedOut) {
+                        console.log(`📱 Phone ${phone} is opted out - skipping SMS`);
                     } else {
-                        console.warn(`⚠️ SMS confirmation failed: ${smsResult.error}`);
+                        const smsResult = await twilioService.sendDropSignupConfirmation({ name, email, phone }, { id: foundDrop.id, title: foundDrop.title, slug: foundDrop.slug },
+                            newSignup.id // Pass signup ID for tracking
+                        );
+
+                        if (smsResult.success) {
+                            console.log(`✅ SMS confirmation sent successfully - SID: ${smsResult.messageSid}`);
+                        } else {
+                            console.warn(`⚠️ SMS confirmation failed: ${smsResult.error}`);
+                        }
                     }
                 } else {
                     console.log('📱 SMS not sent - no phone number provided');

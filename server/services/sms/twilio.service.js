@@ -14,6 +14,7 @@
 
 const twilio = require('twilio');
 const env = require('../../env');
+const db = require('../../config/database');
 
 class TwilioService {
     constructor() {
@@ -118,9 +119,9 @@ class TwilioService {
     }
 
     /**
-     * Send drop signup confirmation SMS
+     * Send drop signup confirmation SMS with database tracking
      */
-    async sendDropSignupConfirmation(userInfo, dropInfo) {
+    async sendDropSignupConfirmation(userInfo, dropInfo, signupId = null) {
         if (!this.isEnabled || !userInfo.phone) {
             return { success: false, error: 'SMS not enabled or no phone number' };
         }
@@ -133,7 +134,35 @@ class TwilioService {
             options.statusCallback = `${env.SITE_URL}/api/sms/status`;
         }
 
-        return await this.sendSMS(userInfo.phone, message, options);
+        const result = await this.sendSMS(userInfo.phone, message, options);
+
+        // Track in database if successful
+        if (result.success && signupId) {
+            try {
+                await this.trackSMSMessage({
+                    dropSignupId: signupId,
+                    phone: userInfo.phone,
+                    messageBody: message,
+                    messageType: 'confirmation',
+                    messageSid: result.messageSid,
+                    status: 'sent'
+                });
+
+                // Update signup record
+                await db('drop_signups')
+                    .where('id', signupId)
+                    .update({
+                        sms_sent: true,
+                        sms_sent_at: new Date()
+                    });
+
+            } catch (trackingError) {
+                console.warn('⚠️ Failed to track SMS in database:', trackingError.message);
+                // Don't fail the SMS send if tracking fails
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -211,6 +240,84 @@ class TwilioService {
         } catch (error) {
             console.error('🚨 Webhook validation failed:', error.message);
             return false;
+        }
+    }
+
+    /**
+     * Track SMS message in database
+     */
+    async trackSMSMessage(messageData) {
+        try {
+            const smsRecord = {
+                drop_signup_id: messageData.dropSignupId,
+                phone: messageData.phone,
+                message_body: messageData.messageBody,
+                message_type: messageData.messageType || 'confirmation',
+                message_sid: messageData.messageSid,
+                status: messageData.status || 'sent',
+                sent_at: new Date(),
+                created_at: new Date()
+            };
+
+            const [newRecord] = await db('sms_messages').insert(smsRecord).returning('*');
+            console.log(`📊 SMS tracked in database: ${newRecord.id}`);
+
+            return newRecord;
+
+        } catch (error) {
+            console.error('🚨 Failed to track SMS message:', error.message);
+            throw error;
+        }
+    }
+
+    /**
+     * Update SMS message status (from webhook)
+     */
+    async updateSMSStatus(messageSid, status, errorCode = null, errorMessage = null) {
+        try {
+            const updateData = {
+                status: status,
+                updated_at: new Date()
+            };
+
+            if (status === 'delivered') {
+                updateData.delivered_at = new Date();
+            } else if (status === 'failed' || status === 'undelivered') {
+                updateData.failed_at = new Date();
+                updateData.error_code = errorCode;
+                updateData.error_message = errorMessage;
+            }
+
+            const updated = await db('sms_messages')
+                .where('message_sid', messageSid)
+                .update(updateData);
+
+            if (updated > 0) {
+                console.log(`📊 Updated SMS status: ${messageSid} → ${status}`);
+            }
+
+            return updated > 0;
+
+        } catch (error) {
+            console.error('🚨 Failed to update SMS status:', error.message);
+            return false;
+        }
+    }
+
+    /**
+     * Check if phone number is opted out
+     */
+    async isOptedOut(phoneNumber) {
+        try {
+            const optOut = await db('sms_opt_outs')
+                .where('phone', phoneNumber)
+                .first();
+
+            return !!optOut;
+
+        } catch (error) {
+            console.warn('⚠️ Failed to check opt-out status:', error.message);
+            return false; // Default to not opted out if check fails
         }
     }
 

@@ -82,6 +82,9 @@ router.post('/webhook/status', async(req, res) => {
 
         console.log(`📱 SMS Status Update - SID: ${messageSid}, Status: ${status}, To: ${phoneNumber}`);
 
+        // Update message status in database
+        const updated = await twilioService.updateSMSStatus(messageSid, status, errorCode, errorMessage);
+
         // Log delivery status
         if (status === 'delivered') {
             console.log(`✅ SMS delivered successfully to ${phoneNumber}`);
@@ -89,8 +92,9 @@ router.post('/webhook/status', async(req, res) => {
             console.error(`❌ SMS failed to ${phoneNumber} - Error: ${errorCode} ${errorMessage}`);
         }
 
-        // TODO: Update message status in database
-        // await updateMessageStatus(messageSid, status, errorCode, errorMessage);
+        if (updated) {
+            console.log(`📊 Database updated for message ${messageSid}`);
+        }
 
         res.status(200).send('OK');
 
@@ -199,6 +203,36 @@ router.get('/campaign/:campaignId/analytics', async(req, res) => {
 
     } catch (error) {
         console.error('🚨 Error getting campaign analytics:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+/**
+ * Get SMS analytics for a drop
+ */
+router.get('/analytics/:dropId', async(req, res) => {
+    try {
+        const { dropId } = req.params;
+
+        const analytics = await twilioService.getDropSMSAnalytics(dropId);
+
+        if (analytics) {
+            res.json({
+                success: true,
+                analytics: analytics
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                error: 'Analytics not available for this drop'
+            });
+        }
+
+    } catch (error) {
+        console.error('🚨 Error getting SMS analytics:', error);
         res.status(500).json({
             success: false,
             error: error.message
