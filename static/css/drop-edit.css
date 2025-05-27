@@ -1209,6 +1209,34 @@
     }
 }
 
+
+/* 🔴 RED CANCEL BUTTON - Changes detected */
+
+.button.secondary.changes-detected {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-color: #ef4444;
+    color: white;
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4), 0 3px 8px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: cancelButtonPulse 2s ease-in-out infinite;
+}
+
+.button.secondary.changes-detected:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    border-color: #dc2626;
+    color: white;
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5), 0 4px 10px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+@keyframes cancelButtonPulse {
+    0%,
+    100% {
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4), 0 3px 8px rgba(239, 68, 68, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.6), 0 4px 10px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+}
+
 .button-spinner {
     animation: spin 1s linear infinite;
 }
@@ -1382,26 +1410,22 @@
     .form-row {
         grid-template-columns: 1fr;
     }
-    /* 🚀 ENTERPRISE MOBILE BUTTON SYSTEM */
+    /* 🚀 FIXED MOBILE BUTTON SYSTEM */
     .form-actions {
-        /* RESEARCH-BASED: Sticky footer with proper spacing */
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
+        /* FIXED: Normal flow instead of fixed positioning */
+        position: static;
         /* ENTERPRISE: Modern gradient background */
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
         /* ACCESSIBILITY: Proper spacing and layout */
-        padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+        padding: 20px;
+        margin: 24px 0 0 0;
         display: flex;
         flex-direction: row;
         gap: 12px;
         /* ENTERPRISE: Premium shadow system */
-        border-top: 1px solid rgba(226, 232, 240, 0.8);
-        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12), 0 -4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border-top: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         /* FUTURE-PROOF: Smooth transitions */
         transition: all 0.3s ease;
     }
@@ -2342,8 +2366,7 @@
     }
     .drop-edit-container {
         padding: 16px;
-        /* ENTERPRISE: Prevent content overlap with sticky footer */
-        padding-bottom: calc(100px + env(safe-area-inset-bottom));
+        /* FIXED: Normal padding since buttons are no longer fixed */
     }
     .drop-edit-content {
         grid-template-columns: 1fr;

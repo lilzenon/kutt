@@ -339,8 +339,8 @@
                     </div>
                 </div>
 
-                <!-- Smart Actions - Only show when changes made -->
-                <div class="form-actions" id="form-actions" style="display: none;">
+                <!-- Smart Actions - Always visible with smart lighting -->
+                <div class="form-actions" id="form-actions">
                     <button type="button" class="button secondary" id="cancel-btn">
                         Cancel Changes
                     </button>
@@ -879,38 +879,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Update action buttons visibility and state
+    // Update action buttons lighting state
     function updateActionButtons() {
-        const formActions = document.getElementById('form-actions');
         const saveBtn = document.getElementById('save-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
 
         if (hasChanges) {
-            // Show buttons with smooth animation
-            formActions.style.display = 'flex';
-            formActions.style.opacity = '0';
-            formActions.style.transform = 'translateY(20px)';
-
-            // Animate in
-            setTimeout(() => {
-                formActions.style.transition = 'all 0.3s ease';
-                formActions.style.opacity = '1';
-                formActions.style.transform = 'translateY(0)';
-            }, 10);
-
-            // Light up save button
+            // 🟢 Light up save button GREEN
             saveBtn.classList.add('changes-detected');
+            // 🔴 Light up cancel button RED
+            cancelBtn.classList.add('changes-detected');
+
+            console.log('🔥 Buttons lit up - Save: GREEN, Cancel: RED');
         } else {
-            // Hide buttons with smooth animation
-            formActions.style.transition = 'all 0.3s ease';
-            formActions.style.opacity = '0';
-            formActions.style.transform = 'translateY(20px)';
-
-            setTimeout(() => {
-                formActions.style.display = 'none';
-            }, 300);
-
-            // Remove save button highlight
+            // Turn off button lighting
             saveBtn.classList.remove('changes-detected');
+            cancelBtn.classList.remove('changes-detected');
+
+            console.log('💡 Button lighting turned off');
         }
     }
 
