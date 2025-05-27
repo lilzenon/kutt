@@ -190,53 +190,101 @@ async function deleteDrop(req, res) {
 
 // Public drop signup
 async function createSignup(req, res) {
-    const { slug } = req.params;
-    const { email, phone, name } = req.body;
-
-    // Find the drop by slug
-    const foundDrop = await drop.findBySlug(slug);
-    if (!foundDrop || !foundDrop.is_active) {
-        throw new CustomError("Drop not found or inactive", 404);
-    }
-
-    // Check if email already signed up
-    const alreadySignedUp = await drop.isEmailSignedUp(foundDrop.id, email);
-    if (alreadySignedUp) {
-        throw new CustomError("Email already signed up for this drop", 400);
-    }
-
-    const signupData = {
-        email,
-        phone: phone || null,
-        name: name || null,
-        ip_address: req.ip,
-        user_agent: req.get('User-Agent'),
-        referrer: req.get('Referrer') || null
-    };
-
     try {
-        // Create signup in main database
-        await drop.createSignup(foundDrop.id, signupData);
+        const { slug } = req.params;
+        const { email, phone, name } = req.body;
 
-        // 🚀 OPTIONAL CRM INTEGRATION (graceful fallback if CRM not available)
-        try {
-            const contactService = require('../services/crm/contact.service');
-            await contactService.createFromDropSignup(signupData, foundDrop.id);
-            console.log('✅ Contact created in CRM for drop signup');
-        } catch (crmError) {
-            console.warn('⚠️ CRM integration failed (continuing without CRM):', crmError.message);
-            // Continue without CRM - don't fail the signup
+        console.log(`🚀 Drop signup attempt for slug: ${slug}`);
+        console.log(`📧 Email: ${email}`);
+        console.log(`📱 Phone: ${phone || 'none'}`);
+        console.log(`👤 Name: ${name || 'none'}`);
+
+        // Find the drop by slug
+        console.log(`🔍 Looking for drop with slug: ${slug}`);
+        const foundDrop = await drop.findBySlug(slug);
+
+        if (!foundDrop) {
+            console.error(`❌ Drop not found for slug: ${slug}`);
+            throw new CustomError("Drop not found", 404);
         }
 
-        res.status(201).json({
-            success: true,
-            message: foundDrop.thank_you_message || "Thank you for signing up! You'll be notified when this drop goes live."
-        });
-    } catch (error) {
-        if (error.message.includes('already signed up')) {
+        if (!foundDrop.is_active) {
+            console.error(`❌ Drop is inactive: ${slug}`);
+            throw new CustomError("Drop is currently inactive", 404);
+        }
+
+        console.log(`✅ Found active drop: ${foundDrop.title} (ID: ${foundDrop.id})`);
+
+        // Check if email already signed up
+        console.log(`🔍 Checking if email already signed up: ${email}`);
+        const alreadySignedUp = await drop.isEmailSignedUp(foundDrop.id, email);
+        if (alreadySignedUp) {
+            console.error(`❌ Email already signed up: ${email}`);
             throw new CustomError("Email already signed up for this drop", 400);
         }
-        throw error;
+
+        const signupData = {
+            email,
+            phone: phone || null,
+            name: name || null,
+            ip_address: req.ip,
+            user_agent: req.get('User-Agent'),
+            referrer: req.get('Referrer') || null
+        };
+
+        console.log(`📝 Creating signup with data:`, signupData);
+
+        try {
+            // Create signup in main database
+            console.log(`💾 Inserting signup into database...`);
+            const newSignup = await drop.createSignup(foundDrop.id, signupData);
+            console.log(`✅ Signup created successfully:`, newSignup);
+
+            // 🚀 OPTIONAL CRM INTEGRATION (graceful fallback if CRM not available)
+            try {
+                const contactService = require('../services/crm/contact.service');
+                await contactService.createFromDropSignup(signupData, foundDrop.id);
+                console.log('✅ Contact created in CRM for drop signup');
+            } catch (crmError) {
+                console.warn('⚠️ CRM integration failed (continuing without CRM):', crmError.message);
+                // Continue without CRM - don't fail the signup
+            }
+
+            console.log(`🎉 Signup process completed successfully for ${email}`);
+
+            res.status(201).json({
+                success: true,
+                message: foundDrop.thank_you_message || "Thank you for signing up! You'll be notified when this drop goes live."
+            });
+        } catch (dbError) {
+            console.error(`🚨 Database error during signup creation:`, dbError);
+
+            if (dbError.message.includes('already signed up')) {
+                throw new CustomError("Email already signed up for this drop", 400);
+            }
+
+            // Check for specific database errors
+            if (dbError.code === 'ER_NO_SUCH_TABLE' || dbError.message.includes('no such table')) {
+                console.error(`🚨 Table missing error - drop_signups table may not exist`);
+                throw new CustomError("Database configuration error. Please contact support.", 500);
+            }
+
+            if (dbError.code === 'ER_DUP_ENTRY' || dbError.code === 'SQLITE_CONSTRAINT') {
+                throw new CustomError("Email already signed up for this drop", 400);
+            }
+
+            throw new CustomError("Database error occurred. Please try again.", 500);
+        }
+    } catch (error) {
+        console.error(`🚨 Signup error for slug ${req.params.slug}:`, error);
+
+        // If it's already a CustomError, just re-throw it
+        if (error.name === 'CustomError') {
+            throw error;
+        }
+
+        // For any other error, wrap it
+        throw new CustomError("An unexpected error occurred. Please try again.", 500);
     }
 }
 

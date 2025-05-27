@@ -11,6 +11,7 @@
         "migrate:crm": "knex migrate:latest --knexfile knexfile.crm.js",
         "migrate:crm:make": "knex migrate:make --knexfile knexfile.crm.js",
         "setup:crm": "node scripts/setup-crm.js",
+        "verify:db": "node scripts/verify-database.js",
         "docs:build": "cd docs/api && node generate && cd ../.."
     },
     "repository": {
