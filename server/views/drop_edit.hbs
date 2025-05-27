@@ -1296,25 +1296,45 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadSummaryStats() {
         try {
             const response = await fetch(`/api/drops/analytics/summary?dropId={{drop.id}}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
             const result = await response.json();
 
             if (result.success) {
                 const stats = result.data;
 
-                // Update summary cards
-                document.getElementById('total-fans').textContent = stats.totalUniqueFans.toLocaleString();
-                document.getElementById('total-rsvps').textContent = stats.totalRSVPs.toLocaleString();
-                document.getElementById('repeat-fans').textContent = stats.repeatFans.toLocaleString();
-                document.getElementById('avg-rsvps').textContent = stats.averageRSVPsPerFan;
+                // Update summary cards with safe defaults
+                document.getElementById('total-fans').textContent = (stats.totalUniqueFans || 0).toLocaleString();
+                document.getElementById('total-rsvps').textContent = (stats.totalRSVPs || 0).toLocaleString();
+                document.getElementById('repeat-fans').textContent = (stats.repeatFans || 0).toLocaleString();
+                document.getElementById('avg-rsvps').textContent = stats.averageRSVPsPerFan || '0';
 
-                // Update change indicators (you can calculate these based on historical data)
-                document.getElementById('fans-change').textContent = `+${stats.recentSignups} this week`;
-                document.getElementById('rsvps-change').textContent = `+${stats.recentSignups} this week`;
-                document.getElementById('repeat-change').textContent = `${((stats.repeatFans / stats.totalUniqueFans) * 100).toFixed(1)}% of fans`;
+                // Update change indicators with safe calculations
+                const recentSignups = stats.recentSignups || 0;
+                const totalFans = stats.totalUniqueFans || 0;
+                const repeatFans = stats.repeatFans || 0;
+
+                document.getElementById('fans-change').textContent = `+${recentSignups} this week`;
+                document.getElementById('rsvps-change').textContent = `+${recentSignups} this week`;
+                document.getElementById('repeat-change').textContent = totalFans > 0 ? `${((repeatFans / totalFans) * 100).toFixed(1)}% of fans` : '0% of fans';
                 document.getElementById('avg-change').textContent = 'All time average';
+            } else {
+                throw new Error(result.message || 'Failed to load summary stats');
             }
         } catch (error) {
             console.error('Failed to load summary stats:', error);
+            // Set default values on error
+            document.getElementById('total-fans').textContent = '0';
+            document.getElementById('total-rsvps').textContent = '0';
+            document.getElementById('repeat-fans').textContent = '0';
+            document.getElementById('avg-rsvps').textContent = '0';
+            document.getElementById('fans-change').textContent = 'No data';
+            document.getElementById('rsvps-change').textContent = 'No data';
+            document.getElementById('repeat-change').textContent = 'No data';
+            document.getElementById('avg-change').textContent = 'No data';
         }
     }
 

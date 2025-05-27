@@ -270,17 +270,29 @@
                     const formData = new FormData(form);
                     const data = Object.fromEntries(formData.entries());
 
+                    console.log('🚀 Submitting form data:', data);
+                    console.log('🚀 Submitting to URL:', '/signup/{{drop.slug}}');
+
                     const response = await fetch('/signup/{{drop.slug}}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify(data)
                     });
 
-                    const result = await response.json();
+                    console.log('🚀 Response status:', response.status);
+                    console.log('🚀 Response headers:', response.headers);
 
-                    if (response.ok) {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('🚀 Response data:', result);
+
+                    if (result.success) {
                         // Success
                         successText.textContent = result.message;
                         successMessage.style.display = 'block';

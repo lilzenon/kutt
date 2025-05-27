@@ -290,41 +290,44 @@ async function getFanAnalytics(userId, options = {}) {
 
 // Get fan summary statistics for dashboard
 async function getFanSummaryStats(userId, dropId = null) {
-    let baseQuery = knex("drop_signups as ds")
-        .join("drops as d", "ds.drop_id", "d.id")
-        .where("d.user_id", userId);
+    try {
+        console.log(`🚀 Getting fan summary stats for user ${userId}, drop ${dropId}`);
 
-    if (dropId) {
-        baseQuery = baseQuery.where("d.id", dropId);
-    }
+        let baseQuery = knex("drop_signups as ds")
+            .join("drops as d", "ds.drop_id", "d.id")
+            .where("d.user_id", userId);
 
-    // Total unique fans
-    const uniqueFansResult = await baseQuery.clone().countDistinct("ds.email as count").first();
-    const totalUniqueFans = parseInt(uniqueFansResult.count) || 0;
+        if (dropId) {
+            baseQuery = baseQuery.where("d.id", dropId);
+        }
 
-    // Total RSVPs
-    const totalRSVPsResult = await baseQuery.clone().count("ds.id as count").first();
-    const totalRSVPs = parseInt(totalRSVPsResult.count) || 0;
+        // Total unique fans
+        const uniqueFansResult = await baseQuery.clone().countDistinct("ds.email as count").first();
+        const totalUniqueFans = parseInt(uniqueFansResult.count) || 0;
 
-    // Repeat fans (fans who have RSVP'd to multiple drops)
-    const repeatFansResult = await knex("drop_signups as ds")
-        .join("drops as d", "ds.drop_id", "d.id")
-        .where("d.user_id", userId)
-        .select("ds.email")
-        .groupBy("ds.email")
-        .having(knex.raw("COUNT(*) > 1"))
-        .then(results => results.length);
+        // Total RSVPs
+        const totalRSVPsResult = await baseQuery.clone().count("ds.id as count").first();
+        const totalRSVPs = parseInt(totalRSVPsResult.count) || 0;
 
-    // Recent signups (last 7 days)
-    const recentSignupsResult = await baseQuery.clone()
-        .where("ds.created_at", ">=", knex.raw("DATE_SUB(NOW(), INTERVAL 7 DAY)"))
-        .count("ds.id as count")
-        .first();
-    const recentSignups = parseInt(recentSignupsResult.count) || 0;
+        // Repeat fans (fans who have RSVP'd to multiple drops)
+        const repeatFansResult = await knex("drop_signups as ds")
+            .join("drops as d", "ds.drop_id", "d.id")
+            .where("d.user_id", userId)
+            .select("ds.email")
+            .groupBy("ds.email")
+            .having(knex.raw("COUNT(*) > 1"))
+            .then(results => results.length);
 
-    // Top acquisition channels
-    const topChannels = await baseQuery.clone()
-        .select(knex.raw(`
+        // Recent signups (last 7 days)
+        const recentSignupsResult = await baseQuery.clone()
+            .where("ds.created_at", ">=", knex.raw("DATE_SUB(NOW(), INTERVAL 7 DAY)"))
+            .count("ds.id as count")
+            .first();
+        const recentSignups = parseInt(recentSignupsResult.count) || 0;
+
+        // Top acquisition channels
+        const topChannels = await baseQuery.clone()
+            .select(knex.raw(`
             CASE
                 WHEN ds.referrer IS NULL OR ds.referrer = '' THEN 'Direct'
                 WHEN ds.referrer LIKE '%instagram%' THEN 'Instagram'
@@ -336,28 +339,45 @@ async function getFanSummaryStats(userId, dropId = null) {
                 ELSE 'Other'
             END as channel
         `))
-        .count("ds.id as count")
-        .groupBy("channel")
-        .orderBy("count", "desc")
-        .limit(5);
+            .count("ds.id as count")
+            .groupBy("channel")
+            .orderBy("count", "desc")
+            .limit(5);
 
-    // Growth trend (last 30 days)
-    const growthTrend = await baseQuery.clone()
-        .select(knex.raw("DATE(ds.created_at) as date"))
-        .count("ds.id as signups")
-        .where("ds.created_at", ">=", knex.raw("DATE_SUB(NOW(), INTERVAL 30 DAY)"))
-        .groupBy("date")
-        .orderBy("date", "asc");
+        // Growth trend (last 30 days)
+        const growthTrend = await baseQuery.clone()
+            .select(knex.raw("DATE(ds.created_at) as date"))
+            .count("ds.id as signups")
+            .where("ds.created_at", ">=", knex.raw("DATE_SUB(NOW(), INTERVAL 30 DAY)"))
+            .groupBy("date")
+            .orderBy("date", "asc");
 
-    return {
-        totalUniqueFans,
-        totalRSVPs,
-        repeatFans: repeatFansResult,
-        recentSignups,
-        averageRSVPsPerFan: totalUniqueFans > 0 ? (totalRSVPs / totalUniqueFans).toFixed(1) : 0,
-        topAcquisitionChannels: topChannels,
-        growthTrend
-    };
+        const result = {
+            totalUniqueFans,
+            totalRSVPs,
+            repeatFans: repeatFansResult,
+            recentSignups,
+            averageRSVPsPerFan: totalUniqueFans > 0 ? (totalRSVPs / totalUniqueFans).toFixed(1) : '0',
+            topAcquisitionChannels: topChannels || [],
+            growthTrend: growthTrend || []
+        };
+
+        console.log(`✅ Fan summary stats result:`, result);
+        return result;
+
+    } catch (error) {
+        console.error('🚨 Error in getFanSummaryStats:', error);
+        // Return default stats on error
+        return {
+            totalUniqueFans: 0,
+            totalRSVPs: 0,
+            repeatFans: 0,
+            recentSignups: 0,
+            averageRSVPsPerFan: '0',
+            topAcquisitionChannels: [],
+            growthTrend: []
+        };
+    }
 }
 
 // Get location from IP address (simplified - you can integrate with a real IP geolocation service)

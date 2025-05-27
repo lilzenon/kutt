@@ -294,15 +294,27 @@ async function getFanAnalytics(req, res) {
 
 // Get fan summary statistics
 async function getFanSummaryStats(req, res) {
-    const userId = req.user.id;
-    const { dropId = null } = req.query;
+    try {
+        const userId = req.user.id;
+        const { dropId = null } = req.query;
 
-    const stats = await drop.getFanSummaryStats(userId, dropId ? parseInt(dropId) : null);
+        console.log(`🚀 Getting fan summary stats for user ${userId}, drop ${dropId}`);
 
-    res.json({
-        success: true,
-        data: stats
-    });
+        const stats = await drop.getFanSummaryStats(userId, dropId ? parseInt(dropId) : null);
+
+        console.log(`✅ Fan summary stats:`, stats);
+
+        res.json({
+            success: true,
+            data: stats
+        });
+    } catch (error) {
+        console.error('🚨 Error getting fan summary stats:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message || 'Failed to get fan summary statistics'
+        });
+    }
 }
 
 // Get analytics for specific drop
