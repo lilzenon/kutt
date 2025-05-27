@@ -120,11 +120,27 @@ async function createSignup(dropId, signupData) {
     };
 
     try {
-        const [id] = await knex("drop_signups").insert(data);
-        return await knex("drop_signups").where("id", id).first();
+        console.log('🔧 Attempting to insert signup data:', data);
+
+        // PostgreSQL-compatible insert with returning clause
+        const result = await knex("drop_signups").insert(data).returning("*");
+
+        console.log('✅ Insert result:', result);
+
+        // PostgreSQL returns an array, get the first item
+        const insertedSignup = Array.isArray(result) ? result[0] : result;
+
+        console.log('✅ Inserted signup:', insertedSignup);
+
+        return insertedSignup;
     } catch (error) {
-        // Handle duplicate email signup
-        if (error.code === 'ER_DUP_ENTRY' || error.code === 'SQLITE_CONSTRAINT') {
+        console.error('🚨 Insert error:', error);
+
+        // Handle duplicate email signup (PostgreSQL uses different error codes)
+        if (error.code === 'ER_DUP_ENTRY' ||
+            error.code === 'SQLITE_CONSTRAINT' ||
+            error.code === '23505' || // PostgreSQL unique violation
+            error.constraint && error.constraint.includes('unique')) {
             throw new Error('Email already signed up for this drop');
         }
         throw error;
