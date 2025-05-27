@@ -683,12 +683,12 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`Updated device preview to: ${device}`);
     }
 
-    // FIXED: Auto-detect user's current device and set appropriate preview (ONLY on initial load)
+    // FIXED: Always show mobile preview (better fit for preview window)
     function detectAndSetInitialDevicePreview() {
-        const isMobile = window.innerWidth <= 768;
-        const defaultDevice = isMobile ? 'mobile' : 'desktop';
+        // ALWAYS default to mobile since it fits better in the preview window
+        const defaultDevice = 'mobile';
 
-        // Set the appropriate device button as active
+        // Set the mobile device button as active
         deviceButtons.forEach(btn => {
             btn.classList.remove('active');
             if (btn.dataset.device === defaultDevice) {
@@ -696,10 +696,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Update preview to match user's actual device
+        // Update preview to mobile view
         updateDevicePreview(defaultDevice);
 
-        console.log(`Initial device detection: ${defaultDevice} (window width: ${window.innerWidth}px)`);
+        console.log(`Preview set to mobile view for better fit in preview window`);
     }
 
     // MODERN TAB SYSTEM - Inspired by Laylo's design patterns
@@ -741,30 +741,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // FIXED: Set device preview based on user's actual device (ONLY on page load)
     detectAndSetInitialDevicePreview();
 
-    // FIXED: Only handle responsive layout changes, NOT device preview switching
+    // FIXED: Keep preview mobile-focused (no auto-switching)
     window.addEventListener('resize', () => {
-        // Only auto-switch if user hasn't manually selected a device
-        if (!manualDeviceSelection) {
-            const isMobile = window.innerWidth <= 768;
-            const currentDevice = isMobile ? 'mobile' : 'desktop';
-
-            // Only update if the device type actually changed
-            const currentActiveButton = document.querySelector('.preview-device-btn.active');
-            const currentActiveDevice = currentActiveButton ? currentActiveButton.dataset.device : null;
-
-            if (currentActiveDevice !== currentDevice) {
-                deviceButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.device === currentDevice) {
-                        btn.classList.add('active');
-                    }
-                });
-                updateDevicePreview(currentDevice);
-                console.log(`Auto-switched to ${currentDevice} due to window resize (no manual selection)`);
-            }
-        } else {
-            console.log('Resize ignored - user has manually selected device preview');
-        }
+        // Keep preview mobile-focused for better fit in preview window
+        // Users can manually switch if they want desktop view
+        console.log('Window resized - keeping mobile preview for better fit');
     });
 
     // Mobile preview toggle functionality
