@@ -1,6 +1,6 @@
 /**
  * 📱 TWILIO SMS SERVICE
- * 
+ *
  * Research-based Twilio integration following industry best practices:
  * - TCPA compliance with proper opt-in/opt-out handling
  * - Secure credential management
@@ -8,7 +8,7 @@
  * - Message templating and personalization
  * - Webhook security validation
  * - Rate limiting and delivery tracking
- * 
+ *
  * Based on Twilio's official documentation and SMS compliance guidelines.
  */
 
@@ -41,10 +41,10 @@ class TwilioService {
             // Initialize Twilio client
             this.client = twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
             this.isEnabled = true;
-            
+
             console.log('✅ Twilio SMS service initialized successfully');
             console.log(`📞 SMS will be sent from: ${env.TWILIO_PHONE_NUMBER}`);
-            
+
         } catch (error) {
             console.error('🚨 Failed to initialize Twilio service:', error.message);
             this.isEnabled = false;
@@ -81,12 +81,12 @@ class TwilioService {
             }
 
             console.log(`📱 Sending SMS to ${cleanedNumber}...`);
-            
+
             // Send message via Twilio
             const result = await this.client.messages.create(messageOptions);
-            
+
             console.log(`✅ SMS sent successfully - SID: ${result.sid}`);
-            
+
             return {
                 success: true,
                 messageSid: result.sid,
@@ -97,7 +97,7 @@ class TwilioService {
 
         } catch (error) {
             console.error('🚨 Failed to send SMS:', error.message);
-            
+
             return {
                 success: false,
                 error: error.message,
@@ -115,11 +115,14 @@ class TwilioService {
         }
 
         const message = this.generateSignupConfirmationMessage(userInfo, dropInfo);
-        
-        return await this.sendSMS(userInfo.phone, message, {
-            // Add any specific options for signup confirmations
-            statusCallback: `${env.SITE_URL}/api/sms/status`, // For delivery tracking
-        });
+
+        // Only add statusCallback in production with valid HTTPS URL
+        const options = {};
+        if (env.NODE_ENV === 'production' && env.SITE_URL && env.SITE_URL.startsWith('https://')) {
+            options.statusCallback = `${env.SITE_URL}/api/sms/status`;
+        }
+
+        return await this.sendSMS(userInfo.phone, message, options);
     }
 
     /**
@@ -128,10 +131,10 @@ class TwilioService {
     generateSignupConfirmationMessage(userInfo, dropInfo) {
         const userName = userInfo.name || 'there';
         const dropTitle = dropInfo.title || 'our drop';
-        
+
         return `🎉 Hey ${userName}! You're confirmed for ${dropTitle}. ` +
-               `We'll text you when it goes live. ` +
-               `Thanks for joining BOUNCE2BOUNCE!`;
+            `We'll text you when it goes live. ` +
+            `Thanks for joining BOUNCE2BOUNCE!`;
     }
 
     /**
@@ -139,10 +142,10 @@ class TwilioService {
      */
     cleanPhoneNumber(phoneNumber) {
         if (!phoneNumber) return null;
-        
+
         // Remove all non-digit characters
         const cleaned = phoneNumber.replace(/\D/g, '');
-        
+
         // Add country code if missing (assume US)
         if (cleaned.length === 10) {
             return `+1${cleaned}`;
@@ -151,7 +154,7 @@ class TwilioService {
         } else if (cleaned.length > 11) {
             return `+${cleaned}`;
         }
-        
+
         return null;
     }
 
@@ -164,14 +167,14 @@ class TwilioService {
             // 1. Add phone number to opt-out list in database
             // 2. Send confirmation message
             // 3. Log the opt-out for compliance
-            
+
             console.log(`📱 Processing opt-out for ${phoneNumber}`);
-            
+
             const confirmationMessage = 'You have been unsubscribed from BOUNCE2BOUNCE SMS. ' +
-                                      'You will not receive any more messages from us.';
-            
+                'You will not receive any more messages from us.';
+
             return await this.sendSMS(phoneNumber, confirmationMessage);
-            
+
         } catch (error) {
             console.error('🚨 Failed to process opt-out:', error.message);
             return { success: false, error: error.message };
@@ -222,7 +225,7 @@ class TwilioService {
         }
 
         const testMessage = `🧪 Test message from ${env.SMS_FROM_NAME}. ` +
-                          `SMS service is working correctly!`;
+            `SMS service is working correctly!`;
 
         return await this.sendSMS(testPhoneNumber, testMessage);
     }

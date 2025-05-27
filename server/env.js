@@ -62,6 +62,7 @@ const spec = {
     TWILIO_ACCOUNT_SID: str({ example: "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", default: "" }),
     TWILIO_AUTH_TOKEN: str({ example: "your_auth_token_here", default: "" }),
     TWILIO_PHONE_NUMBER: str({ example: "+1234567890", default: "" }),
+    TWILIO_MESSAGING_SERVICE_SID: str({ example: "MGxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", default: "" }),
     TWILIO_WEBHOOK_SECRET: str({ default: "" }),
 
     // 📨 SMS SETTINGS

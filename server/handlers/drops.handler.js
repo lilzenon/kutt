@@ -250,14 +250,23 @@ async function createSignup(req, res) {
                 // Continue without CRM - don't fail the signup
             }
 
-            // 📱 SEND SMS CONFIRMATION (graceful fallback if SMS not available)
+            // 📱 ENTERPRISE SMS CONFIRMATION (graceful fallback if SMS not available)
             try {
-                const twilioService = require('../services/sms/twilio.service');
+                const campaignService = require('../services/sms/campaign.service');
 
-                if (phone && twilioService.getStatus().enabled) {
+                if (phone) {
                     console.log(`📱 Sending SMS confirmation to ${phone}...`);
 
-                    const smsResult = await twilioService.sendDropSignupConfirmation({ name, email, phone }, { title: foundDrop.title, slug: foundDrop.slug });
+                    const smsResult = await campaignService.sendDropSignupConfirmation({
+                        name,
+                        email,
+                        phone,
+                        contactId: newSignup.id // For tracking
+                    }, {
+                        id: foundDrop.id,
+                        title: foundDrop.title,
+                        slug: foundDrop.slug
+                    });
 
                     if (smsResult.success) {
                         console.log(`✅ SMS confirmation sent successfully - SID: ${smsResult.messageSid}`);
@@ -265,7 +274,7 @@ async function createSignup(req, res) {
                         console.warn(`⚠️ SMS confirmation failed: ${smsResult.error}`);
                     }
                 } else {
-                    console.log('📱 SMS not sent - no phone number or SMS service disabled');
+                    console.log('📱 SMS not sent - no phone number provided');
                 }
             } catch (smsError) {
                 console.warn('⚠️ SMS service failed (continuing without SMS):', smsError.message);
