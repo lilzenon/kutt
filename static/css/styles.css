@@ -4598,6 +4598,21 @@ footer {
     text-align: center;
 }
 
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-links {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-color);
+}
+
 footer button.link {
     display: inline-block;
     font-size: 13px;
@@ -4611,6 +4626,94 @@ footer button.link .spinner {
 
 footer button.link.htmx-request .spinner {
     display: inline;
+}
+
+
+/* 🚀 GITHUB BUILD STATUS INDICATOR */
+
+.build-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.build-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    background: rgba(0, 0, 0, 0.05);
+    color: #6b7280;
+}
+
+.build-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.build-icon {
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+}
+
+.build-text {
+    font-size: 11px;
+    letter-spacing: 0.025em;
+}
+
+
+/* Status-specific styling */
+
+.build-link.production {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-color: #10b981;
+}
+
+.build-link.production:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.build-link.development {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border-color: #3b82f6;
+}
+
+.build-link.development:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.build-link.dirty {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    border-color: #f59e0b;
+}
+
+.build-link.dirty:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+}
+
+.build-link.unknown {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: white;
+    border-color: #6b7280;
+}
+
+.build-link.unknown:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+    box-shadow: 0 4px 8px rgba(107, 114, 128, 0.3);
 }
 
 
@@ -5974,6 +6077,26 @@ svg.map path.active {
     }
     footer button.link {
         font-size: 12px;
+    }
+    /* Mobile build status */
+    .footer-content {
+        gap: 8px;
+    }
+    .footer-links {
+        font-size: 12px;
+        text-align: center;
+        line-height: 1.4;
+    }
+    .build-link {
+        padding: 3px 6px;
+        font-size: 10px;
+    }
+    .build-text {
+        font-size: 10px;
+    }
+    .build-icon svg {
+        width: 10px;
+        height: 10px;
     }
     h1.settings-welcome {
         font-size: 18px;
