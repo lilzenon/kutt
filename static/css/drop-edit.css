@@ -847,23 +847,39 @@
 }
 
 
-/* Mobile preview adjustments to match live page */
+/* Mobile preview adjustments to match live page exactly */
+
+.preview-viewport.mobile .drop-page-wrapper {
+    padding: 0;
+}
 
 .preview-viewport.mobile .drop-container {
     max-width: 100%;
     margin: 0;
     box-shadow: none;
     border-radius: 0;
+    min-height: 100vh;
 }
 
 
-/* Desktop preview adjustments to match live page */
+/* Desktop preview adjustments to match live page exactly */
+
+.preview-viewport.desktop .drop-page-wrapper {
+    padding: 40px 20px;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
 
 .preview-viewport.desktop .drop-container {
     max-width: 600px;
-    margin: 20px auto;
+    width: 100%;
+    margin: 0;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
     border-radius: 16px;
+    overflow: hidden;
+    min-height: auto;
 }
 
 .preview-viewport .drop-header,

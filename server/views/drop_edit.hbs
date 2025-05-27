@@ -419,6 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to update device preview to match real experience
     function updateDevicePreview(device) {
+        // Simply update the viewport class - let CSS handle everything else
         previewViewport.className = `preview-viewport ${device}`;
 
         // Update device indicator
@@ -427,93 +428,9 @@ document.addEventListener('DOMContentLoaded', function() {
             deviceIndicator.textContent = device === 'mobile' ? 'Mobile View' : 'Desktop View';
         }
 
-        // Update preview to match actual device experience exactly
-        if (device === 'mobile') {
-            // Mobile-specific styling to match actual mobile experience (768px breakpoint)
-            previewDrop.style.fontSize = '14px';
-            previewTitle.style.fontSize = '24px';
-            previewDescription.style.fontSize = '16px';
-
-            // Adjust form inputs for mobile (exact match with drop landing page)
-            const inputs = previewDrop.querySelectorAll('.form-input');
-            inputs.forEach(input => {
-                input.style.padding = '14px';
-                input.style.fontSize = '16px'; // Prevent zoom on iOS
-                input.style.borderRadius = '8px';
-            });
-
-            // Adjust button for mobile (exact match with drop landing page)
-            previewButton.style.padding = '14px';
-            previewButton.style.fontSize = '16px';
-            previewButton.style.borderRadius = '8px';
-
-            // Mobile-specific layout adjustments (exact match)
-            const previewContent = previewDrop.querySelector('.drop-main');
-            if (previewContent) {
-                previewContent.style.padding = '24px 16px';
-            }
-
-            // Mobile header adjustments
-            const previewHeader = previewDrop.querySelector('.drop-header');
-            if (previewHeader) {
-                previewHeader.style.padding = '12px 16px';
-            }
-
-            // Mobile footer adjustments
-            const previewFooter = previewDrop.querySelector('.drop-footer');
-            if (previewFooter) {
-                previewFooter.style.padding = '16px';
-            }
-
-            // Mobile brand text
-            const brandText = previewDrop.querySelector('.brand-text');
-            if (brandText) {
-                brandText.style.fontSize = '16px';
-            }
-
-        } else {
-            // Desktop styling to match actual desktop experience
-            previewDrop.style.fontSize = '16px';
-            previewTitle.style.fontSize = '32px';
-            previewDescription.style.fontSize = '18px';
-
-            // Adjust form inputs for desktop (exact match with drop landing page)
-            const inputs = previewDrop.querySelectorAll('.form-input');
-            inputs.forEach(input => {
-                input.style.padding = '16px';
-                input.style.fontSize = '16px';
-                input.style.borderRadius = '8px';
-            });
-
-            // Adjust button for desktop (exact match with drop landing page)
-            previewButton.style.padding = '16px 32px';
-            previewButton.style.fontSize = '16px';
-            previewButton.style.borderRadius = '8px';
-
-            // Desktop-specific layout adjustments (exact match)
-            const previewContent = previewDrop.querySelector('.drop-main');
-            if (previewContent) {
-                previewContent.style.padding = '40px 24px';
-            }
-
-            // Desktop header adjustments
-            const previewHeader = previewDrop.querySelector('.drop-header');
-            if (previewHeader) {
-                previewHeader.style.padding = '16px 24px';
-            }
-
-            // Desktop footer adjustments
-            const previewFooter = previewDrop.querySelector('.drop-footer');
-            if (previewFooter) {
-                previewFooter.style.padding = '24px';
-            }
-
-            // Desktop brand text
-            const brandText = previewDrop.querySelector('.brand-text');
-            if (brandText) {
-                brandText.style.fontSize = '18px';
-            }
-        }
+        // Let the shared CSS system handle all styling automatically
+        // No manual JavaScript overrides - CSS variables and media queries handle everything
+        console.log(`Updated device preview to: ${device}`);
     }
 
     // Auto-detect user's current device and set appropriate preview
