@@ -26,13 +26,19 @@
     <!-- Styles -->
     <link rel="stylesheet" href="/css/styles.css">
 
+    <!-- Modular Drop System -->
+    <link rel="stylesheet" href="/css/drop-shared.css">
+
     <!-- Drop Landing Page Styles -->
     <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Modular Drop System - CSS Variables */
+        :root {
+            --drop-background-color: {{drop.background_color}};
+            --drop-card-color: {{drop.card_color}};
+            --drop-title-color: {{drop.title_color}};
+            --drop-description-color: {{drop.description_color}};
+            --drop-button-color: {{drop.button_color}};
+            --drop-button-text-color: {{getContrastColor drop.button_color}};
         }
 
         body.drop-landing-page {
@@ -42,287 +48,9 @@
             padding: 0;
         }
 
-        /* Page background (behind the card) */
-        body {
-            background-color: {{drop.background_color}};
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
 
-        .drop-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: {{drop.card_color}};
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
 
-        /* Device-specific optimizations */
-        {{#if isMobile}}
-        /* Mobile-optimized layout with card structure */
-        .drop-container {
-            font-size: 14px;
-            max-width: 100%;
-            margin: 0;
-            box-shadow: none;
-            border-radius: 0;
-        }
-
-        .drop-header {
-            padding: 12px 16px !important;
-        }
-
-        .brand-text {
-            font-size: 16px !important;
-        }
-
-        .drop-main {
-            padding: 24px 16px !important;
-        }
-
-        .drop-title {
-            font-size: 24px !important;
-        }
-
-        .drop-description p {
-            font-size: 16px !important;
-        }
-
-        .form-input {
-            padding: 14px !important;
-            font-size: 16px !important; /* Prevent zoom on iOS */
-        }
-
-        .signup-button {
-            padding: 14px !important;
-            font-size: 16px !important;
-        }
-
-        .drop-cover-image {
-            width: 150px !important;
-            height: 150px !important;
-        }
-        {{else}}
-        /* Desktop-optimized layout with card structure */
-        .drop-container {
-            font-size: 16px;
-            max-width: 600px;
-            margin: 40px auto;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .drop-header {
-            padding: 16px 24px !important;
-        }
-
-        .brand-text {
-            font-size: 18px !important;
-        }
-
-        .drop-main {
-            padding: 40px 24px !important;
-        }
-
-        .drop-title {
-            font-size: 32px !important;
-        }
-
-        .drop-description p {
-            font-size: 18px !important;
-        }
-
-        .form-input {
-            padding: 16px !important;
-            font-size: 16px !important;
-        }
-
-        .signup-button {
-            padding: 16px 32px !important;
-            font-size: 16px !important;
-        }
-
-        .drop-cover-image {
-            width: 200px !important;
-            height: 200px !important;
-        }
-        {{/if}}
-
-        /* Header */
-        .drop-header {
-            padding: 16px 24px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            background: transparent;
-        }
-
-        .drop-brand {
-            display: flex;
-            align-items: center;
-        }
-
-        .brand-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
-            transition: opacity 0.2s ease;
-        }
-
-        .brand-link:hover {
-            opacity: 0.8;
-        }
-
-        .brand-logo {
-            width: 24px;
-            height: 24px;
-            margin-right: 8px;
-        }
-
-        .brand-text {
-            font-size: 18px;
-            font-weight: 700;
-            color: inherit;
-        }
-
-        /* Main content */
-        .drop-main {
-            flex: 1;
-            padding: 40px 24px;
-            text-align: center;
-        }
-
-        .drop-content {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* Cover image - Perfect square cropping */
-        .drop-cover-image {
-            margin-bottom: 32px;
-            border-radius: 12px;
-            overflow: hidden;
-            width: 200px;
-            height: 200px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-        }
-
-        .drop-cover-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        /* Drop info */
-        .drop-info {
-            margin-bottom: 40px;
-        }
-
-        .drop-title {
-            margin: 0 0 16px 0;
-            font-size: 32px;
-            font-weight: 700;
-            line-height: 1.2;
-            color: {{drop.title_color}};
-        }
-
-        .drop-description p {
-            margin: 0 0 24px 0;
-            font-size: 18px;
-            line-height: 1.6;
-            color: {{drop.description_color}};
-        }
-
-        .drop-stats {
-            margin-bottom: 16px;
-        }
-
-        .signup-count {
-            display: inline-block;
-            padding: 8px 16px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            color: inherit;
-        }
-
-        /* Signup form */
-        .drop-signup-section {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .signup-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .form-group {
-            margin: 0;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #374151;
-            transition: border-color 0.2s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .signup-button {
-            width: 100%;
-            padding: 16px 32px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: {{drop.button_color}};
-            color: {{getContrastColor drop.button_color}};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .signup-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .signup-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .button-spinner {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Messages */
+        /* Messages - Keep only essential styles not in modular system */
         .success-message,
         .error-message {
             margin-top: 20px;
@@ -348,211 +76,13 @@
             margin-bottom: 8px;
         }
 
-        /* Footer */
-        .drop-footer {
-            padding: 24px;
-            text-align: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            background: transparent;
+        .button-spinner {
+            animation: spin 1s linear infinite;
         }
 
-        .drop-footer p {
-            margin: 0;
-            font-size: 14px;
-            color: inherit;
-            opacity: 0.6;
-        }
-
-        .footer-link {
-            color: inherit;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .footer-link:hover {
-            opacity: 0.8;
-        }
-
-        /* Screen reader only */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Enterprise Responsive Design */
-
-        /* Tablet and Mobile Landscape (768px and below) */
-        @media (max-width: 768px) {
-            .drop-header {
-                padding: 12px 16px;
-            }
-
-            .brand-text {
-                font-size: 16px;
-            }
-
-            .drop-main {
-                padding: 24px 16px;
-            }
-
-            .drop-content {
-                max-width: 100%;
-            }
-
-            .drop-title {
-                font-size: 24px;
-                margin-bottom: 12px;
-            }
-
-            .drop-description p {
-                font-size: 16px;
-                margin-bottom: 20px;
-            }
-
-            .signup-count {
-                font-size: 13px;
-                padding: 6px 12px;
-            }
-
-            .form-input {
-                padding: 14px;
-                font-size: 16px; /* Prevent zoom on iOS */
-                border-radius: 8px;
-            }
-
-            .signup-button {
-                padding: 14px;
-                font-size: 16px; /* Prevent zoom on iOS */
-                border-radius: 8px;
-            }
-
-            .drop-footer {
-                padding: 16px;
-            }
-
-            .drop-footer p {
-                font-size: 13px;
-            }
-        }
-
-        /* Mobile Portrait (480px and below) */
-        @media (max-width: 480px) {
-            .drop-header {
-                padding: 10px 12px;
-            }
-
-            .brand-logo {
-                width: 20px;
-                height: 20px;
-            }
-
-            .brand-text {
-                font-size: 14px;
-            }
-
-            .drop-main {
-                padding: 20px 12px;
-            }
-
-            .drop-title {
-                font-size: 20px;
-                margin-bottom: 10px;
-            }
-
-            .drop-description p {
-                font-size: 14px;
-                margin-bottom: 16px;
-            }
-
-            .signup-count {
-                font-size: 12px;
-                padding: 5px 10px;
-            }
-
-            .form-input {
-                padding: 12px;
-                font-size: 16px; /* Maintain 16px to prevent zoom */
-            }
-
-            .signup-button {
-                padding: 12px;
-                font-size: 16px; /* Maintain 16px for consistency */
-            }
-
-            .drop-footer {
-                padding: 12px;
-            }
-
-            .drop-footer p {
-                font-size: 12px;
-            }
-        }
-
-        /* Large Mobile (375px and below) */
-        @media (max-width: 375px) {
-            .drop-main {
-                padding: 16px 10px;
-            }
-
-            .drop-title {
-                font-size: 18px;
-            }
-
-            .drop-description p {
-                font-size: 13px;
-            }
-
-            .form-input,
-            .signup-button {
-                padding: 10px;
-            }
-        }
-
-        /* Desktop Optimization (1024px and above) */
-        @media (min-width: 1024px) {
-            .drop-content {
-                max-width: 500px;
-            }
-
-            .drop-title {
-                font-size: 36px;
-            }
-
-            .drop-description p {
-                font-size: 20px;
-            }
-
-            .form-input,
-            .signup-button {
-                padding: 18px;
-                font-size: 18px;
-            }
-        }
-
-        /* Large Desktop (1440px and above) */
-        @media (min-width: 1440px) {
-            .drop-main {
-                padding: 60px 24px;
-            }
-
-            .drop-content {
-                max-width: 600px;
-            }
-
-            .drop-title {
-                font-size: 40px;
-            }
-
-            .drop-description p {
-                font-size: 22px;
-            }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 
@@ -564,7 +94,8 @@
     {{/if}}
 </head>
 <body class="drop-landing-page {{deviceType}}-device" data-device="{{deviceType}}">
-    <div class="drop-container">
+    <div class="drop-page-wrapper">
+        <div class="drop-container">
         <!-- Header -->
         <header class="drop-header">
             <div class="drop-brand">
@@ -673,7 +204,11 @@
         <footer class="drop-footer">
             <p>Powered by <a href="/" class="footer-link">BOUNCE2BOUNCE</a></p>
         </footer>
+        </div>
     </div>
+
+    <!-- Modular Color System -->
+    <script src="/js/drop-color-system.js"></script>
 
     <!-- JavaScript -->
     <script>

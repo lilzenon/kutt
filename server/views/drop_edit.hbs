@@ -217,7 +217,8 @@
 
             <div class="preview-container">
                 <div class="preview-viewport" id="preview-viewport">
-                    <div class="drop-container" id="drop-preview">
+                    <div class="drop-page-wrapper">
+                        <div class="drop-container" id="drop-preview">
                         <!-- Header -->
                         <header class="drop-header">
                             <div class="drop-brand">
@@ -268,6 +269,7 @@
                         <footer class="drop-footer">
                             <p>Powered by <a href="/" class="footer-link">BOUNCE2BOUNCE</a></p>
                         </footer>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -291,6 +293,10 @@
 <div id="edit-success" class="success-message" style="display: none;"></div>
 
 {{> footer}}
+
+<!-- Modular Systems -->
+<link rel="stylesheet" href="/css/drop-shared.css">
+<script src="/js/drop-color-system.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -325,85 +331,21 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePreviewContent();
     }
 
-    // Update preview colors
+    // Initialize modular color system
+    const colorSystem = new DropColorSystem(previewViewport);
+
+    // Update preview colors using modular system
     function updatePreviewColors() {
-        const backgroundColor = backgroundColorInput.value || '#ffffff';
-        const cardColor = cardColorInput.value || '#ffffff';
-        const titleColor = titleColorInput.value || '#000000';
-        const descriptionColor = descriptionColorInput.value || '#666666';
-        const buttonColor = buttonColorInput.value || '#007bff';
+        const colors = {
+            background: backgroundColorInput.value || '#ffffff',
+            card: cardColorInput.value || '#ffffff',
+            title: titleColorInput.value || '#000000',
+            description: descriptionColorInput.value || '#666666',
+            button: buttonColorInput.value || '#007bff'
+        };
 
-        console.log('Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor });
-
-        // Apply BACKGROUND color (page background - behind the card)
-        if (previewViewport) {
-            previewViewport.style.setProperty('background-color', backgroundColor, 'important');
-            previewViewport.style.setProperty('background', backgroundColor, 'important');
-        }
-
-        // Apply to the entire preview area (page background)
-        const previewContainer = document.querySelector('.preview-container');
-        if (previewContainer) {
-            previewContainer.style.setProperty('background-color', backgroundColor, 'important');
-            previewContainer.style.setProperty('background', backgroundColor, 'important');
-        }
-
-        // Apply CARD color (the actual content card)
-        if (previewDrop) {
-            previewDrop.style.setProperty('background-color', cardColor, 'important');
-            previewDrop.style.setProperty('background', cardColor, 'important');
-            console.log('Applied card color to previewDrop:', cardColor);
-        }
-
-        // Apply card color to drop container specifically
-        const dropContainer = previewDrop.querySelector('.drop-container');
-        if (dropContainer) {
-            dropContainer.style.setProperty('background-color', cardColor, 'important');
-            dropContainer.style.setProperty('background', cardColor, 'important');
-        }
-
-        // Apply card color to main content areas (not header/footer)
-        const cardElements = previewDrop.querySelectorAll('.drop-main');
-        cardElements.forEach(element => {
-            element.style.setProperty('background-color', cardColor, 'important');
-            element.style.setProperty('background', cardColor, 'important');
-        });
-
-        console.log('Applied background color:', backgroundColor, 'and card color:', cardColor);
-
-        // Apply title color specifically to title
-        if (previewTitle) {
-            previewTitle.style.setProperty('color', titleColor, 'important');
-            console.log('Applied title color:', titleColor);
-        }
-
-        // Apply description color specifically to description
-        if (previewDescription) {
-            previewDescription.style.setProperty('color', descriptionColor, 'important');
-            console.log('Applied description color:', descriptionColor);
-        }
-
-        // Apply button color with multiple targeting approaches
-        if (previewButton) {
-            previewButton.style.setProperty('background-color', buttonColor, 'important');
-            previewButton.style.setProperty('background', buttonColor, 'important');
-
-            // Calculate if button text should be white or black based on button color
-            const buttonTextColor = getContrastColor(buttonColor);
-            previewButton.style.setProperty('color', buttonTextColor, 'important');
-            console.log('Applied button colors:', { buttonColor, buttonTextColor });
-        }
-
-        // Also target all signup buttons in preview (fallback)
-        const allPreviewButtons = previewDrop.querySelectorAll('.signup-button, button[type="button"]');
-        allPreviewButtons.forEach(btn => {
-            btn.style.setProperty('background-color', buttonColor, 'important');
-            btn.style.setProperty('background', buttonColor, 'important');
-            const btnTextColor = getContrastColor(buttonColor);
-            btn.style.setProperty('color', btnTextColor, 'important');
-        });
-
-
+        console.log('Updating preview colors with modular system:', colors);
+        colorSystem.setColors(colors);
     }
 
     // Update preview content

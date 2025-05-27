@@ -1,0 +1,310 @@
+/* 
+ * SHARED DROP STYLES - FUTURE-PROOF MODULAR SYSTEM
+ * Used by both preview and live drop pages to ensure consistency
+ */
+
+/* ===== CORE LAYOUT SYSTEM ===== */
+
+.drop-page-wrapper {
+    min-height: 100vh;
+    background-color: var(--drop-background-color, #ffffff);
+    padding: 0;
+    margin: 0;
+}
+
+.drop-container {
+    background-color: var(--drop-card-color, #ffffff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* ===== DEVICE-SPECIFIC LAYOUTS ===== */
+
+/* Mobile Layout (768px and below) */
+@media (max-width: 768px) {
+    .drop-page-wrapper {
+        padding: 0;
+    }
+    
+    .drop-container {
+        max-width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        min-height: 100vh;
+    }
+}
+
+/* Desktop Layout (769px and above) */
+@media (min-width: 769px) {
+    .drop-page-wrapper {
+        padding: 40px 20px;
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    
+    .drop-container {
+        max-width: 600px;
+        width: 100%;
+        margin: 0;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+        border-radius: 16px;
+        overflow: hidden;
+        min-height: auto;
+    }
+}
+
+/* ===== HEADER SYSTEM ===== */
+
+.drop-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 16px 24px;
+}
+
+.drop-brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+.brand-link:hover {
+    opacity: 0.8;
+}
+
+.brand-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.brand-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: inherit;
+}
+
+/* ===== MAIN CONTENT SYSTEM ===== */
+
+.drop-main {
+    flex: 1;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+.drop-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* ===== COVER IMAGE SYSTEM ===== */
+
+.drop-cover-image {
+    margin-bottom: 32px;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+.drop-cover-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* ===== TEXT SYSTEM ===== */
+
+.drop-title {
+    margin: 0 0 16px 0;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--drop-title-color, #000000);
+}
+
+.drop-description p {
+    margin: 0 0 24px 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--drop-description-color, #666666);
+}
+
+.drop-stats {
+    margin-bottom: 16px;
+}
+
+.signup-count {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: inherit;
+}
+
+/* ===== FORM SYSTEM ===== */
+
+.drop-signup-section {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    margin: 0;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #374151;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
+/* ===== BUTTON SYSTEM ===== */
+
+.signup-button {
+    width: 100%;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: var(--drop-button-color, #007bff);
+    color: var(--drop-button-text-color, #ffffff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+}
+
+.signup-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.signup-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ===== FOOTER SYSTEM ===== */
+
+.drop-footer {
+    padding: 24px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+}
+
+.drop-footer p {
+    margin: 0;
+    font-size: 14px;
+    color: inherit;
+    opacity: 0.6;
+}
+
+.footer-link {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    opacity: 0.8;
+}
+
+/* ===== MOBILE RESPONSIVE OVERRIDES ===== */
+
+@media (max-width: 768px) {
+    .drop-header {
+        padding: 12px 16px;
+    }
+    
+    .brand-text {
+        font-size: 16px;
+    }
+    
+    .drop-main {
+        padding: 24px 16px;
+    }
+    
+    .drop-title {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    .drop-description p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .form-input {
+        padding: 14px;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    .signup-button {
+        padding: 14px;
+        font-size: 16px;
+    }
+    
+    .drop-cover-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .drop-footer {
+        padding: 16px;
+    }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
