@@ -44,13 +44,13 @@ const spec = {
     DB_POOL_MIN: num({ default: 0 }),
     DB_POOL_MAX: num({ default: 10 }),
 
-    // 🚀 CRM DATABASE CONFIGURATION
+    // 🚀 CRM DATABASE CONFIGURATION (OPTIONAL)
     CRM_DB_CLIENT: str({ choices: supportedDBClients, default: "pg" }),
-    CRM_DB_HOST: str({ example: "dpg-d0qvadbipnbc73eppoh0-a.virginia-postgres.render.com" }),
+    CRM_DB_HOST: str({ example: "dpg-d0qvadbipnbc73eppoh0-a.virginia-postgres.render.com", default: "" }),
     CRM_DB_PORT: num({ default: 5432 }),
-    CRM_DB_NAME: str({ example: "b2b_crm" }),
-    CRM_DB_USER: str({ example: "b2b_admin" }),
-    CRM_DB_PASSWORD: str(),
+    CRM_DB_NAME: str({ example: "b2b_crm", default: "" }),
+    CRM_DB_USER: str({ example: "b2b_admin", default: "" }),
+    CRM_DB_PASSWORD: str({ default: "" }),
     CRM_DB_SSL: bool({ default: true }),
     CRM_DB_POOL_MIN: num({ default: 2 }),
     CRM_DB_POOL_MAX: num({ default: 10 }),

@@ -6,6 +6,9 @@
     "scripts": {
         "dev": "node --watch-path=./server --watch-path=./custom server/server.js",
         "start": "node server/server.js --production",
+        "build": "node scripts/generate-build-info.js",
+        "prebuild": "node scripts/generate-build-info.js",
+        "prestart": "node scripts/generate-build-info.js",
         "migrate": "knex migrate:latest",
         "migrate:make": "knex migrate:make",
         "migrate:crm": "knex migrate:latest --knexfile knexfile.crm.js",

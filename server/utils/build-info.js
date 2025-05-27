@@ -25,7 +25,18 @@ class BuildInfo {
             return this.cache;
         }
 
+        // First, try to load pre-generated build info (for production)
+        const preGeneratedInfo = this.loadPreGeneratedBuildInfo();
+        if (preGeneratedInfo) {
+            console.log('✅ Using pre-generated build info');
+            this.cache = preGeneratedInfo;
+            this.cacheTime = Date.now();
+            return preGeneratedInfo;
+        }
+
+        // Fallback to Git commands (for development)
         try {
+            console.log('🔍 Attempting to get build info from Git...');
             const buildInfo = {
                 // Git information
                 commitHash: this.getCommitHash(),
@@ -55,8 +66,48 @@ class BuildInfo {
 
             return buildInfo;
         } catch (error) {
-            console.warn('⚠️ Could not get build info:', error.message);
+            console.warn('⚠️ Could not get build info from Git:', error.message);
             return this.getFallbackBuildInfo();
+        }
+    }
+
+    /**
+     * Load pre-generated build info from JSON file
+     */
+    loadPreGeneratedBuildInfo() {
+        try {
+            const buildInfoPath = path.join(__dirname, '../../build-info.json');
+
+            if (!fs.existsSync(buildInfoPath)) {
+                console.log('ℹ️ No pre-generated build info found');
+                return null;
+            }
+
+            const buildInfoData = fs.readFileSync(buildInfoPath, 'utf8');
+            const buildInfo = JSON.parse(buildInfoData);
+
+            // Ensure all required fields are present
+            if (!buildInfo.displayText) {
+                if (buildInfo.commitHashShort && buildInfo.branch) {
+                    buildInfo.displayText = `${buildInfo.branch}@${buildInfo.commitHashShort}`;
+                } else if (buildInfo.commitHashShort) {
+                    buildInfo.displayText = buildInfo.commitHashShort;
+                } else {
+                    buildInfo.displayText = `Build ${new Date(buildInfo.buildDate).toISOString().split('T')[0]}`;
+                }
+            }
+
+            // Ensure GitHub URL is set
+            if (!buildInfo.githubUrl && buildInfo.repoUrl) {
+                buildInfo.githubUrl = buildInfo.repoUrl;
+            }
+
+            console.log(`✅ Loaded pre-generated build info: ${buildInfo.displayText}`);
+            return buildInfo;
+
+        } catch (error) {
+            console.warn('⚠️ Could not load pre-generated build info:', error.message);
+            return null;
         }
     }
 

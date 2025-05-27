@@ -16,8 +16,11 @@ const env = require("../env");
 // CRM Database Connection (Separate from main Kutt database)
 let crmDb = null;
 
-// Only initialize CRM database if credentials are provided
-if (env.CRM_DB_HOST && env.CRM_DB_NAME && env.CRM_DB_USER && env.CRM_DB_PASSWORD) {
+// Only initialize CRM database if credentials are provided (not empty strings)
+if (env.CRM_DB_HOST && env.CRM_DB_HOST !== "" &&
+    env.CRM_DB_NAME && env.CRM_DB_NAME !== "" &&
+    env.CRM_DB_USER && env.CRM_DB_USER !== "" &&
+    env.CRM_DB_PASSWORD && env.CRM_DB_PASSWORD !== "") {
     try {
         crmDb = knex({
             client: env.CRM_DB_CLIENT || env.DB_CLIENT,

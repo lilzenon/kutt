@@ -1,0 +1,17 @@
+{
+  "buildDate": "2025-05-27T19:19:54.157Z",
+  "nodeVersion": "v18.12.1",
+  "platform": "win32",
+  "arch": "x64",
+  "commitHash": "4abbe6ec8442bc297cf6ec2ce540808df7e9326b",
+  "commitHashShort": "4abbe6e",
+  "branch": "main",
+  "commitDate": "2025-05-27T19:16:37.000Z",
+  "commitMessage": "FIX DATABASE CONNECTION: Enhanced error logging, database verification script, migration fixes, comprehensive debugging for form submission issues",
+  "isDirty": true,
+  "repoUrl": "https://github.com/lilzenon/kutt.git",
+  "githubUrl": "https://github.com/lilzenon/kutt",
+  "commitUrl": "https://github.com/lilzenon/kutt/commit/4abbe6ec8442bc297cf6ec2ce540808df7e9326b",
+  "displayText": "main@4abbe6e*",
+  "environment": "development"
+}
