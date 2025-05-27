@@ -349,25 +349,13 @@
             <div class="preview-collapsible">
                 <div class="preview-header">
                     <div class="preview-title-section">
-                        <h3>Live Preview</h3>
-                        <span class="preview-device-indicator" id="device-indicator">Desktop View</span>
-                    </div>
-                    <div class="preview-controls">
-                        <button type="button" class="preview-device-btn active" data-device="desktop" title="Desktop View">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/>
-                            </svg>
-                        </button>
-                        <button type="button" class="preview-device-btn" data-device="mobile" title="Mobile View">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 4h10v14H7V4z"/>
-                            </svg>
-                        </button>
+                        <h3>Mobile Preview</h3>
+                        <span class="preview-device-indicator" id="device-indicator">Mobile View</span>
                     </div>
                 </div>
 
             <div class="preview-container">
-                <div class="preview-viewport" id="preview-viewport">
+                <div class="preview-viewport mobile" id="preview-viewport">
                     <div class="drop-page-wrapper">
                         <div class="drop-container" id="drop-preview">
                         <!-- Header -->
@@ -650,56 +638,18 @@ document.addEventListener('DOMContentLoaded', function() {
     descriptionColorInput.addEventListener('change', updatePreviewColors);
     formFieldColorInput.addEventListener('change', updatePreviewColors);
 
-    // FIXED: Device preview toggle with manual override support
-    const deviceButtons = document.querySelectorAll('.preview-device-btn');
-    let manualDeviceSelection = false; // Track if user manually selected a device
-
-    deviceButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            deviceButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const device = btn.dataset.device;
-            manualDeviceSelection = true; // User made manual selection
-            updateDevicePreview(device);
-
-            console.log(`Manual device selection: ${device}`);
-        });
-    });
-
-    // Function to update device preview to match real experience
-    function updateDevicePreview(device) {
-        // Simply update the viewport class - let CSS handle everything else
-        previewViewport.className = `preview-viewport ${device}`;
+    // MOBILE-ONLY PREVIEW: No device switching needed
+    function initializeMobilePreview() {
+        // Force mobile preview always
+        previewViewport.className = 'preview-viewport mobile';
 
         // Update device indicator
         const deviceIndicator = document.getElementById('device-indicator');
         if (deviceIndicator) {
-            deviceIndicator.textContent = device === 'mobile' ? 'Mobile View' : 'Desktop View';
+            deviceIndicator.textContent = 'Mobile View';
         }
 
-        // Let the shared CSS system handle all styling automatically
-        // No manual JavaScript overrides - CSS variables and media queries handle everything
-        console.log(`Updated device preview to: ${device}`);
-    }
-
-    // FIXED: Always show mobile preview (better fit for preview window)
-    function detectAndSetInitialDevicePreview() {
-        // ALWAYS default to mobile since it fits better in the preview window
-        const defaultDevice = 'mobile';
-
-        // Set the mobile device button as active
-        deviceButtons.forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.device === defaultDevice) {
-                btn.classList.add('active');
-            }
-        });
-
-        // Update preview to mobile view
-        updateDevicePreview(defaultDevice);
-
-        console.log(`Preview set to mobile view for better fit in preview window`);
+        console.log('Preview locked to mobile view for optimal display');
     }
 
     // MODERN TAB SYSTEM - Inspired by Laylo's design patterns
@@ -738,8 +688,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize preview
     initializePreview();
 
-    // FIXED: Set device preview based on user's actual device (ONLY on page load)
-    detectAndSetInitialDevicePreview();
+    // Initialize mobile-only preview
+    initializeMobilePreview();
 
     // FIXED: Keep preview mobile-focused (no auto-switching)
     window.addEventListener('resize', () => {

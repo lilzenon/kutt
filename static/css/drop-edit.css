@@ -119,9 +119,9 @@
 }
 
 .tab-btn svg {
-    /* FIXED: Much larger icons for better visibility */
-    width: 20px;
-    height: 20px;
+    /* HUGE ICONS: Much larger for perfect visibility */
+    width: 32px !important;
+    height: 32px !important;
     opacity: 0.8;
     transition: all 0.3s ease;
     position: relative;
@@ -140,12 +140,12 @@
 }
 
 
-/* DESKTOP: Even larger icons for desktop */
+/* DESKTOP: HUGE icons for desktop visibility */
 
 @media (min-width: 769px) {
     .tab-btn svg {
-        width: 22px;
-        height: 22px;
+        width: 36px !important;
+        height: 36px !important;
     }
     .tab-btn:hover svg {
         transform: scale(1.08);
