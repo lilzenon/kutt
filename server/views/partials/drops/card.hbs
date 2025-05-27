@@ -1,102 +1,143 @@
-<!-- MODERN DROP CARD - RESEARCH-BASED DESIGN -->
-<div class="modern-drop-card" data-drop-id="{{id}}">
-  <!-- Card Header with Cover & Status -->
-  <div class="card-header">
+<!-- 🚀 STUNNING DROP CARD - "WOW" FACTOR DESIGN -->
+<div class="stunning-drop-card" data-drop-id="{{id}}">
+  <!-- ✨ Magical Card Header with Animated Background -->
+  <div class="card-header-magic">
     {{#if cover_image}}
-      <div class="card-cover" style="background-image: url('{{cover_image}}')">
-        <div class="cover-overlay"></div>
+      <div class="card-cover-image" style="background-image: url('{{cover_image}}')">
+        <div class="image-overlay-gradient"></div>
+        <div class="floating-particles"></div>
       </div>
     {{else}}
-      <div class="card-cover card-cover-default" style="background: linear-gradient(135deg, {{background_color}} 0%, {{background_color}}dd 100%)">
-        <div class="cover-pattern"></div>
-        <div class="cover-icon">
-          {{> icons/drop}}
+      <div class="card-cover-gradient" style="background: linear-gradient(135deg, {{background_color}} 0%, {{background_color}}dd 50%, {{background_color}}aa 100%)">
+        <div class="animated-mesh-bg"></div>
+        <div class="floating-orbs">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+        </div>
+        <div class="cover-icon-glow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
         </div>
       </div>
     {{/if}}
 
-    <!-- Status Badge -->
-    <div class="status-indicator">
+    <!-- 🔥 Glowing Status Badge -->
+    <div class="status-glow">
       {{#if is_active}}
-        <span class="status-badge status-live">
-          <span class="status-pulse"></span>
-          <span class="status-text">Live</span>
+        <span class="status-badge-glow status-live-glow">
+          <span class="pulse-ring"></span>
+          <span class="pulse-dot"></span>
+          <span class="status-text-glow">LIVE</span>
         </span>
       {{else}}
-        <span class="status-badge status-draft">
-          <span class="status-dot"></span>
-          <span class="status-text">Draft</span>
+        <span class="status-badge-glow status-draft-glow">
+          <span class="draft-dot"></span>
+          <span class="status-text-glow">DRAFT</span>
         </span>
       {{/if}}
     </div>
 
-    <!-- Quick Actions Overlay -->
-    <div class="quick-actions">
-      <button type="button" class="quick-action primary" title="Edit Drop" onclick="editDrop('{{id}}')">
-        {{> icons/pencil}}
+    <!-- ⚡ Lightning Quick Actions -->
+    <div class="lightning-actions">
+      <button type="button" class="lightning-btn edit-lightning" title="Edit Drop" onclick="editDrop('{{id}}')">
+        <div class="btn-glow"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="m16 3 5 5L8 21H3v-5z"/>
+        </svg>
       </button>
-      <button type="button" class="quick-action secondary" title="View Stats" onclick="viewDropStats('{{id}}')">
-        {{> icons/chart}}
+      <button type="button" class="lightning-btn stats-lightning" title="View Stats" onclick="viewDropStats('{{id}}')">
+        <div class="btn-glow"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M21.2 15.9A10 10 0 1 1 8 2.9M22 12A10 10 0 0 0 12 2v10z"/>
+        </svg>
       </button>
     </div>
   </div>
 
-  <!-- Card Content -->
-  <div class="card-content">
-    <!-- Title & Description -->
-    <div class="content-header">
-      <h3 class="card-title">{{title}}</h3>
+  <!-- 💎 Holographic Card Content -->
+  <div class="holographic-content">
+    <!-- 🎭 Dramatic Title Section -->
+    <div class="title-section-wow">
+      <h3 class="title-holographic">{{title}}</h3>
       {{#if description}}
-        <p class="card-description">{{description}}</p>
+        <p class="description-shimmer">{{description}}</p>
       {{/if}}
     </div>
 
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-value">{{signup_count}}</div>
-        <div class="stat-label">Signups</div>
+    <!-- 📊 Neon Stats Dashboard -->
+    <div class="neon-stats-grid">
+      <div class="neon-stat-card">
+        <div class="stat-glow-ring"></div>
+        <div class="stat-value-neon">{{signup_count}}</div>
+        <div class="stat-label-glow">SIGNUPS</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-value">{{formatDate created_at "MMM d"}}</div>
-        <div class="stat-label">Created</div>
+      <div class="neon-stat-card">
+        <div class="stat-glow-ring"></div>
+        <div class="stat-value-neon">{{formatDate created_at "MMM d"}}</div>
+        <div class="stat-label-glow">CREATED</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-value">{{#if is_active}}Active{{else}}Draft{{/if}}</div>
-        <div class="stat-label">Status</div>
+      <div class="neon-stat-card">
+        <div class="stat-glow-ring"></div>
+        <div class="stat-value-neon">{{#if is_active}}LIVE{{else}}DRAFT{{/if}}</div>
+        <div class="stat-label-glow">STATUS</div>
       </div>
     </div>
 
-    <!-- URL Display -->
-    <div class="url-display">
-      <div class="url-container">
-        <span class="url-domain">{{../domain}}/drop/</span>
-        <span class="url-slug">{{slug}}</span>
+    <!-- 🔗 Futuristic URL Display -->
+    <div class="futuristic-url">
+      <div class="url-hologram">
+        <div class="url-scan-line"></div>
+        <div class="url-text-container">
+          <span class="url-domain-cyber">{{../domain}}/drop/</span>
+          <span class="url-slug-neon">{{slug}}</span>
+        </div>
       </div>
-      <button type="button" class="copy-url-btn" title="Copy URL" onclick="copyDropUrl('{{../domain}}/drop/{{slug}}')">
-        {{> icons/copy}}
+      <button type="button" class="copy-btn-cyber" title="Copy URL" onclick="copyDropUrl('{{../domain}}/drop/{{slug}}')">
+        <div class="copy-btn-glow"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <rect width="13" height="13" x="9" y="9" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
       </button>
     </div>
   </div>
 
-  <!-- Card Actions -->
-  <div class="card-actions">
-    <div class="action-group primary-actions">
-      <button type="button" class="action-btn edit" title="Edit Drop" onclick="editDrop('{{id}}')">
-        {{> icons/pencil}}
-        <span>Edit</span>
+  <!-- 🎮 Epic Action Command Center -->
+  <div class="action-command-center">
+    <div class="primary-command-group">
+      <button type="button" class="epic-action-btn edit-command" title="Edit Drop" onclick="editDrop('{{id}}')">
+        <div class="btn-particle-field"></div>
+        <div class="btn-energy-core"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="m16 3 5 5L8 21H3v-5z"/>
+        </svg>
+        <span class="btn-text-glow">EDIT</span>
       </button>
-      <button type="button" class="action-btn stats" title="View Stats" onclick="viewDropStats('{{id}}')">
-        {{> icons/chart}}
-        <span>Stats</span>
+      <button type="button" class="epic-action-btn stats-command" title="View Stats" onclick="viewDropStats('{{id}}')">
+        <div class="btn-particle-field"></div>
+        <div class="btn-energy-core"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M21.2 15.9A10 10 0 1 1 8 2.9M22 12A10 10 0 0 0 12 2v10z"/>
+        </svg>
+        <span class="btn-text-glow">STATS</span>
       </button>
     </div>
-    <div class="action-group secondary-actions">
-      <button type="button" class="action-btn qr" title="QR Code" onclick="showDropQR('{{id}}', '{{../domain}}/drop/{{slug}}')">
-        {{> icons/qrcode}}
+    <div class="secondary-command-group">
+      <button type="button" class="mini-action-btn qr-mini" title="QR Code" onclick="showDropQR('{{id}}', '{{../domain}}/drop/{{slug}}')">
+        <div class="mini-btn-glow"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="-2 -2 24 24">
+          <path d="M13 18h3a2 2 0 0 0 2-2v-3a1 1 0 0 1 2 0v3a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4v-3a1 1 0 0 1 2 0v3a2 2 0 0 0 2 2h3a1 1 0 0 1 0 2h6a1 1 0 0 1 0-2M2 7a1 1 0 1 1-2 0V4a4 4 0 0 1 4-4h3a1 1 0 1 1 0 2H4a2 2 0 0 0-2 2zm16 0V4a2 2 0 0 0-2-2h-3a1 1 0 0 1 0-2h3a4 4 0 0 1 4 4v3a1 1 0 0 1-2 0"/>
+        </svg>
       </button>
-      <button type="button" class="action-btn delete" title="Delete Drop" onclick="deleteDrop('{{id}}', '{{title}}')">
-        {{> icons/trash}}
+      <button type="button" class="mini-action-btn delete-mini" title="Delete Drop" onclick="deleteDrop('{{id}}', '{{title}}')">
+        <div class="mini-btn-glow danger-glow"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-6 5v6m4-6v6"/>
+        </svg>
       </button>
     </div>
   </div>

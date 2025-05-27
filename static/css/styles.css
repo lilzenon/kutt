@@ -1163,212 +1163,796 @@ table .tab a:not(.active):hover {
 }
 
 
-/* ===== MODERN DROP CARD DESIGN ===== */
+/* 🚀 STUNNING DROP CARD - "WOW" FACTOR DESIGN ===== */
 
-.modern-drop-card {
-    /* RESEARCH-BASED: Modern card foundation */
-    background: white;
-    border-radius: 20px;
-    /* PREMIUM: Layered shadows for depth */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+.stunning-drop-card {
+    /* 💎 HOLOGRAPHIC FOUNDATION */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(240, 248, 255, 0.95) 100%);
+    border-radius: 24px;
+    /* 🌟 EPIC LAYERED SHADOWS */
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15), 0 4px 16px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(16, 185, 129, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(59, 130, 246, 0.1);
+    border: 2px solid;
+    border-image: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 50%, rgba(16, 185, 129, 0.3) 100%) 1;
     overflow: hidden;
-    /* SMOOTH: Enhanced transitions */
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    /* MODERN: Glass morphism effect */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    /* FUTURE-PROOF: Flexible layout */
+    /* ⚡ LIGHTNING FAST TRANSITIONS */
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    /* 🔮 MAGICAL GLASS MORPHISM */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* 🎭 FLEXIBLE LAYOUT */
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
+    /* 🌈 HOLOGRAPHIC SHIMMER */
+    background-image: linear-gradient(135deg, transparent 25%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.1) 50%, transparent 50%, transparent 75%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 20px 20px;
+    animation: shimmer 3s ease-in-out infinite;
 }
 
-.modern-drop-card:hover {
-    /* RESEARCH-BASED: Subtle lift effect */
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(59, 130, 246, 0.2);
+@keyframes shimmer {
+    0%,
+    100% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 20px 20px;
+    }
+}
+
+.stunning-drop-card:hover {
+    /* 🚀 EPIC HOVER TRANSFORMATION */
+    transform: translateY(-16px) scale(1.03) rotateX(5deg);
+    box-shadow: 0 32px 64px rgba(59, 130, 246, 0.25), 0 16px 32px rgba(139, 92, 246, 0.2), 0 8px 16px rgba(16, 185, 129, 0.15), inset 0 2px 0 rgba(255, 255, 255, 1), inset 0 -2px 0 rgba(59, 130, 246, 0.2);
+    border-image: linear-gradient(135deg, rgba(59, 130, 246, 0.6) 0%, rgba(139, 92, 246, 0.6) 50%, rgba(16, 185, 129, 0.6) 100%) 1;
+    /* 🔥 GLOW EFFECT */
+    filter: brightness(1.1) saturate(1.2);
 }
 
 
-/* CARD HEADER */
+/* ✨ MAGICAL CARD HEADER */
 
-.modern-drop-card .card-header {
+.stunning-drop-card .card-header-magic {
     position: relative;
-    height: 140px;
+    height: 160px;
     overflow: hidden;
-    /* MODERN: Smooth gradient overlay */
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* 🎭 PERSPECTIVE FOR 3D EFFECTS */
+    perspective: 1000px;
+    transform-style: preserve-3d;
 }
 
-.modern-drop-card .card-cover {
+.stunning-drop-card .card-cover-image {
     width: 100%;
     height: 100%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+    /* 🌊 PARALLAX EFFECT */
+    transform: translateZ(0);
+    transition: transform 0.6s ease;
 }
 
-.modern-drop-card .card-cover-default {
+.stunning-drop-card:hover .card-cover-image {
+    transform: translateZ(20px) scale(1.1);
+}
+
+.stunning-drop-card .card-cover-gradient {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    /* 🌈 ANIMATED GRADIENT */
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.stunning-drop-card .animated-mesh-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.2) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    animation: meshFloat 6s ease-in-out infinite;
+}
+
+@keyframes meshFloat {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+.stunning-drop-card .floating-orbs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.stunning-drop-card .orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    animation: orbFloat 4s ease-in-out infinite;
+}
+
+.stunning-drop-card .orb-1 {
+    width: 20px;
+    height: 20px;
+    top: 20%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.stunning-drop-card .orb-2 {
+    width: 15px;
+    height: 15px;
+    top: 60%;
+    right: 30%;
+    animation-delay: 1.5s;
+}
+
+.stunning-drop-card .orb-3 {
+    width: 25px;
+    height: 25px;
+    bottom: 30%;
+    left: 70%;
+    animation-delay: 3s;
+}
+
+@keyframes orbFloat {
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-20px) scale(1.2);
+        opacity: 0.6;
+    }
+}
+
+.stunning-drop-card .cover-icon-glow {
+    width: 64px;
+    height: 64px;
+    color: rgba(255, 255, 255, 0.95);
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 🔥 EPIC GLOW EFFECT */
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+    animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
+    }
+}
+
+.stunning-drop-card .image-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(16, 185, 129, 0.2) 100%);
+}
+
+.stunning-drop-card .floating-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent), radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent), radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent);
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    animation: particleFloat 10s linear infinite;
+}
+
+@keyframes particleFloat {
+    0% {
+        background-position: 0 0, 0 0, 0 0;
+    }
+    100% {
+        background-position: 100px 100px, -100px 100px, 50px -100px;
+    }
+}
+
+
+/* 🔥 GLOWING STATUS INDICATORS */
+
+.stunning-drop-card .status-glow {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+}
+
+.stunning-drop-card .status-badge-glow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 25px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    /* 🌟 EPIC GLASS MORPHISM */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stunning-drop-card .status-badge-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.stunning-drop-card:hover .status-badge-glow::before {
+    left: 100%;
+}
+
+.stunning-drop-card .status-badge-glow.status-live-glow {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(34, 197, 94, 0.9) 100%);
+    color: white;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), 0 0 20px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.stunning-drop-card .status-badge-glow.status-draft-glow {
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.9) 0%, rgba(148, 163, 184, 0.9) 100%);
+    color: white;
+    box-shadow: 0 8px 24px rgba(100, 116, 139, 0.4), 0 0 20px rgba(100, 116, 139, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.stunning-drop-card .pulse-ring {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    position: relative;
+    animation: pulseRing 2s infinite;
+}
+
+.stunning-drop-card .pulse-ring::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseRing {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+    }
+}
+
+@keyframes pulseDot {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+}
+
+.stunning-drop-card .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    animation: pulseDot 2s infinite;
+}
+
+.stunning-drop-card .draft-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    opacity: 0.9;
+}
+
+.stunning-drop-card .status-text-glow {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+
+/* ⚡ LIGHTNING QUICK ACTIONS */
+
+.stunning-drop-card .lightning-actions {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 15;
+}
+
+.stunning-drop-card:hover .lightning-actions {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.stunning-drop-card .lightning-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
+    /* 🌟 EPIC GLASS MORPHISM */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.modern-drop-card .cover-pattern {
+.stunning-drop-card .lightning-btn .btn-glow {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.modern-drop-card .cover-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+.stunning-drop-card .lightning-btn:hover .btn-glow {
+    opacity: 1;
 }
 
-.modern-drop-card .cover-icon {
-    width: 48px;
-    height: 48px;
-    color: rgba(255, 255, 255, 0.9);
+.stunning-drop-card .lightning-btn.edit-lightning {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(99, 102, 241, 0.9) 100%);
+    color: white;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.stunning-drop-card .lightning-btn.stats-lightning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.9) 0%, rgba(251, 191, 36, 0.9) 100%);
+    color: white;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.stunning-drop-card .lightning-btn:hover {
+    transform: scale(1.15) rotate(5deg);
+    filter: brightness(1.2);
+}
+
+.stunning-drop-card .lightning-btn svg {
+    width: 20px;
+    height: 20px;
     z-index: 2;
     position: relative;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 
-/* STATUS INDICATOR */
+/* 💎 HOLOGRAPHIC CONTENT */
 
-.modern-drop-card .status-indicator {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 10;
-}
-
-.modern-drop-card .status-badge {
+.stunning-drop-card .holographic-content {
+    padding: 28px;
+    flex: 1;
     display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    /* MODERN: Glass morphism effect */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
+    flex-direction: column;
+    gap: 24px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
 }
 
-.modern-drop-card .status-badge.status-live {
-    background: rgba(34, 197, 94, 0.9);
-    color: white;
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+.stunning-drop-card .title-section-wow {
+    flex-shrink: 0;
 }
 
-.modern-drop-card .status-badge.status-draft {
-    background: rgba(148, 163, 184, 0.9);
-    color: white;
-    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.3);
+.stunning-drop-card .title-holographic {
+    margin: 0 0 12px 0;
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    animation: titleShimmer 3s ease-in-out infinite;
 }
 
-.modern-drop-card .status-pulse {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    animation: statusPulse 2s infinite;
-}
-
-.modern-drop-card .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.8;
-}
-
-@keyframes statusPulse {
+@keyframes titleShimmer {
     0%,
     100% {
-        opacity: 1;
-        transform: scale(1);
+        background-position: 0% 50%;
     }
     50% {
-        opacity: 0.7;
-        transform: scale(1.2);
+        background-position: 100% 50%;
     }
 }
 
+.stunning-drop-card .description-shimmer {
+    margin: 0;
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.9;
+}
 
-/* QUICK ACTIONS OVERLAY */
 
-.modern-drop-card .quick-actions {
+/* 📊 NEON STATS DASHBOARD */
+
+.stunning-drop-card .neon-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.stunning-drop-card .neon-stat-card {
+    position: relative;
+    padding: 16px 12px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    text-align: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stunning-drop-card .neon-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.stunning-drop-card .stat-glow-ring {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+    border-radius: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stunning-drop-card .neon-stat-card:hover .stat-glow-ring {
+    opacity: 1;
+}
+
+.stunning-drop-card .stat-value-neon {
+    font-size: 20px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    z-index: 2;
+}
+
+.stunning-drop-card .stat-label-glow {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
+}
+
+
+/* 🔗 FUTURISTIC URL DISPLAY */
+
+.stunning-drop-card .futuristic-url {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.05) 0%, rgba(30, 41, 59, 0.05) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stunning-drop-card .url-hologram {
+    flex: 1;
+    position: relative;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+}
+
+.stunning-drop-card .url-scan-line {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+    animation: scanLine 3s ease-in-out infinite;
+}
+
+@keyframes scanLine {
+    0%,
+    100% {
+        left: -100%;
+    }
+    50% {
+        left: 100%;
+    }
+}
+
+.stunning-drop-card .url-text-container {
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+    z-index: 2;
+}
+
+.stunning-drop-card .url-domain-cyber {
+    color: #64748b;
+    font-weight: 400;
+}
+
+.stunning-drop-card .url-slug-neon {
+    color: #1e293b;
+    font-weight: 700;
+    word-break: break-all;
+}
+
+.stunning-drop-card .copy-btn-cyber {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    color: #3b82f6;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.stunning-drop-card .copy-btn-cyber:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    transform: scale(1.1);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.stunning-drop-card .copy-btn-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stunning-drop-card .copy-btn-cyber:hover .copy-btn-glow {
+    opacity: 1;
+}
+
+.stunning-drop-card .copy-btn-cyber svg {
+    width: 16px;
+    height: 16px;
+    z-index: 2;
+    position: relative;
+}
+
+
+/* 🎮 EPIC ACTION COMMAND CENTER */
+
+.stunning-drop-card .action-command-center {
+    padding: 20px 28px 28px;
+    border-top: 1px solid rgba(59, 130, 246, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(240, 248, 255, 0.05) 100%);
+}
+
+.stunning-drop-card .primary-command-group {
+    display: flex;
+    gap: 12px;
+}
+
+.stunning-drop-card .epic-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 14px;
+    border: none;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stunning-drop-card .epic-action-btn.edit-command {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.stunning-drop-card .epic-action-btn.stats-command {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+}
+
+.stunning-drop-card .epic-action-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1.1);
+}
+
+.stunning-drop-card .btn-particle-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stunning-drop-card .epic-action-btn:hover .btn-particle-field {
+    opacity: 1;
+}
+
+.stunning-drop-card .btn-energy-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.stunning-drop-card .epic-action-btn:hover .btn-energy-core {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(3);
+}
+
+.stunning-drop-card .btn-text-glow {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.stunning-drop-card .epic-action-btn svg {
+    width: 16px;
+    height: 16px;
+    z-index: 2;
+    position: relative;
+}
+
+.stunning-drop-card .secondary-command-group {
     display: flex;
     gap: 8px;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    z-index: 10;
 }
 
-.modern-drop-card:hover .quick-actions {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.modern-drop-card .quick-action {
+.stunning-drop-card .mini-action-btn {
     width: 36px;
     height: 36px;
-    border-radius: 12px;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-    /* MODERN: Glass morphism effect */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: rgba(100, 116, 139, 0.1);
+    border: 1px solid rgba(100, 116, 139, 0.2);
 }
 
-.modern-drop-card .quick-action.primary {
-    background: rgba(59, 130, 246, 0.9);
-    color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-.modern-drop-card .quick-action.secondary {
-    background: rgba(255, 255, 255, 0.9);
-    color: #374151;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.modern-drop-card .quick-action:hover {
+.stunning-drop-card .mini-action-btn:hover {
     transform: scale(1.1);
+    background: rgba(100, 116, 139, 0.2);
 }
 
-.modern-drop-card .quick-action svg {
+.stunning-drop-card .mini-btn-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stunning-drop-card .mini-btn-glow.danger-glow {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 70%);
+}
+
+.stunning-drop-card .mini-action-btn:hover .mini-btn-glow {
+    opacity: 1;
+}
+
+.stunning-drop-card .mini-action-btn svg {
     width: 16px;
     height: 16px;
+    color: #64748b;
+    z-index: 2;
+    position: relative;
 }
 
 
