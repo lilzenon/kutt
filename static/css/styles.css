@@ -903,6 +903,9 @@ table .tab a:not(.active):hover {
     transform: translateY(-2px);
 }
 
+
+/* ===== INDUSTRY-LEADING MOBILE MODAL DESIGN ===== */
+
 .dialog {
     position: fixed;
     width: 100%;
@@ -912,9 +915,25 @@ table .tab a:not(.active):hover {
     display: none;
     justify-content: center;
     align-items: center;
-    background-color: rgba(50, 50, 50, 0.8);
+    /* RESEARCH-BASED: Enhanced backdrop with blur */
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 1000;
-    animation: fadein 0.2s ease-in-out;
+    /* MOBILE-FIRST: Prevent body scroll */
+    overflow: hidden;
+    animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+    }
 }
 
 .dialog.open {
@@ -922,17 +941,36 @@ table .tab a:not(.active):hover {
 }
 
 .dialog .box {
-    min-width: 450px;
-    max-width: 90%;
+    /* RESEARCH-BASED: Mobile-first responsive sizing */
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    margin: 16px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 3rem 2rem;
-    background-color: white;
-    border-radius: 8px;
-    --keyframe-slidey-offset: -30px;
-    animation: slidey 0.2s ease-in-out;
+    align-items: stretch;
+    /* PREMIUM: Enhanced styling */
+    background: white;
+    border-radius: 20px;
+    /* RESEARCH-BASED: Layered shadows for depth */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 20px -5px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    /* MODERN: Glass morphism effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow: hidden;
+    /* RESEARCH-BASED: Smooth scale-in animation */
+    animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .dialog.qrcode .box {
@@ -1605,39 +1643,124 @@ table .tab a:not(.active):hover {
     animation: spin 1s linear infinite;
 }
 
+
+/* INDUSTRY-LEADING MODAL CONTENT STYLING */
+
 .dialog .content {
     display: flex;
     flex-direction: column;
+    /* RESEARCH-BASED: Optimal padding for mobile */
+    padding: 24px;
+    max-height: 90vh;
+    overflow-y: auto;
+    /* MOBILE-FIRST: Smooth scrolling */
+    -webkit-overflow-scrolling: touch;
     animation: fadein 0.2s ease-in-out;
 }
 
 .dialog .content h2 {
-    font-weight: bold !important;
-    margin-bottom: 0.5rem !important;
-    margin-top: 0;
+    font-weight: 700 !important;
+    font-size: 24px;
+    margin: 0 0 24px 0 !important;
+    color: #1e293b;
+    text-align: center;
+    /* MODERN: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
+
+
+/* RESEARCH-BASED: Mobile-optimized button layout */
 
 .dialog .content .buttons {
     display: flex;
-    align-items: center;
-    margin-top: 1.5rem;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #f1f5f9;
 }
 
 .dialog .content .buttons button {
-    margin-right: 2rem;
-}
-
-.dialog .content .buttons button:last-of-type {
-    margin-right: 0;
-}
-
-.dialog .content {
+    /* RESEARCH-BASED: Full-width buttons for mobile */
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* MOBILE-FIRST: Optimal touch target */
+    min-height: 56px;
+    margin: 0;
+    /* MODERN: Better text rendering */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* RESEARCH-BASED: Primary button styling */
+
+.dialog .content .buttons button.primary,
+.dialog .content .buttons button[type="submit"] {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: 2px solid #3b82f6;
+    color: white;
+    /* RESEARCH-BASED: Primary action should be first */
+    order: 1;
+    /* PREMIUM: Enhanced shadows */
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3), 0 2px 4px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.dialog .content .buttons button.primary:hover,
+.dialog .content .buttons button[type="submit"]:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4), 0 4px 8px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+
+/* RESEARCH-BASED: Secondary button styling */
+
+.dialog .content .buttons button:not(.primary):not([type="submit"]) {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    color: #475569;
+    /* RESEARCH-BASED: Secondary button should be less prominent */
+    order: 2;
+}
+
+.dialog .content .buttons button:not(.primary):not([type="submit"]):hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dialog .content .buttons button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .dialog .content #dialog-error {
-    margin-top: 1rem;
-    margin-bottom: -1rem;
+    margin-top: 16px;
+    margin-bottom: 0;
+    padding: 16px;
+    background: linear-gradient(135deg, #fef2f2 0%, #fde8e8 100%);
+    border: 2px solid #fecaca;
+    border-radius: 12px;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 500;
+    /* MODERN: Enhanced error styling */
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dialog .content .icon {
@@ -1686,16 +1809,77 @@ table .tab a:not(.active):hover {
     display: none;
 }
 
+
+/* RESEARCH-BASED: Single-column mobile-first form layout */
+
 .dialog .content label {
-    margin: 0.5rem 0;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+    /* MODERN: Better text rendering */
+    text-rendering: optimizeLegibility;
+}
+
+.dialog .content .form-group {
+    margin-bottom: 20px;
+}
+
+.dialog .content .form-group:last-child {
+    margin-bottom: 0;
 }
 
 .dialog .content input[type="text"],
 .dialog .content input[type="password"],
 .dialog .content input[type="email"],
+.dialog .content textarea,
 .dialog .content select {
-    width: 320px;
-    height: 48px;
+    width: 100%;
+    /* RESEARCH-BASED: Optimal touch target size for mobile */
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    /* MOBILE-FIRST: Prevent zoom on iOS */
+    font-size: 16px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    box-sizing: border-box;
+    /* MODERN: Enhanced shadows */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    /* MOBILE-FIRST: Remove browser styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* RESEARCH-BASED: Consistent height */
+    min-height: 56px;
+}
+
+.dialog .content input[type="text"]:focus,
+.dialog .content input[type="password"]:focus,
+.dialog .content input[type="email"]:focus,
+.dialog .content textarea:focus,
+.dialog .content select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    /* RESEARCH-BASED: Enhanced focus ring */
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.dialog .content textarea {
+    resize: vertical;
+    min-height: 100px;
+    /* MOBILE-FIRST: Better line height for readability */
+    line-height: 1.5;
+}
+
+.dialog .content .form-help {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.4;
 }
 
 .inputs {
