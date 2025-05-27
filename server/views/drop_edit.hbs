@@ -229,21 +229,22 @@
                             <div class="modern-setting-group">
                                 <div class="setting-header">
                                     <div class="setting-info">
-                                        <h4 class="setting-title">Active Drop</h4>
+                                        <div class="setting-title-row">
+                                            <h4 class="setting-title">Active Drop</h4>
+                                            <div class="world-class-status-indicator {{#if drop.is_active}}live{{else}}inactive{{/if}}" id="drop-status-indicator">
+                                                <div class="status-pulse-dot"></div>
+                                                <span class="status-text">{{#if drop.is_active}}Live{{else}}Inactive{{/if}}</span>
+                                            </div>
+                                        </div>
                                         <p class="setting-description">When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</p>
                                     </div>
                                     <div class="setting-control">
                                         <label class="modern-toggle">
-                                            <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}}>
+                                            <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}} id="active-drop-toggle">
                                             <span class="toggle-slider">
                                                 <span class="toggle-thumb"></span>
                                             </span>
                                         </label>
-                                        <div class="setting-status">
-                                            <span class="status-indicator {{#if drop.is_active}}active{{else}}inactive{{/if}}">
-                                                {{#if drop.is_active}}Live{{else}}Draft{{/if}}
-                                            </span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -762,6 +763,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize data collection toggles
     initializeDataCollectionToggles();
+
+    // WORLD-CLASS STATUS INDICATOR SYSTEM - Dynamic real-time updates
+    function initializeStatusIndicator() {
+        const activeDropToggle = document.getElementById('active-drop-toggle');
+        const statusIndicator = document.getElementById('drop-status-indicator');
+
+        if (!activeDropToggle || !statusIndicator) {
+            console.warn('⚠️ Status indicator elements not found');
+            return;
+        }
+
+        function updateStatusIndicator(isActive) {
+            const statusText = statusIndicator.querySelector('.status-text');
+            const statusClasses = ['live', 'inactive'];
+
+            // Remove all status classes
+            statusIndicator.classList.remove(...statusClasses);
+
+            if (isActive) {
+                // LIVE STATE: Green with pulse animation
+                statusIndicator.classList.add('live');
+                statusText.textContent = 'Live';
+                console.log('🟢 Status updated to LIVE');
+            } else {
+                // INACTIVE STATE: Red with pulse animation
+                statusIndicator.classList.add('inactive');
+                statusText.textContent = 'Inactive';
+                console.log('🔴 Status updated to INACTIVE');
+            }
+
+            // PREMIUM: Add subtle bounce animation on change
+            statusIndicator.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                statusIndicator.style.transform = '';
+            }, 200);
+        }
+
+        // Listen for toggle changes
+        activeDropToggle.addEventListener('change', function() {
+            const isActive = this.checked;
+            updateStatusIndicator(isActive);
+
+            console.log('🎯 Active Drop toggle changed:', {
+                isActive: isActive,
+                timestamp: new Date().toISOString()
+            });
+        });
+
+        // Initialize with current state
+        updateStatusIndicator(activeDropToggle.checked);
+
+        console.log('✅ World-class status indicator initialized');
+    }
+
+    // Initialize status indicator
+    initializeStatusIndicator();
 
     // FIXED: Keep preview mobile-focused (no auto-switching)
     window.addEventListener('resize', () => {
