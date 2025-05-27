@@ -58,7 +58,8 @@
         "rate-limit-redis": "4.2.0",
         "useragent": "2.3.0",
         "libphonenumber-js": "1.11.14",
-        "twilio": "5.3.5"
+        "twilio": "5.3.5",
+        "geoip-lite": "1.4.10"
     },
     "devDependencies": {
         "@types/bcryptjs": "2.4.2",
