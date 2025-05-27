@@ -61,4 +61,24 @@ router.get(
     asyncHandler(drops.getDropSignups)
 );
 
+// 🚀 ANALYTICS ROUTES - LAYLO-STYLE FANS SYSTEM
+
+// GET /api/drops/analytics/fans - Get comprehensive fan analytics
+router.get(
+    "/analytics/fans",
+    asyncHandler(drops.getFanAnalytics)
+);
+
+// GET /api/drops/analytics/summary - Get fan summary statistics
+router.get(
+    "/analytics/summary",
+    asyncHandler(drops.getFanSummaryStats)
+);
+
+// GET /api/drops/:id/analytics - Get analytics for specific drop
+router.get(
+    "/:id/analytics",
+    asyncHandler(drops.getDropAnalytics)
+);
+
 module.exports = router;

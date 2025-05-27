@@ -263,6 +263,73 @@ async function getDropSignups(req, res) {
     });
 }
 
+// 🚀 LAYLO-STYLE ANALYTICS ENDPOINTS
+
+// Get comprehensive fan analytics
+async function getFanAnalytics(req, res) {
+    const userId = req.user.id;
+    const {
+        limit = 100,
+            offset = 0,
+            search = '',
+            sortBy = 'latest',
+            dropId = null
+    } = req.query;
+
+    const options = {
+        limit: parseInt(limit),
+        offset: parseInt(offset),
+        search: search.trim(),
+        sortBy,
+        dropId: dropId ? parseInt(dropId) : null
+    };
+
+    const analytics = await drop.getFanAnalytics(userId, options);
+
+    res.json({
+        success: true,
+        data: analytics
+    });
+}
+
+// Get fan summary statistics
+async function getFanSummaryStats(req, res) {
+    const userId = req.user.id;
+    const { dropId = null } = req.query;
+
+    const stats = await drop.getFanSummaryStats(userId, dropId ? parseInt(dropId) : null);
+
+    res.json({
+        success: true,
+        data: stats
+    });
+}
+
+// Get analytics for specific drop
+async function getDropAnalytics(req, res) {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    // Check if drop belongs to user
+    const foundDrop = await drop.findOne({ id, user_id: userId });
+    if (!foundDrop) {
+        throw new CustomError("Drop not found", 404);
+    }
+
+    // Get fan analytics for this specific drop
+    const fanAnalytics = await drop.getFanAnalytics(userId, { dropId: parseInt(id) });
+    const summaryStats = await drop.getFanSummaryStats(userId, parseInt(id));
+
+    res.json({
+        success: true,
+        data: {
+            drop: foundDrop,
+            fanAnalytics,
+            summaryStats
+        }
+    });
+}
+
 module.exports = {
     createDropValidation,
     updateDropValidation,
@@ -273,5 +340,9 @@ module.exports = {
     updateDrop,
     deleteDrop,
     createSignup,
-    getDropSignups
+    getDropSignups,
+    // 🚀 Analytics
+    getFanAnalytics,
+    getFanSummaryStats,
+    getDropAnalytics
 };

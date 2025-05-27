@@ -1,6 +1,7 @@
 {{> header}}
 
 <link rel="stylesheet" href="/css/drop-edit.css">
+<link rel="stylesheet" href="/css/analytics.css">
 
 <div class="drop-edit-container">
     <div class="drop-edit-header">
@@ -313,14 +314,136 @@
 
                 <!-- ANALYTICS TAB CONTENT -->
                 <div class="tab-content" data-tab-content="analytics">
-                    <div class="tab-placeholder">
-                        <div class="placeholder-content">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" class="placeholder-icon">
-                                <path d="M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M16,8H18V15H16V8M12,2H14V15H12V2M8,13H10V15H8V13M4,8H6V15H4V8Z"/>
-                            </svg>
-                            <h3>Analytics</h3>
-                            <p>View detailed insights, conversion rates, and performance metrics for your drop.</p>
-                            <span class="coming-soon-badge">Coming Soon</span>
+                    <!-- 🚀 LAYLO-STYLE ANALYTICS DASHBOARD -->
+                    <div class="analytics-dashboard">
+                        <!-- Summary Stats Cards -->
+                        <div class="analytics-summary-grid">
+                            <div class="analytics-card">
+                                <div class="card-header">
+                                    <h3>Total Fans</h3>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H16c-.8 0-1.54.37-2 1l-3.72 5.6-2.28-2.28A1 1 0 0 0 7.29 12L4 15.29V20h2v-3.59l2.71-2.7L11 16l4-6h2.54l2.46 7.4V22h4z"/>
+                                    </svg>
+                                </div>
+                                <div class="card-value" id="total-fans">-</div>
+                                <div class="card-change positive" id="fans-change">-</div>
+                            </div>
+
+                            <div class="analytics-card">
+                                <div class="card-header">
+                                    <h3>Total RSVPs</h3>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                                    </svg>
+                                </div>
+                                <div class="card-value" id="total-rsvps">-</div>
+                                <div class="card-change positive" id="rsvps-change">-</div>
+                            </div>
+
+                            <div class="analytics-card">
+                                <div class="card-header">
+                                    <h3>Repeat Fans</h3>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                </div>
+                                <div class="card-value" id="repeat-fans">-</div>
+                                <div class="card-change positive" id="repeat-change">-</div>
+                            </div>
+
+                            <div class="analytics-card">
+                                <div class="card-header">
+                                    <h3>Avg RSVPs/Fan</h3>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+                                    </svg>
+                                </div>
+                                <div class="card-value" id="avg-rsvps">-</div>
+                                <div class="card-change neutral" id="avg-change">-</div>
+                            </div>
+                        </div>
+
+                        <!-- Fans Table Section -->
+                        <div class="fans-section">
+                            <div class="fans-header">
+                                <div class="fans-title">
+                                    <h2>Fans</h2>
+                                    <p>All fans who have RSVP'd to your drops</p>
+                                </div>
+                                <div class="fans-controls">
+                                    <div class="search-container">
+                                        <input type="text" id="fans-search" placeholder="Search fans..." class="search-input">
+                                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                        </svg>
+                                    </div>
+                                    <select id="fans-sort" class="sort-select">
+                                        <option value="latest">Latest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="most_active">Most Active</option>
+                                        <option value="name">Name A-Z</option>
+                                        <option value="email">Email A-Z</option>
+                                    </select>
+                                    <button type="button" class="export-btn" onclick="exportFans()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                        Export
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Fans Table -->
+                            <div class="fans-table-container">
+                                <div class="table-loading" id="fans-loading">
+                                    <div class="loading-spinner"></div>
+                                    <p>Loading fans...</p>
+                                </div>
+
+                                <table class="fans-table" id="fans-table" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Contact</th>
+                                            <th>Location</th>
+                                            <th>Joined On</th>
+                                            <th>Acq. Channel</th>
+                                            <th>RSVPs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="fans-table-body">
+                                        <!-- Dynamic content loaded here -->
+                                    </tbody>
+                                </table>
+
+                                <div class="table-pagination" id="fans-pagination" style="display: none;">
+                                    <div class="pagination-info">
+                                        <span id="pagination-text">Showing 1-50 of 0 fans</span>
+                                    </div>
+                                    <div class="pagination-controls">
+                                        <button type="button" id="prev-page" class="pagination-btn" disabled>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                                            </svg>
+                                            Previous
+                                        </button>
+                                        <span id="page-numbers" class="page-numbers"></span>
+                                        <button type="button" id="next-page" class="pagination-btn">
+                                            Next
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="empty-state" id="fans-empty" style="display: none;">
+                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor" class="empty-icon">
+                                        <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8H16c-.8 0-1.54.37-2 1l-3.72 5.6-2.28-2.28A1 1 0 0 0 7.29 12L4 15.29V20h2v-3.59l2.71-2.7L11 16l4-6h2.54l2.46 7.4V22h4z"/>
+                                    </svg>
+                                    <h3>No fans yet</h3>
+                                    <p>Share your drop page to start collecting fans!</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -724,7 +847,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize with first tab active (Page)
     switchTab('page');
 
-
+    // 🚀 ANALYTICS SYSTEM INITIALIZATION
+    initializeAnalytics();
 
     // Initialize preview
     initializePreview();
@@ -1094,5 +1218,263 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => banner.remove(), 300);
         }, 5000);
     }
+    // 🚀 LAYLO-STYLE ANALYTICS SYSTEM
+
+    let currentPage = 1;
+    let currentSearch = '';
+    let currentSort = 'latest';
+    const pageSize = 50;
+
+    function initializeAnalytics() {
+        // Set up event listeners for analytics controls
+        const searchInput = document.getElementById('fans-search');
+        const sortSelect = document.getElementById('fans-sort');
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearch = e.target.value;
+                    currentPage = 1;
+                    loadFansData();
+                }, 300);
+            });
+        }
+
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                currentPage = 1;
+                loadFansData();
+            });
+        }
+
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadFansData();
+                }
+            });
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                currentPage++;
+                loadFansData();
+            });
+        }
+
+        // Load initial data when analytics tab is clicked
+        const analyticsTab = document.querySelector('[data-tab="analytics"]');
+        if (analyticsTab) {
+            analyticsTab.addEventListener('click', () => {
+                setTimeout(() => {
+                    loadAnalyticsData();
+                }, 100);
+            });
+        }
+    }
+
+    async function loadAnalyticsData() {
+        try {
+            // Load summary stats
+            await loadSummaryStats();
+
+            // Load fans data
+            await loadFansData();
+
+        } catch (error) {
+            console.error('Failed to load analytics data:', error);
+            showAnalyticsError('Failed to load analytics data');
+        }
+    }
+
+    async function loadSummaryStats() {
+        try {
+            const response = await fetch(`/api/drops/analytics/summary?dropId={{drop.id}}`);
+            const result = await response.json();
+
+            if (result.success) {
+                const stats = result.data;
+
+                // Update summary cards
+                document.getElementById('total-fans').textContent = stats.totalUniqueFans.toLocaleString();
+                document.getElementById('total-rsvps').textContent = stats.totalRSVPs.toLocaleString();
+                document.getElementById('repeat-fans').textContent = stats.repeatFans.toLocaleString();
+                document.getElementById('avg-rsvps').textContent = stats.averageRSVPsPerFan;
+
+                // Update change indicators (you can calculate these based on historical data)
+                document.getElementById('fans-change').textContent = `+${stats.recentSignups} this week`;
+                document.getElementById('rsvps-change').textContent = `+${stats.recentSignups} this week`;
+                document.getElementById('repeat-change').textContent = `${((stats.repeatFans / stats.totalUniqueFans) * 100).toFixed(1)}% of fans`;
+                document.getElementById('avg-change').textContent = 'All time average';
+            }
+        } catch (error) {
+            console.error('Failed to load summary stats:', error);
+        }
+    }
+
+    async function loadFansData() {
+        const loadingElement = document.getElementById('fans-loading');
+        const tableElement = document.getElementById('fans-table');
+        const emptyElement = document.getElementById('fans-empty');
+        const paginationElement = document.getElementById('fans-pagination');
+
+        // Show loading state
+        loadingElement.style.display = 'flex';
+        tableElement.style.display = 'none';
+        emptyElement.style.display = 'none';
+        paginationElement.style.display = 'none';
+
+        try {
+            const offset = (currentPage - 1) * pageSize;
+            const params = new URLSearchParams({
+                limit: pageSize,
+                offset: offset,
+                search: currentSearch,
+                sortBy: currentSort,
+                dropId: '{{drop.id}}'
+            });
+
+            const response = await fetch(`/api/drops/analytics/fans?${params}`);
+            const result = await response.json();
+
+            if (result.success) {
+                const { fans, total, pagination } = result.data;
+
+                // Hide loading
+                loadingElement.style.display = 'none';
+
+                if (fans.length === 0) {
+                    // Show empty state
+                    emptyElement.style.display = 'flex';
+                } else {
+                    // Show table with data
+                    renderFansTable(fans);
+                    renderPagination(pagination);
+                    tableElement.style.display = 'table';
+                    paginationElement.style.display = 'flex';
+                }
+            } else {
+                throw new Error(result.message || 'Failed to load fans data');
+            }
+        } catch (error) {
+            console.error('Failed to load fans data:', error);
+            loadingElement.style.display = 'none';
+            showAnalyticsError('Failed to load fans data');
+        }
+    }
+
+    function renderFansTable(fans) {
+        const tbody = document.getElementById('fans-table-body');
+        tbody.innerHTML = '';
+
+        fans.forEach(fan => {
+            const row = document.createElement('tr');
+            row.className = fan.is_repeat_fan ? 'repeat-fan' : '';
+
+            // Format join date
+            const joinDate = new Date(fan.join_date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+
+            // Create contact cell with name and email
+            const contactName = fan.name || 'Anonymous';
+            const contactEmail = fan.email;
+
+            row.innerHTML = `
+                <td class="contact-cell">
+                    <div class="contact-info">
+                        <div class="contact-name">${escapeHtml(contactName)}</div>
+                        <div class="contact-email">${escapeHtml(contactEmail)}</div>
+                        ${fan.phone ? `<div class="contact-phone">${escapeHtml(fan.phone)}</div>` : ''}
+                    </div>
+                    ${fan.is_repeat_fan ? '<span class="repeat-badge">Repeat Fan</span>' : ''}
+                </td>
+                <td class="location-cell">${escapeHtml(fan.location || 'Unknown')}</td>
+                <td class="date-cell">${joinDate}</td>
+                <td class="channel-cell">
+                    <span class="channel-badge channel-${fan.acquisition_channel.toLowerCase().replace(/[^a-z0-9]/g, '')}">${escapeHtml(fan.acquisition_channel)}</span>
+                </td>
+                <td class="rsvp-cell">
+                    <span class="rsvp-count">${fan.total_rsvps}</span>
+                    ${fan.total_rsvps > 1 ? `<span class="rsvp-drops">${fan.fan_drops.length} drops</span>` : ''}
+                </td>
+            `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    function renderPagination(pagination) {
+        const paginationText = document.getElementById('pagination-text');
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+        const pageNumbers = document.getElementById('page-numbers');
+
+        // Update pagination text
+        const start = pagination.offset + 1;
+        const end = Math.min(pagination.offset + pagination.limit, pagination.total);
+        paginationText.textContent = `Showing ${start}-${end} of ${pagination.total} fans`;
+
+        // Update button states
+        prevButton.disabled = pagination.currentPage <= 1;
+        nextButton.disabled = pagination.currentPage >= pagination.pages;
+
+        // Update page numbers
+        pageNumbers.innerHTML = '';
+        const maxVisiblePages = 5;
+        const startPage = Math.max(1, pagination.currentPage - Math.floor(maxVisiblePages / 2));
+        const endPage = Math.min(pagination.pages, startPage + maxVisiblePages - 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `page-number ${i === pagination.currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                loadFansData();
+            });
+            pageNumbers.appendChild(pageButton);
+        }
+    }
+
+    function showAnalyticsError(message) {
+        const emptyElement = document.getElementById('fans-empty');
+        emptyElement.innerHTML = `
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor" class="empty-icon error">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <h3>Error loading analytics</h3>
+            <p>${escapeHtml(message)}</p>
+            <button type="button" onclick="loadAnalyticsData()" class="retry-btn">Try Again</button>
+        `;
+        emptyElement.style.display = 'flex';
+    }
+
+    function exportFans() {
+        // Create CSV export of fans data
+        const params = new URLSearchParams({
+            search: currentSearch,
+            sortBy: currentSort,
+            dropId: '{{drop.id}}',
+            format: 'csv'
+        });
+
+        window.open(`/api/drops/analytics/fans?${params}`, '_blank');
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
 });
 </script>
