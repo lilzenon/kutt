@@ -331,21 +331,31 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePreviewContent();
     }
 
-    // Initialize modular color system
-    const colorSystem = new DropColorSystem(previewViewport);
-
-    // Update preview colors using modular system
+    // Simple, working color system
     function updatePreviewColors() {
-        const colors = {
-            background: backgroundColorInput.value || '#ffffff',
-            card: cardColorInput.value || '#ffffff',
-            title: titleColorInput.value || '#000000',
-            description: descriptionColorInput.value || '#666666',
-            button: buttonColorInput.value || '#007bff'
-        };
+        const backgroundColor = backgroundColorInput.value || '#ffffff';
+        const cardColor = cardColorInput.value || '#ffffff';
+        const titleColor = titleColorInput.value || '#000000';
+        const descriptionColor = descriptionColorInput.value || '#666666';
+        const buttonColor = buttonColorInput.value || '#007bff';
 
-        console.log('Updating preview colors with modular system:', colors);
-        colorSystem.setColors(colors);
+        console.log('Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor });
+
+        // Apply CSS custom properties directly to the preview container
+        const previewContainer = previewDrop.closest('.preview-viewport') || previewDrop;
+
+        // Set CSS variables
+        previewContainer.style.setProperty('--drop-background-color', backgroundColor);
+        previewContainer.style.setProperty('--drop-card-color', cardColor);
+        previewContainer.style.setProperty('--drop-title-color', titleColor);
+        previewContainer.style.setProperty('--drop-description-color', descriptionColor);
+        previewContainer.style.setProperty('--drop-button-color', buttonColor);
+
+        // Calculate and set button text color
+        const buttonTextColor = getContrastColor(buttonColor);
+        previewContainer.style.setProperty('--drop-button-text-color', buttonTextColor);
+
+        console.log('Applied CSS variables to preview container');
     }
 
     // Update preview content

@@ -847,49 +847,158 @@
 }
 
 
-/* Mobile preview adjustments to match live page exactly */
+/* Force preview to use shared CSS system exactly */
+
+
+/* Mobile preview - force mobile layout */
+
+.preview-viewport.mobile {
+    /* Force mobile breakpoint behavior */
+    width: 375px;
+    /* Simulate mobile width */
+}
 
 .preview-viewport.mobile .drop-page-wrapper {
-    padding: 0;
+    padding: 0 !important;
 }
 
 .preview-viewport.mobile .drop-container {
-    max-width: 100%;
-    margin: 0;
-    box-shadow: none;
-    border-radius: 0;
-    min-height: 100vh;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    min-height: 100vh !important;
 }
 
 
-/* Desktop preview adjustments to match live page exactly */
+/* Desktop preview - force desktop layout */
+
+.preview-viewport.desktop {
+    /* Force desktop breakpoint behavior */
+    width: 100%;
+    min-width: 769px;
+    /* Ensure desktop breakpoint */
+}
 
 .preview-viewport.desktop .drop-page-wrapper {
-    padding: 40px 20px;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    padding: 40px 20px !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
 }
 
 .preview-viewport.desktop .drop-container {
-    max-width: 600px;
-    width: 100%;
-    margin: 0;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
-    border-radius: 16px;
-    overflow: hidden;
-    min-height: auto;
+    max-width: 600px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    min-height: auto !important;
 }
+
+
+/* Mobile responsive overrides for preview to match shared CSS exactly */
+
+.preview-viewport.mobile .drop-header {
+    padding: 12px 16px !important;
+}
+
+.preview-viewport.mobile .brand-text {
+    font-size: 16px !important;
+}
+
+.preview-viewport.mobile .drop-main {
+    padding: 24px 16px !important;
+}
+
+.preview-viewport.mobile .drop-title {
+    font-size: 24px !important;
+    margin-bottom: 12px !important;
+}
+
+.preview-viewport.mobile .drop-description p {
+    font-size: 16px !important;
+    margin-bottom: 20px !important;
+}
+
+.preview-viewport.mobile .form-input {
+    padding: 14px !important;
+    font-size: 16px !important;
+    /* Prevent zoom on iOS */
+}
+
+.preview-viewport.mobile .signup-button {
+    padding: 14px !important;
+    font-size: 16px !important;
+}
+
+.preview-viewport.mobile .drop-cover-image {
+    width: 150px !important;
+    height: 150px !important;
+}
+
+.preview-viewport.mobile .drop-footer {
+    padding: 16px !important;
+}
+
+
+/* Desktop responsive overrides for preview */
+
+.preview-viewport.desktop .drop-header {
+    padding: 16px 24px !important;
+}
+
+.preview-viewport.desktop .brand-text {
+    font-size: 18px !important;
+}
+
+.preview-viewport.desktop .drop-main {
+    padding: 40px 24px !important;
+}
+
+.preview-viewport.desktop .drop-title {
+    font-size: 32px !important;
+    margin-bottom: 16px !important;
+}
+
+.preview-viewport.desktop .drop-description p {
+    font-size: 18px !important;
+    margin-bottom: 24px !important;
+}
+
+.preview-viewport.desktop .form-input {
+    padding: 16px !important;
+    font-size: 16px !important;
+}
+
+.preview-viewport.desktop .signup-button {
+    padding: 16px 32px !important;
+    font-size: 16px !important;
+}
+
+.preview-viewport.desktop .drop-cover-image {
+    width: 200px !important;
+    height: 200px !important;
+}
+
+.preview-viewport.desktop .drop-footer {
+    padding: 24px !important;
+}
+
+
+/* Ensure header and footer don't override background */
 
 .preview-viewport .drop-header,
 .preview-viewport .drop-footer {
-    /* Ensure header and footer don't override background */
     background: transparent !important;
 }
 
+
+/* Remove button overrides - let CSS variables work */
+
 .preview-viewport .signup-button {
-    /* Remove overrides - let CSS variables work */
     border: none !important;
 }
 
