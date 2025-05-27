@@ -669,11 +669,12 @@
 
 /* ===== WORLD-CLASS STATUS INDICATOR SYSTEM ===== */
 
-.setting-title-row {
+.setting-control-column {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
+    gap: 12px;
+    flex-shrink: 0;
 }
 
 .setting-title {
@@ -2177,13 +2178,10 @@
         font-size: 13px;
     }
     /* MOBILE: World-class status indicator adjustments */
-    .setting-title-row {
-        flex-direction: column;
-        align-items: flex-start;
+    .setting-control-column {
         gap: 8px;
     }
     .world-class-status-indicator {
-        align-self: flex-end;
         font-size: 11px;
         padding: 5px 10px;
         gap: 6px;

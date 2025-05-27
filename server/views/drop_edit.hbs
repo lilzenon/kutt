@@ -229,16 +229,14 @@
                             <div class="modern-setting-group">
                                 <div class="setting-header">
                                     <div class="setting-info">
-                                        <div class="setting-title-row">
-                                            <h4 class="setting-title">Active Drop</h4>
-                                            <div class="world-class-status-indicator {{#if drop.is_active}}live{{else}}inactive{{/if}}" id="drop-status-indicator">
-                                                <div class="status-pulse-dot"></div>
-                                                <span class="status-text">{{#if drop.is_active}}Live{{else}}Inactive{{/if}}</span>
-                                            </div>
-                                        </div>
+                                        <h4 class="setting-title">Active Drop</h4>
                                         <p class="setting-description">When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</p>
                                     </div>
-                                    <div class="setting-control">
+                                    <div class="setting-control-column">
+                                        <div class="world-class-status-indicator {{#if drop.is_active}}live{{else}}inactive{{/if}}" id="drop-status-indicator">
+                                            <div class="status-pulse-dot"></div>
+                                            <span class="status-text">{{#if drop.is_active}}Live{{else}}Inactive{{/if}}</span>
+                                        </div>
                                         <label class="modern-toggle">
                                             <input type="checkbox" name="is_active" {{#if drop.is_active}}checked{{/if}} id="active-drop-toggle">
                                             <span class="toggle-slider">
