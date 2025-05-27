@@ -325,13 +325,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const previewCoverImage = document.getElementById('preview-cover-image');
     const previewViewport = document.getElementById('preview-viewport');
 
-    // Initialize preview with current values
+    // BULLETPROOF INITIALIZATION with error handling
     function initializePreview() {
-        updatePreviewColors();
-        updatePreviewContent();
+        try {
+            console.log('🚀 Initializing preview system...');
+
+            // Initialize colors first
+            updatePreviewColors();
+
+            // Then initialize content
+            updatePreviewContent();
+
+            // Verify all elements are properly initialized
+            const requiredElements = [previewTitle, previewDescription, previewButton, previewButtonText];
+            const missingElements = requiredElements.filter(el => !el);
+
+            if (missingElements.length > 0) {
+                console.warn('⚠️ Some preview elements are missing:', missingElements);
+            } else {
+                console.log('✅ All preview elements initialized successfully');
+            }
+
+            // Force initial repaint
+            const previewContainer = previewDrop.closest('.preview-viewport') || previewDrop;
+            previewContainer.style.display = 'none';
+            previewContainer.offsetHeight; // Trigger reflow
+            previewContainer.style.display = '';
+
+            console.log('🎨 Preview initialization complete');
+
+        } catch (error) {
+            console.error('❌ Error initializing preview:', error);
+            // Fallback: try again after a short delay
+            setTimeout(() => {
+                console.log('🔄 Retrying preview initialization...');
+                updatePreviewColors();
+                updatePreviewContent();
+            }, 500);
+        }
     }
 
-    // Simple, working color system
+    // BULLETPROOF CSS CUSTOM PROPERTIES SYSTEM
+    // Based on MDN best practices and research findings
     function updatePreviewColors() {
         const backgroundColor = backgroundColorInput.value || '#ffffff';
         const cardColor = cardColorInput.value || '#ffffff';
@@ -339,23 +374,40 @@ document.addEventListener('DOMContentLoaded', function() {
         const descriptionColor = descriptionColorInput.value || '#666666';
         const buttonColor = buttonColorInput.value || '#007bff';
 
-        console.log('Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor });
+        console.log('🎨 Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor });
 
-        // Apply CSS custom properties directly to the preview container
+        // RESEARCH-BASED APPROACH: Apply CSS custom properties to :root for maximum inheritance
+        // This ensures variables cascade properly to all child elements
+        const documentRoot = document.documentElement;
+
+        // Set CSS variables with preview-specific prefixes to avoid conflicts
+        documentRoot.style.setProperty('--preview-drop-background-color', backgroundColor);
+        documentRoot.style.setProperty('--preview-drop-card-color', cardColor);
+        documentRoot.style.setProperty('--preview-drop-title-color', titleColor);
+        documentRoot.style.setProperty('--preview-drop-description-color', descriptionColor);
+        documentRoot.style.setProperty('--preview-drop-button-color', buttonColor);
+
+        // Calculate and set button text color with intelligent contrast
+        const buttonTextColor = getContrastColor(buttonColor);
+        documentRoot.style.setProperty('--preview-drop-button-text-color', buttonTextColor);
+
+        // ALSO apply to preview container as fallback for better scope control
         const previewContainer = previewDrop.closest('.preview-viewport') || previewDrop;
-
-        // Set CSS variables
         previewContainer.style.setProperty('--drop-background-color', backgroundColor);
         previewContainer.style.setProperty('--drop-card-color', cardColor);
         previewContainer.style.setProperty('--drop-title-color', titleColor);
         previewContainer.style.setProperty('--drop-description-color', descriptionColor);
         previewContainer.style.setProperty('--drop-button-color', buttonColor);
-
-        // Calculate and set button text color
-        const buttonTextColor = getContrastColor(buttonColor);
         previewContainer.style.setProperty('--drop-button-text-color', buttonTextColor);
 
-        console.log('Applied CSS variables to preview container');
+        console.log('✅ Applied CSS variables to both :root and preview container for maximum compatibility');
+
+        // Force a repaint to ensure changes are applied immediately
+        previewContainer.style.display = 'none';
+        previewContainer.offsetHeight; // Trigger reflow
+        previewContainer.style.display = '';
+
+        console.log('🔄 Forced repaint for immediate visual update');
     }
 
     // Update preview content
@@ -402,18 +454,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event listeners for real-time updates
-    titleInput.addEventListener('input', updatePreviewContent);
-    descriptionInput.addEventListener('input', updatePreviewContent);
-    slugInput.addEventListener('input', updatePreviewContent);
-    buttonTextInput.addEventListener('input', updatePreviewContent);
-    coverImageInput.addEventListener('input', updatePreviewContent);
+    // BULLETPROOF EVENT LISTENERS with debouncing for performance
+    // Debounce function to prevent excessive updates
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
 
+    // Debounced update functions for better performance
+    const debouncedUpdateColors = debounce(updatePreviewColors, 100);
+    const debouncedUpdateContent = debounce(updatePreviewContent, 100);
+
+    // Content update listeners
+    titleInput.addEventListener('input', debouncedUpdateContent);
+    descriptionInput.addEventListener('input', debouncedUpdateContent);
+    slugInput.addEventListener('input', debouncedUpdateContent);
+    buttonTextInput.addEventListener('input', debouncedUpdateContent);
+    coverImageInput.addEventListener('input', debouncedUpdateContent);
+
+    // Color update listeners with immediate feedback
     buttonColorInput.addEventListener('input', updatePreviewColors);
     backgroundColorInput.addEventListener('input', updatePreviewColors);
     cardColorInput.addEventListener('input', updatePreviewColors);
     titleColorInput.addEventListener('input', updatePreviewColors);
     descriptionColorInput.addEventListener('input', updatePreviewColors);
+
+    // Also add 'change' event listeners for better compatibility
+    buttonColorInput.addEventListener('change', updatePreviewColors);
+    backgroundColorInput.addEventListener('change', updatePreviewColors);
+    cardColorInput.addEventListener('change', updatePreviewColors);
+    titleColorInput.addEventListener('change', updatePreviewColors);
+    descriptionColorInput.addEventListener('change', updatePreviewColors);
 
     // Device preview toggle with real device simulation
     const deviceButtons = document.querySelectorAll('.preview-device-btn');

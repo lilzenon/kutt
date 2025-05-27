@@ -1,33 +1,38 @@
-/* 
+/*
  * SHARED DROP STYLES - FUTURE-PROOF MODULAR SYSTEM
  * Used by both preview and live drop pages to ensure consistency
  */
+
 
 /* ===== CORE LAYOUT SYSTEM ===== */
 
 .drop-page-wrapper {
     min-height: 100vh;
-    background-color: var(--drop-background-color, #ffffff);
+    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
+    background-color: var(--preview-drop-background-color, var(--drop-background-color, #ffffff));
     padding: 0;
     margin: 0;
 }
 
 .drop-container {
-    background-color: var(--drop-card-color, #ffffff);
+    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
+    background-color: var(--preview-drop-card-color, var(--drop-card-color, #ffffff));
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
 }
 
+
 /* ===== DEVICE-SPECIFIC LAYOUTS ===== */
 
+
 /* Mobile Layout (768px and below) */
+
 @media (max-width: 768px) {
     .drop-page-wrapper {
         padding: 0;
     }
-    
     .drop-container {
         max-width: 100%;
         margin: 0;
@@ -37,7 +42,9 @@
     }
 }
 
+
 /* Desktop Layout (769px and above) */
+
 @media (min-width: 769px) {
     .drop-page-wrapper {
         padding: 40px 20px;
@@ -46,7 +53,6 @@
         align-items: flex-start;
         justify-content: center;
     }
-    
     .drop-container {
         max-width: 600px;
         width: 100%;
@@ -57,6 +63,7 @@
         min-height: auto;
     }
 }
+
 
 /* ===== HEADER SYSTEM ===== */
 
@@ -95,6 +102,7 @@
     color: inherit;
 }
 
+
 /* ===== MAIN CONTENT SYSTEM ===== */
 
 .drop-main {
@@ -107,6 +115,7 @@
     max-width: 400px;
     margin: 0 auto;
 }
+
 
 /* ===== COVER IMAGE SYSTEM ===== */
 
@@ -128,6 +137,7 @@
     object-position: center;
 }
 
+
 /* ===== TEXT SYSTEM ===== */
 
 .drop-title {
@@ -135,14 +145,16 @@
     font-size: 32px;
     font-weight: 700;
     line-height: 1.2;
-    color: var(--drop-title-color, #000000);
+    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
+    color: var(--preview-drop-title-color, var(--drop-title-color, #000000));
 }
 
 .drop-description p {
     margin: 0 0 24px 0;
     font-size: 18px;
     line-height: 1.6;
-    color: var(--drop-description-color, #666666);
+    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
+    color: var(--preview-drop-description-color, var(--drop-description-color, #666666));
 }
 
 .drop-stats {
@@ -158,6 +170,7 @@
     font-weight: 500;
     color: inherit;
 }
+
 
 /* ===== FORM SYSTEM ===== */
 
@@ -193,6 +206,7 @@
     border-color: rgba(0, 0, 0, 0.3);
 }
 
+
 /* ===== BUTTON SYSTEM ===== */
 
 .signup-button {
@@ -204,8 +218,9 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    background-color: var(--drop-button-color, #007bff);
-    color: var(--drop-button-text-color, #ffffff);
+    /* BULLETPROOF: Use preview variables first, then regular variables, then fallback */
+    background-color: var(--preview-drop-button-color, var(--drop-button-color, #007bff)) !important;
+    color: var(--preview-drop-button-text-color, var(--drop-button-text-color, #ffffff)) !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -223,6 +238,7 @@
     cursor: not-allowed;
     transform: none;
 }
+
 
 /* ===== FOOTER SYSTEM ===== */
 
@@ -250,50 +266,45 @@
     opacity: 0.8;
 }
 
+
 /* ===== MOBILE RESPONSIVE OVERRIDES ===== */
 
 @media (max-width: 768px) {
     .drop-header {
         padding: 12px 16px;
     }
-    
     .brand-text {
         font-size: 16px;
     }
-    
     .drop-main {
         padding: 24px 16px;
     }
-    
     .drop-title {
         font-size: 24px;
         margin-bottom: 12px;
     }
-    
     .drop-description p {
         font-size: 16px;
         margin-bottom: 20px;
     }
-    
     .form-input {
         padding: 14px;
-        font-size: 16px; /* Prevent zoom on iOS */
+        font-size: 16px;
+        /* Prevent zoom on iOS */
     }
-    
     .signup-button {
         padding: 14px;
         font-size: 16px;
     }
-    
     .drop-cover-image {
         width: 150px;
         height: 150px;
     }
-    
     .drop-footer {
         padding: 16px;
     }
 }
+
 
 /* ===== UTILITY CLASSES ===== */
 
