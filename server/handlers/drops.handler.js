@@ -250,6 +250,28 @@ async function createSignup(req, res) {
                 // Continue without CRM - don't fail the signup
             }
 
+            // 📱 SEND SMS CONFIRMATION (graceful fallback if SMS not available)
+            try {
+                const twilioService = require('../services/sms/twilio.service');
+
+                if (phone && twilioService.getStatus().enabled) {
+                    console.log(`📱 Sending SMS confirmation to ${phone}...`);
+
+                    const smsResult = await twilioService.sendDropSignupConfirmation({ name, email, phone }, { title: foundDrop.title, slug: foundDrop.slug });
+
+                    if (smsResult.success) {
+                        console.log(`✅ SMS confirmation sent successfully - SID: ${smsResult.messageSid}`);
+                    } else {
+                        console.warn(`⚠️ SMS confirmation failed: ${smsResult.error}`);
+                    }
+                } else {
+                    console.log('📱 SMS not sent - no phone number or SMS service disabled');
+                }
+            } catch (smsError) {
+                console.warn('⚠️ SMS service failed (continuing without SMS):', smsError.message);
+                // Continue without SMS - don't fail the signup
+            }
+
             console.log(`🎉 Signup process completed successfully for ${email}`);
 
             res.status(201).json({

@@ -54,6 +54,17 @@ const spec = {
     CRM_DB_SSL: bool({ default: true }),
     CRM_DB_POOL_MIN: num({ default: 2 }),
     CRM_DB_POOL_MAX: num({ default: 10 }),
+
+    // 📱 TWILIO SMS CONFIGURATION
+    TWILIO_ACCOUNT_SID: str({ example: "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", default: "" }),
+    TWILIO_AUTH_TOKEN: str({ example: "your_auth_token_here", default: "" }),
+    TWILIO_PHONE_NUMBER: str({ example: "+1234567890", default: "" }),
+    TWILIO_WEBHOOK_SECRET: str({ default: "" }),
+
+    // 📨 SMS SETTINGS
+    SMS_ENABLED: bool({ default: false }),
+    SMS_FROM_NAME: str({ default: "BOUNCE2BOUNCE" }),
+    SMS_OPT_OUT_KEYWORDS: str({ default: "STOP,UNSUBSCRIBE,QUIT,END,CANCEL" }),
     REDIS_ENABLED: bool({ default: false }),
     REDIS_HOST: str({ default: "127.0.0.1" }),
     REDIS_PORT: num({ default: 6379 }),

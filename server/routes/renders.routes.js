@@ -224,4 +224,13 @@ router.get(
     asyncHandler(renders.dropEdit)
 );
 
+router.get(
+    "/sms",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    (req, res) => {
+        res.render("sms_dashboard", { title: "SMS Dashboard - BOUNCE2BOUNCE" });
+    }
+);
+
 module.exports = router;
