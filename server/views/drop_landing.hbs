@@ -271,9 +271,9 @@
                     const data = Object.fromEntries(formData.entries());
 
                     console.log('🚀 Submitting form data:', data);
-                    console.log('🚀 Submitting to URL:', '/signup/{{drop.slug}}');
+                    console.log('🚀 Submitting to URL:', '/drop/signup/{{drop.slug}}');
 
-                    const response = await fetch('/signup/{{drop.slug}}', {
+                    const response = await fetch('/drop/signup/{{drop.slug}}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
