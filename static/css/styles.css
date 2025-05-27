@@ -1163,62 +1163,556 @@ table .tab a:not(.active):hover {
 }
 
 
-/* 🚀 STUNNING DROP CARD - "WOW" FACTOR DESIGN ===== */
+/* 🎯 STRATEGIC DROP CARD - CLEAN & PURPOSEFUL DESIGN ===== */
 
-.stunning-drop-card {
-    /* 💎 HOLOGRAPHIC FOUNDATION */
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(240, 248, 255, 0.95) 100%);
-    border-radius: 24px;
-    /* 🌟 EPIC LAYERED SHADOWS */
-    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15), 0 4px 16px rgba(139, 92, 246, 0.1), 0 2px 8px rgba(16, 185, 129, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(59, 130, 246, 0.1);
-    border: 2px solid;
-    border-image: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 50%, rgba(16, 185, 129, 0.3) 100%) 1;
+.strategic-drop-card {
+    /* 🎨 CLEAN FOUNDATION */
+    background: white;
+    border-radius: 16px;
+    /* 🎯 PURPOSEFUL SHADOWS */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(226, 232, 240, 0.8);
     overflow: hidden;
-    /* ⚡ LIGHTNING FAST TRANSITIONS */
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    /* 🔮 MAGICAL GLASS MORPHISM */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    /* ⚡ SMOOTH TRANSITIONS */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* 🔮 SUBTLE GLASS EFFECT */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     /* 🎭 FLEXIBLE LAYOUT */
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
-    /* 🌈 HOLOGRAPHIC SHIMMER */
-    background-image: linear-gradient(135deg, transparent 25%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.1) 50%, transparent 50%, transparent 75%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 20px 20px;
-    animation: shimmer 3s ease-in-out infinite;
 }
 
-@keyframes shimmer {
+.strategic-drop-card:hover {
+    /* 🎯 STRATEGIC HOVER - PURPOSEFUL LIFT */
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+
+/* 🎨 CLEAN CARD HEADER */
+
+.strategic-drop-card .card-header-clean {
+    position: relative;
+    height: 140px;
+    overflow: hidden;
+}
+
+.strategic-drop-card .card-cover-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.strategic-drop-card:hover .card-cover-image {
+    transform: scale(1.05);
+}
+
+.strategic-drop-card .card-cover-gradient {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.strategic-drop-card .cover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.strategic-drop-card .subtle-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+}
+
+.strategic-drop-card .cover-icon {
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 255, 255, 0.9);
+    z-index: 2;
+    position: relative;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+
+/* 🎯 STRATEGIC STATUS BADGE */
+
+.strategic-drop-card .status-badge-container {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+}
+
+.strategic-drop-card .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.strategic-drop-card .status-badge.status-live {
+    background: rgba(16, 185, 129, 0.9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.strategic-drop-card .status-badge.status-draft {
+    background: rgba(100, 116, 139, 0.9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+}
+
+.strategic-drop-card .live-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
     0%,
     100% {
-        background-position: 0 0;
+        opacity: 1;
+        transform: scale(1);
     }
     50% {
-        background-position: 20px 20px;
+        opacity: 0.7;
+        transform: scale(1.2);
     }
 }
 
-.stunning-drop-card:hover {
-    /* 🚀 EPIC HOVER TRANSFORMATION */
-    transform: translateY(-16px) scale(1.03) rotateX(5deg);
-    box-shadow: 0 32px 64px rgba(59, 130, 246, 0.25), 0 16px 32px rgba(139, 92, 246, 0.2), 0 8px 16px rgba(16, 185, 129, 0.15), inset 0 2px 0 rgba(255, 255, 255, 1), inset 0 -2px 0 rgba(59, 130, 246, 0.2);
-    border-image: linear-gradient(135deg, rgba(59, 130, 246, 0.6) 0%, rgba(139, 92, 246, 0.6) 50%, rgba(16, 185, 129, 0.6) 100%) 1;
-    /* 🔥 GLOW EFFECT */
-    filter: brightness(1.1) saturate(1.2);
+.strategic-drop-card .draft-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
 }
 
 
-/* ✨ MAGICAL CARD HEADER */
+/* ⚡ QUICK ACTIONS OVERLAY */
 
-.stunning-drop-card .card-header-magic {
-    position: relative;
-    height: 160px;
+.strategic-drop-card .quick-actions-overlay {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.strategic-drop-card:hover .quick-actions-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.strategic-drop-card .quick-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.strategic-drop-card .quick-action.edit-action {
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.strategic-drop-card .quick-action.stats-action {
+    background: rgba(245, 158, 11, 0.9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.strategic-drop-card .quick-action:hover {
+    transform: scale(1.1);
+}
+
+.strategic-drop-card .quick-action svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* 📝 CLEAN CONTENT SECTION */
+
+.strategic-drop-card .card-content-clean {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.strategic-drop-card .content-header {
+    flex-shrink: 0;
+}
+
+.strategic-drop-card .card-title {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.3;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+.strategic-drop-card .card-description {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    /* 🎭 PERSPECTIVE FOR 3D EFFECTS */
-    perspective: 1000px;
-    transform-style: preserve-3d;
+    text-overflow: ellipsis;
+}
+
+
+/* 📊 CLEAN STATS GRID */
+
+.strategic-drop-card .stats-grid-clean {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.strategic-drop-card .stat-item {
+    text-align: center;
+    padding: 8px 4px;
+}
+
+.strategic-drop-card .stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.strategic-drop-card .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+/* 🔗 CLEAN URL DISPLAY */
+
+.strategic-drop-card .url-display-clean {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+}
+
+.strategic-drop-card .url-container {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.strategic-drop-card .url-domain {
+    color: #64748b;
+    font-weight: 400;
+}
+
+.strategic-drop-card .url-slug {
+    color: #1e293b;
+    font-weight: 600;
+    word-break: break-all;
+}
+
+.strategic-drop-card .copy-url-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.strategic-drop-card .copy-url-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    transform: scale(1.05);
+}
+
+.strategic-drop-card .copy-url-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+
+/* 🎯 CLEAN ACTION SECTION */
+
+.strategic-drop-card .card-actions-clean {
+    padding: 16px 24px 24px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.strategic-drop-card .primary-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.strategic-drop-card .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.strategic-drop-card .action-btn.primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.strategic-drop-card .action-btn.primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.strategic-drop-card .action-btn.secondary {
+    background: white;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+.strategic-drop-card .action-btn.secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.strategic-drop-card .action-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.strategic-drop-card .secondary-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.strategic-drop-card .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.strategic-drop-card .icon-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.strategic-drop-card .icon-btn.delete-btn:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+.strategic-drop-card .icon-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* 🗑️ DELETE MODAL STYLES */
+
+.delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+.delete-modal-overlay.show {
+    opacity: 1;
+}
+
+.delete-modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+    margin: 20px;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.delete-modal-overlay.show .delete-modal {
+    transform: scale(1) translateY(0);
+}
+
+.delete-modal-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.delete-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.delete-modal-content {
+    padding: 16px 24px 24px;
+}
+
+.delete-modal-content p {
+    margin: 0 0 12px 0;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.delete-modal-content p:last-child {
+    margin-bottom: 0;
+}
+
+.delete-modal-content .warning-text {
+    color: #dc2626;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.delete-modal-actions {
+    padding: 0 24px 24px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+}
+
+.modal-btn.cancel-btn {
+    background: white;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+.modal-btn.cancel-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.modal-btn.delete-btn {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: white;
+}
+
+.modal-btn.delete-btn:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
 }
 
 .stunning-drop-card .card-cover-image {

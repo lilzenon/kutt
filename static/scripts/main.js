@@ -321,11 +321,58 @@ function showCopyFeedback(message) {
     }, 3000);
 }
 
-// Delete drop function
-function deleteDrop(dropId, dropTitle) {
-    if (confirm(`Are you sure you want to delete the drop "${dropTitle}"? This action cannot be undone.`)) {
-        deleteDropConfirmed(dropId);
+// Show delete drop modal (replaces browser confirm)
+function showDeleteDropModal(dropId, dropTitle) {
+    const modal = document.createElement('div');
+    modal.className = 'delete-modal-overlay';
+    modal.innerHTML = `
+        <div class="delete-modal">
+            <div class="delete-modal-header">
+                <h3>Delete Drop?</h3>
+            </div>
+            <div class="delete-modal-content">
+                <p>Are you sure you want to delete the drop <strong>"${dropTitle}"</strong>?</p>
+                <p class="warning-text">This action cannot be undone.</p>
+            </div>
+            <div class="delete-modal-actions">
+                <button type="button" class="modal-btn cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                <button type="button" class="modal-btn delete-btn" onclick="confirmDeleteDrop('${dropId}')">Delete Drop</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Animate in
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+// Close delete modal
+function closeDeleteModal() {
+    const modal = document.querySelector('.delete-modal-overlay');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.remove();
+            document.body.style.overflow = '';
+        }, 300);
     }
+}
+
+// Confirm delete drop
+function confirmDeleteDrop(dropId) {
+    closeDeleteModal();
+    deleteDropConfirmed(dropId);
+}
+
+// Legacy delete drop function (keeping for compatibility)
+function deleteDrop(dropId, dropTitle) {
+    showDeleteDropModal(dropId, dropTitle);
 }
 
 // Confirmed drop deletion
