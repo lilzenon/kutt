@@ -101,17 +101,25 @@
 }
 
 
-/* ===== HEADER SYSTEM ===== */
+/* ===== MOBILE-FIRST HEADER SYSTEM ===== */
 
 .drop-header {
     background: transparent;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 16px 24px;
+    /* MOBILE-FIRST: Proper mobile padding to prevent width issues */
+    padding: 12px 16px;
+    /* RESEARCH-BASED: Prevent horizontal overflow */
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .drop-brand {
     display: flex;
     align-items: center;
+    /* MOBILE: Prevent overflow */
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .brand-link {
@@ -120,6 +128,9 @@
     text-decoration: none;
     color: inherit;
     transition: opacity 0.2s ease;
+    /* MOBILE: Prevent text overflow */
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .brand-link:hover {
@@ -130,26 +141,41 @@
     width: 24px;
     height: 24px;
     margin-right: 8px;
+    /* MOBILE: Prevent shrinking */
+    flex-shrink: 0;
 }
 
 .brand-text {
-    font-size: 18px;
+    /* MOBILE-FIRST: Smaller font size for mobile */
+    font-size: 16px;
     font-weight: 700;
     color: inherit;
+    /* MOBILE: Prevent text overflow */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
-/* ===== MAIN CONTENT SYSTEM ===== */
+/* ===== MOBILE-FIRST MAIN CONTENT SYSTEM ===== */
 
 .drop-main {
     flex: 1;
-    padding: 40px 24px;
+    /* MOBILE-FIRST: Proper mobile padding to prevent width issues */
+    padding: 24px 16px;
     text-align: center;
+    /* RESEARCH-BASED: Prevent horizontal overflow */
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .drop-content {
     max-width: 400px;
     margin: 0 auto;
+    /* MOBILE: Ensure content doesn't overflow */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 
@@ -425,6 +451,70 @@
     .drop-cover-image {
         width: 240px;
         height: 240px;
+    }
+}
+
+
+/* ===== RESEARCH-BASED MOBILE FIXES ===== */
+
+
+/* MOBILE: Prevent zoom on input focus (iOS Safari) */
+
+@media screen and (max-width: 767px) {
+    .form-input {
+        font-size: 16px !important;
+        /* CRITICAL: Prevents iOS zoom */
+        -webkit-text-size-adjust: 100%;
+        -webkit-appearance: none;
+    }
+    /* MOBILE: Tighter spacing for mobile */
+    .drop-header {
+        padding: 12px 16px;
+    }
+    .drop-main {
+        padding: 20px 16px;
+    }
+    .drop-footer {
+        padding: 16px;
+    }
+    /* MOBILE: Smaller brand text */
+    .brand-text {
+        font-size: 16px;
+    }
+    /* MOBILE: Prevent horizontal scroll */
+    body,
+    html {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+    .drop-page-wrapper {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+    .drop-container {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+
+/* TABLET AND UP: Enhanced spacing */
+
+@media screen and (min-width: 768px) {
+    .drop-header {
+        padding: 16px 24px;
+    }
+    .drop-main {
+        padding: 40px 24px;
+    }
+    .drop-footer {
+        padding: 24px;
+    }
+    .brand-text {
+        font-size: 18px;
     }
 }
 
