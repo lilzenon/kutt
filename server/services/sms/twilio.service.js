@@ -14,12 +14,13 @@
 
 const twilio = require('twilio');
 const env = require('../../env');
-const db = require('../../config/database');
+const db = require('../../knex');
 
 class TwilioService {
     constructor() {
         this.client = null;
         this.isEnabled = false;
+        this.tablesReady = false;
         this.initialize();
     }
 
@@ -46,9 +47,86 @@ class TwilioService {
             console.log('✅ Twilio SMS service initialized successfully');
             console.log(`📞 SMS will be sent from: ${env.TWILIO_PHONE_NUMBER}`);
 
+            // Initialize database tables
+            this.initializeTables();
+
         } catch (error) {
             console.error('🚨 Failed to initialize Twilio service:', error.message);
             this.isEnabled = false;
+        }
+    }
+
+    /**
+     * Initialize SMS tracking tables if they don't exist
+     */
+    async initializeTables() {
+        try {
+            // Check if sms_messages table exists
+            const hasSMSMessages = await db.schema.hasTable('sms_messages');
+            if (!hasSMSMessages) {
+                console.log('📋 Creating sms_messages table...');
+                await db.schema.createTable('sms_messages', table => {
+                    table.increments('id').primary();
+                    table.integer('drop_signup_id').references('id').inTable('drop_signups').onDelete('CASCADE');
+                    table.string('phone', 20).notNullable();
+                    table.text('message_body');
+                    table.string('message_type', 50).defaultTo('confirmation');
+                    table.string('message_sid', 100).unique();
+                    table.string('status', 50).defaultTo('sent');
+                    table.string('error_code', 20);
+                    table.text('error_message');
+                    table.timestamp('sent_at').defaultTo(db.fn.now());
+                    table.timestamp('delivered_at');
+                    table.timestamp('failed_at');
+                    table.timestamp('created_at').defaultTo(db.fn.now());
+                    table.timestamp('updated_at').defaultTo(db.fn.now());
+
+                    table.index('drop_signup_id');
+                    table.index('phone');
+                    table.index('status');
+                    table.index('message_sid');
+                });
+                console.log('✅ Created sms_messages table');
+            }
+
+            // Check if sms_opt_outs table exists
+            const hasSMSOptOuts = await db.schema.hasTable('sms_opt_outs');
+            if (!hasSMSOptOuts) {
+                console.log('📋 Creating sms_opt_outs table...');
+                await db.schema.createTable('sms_opt_outs', table => {
+                    table.increments('id').primary();
+                    table.string('phone', 20).notNullable().unique();
+                    table.timestamp('opted_out_at').defaultTo(db.fn.now());
+                    table.string('opt_out_method', 50).defaultTo('sms_reply');
+                    table.text('opt_out_message');
+                    table.boolean('confirmation_sent').defaultTo(false);
+                    table.string('confirmation_sid', 100);
+                    table.timestamp('created_at').defaultTo(db.fn.now());
+
+                    table.index('phone');
+                });
+                console.log('✅ Created sms_opt_outs table');
+            }
+
+            // Add SMS columns to drop_signups if they don't exist
+            const hasColumns = await db.schema.hasColumn('drop_signups', 'sms_opt_in');
+            if (!hasColumns) {
+                console.log('📋 Adding SMS columns to drop_signups table...');
+                await db.schema.alterTable('drop_signups', table => {
+                    table.boolean('sms_opt_in').defaultTo(true);
+                    table.boolean('sms_sent').defaultTo(false);
+                    table.timestamp('sms_sent_at');
+                });
+                console.log('✅ Added SMS columns to drop_signups table');
+            }
+
+            this.tablesReady = true;
+            console.log('📊 SMS tracking tables ready');
+
+        } catch (error) {
+            console.warn('⚠️ Failed to initialize SMS tables:', error.message);
+            // Continue without database tracking
+            this.tablesReady = false;
         }
     }
 
@@ -247,6 +325,11 @@ class TwilioService {
      * Track SMS message in database
      */
     async trackSMSMessage(messageData) {
+        if (!this.tablesReady) {
+            console.warn('⚠️ SMS tables not ready - skipping tracking');
+            return null;
+        }
+
         try {
             const smsRecord = {
                 drop_signup_id: messageData.dropSignupId,
@@ -266,7 +349,7 @@ class TwilioService {
 
         } catch (error) {
             console.error('🚨 Failed to track SMS message:', error.message);
-            throw error;
+            return null; // Don't throw error, just log and continue
         }
     }
 
@@ -274,6 +357,11 @@ class TwilioService {
      * Update SMS message status (from webhook)
      */
     async updateSMSStatus(messageSid, status, errorCode = null, errorMessage = null) {
+        if (!this.tablesReady) {
+            console.warn('⚠️ SMS tables not ready - skipping status update');
+            return false;
+        }
+
         try {
             const updateData = {
                 status: status,
@@ -308,6 +396,11 @@ class TwilioService {
      * Check if phone number is opted out
      */
     async isOptedOut(phoneNumber) {
+        if (!this.tablesReady) {
+            console.warn('⚠️ SMS tables not ready - assuming not opted out');
+            return false;
+        }
+
         try {
             const optOut = await db('sms_opt_outs')
                 .where('phone', phoneNumber)
