@@ -510,9 +510,7 @@
 }
 
 .color-picker-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: block;
     font-weight: 500;
     color: #374151;
     font-size: 14px;
@@ -525,27 +523,6 @@
 
 .color-picker-label:hover {
     color: #1f2937;
-}
-
-.color-label-text {
-    flex: 1;
-}
-
-.color-preview-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #ffffff;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    /* MODERN: Use CSS custom property for dynamic color */
-    background-color: var(--preview-color, #e5e7eb);
-    flex-shrink: 0;
-}
-
-.color-picker-label:hover .color-preview-dot {
-    transform: scale(1.1);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .modern-color-input {
@@ -2075,10 +2052,6 @@
     .color-picker-label {
         padding: 6px 0;
         font-size: 13px;
-    }
-    .color-preview-dot {
-        width: 18px;
-        height: 18px;
     }
     .modern-color-input {
         height: 44px;

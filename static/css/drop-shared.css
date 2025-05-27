@@ -409,11 +409,34 @@ body {
     box-sizing: border-box;
     /* Modern: Subtle shadow for depth */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* FIXED: Ensure consistent height across all input types */
+    height: 56px;
+    line-height: 1.4;
+    /* FIXED: Remove browser-specific styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .form-input:focus {
     outline: none;
     border-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* FIXED: Ensure all input types have consistent styling */
+
+input[type="email"].form-input,
+input[type="tel"].form-input,
+input[type="text"].form-input {
+    height: 56px;
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.4;
+    /* FIXED: Remove browser-specific styling for tel inputs */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 
