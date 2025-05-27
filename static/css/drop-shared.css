@@ -21,15 +21,16 @@
 .drop-container {
     /* BEAUTIFUL: Modern card design with subtle shadows */
     background: var(--preview-drop-card-color, var(--drop-card-color, #ffffff));
-    min-height: 100vh;
+    min-height: calc(100vh - 20px);
+    /* MOBILE: Leave space for background visibility */
     display: flex;
     flex-direction: column;
     position: relative;
-    /* Mobile-first: Full width on mobile */
-    width: 100%;
-    margin: 0;
-    box-shadow: none;
-    border-radius: 0;
+    /* Mobile-first: Almost full width with small margins for background visibility */
+    width: calc(100% - 20px);
+    margin: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     /* Modern: Subtle backdrop blur effect */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -270,10 +271,13 @@
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     font-size: 16px;
-    background: rgba(255, 255, 255, 0.9);
+    /* BEAUTIFUL: Use CSS variables for form field background */
+    background: var(--preview-drop-form-field-color, var(--drop-form-field-color, #ffffff));
     color: #374151;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
     box-sizing: border-box;
+    /* Modern: Subtle shadow for depth */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .form-input:focus {

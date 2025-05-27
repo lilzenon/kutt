@@ -81,6 +81,12 @@
                             <input type="color" id="edit-button-color" name="button_color"
                                    value="{{drop.button_color}}">
                         </div>
+
+                        <div class="form-group">
+                            <label for="edit-form-field-color">Form Field Color</label>
+                            <input type="color" id="edit-form-field-color" name="form_field_color"
+                                   value="{{drop.form_field_color}}">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -313,6 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cardColorInput = document.getElementById('edit-card-color');
     const titleColorInput = document.getElementById('edit-title-color');
     const descriptionColorInput = document.getElementById('edit-description-color');
+    const formFieldColorInput = document.getElementById('edit-form-field-color');
     const coverImageInput = document.getElementById('edit-cover-image');
 
     const previewDrop = document.getElementById('drop-preview');
@@ -373,8 +380,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const titleColor = titleColorInput.value || '#000000';
         const descriptionColor = descriptionColorInput.value || '#666666';
         const buttonColor = buttonColorInput.value || '#007bff';
+        const formFieldColor = formFieldColorInput.value || '#ffffff';
 
-        console.log('🎨 Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor });
+        console.log('🎨 Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor, formFieldColor });
 
         // RESEARCH-BASED APPROACH: Apply CSS custom properties to :root for maximum inheritance
         // This ensures variables cascade properly to all child elements
@@ -386,6 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
         documentRoot.style.setProperty('--preview-drop-title-color', titleColor);
         documentRoot.style.setProperty('--preview-drop-description-color', descriptionColor);
         documentRoot.style.setProperty('--preview-drop-button-color', buttonColor);
+        documentRoot.style.setProperty('--preview-drop-form-field-color', formFieldColor);
 
         // Calculate and set button text color with intelligent contrast
         const buttonTextColor = getContrastColor(buttonColor);
@@ -399,6 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
         previewContainer.style.setProperty('--drop-description-color', descriptionColor);
         previewContainer.style.setProperty('--drop-button-color', buttonColor);
         previewContainer.style.setProperty('--drop-button-text-color', buttonTextColor);
+        previewContainer.style.setProperty('--drop-form-field-color', formFieldColor);
 
         console.log('✅ Applied CSS variables to both :root and preview container for maximum compatibility');
 
@@ -485,6 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cardColorInput.addEventListener('input', updatePreviewColors);
     titleColorInput.addEventListener('input', updatePreviewColors);
     descriptionColorInput.addEventListener('input', updatePreviewColors);
+    formFieldColorInput.addEventListener('input', updatePreviewColors);
 
     // Also add 'change' event listeners for better compatibility
     buttonColorInput.addEventListener('change', updatePreviewColors);
@@ -492,6 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cardColorInput.addEventListener('change', updatePreviewColors);
     titleColorInput.addEventListener('change', updatePreviewColors);
     descriptionColorInput.addEventListener('change', updatePreviewColors);
+    formFieldColorInput.addEventListener('change', updatePreviewColors);
 
     // Device preview toggle with real device simulation
     const deviceButtons = document.querySelectorAll('.preview-device-btn');
