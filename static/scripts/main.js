@@ -4,42 +4,90 @@
 // ===== MOBILE NAVIGATION FUNCTIONS =====
 
 function toggleMobileNav() {
+    console.log('toggleMobileNav called');
     const overlay = document.getElementById('mobileOverlay');
     const nav = document.getElementById('mobileNav');
 
+    console.log('Overlay found:', !!overlay);
+    console.log('Nav found:', !!nav);
+
     if (overlay && nav) {
-        overlay.classList.add('active');
-        nav.classList.add('active');
+        const isActive = nav.classList.contains('active');
+        console.log('Current active state:', isActive);
 
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+        if (isActive) {
+            // Close navigation
+            overlay.classList.remove('active');
+            nav.classList.remove('active');
+            document.body.style.overflow = '';
+            console.log('Navigation closed');
+        } else {
+            // Open navigation
+            overlay.classList.add('active');
+            nav.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            console.log('Navigation opened');
 
-        // Add haptic feedback if supported
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
+            // Add haptic feedback if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
         }
+    } else {
+        console.error('Mobile navigation elements not found');
+        console.log('Available elements with mobileOverlay:', document.querySelectorAll('[id*="mobile"]'));
     }
 }
 
 function closeMobileNav() {
+    console.log('closeMobileNav called');
     const overlay = document.getElementById('mobileOverlay');
     const nav = document.getElementById('mobileNav');
 
     if (overlay && nav) {
         overlay.classList.remove('active');
         nav.classList.remove('active');
-
-        // Restore body scroll
         document.body.style.overflow = '';
+        console.log('Navigation closed via closeMobileNav');
     }
 }
 
 // Mobile navigation event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile navigation trigger
+    // Mobile navigation trigger with enhanced touch support
     const mobileTrigger = document.getElementById('mobileTrigger');
     if (mobileTrigger) {
-        mobileTrigger.addEventListener('click', toggleMobileNav);
+        // Add multiple event listeners for better mobile compatibility
+        mobileTrigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Mobile trigger clicked');
+            toggleMobileNav();
+        });
+
+        // Add touch events for better mobile support
+        mobileTrigger.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            console.log('Mobile trigger touched');
+            toggleMobileNav();
+        }, { passive: false });
+
+        // Add pointer events for modern devices
+        mobileTrigger.addEventListener('pointerdown', function(e) {
+            e.preventDefault();
+            console.log('Mobile trigger pointer down');
+            toggleMobileNav();
+        });
+
+        // Ensure the element is properly styled for touch
+        mobileTrigger.style.cursor = 'pointer';
+        mobileTrigger.style.userSelect = 'none';
+        mobileTrigger.style.webkitUserSelect = 'none';
+        mobileTrigger.style.webkitTouchCallout = 'none';
+
+        console.log('Mobile trigger initialized with enhanced touch support');
+    } else {
+        console.error('Mobile trigger element not found');
     }
 
     // Close mobile nav when clicking overlay
@@ -1487,65 +1535,7 @@ htmx.defineExtension("preload", {
     }
 })
 
-// ===== LAYLO-STYLE MOBILE NAVIGATION =====
-
-// Mobile navigation state
-let mobileNavOpen = false;
-
-// Toggle mobile navigation
-function toggleMobileNav() {
-    if (mobileNavOpen) {
-        closeMobileNav();
-    } else {
-        openMobileNav();
-    }
-}
-
-// Open mobile navigation
-function openMobileNav() {
-    if (mobileNavOpen) return;
-
-    mobileNavOpen = true;
-    const overlay = document.querySelector('.laylo-mobile-overlay');
-    const nav = document.querySelector('.laylo-mobile-nav');
-
-    if (overlay && nav) {
-        overlay.classList.add('active');
-        nav.classList.add('active');
-
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
-
-        // Add haptic feedback on supported devices
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
-        }
-    }
-}
-
-// Close mobile navigation
-function closeMobileNav() {
-    if (!mobileNavOpen) return;
-
-    mobileNavOpen = false;
-    const overlay = document.querySelector('.laylo-mobile-overlay');
-    const nav = document.querySelector('.laylo-mobile-nav');
-
-    if (overlay && nav) {
-        overlay.classList.remove('active');
-        nav.classList.remove('active');
-
-        // Restore body scroll
-        document.body.style.overflow = '';
-    }
-}
-
-// Handle escape key to close navigation
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && mobileNavOpen) {
-        closeMobileNav();
-    }
-});
+// ===== ENHANCED MOBILE NAVIGATION GESTURES =====
 
 // Handle swipe gestures for mobile navigation
 let touchStartY = 0;
@@ -1565,26 +1555,13 @@ function handleSwipeGesture() {
     const minSwipeDistance = 50;
 
     // Only handle swipes on the navigation area
-    const nav = document.querySelector('.laylo-mobile-nav');
+    const nav = document.getElementById('mobileNav');
     if (!nav) return;
 
     if (Math.abs(swipeDistance) < minSwipeDistance) return;
 
     // Swipe down to close when navigation is open
-    if (swipeDistance < 0 && mobileNavOpen) {
+    if (swipeDistance < 0 && nav.classList.contains('active')) {
         closeMobileNav();
     }
 }
-
-// Auto-close navigation when clicking on navigation items
-document.addEventListener('click', function(e) {
-    if (e.target.matches('.laylo-mobile-nav-item') || e.target.closest('.laylo-mobile-nav-item')) {
-        // Add a small delay to allow the navigation to complete
-        setTimeout(closeMobileNav, 200);
-    }
-});
-
-// Initialize mobile navigation on page load
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🧭 Laylo-style mobile navigation initialized');
-});
