@@ -1,25 +1,27 @@
-{{!-- PlainAdmin Default Dashboard Template --}}
+{{!-- Clean Dashboard Content - No Nested Layout --}}
 
-<!-- Main Content -->
-<div class="main-content">
-    <!-- Breadcrumb -->
-    <div class="breadcrumb-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title">
-                        <h4>eCommerce Dashboard</h4>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">eCommerce</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col">
+                <h1 class="page-title">BOUNCE2BOUNCE Dashboard</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Overview</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-auto">
+                <a href="/drops/create" class="btn btn-primary">
+                    <i class="lni lni-plus"></i>
+                    Create Drop
+                </a>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Stats Cards -->
     <div class="container-fluid">
@@ -264,214 +266,3 @@
         </div>
     </div>
 </div>
-
-<style>
-/* Ultra-Modern Dashboard Styles */
-.modern-dashboard {
-    padding: 32px;
-    max-width: 1600px;
-    margin: 0 auto;
-    background: var(--bg-primary);
-}
-
-/* Hero Section */
-.dashboard-hero {
-    margin-bottom: 40px;
-}
-
-.hero-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 32px;
-}
-
-.hero-text {
-    flex: 1;
-}
-
-.hero-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin: 0 0 8px 0;
-    letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    margin: 0;
-    font-weight: 400;
-}
-
-.hero-actions {
-    display: flex;
-    gap: 12px;
-    flex-shrink: 0;
-}
-
-.action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-    cursor: pointer;
-    min-height: 44px;
-}
-
-.action-btn.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.action-btn.primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
-}
-
-.action-btn.secondary {
-    background: var(--bg-elevated);
-    color: var(--text-primary);
-    border: 1px solid var(--border-primary);
-}
-
-.action-btn.secondary:hover {
-    background: var(--bg-tertiary);
-    border-color: var(--border-secondary);
-}
-
-.action-icon {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2.5;
-}
-
-/* Metrics Grid */
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    margin-bottom: 40px;
-}
-
-.metric-card {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-primary);
-    border-radius: 16px;
-    padding: 24px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.metric-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    border-color: var(--border-secondary);
-}
-
-.metric-card.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-}
-
-.metric-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
-}
-
-.metric-icon {
-    width: 48px;
-    height: 48px;
-    background: var(--bg-tertiary);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.metric-card.primary .metric-icon {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.metric-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--text-secondary);
-    stroke-width: 2;
-}
-
-.metric-card.primary .metric-icon svg {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.metric-trend {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 8px;
-}
-
-.metric-trend.up {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-}
-
-.metric-trend.down {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-}
-
-.metric-trend.neutral {
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-}
-
-.metric-card.primary .metric-trend {
-    background: rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.metric-trend svg {
-    width: 12px;
-    height: 12px;
-}
-
-.metric-value {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-    letter-spacing: -0.02em;
-}
-
-.metric-card.primary .metric-value {
-    color: white;
-}
-
-.metric-label {
-    font-size: 14px;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-.metric-card.primary .metric-label {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* Modern Dashboard Styles are now in /css/modern-dashboard.css */
-</style>

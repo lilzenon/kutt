@@ -7,29 +7,38 @@
  */
 
 
-/* Main Content */
+/* Dashboard Content - Works with existing layout */
 
-.main-content {
-    padding: 0;
+.dashboard-main {
     background: #f8f9fa;
-    min-height: 100vh;
+    padding: 0;
 }
 
 
-/* Breadcrumb Wrapper */
+/* Page Header */
 
-.breadcrumb-wrapper {
+.page-header {
     background: white;
     border-bottom: 1px solid #e9ecef;
-    padding: 20px 0;
-    margin-bottom: 30px;
+    padding: 24px 0;
+    margin-bottom: 32px;
 }
 
-.page-title h4 {
-    font-size: 1.5rem;
+.page-title {
+    font-size: 1.75rem;
     font-weight: 600;
     color: #2c3e50;
     margin: 0 0 8px 0;
+}
+
+.btn-primary {
+    background: #3498db;
+    border-color: #3498db;
+    padding: 10px 20px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .breadcrumb {
