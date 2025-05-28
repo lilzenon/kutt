@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>{{title}} - BOUNCE2BOUNCE</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/css/themes.css" as="style">
+    <link rel="preload" href="/css/navigation.css" as="style">
+    <link rel="preload" href="/js/theme-manager.js" as="script">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/navigation.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    {{#if additionalCSS}}
+        {{#each additionalCSS}}
+            <link rel="stylesheet" href="{{this}}">
+        {{/each}}
+    {{/if}}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BOUNCE2BOUNCE">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Desktop Sidebar Navigation -->
+        <nav class="dashboard-sidebar" role="navigation" aria-label="Main navigation">
+            <!-- Sidebar Header -->
+            <div class="sidebar-header">
+                <a href="/dashboard" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">B2B</div>
+                    <span>BOUNCE2BOUNCE</span>
+                </a>
+            </div>
+
+            <!-- Create Drop Button -->
+            <div class="create-drop-section">
+                <a href="/drops/create" class="create-drop-btn">
+                    <span class="create-drop-icon">+</span>
+                    <span>Create a Drop</span>
+                </a>
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="/dashboard" class="nav-link" data-nav="home">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Home</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="/profile" class="nav-link" data-nav="profile">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-text">Profile</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="/messages" class="nav-link" data-nav="messages">
+                        <span class="nav-icon">💬</span>
+                        <span class="nav-text">Messages</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="/analytics" class="nav-link" data-nav="fans">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text">Fans</span>
+                    </a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="/settings" class="nav-link" data-nav="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                    <span class="theme-icon">🔄</span>
+                    <span class="theme-text">Auto</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-main" role="main">
+            {{{body}}}
+        </main>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
+            <!-- Mobile Nav Toggle -->
+            <button class="mobile-nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+                <span class="mobile-nav-toggle-icon">⬆️</span>
+            </button>
+
+            <!-- Mobile Nav Content -->
+            <div class="mobile-nav-content">
+                <!-- Navigation Grid -->
+                <div class="mobile-nav-grid">
+                    <a href="/dashboard" class="mobile-nav-item" data-nav="home">
+                        <span class="mobile-nav-icon">🏠</span>
+                        <span class="mobile-nav-text">Home</span>
+                    </a>
+
+                    <a href="/profile" class="mobile-nav-item" data-nav="profile">
+                        <span class="mobile-nav-icon">👤</span>
+                        <span class="mobile-nav-text">Profile</span>
+                    </a>
+
+                    <a href="/messages" class="mobile-nav-item" data-nav="messages">
+                        <span class="mobile-nav-icon">💬</span>
+                        <span class="mobile-nav-text">Messages</span>
+                    </a>
+
+                    <a href="/analytics" class="mobile-nav-item" data-nav="fans">
+                        <span class="mobile-nav-icon">👥</span>
+                        <span class="mobile-nav-text">Fans</span>
+                    </a>
+
+                    <a href="/settings" class="mobile-nav-item" data-nav="settings">
+                        <span class="mobile-nav-icon">⚙️</span>
+                        <span class="mobile-nav-text">Settings</span>
+                    </a>
+
+                    <button class="mobile-nav-item" data-theme-toggle>
+                        <span class="mobile-nav-icon theme-icon">🔄</span>
+                        <span class="mobile-nav-text theme-text">Auto</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Create Drop Button -->
+                <a href="/drops/create" class="mobile-create-drop">
+                    + Create a Drop
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/theme-manager.js"></script>
+    <script src="/js/navigation.js"></script>
+    {{#if additionalJS}}
+        {{#each additionalJS}}
+            <script src="{{this}}"></script>
+        {{/each}}
+    {{/if}}
+
+    <!-- Theme initialization script -->
+    <script>
+        // Prevent flash of unstyled content
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove any loading states
+            document.body.classList.remove('loading');
+
+            // Initialize active navigation states
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('[data-nav]');
+
+            navLinks.forEach(link => {
+                const navType = link.getAttribute('data-nav');
+                const href = link.getAttribute('href');
+
+                if (href && isActivePath(currentPath, href, navType)) {
+                    link.classList.add('active');
+                }
+            });
+
+            function isActivePath(currentPath, linkPath, navType) {
+                // Special handling for different nav types
+                switch (navType) {
+                    case 'home':
+                        return currentPath === '/' || currentPath === '/dashboard';
+                    case 'fans':
+                        return currentPath.includes('/analytics');
+                    default:
+                        return currentPath.startsWith(linkPath);
+                }
+            }
+        });
+
+        // Handle navigation events
+        document.addEventListener('navigationchange', function(e) {
+            console.log('Navigation state changed:', e.detail);
+        });
+
+        document.addEventListener('themechange', function(e) {
+            console.log('Theme changed:', e.detail);
+        });
+    </script>
+</body>
+</html>

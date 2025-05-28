@@ -1,0 +1,346 @@
+{{!-- Dashboard Home Page with New Navigation --}}
+
+<div class="dashboard-content">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="dashboard-header-content">
+            <h1 class="dashboard-title">Welcome back, {{user.email}}!</h1>
+            <p class="dashboard-subtitle">Manage your drops and track your audience engagement</p>
+        </div>
+        
+        <div class="dashboard-header-actions">
+            <a href="/drops/create" class="btn btn-primary">
+                <span class="btn-icon">+</span>
+                Create Drop
+            </a>
+        </div>
+    </div>
+    
+    <!-- Dashboard Stats -->
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <div class="stat-number">{{stats.totalDrops}}</div>
+                <div class="stat-label">Total Drops</div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <div class="stat-number">{{stats.totalFans}}</div>
+                <div class="stat-label">Total Fans</div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">📱</div>
+            <div class="stat-content">
+                <div class="stat-number">{{stats.totalSMS}}</div>
+                <div class="stat-label">SMS Sent</div>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-content">
+                <div class="stat-number">{{stats.activeDrops}}</div>
+                <div class="stat-label">Active Drops</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2 class="section-title">Recent Activity</h2>
+            <a href="/analytics" class="section-link">View All</a>
+        </div>
+        
+        <div class="activity-list">
+            {{#if recentActivity}}
+                {{#each recentActivity}}
+                    <div class="activity-item">
+                        <div class="activity-icon">{{icon}}</div>
+                        <div class="activity-content">
+                            <div class="activity-title">{{title}}</div>
+                            <div class="activity-description">{{description}}</div>
+                            <div class="activity-time">{{timeAgo}}</div>
+                        </div>
+                    </div>
+                {{/each}}
+            {{else}}
+                <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <h3>No recent activity</h3>
+                    <p>Create your first drop to get started!</p>
+                    <a href="/drops/create" class="btn btn-primary">Create Drop</a>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    
+    <!-- Your Drops Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2 class="section-title">Your Drops</h2>
+            <a href="/drops" class="section-link">Manage All</a>
+        </div>
+        
+        {{> drops/section}}
+    </div>
+</div>
+
+<style>
+/* Dashboard Content Styles */
+.dashboard-content {
+    padding: var(--space-xl);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-2xl);
+    gap: var(--space-xl);
+}
+
+.dashboard-header-content {
+    flex: 1;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.dashboard-header-actions {
+    flex-shrink: 0;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+/* Dashboard Stats */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+}
+
+.stat-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Dashboard Sections */
+.dashboard-section {
+    margin-bottom: var(--space-2xl);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.section-link {
+    color: var(--brand-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--transition-fast);
+}
+
+.section-link:hover {
+    color: var(--brand-secondary);
+}
+
+/* Activity List */
+.activity-list {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--border-primary);
+    transition: background-color var(--transition-fast);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.activity-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.activity-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.activity-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-xs);
+}
+
+.activity-time {
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--space-2xl);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-lg);
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .dashboard-content {
+        padding: var(--space-lg);
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-lg);
+    }
+    
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+    
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    
+    .stat-card {
+        padding: var(--space-lg);
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-sm);
+    }
+}
+</style>

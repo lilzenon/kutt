@@ -225,6 +225,25 @@ router.get(
 );
 
 router.get(
+    "/dashboard",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    (req, res) => {
+        res.render("dashboard", {
+            title: "Dashboard - BOUNCE2BOUNCE",
+            layout: "layouts/dashboard",
+            stats: {
+                totalDrops: 0,
+                totalFans: 0,
+                totalSMS: 0,
+                activeDrops: 0
+            },
+            recentActivity: []
+        });
+    }
+);
+
+router.get(
     "/sms",
     asyncHandler(auth.jwt),
     asyncHandler(locals.user),
