@@ -1,6 +1,97 @@
 // log htmx on dev
 // htmx.logAll();
 
+// ===== MOBILE NAVIGATION FUNCTIONS =====
+
+function toggleMobileNav() {
+    const overlay = document.getElementById('mobileOverlay');
+    const nav = document.getElementById('mobileNav');
+
+    if (overlay && nav) {
+        overlay.classList.add('active');
+        nav.classList.add('active');
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+
+        // Add haptic feedback if supported
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
+}
+
+function closeMobileNav() {
+    const overlay = document.getElementById('mobileOverlay');
+    const nav = document.getElementById('mobileNav');
+
+    if (overlay && nav) {
+        overlay.classList.remove('active');
+        nav.classList.remove('active');
+
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+}
+
+// Mobile navigation event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile navigation trigger
+    const mobileTrigger = document.getElementById('mobileTrigger');
+    if (mobileTrigger) {
+        mobileTrigger.addEventListener('click', toggleMobileNav);
+    }
+
+    // Close mobile nav when clicking overlay
+    const overlay = document.getElementById('mobileOverlay');
+    if (overlay) {
+        overlay.addEventListener('click', closeMobileNav);
+    }
+
+    // Close mobile nav when clicking close button
+    const closeBtn = document.getElementById('mobileClose');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeMobileNav);
+    }
+
+    // Close mobile nav when pressing escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeMobileNav();
+        }
+    });
+
+    // Touch gesture support for mobile nav
+    let startY = 0;
+    let currentY = 0;
+    const nav = document.getElementById('mobileNav');
+
+    if (nav) {
+        nav.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        nav.addEventListener('touchmove', function(e) {
+            currentY = e.touches[0].clientY;
+            const deltaY = currentY - startY;
+
+            // If swiping down significantly, close the nav
+            if (deltaY > 100) {
+                closeMobileNav();
+            }
+        }, { passive: true });
+    }
+
+    // Auto-close mobile nav when clicking navigation items
+    const navItems = document.querySelectorAll('.laylo-mobile-nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Small delay to allow navigation to start
+            setTimeout(closeMobileNav, 100);
+        });
+    });
+});
+
 // add text/html accept header to receive html instead of json for the requests
 document.body.addEventListener("htmx:configRequest", function(evt) {
     evt.detail.headers["Accept"] = "text/html,*/*";
