@@ -1132,35 +1132,219 @@
 }
 
 
-/* Responsive Design */
+/* ===== MOBILE-FIRST LAYLO DESIGN ===== */
 
 @media (max-width: 768px) {
+    /* Hide desktop elements on mobile */
+    .laylo-sidebar {
+        display: none !important;
+    }
+    /* Mobile main container */
+    .laylo-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+        background: #f8fafc;
+        min-height: 100vh;
+    }
+    /* Mobile dashboard container */
     .laylo-dashboard {
-        padding: 16px;
+        padding: 20px 16px 100px 16px;
+        /* Bottom padding for mobile nav */
+        margin: 0;
+        max-width: none;
+        background: #f8fafc;
+        min-height: calc(100vh - 100px);
+    }
+    /* Mobile header styling */
+    .dashboard-header {
+        margin-bottom: 24px;
+        padding-top: 60px;
+        /* Space for mobile trigger button */
     }
     .greeting {
-        font-size: 1.5rem;
-        margin-bottom: 16px;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 20px;
+        line-height: 1.2;
     }
+    /* Mobile shortcuts redesign */
     .shortcuts {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
+        display: block;
+        margin-bottom: 24px;
     }
     .shortcuts-label {
-        margin-bottom: 8px;
+        font-size: 0.875rem;
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 12px;
+        display: block;
     }
     .shortcut-btn {
-        justify-content: center;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #374151;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        width: 100%;
+        box-sizing: border-box;
     }
+    .shortcut-btn:hover,
+    .shortcut-btn:active {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #374151;
+        text-decoration: none;
+        transform: none;
+        /* Remove desktop hover effects */
+    }
+    .shortcut-icon {
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+    /* Mobile setup card */
     .setup-card {
-        flex-direction: column;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        display: block;
+    }
+    .setup-icon {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 16px auto;
+    }
+    .setup-content {
         text-align: center;
     }
+    .setup-content h3 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    .setup-content p {
+        font-size: 0.875rem;
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+    /* Mobile sections */
+    .dropping-soon,
+    .drops-section {
+        margin-bottom: 24px;
+    }
+    .dropping-soon h2,
+    .drops-section h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 12px;
+    }
+    .section-subtitle {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 16px;
+        line-height: 1.4;
+    }
+    /* Mobile drops grid */
     .drops-grid {
-        grid-template-columns: 1fr;
+        display: block;
+        gap: 0;
     }
     .drop-card {
-        max-width: 100%;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        max-width: none;
+    }
+    .drop-card:hover {
+        transform: none;
+        /* Remove desktop hover effects */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .drop-image {
+        height: 120px;
+        background-size: cover;
+        background-position: center;
+    }
+    .drop-info {
+        padding: 12px 16px;
+    }
+    .drop-info h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+    .drop-date {
+        font-size: 0.8rem;
+        color: #64748b;
+    }
+    /* Mobile empty states */
+    .empty-drops,
+    .empty-state {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 32px 20px;
+        text-align: center;
+        margin-bottom: 16px;
+    }
+    .create-drop-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #3b82f6;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+    .create-drop-btn:hover,
+    .create-drop-btn:active {
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        transform: none;
+    }
+    /* Mobile trigger button positioning */
+    .laylo-mobile-trigger {
+        position: fixed !important;
+        top: 16px !important;
+        left: 16px !important;
+        width: 44px !important;
+        height: 44px !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 12px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        z-index: 1000 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+    .laylo-mobile-trigger svg {
+        width: 20px !important;
+        height: 20px !important;
+        color: #374151 !important;
+        stroke-width: 2.5 !important;
     }
 }
