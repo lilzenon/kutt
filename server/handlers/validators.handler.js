@@ -524,6 +524,81 @@ const deleteUserByAdmin = [
     .isNumeric()
 ];
 
+const updateProfile = [
+    body("first_name")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage("First name length must be between 1 and 50."),
+    body("last_name")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage("Last name length must be between 1 and 50."),
+    body("username")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Username length must be between 3 and 30.")
+    .matches(/^[a-zA-Z0-9_-]+$/)
+    .withMessage("Username can only contain letters, numbers, underscores, and hyphens.")
+    .custom(async(value, { req }) => {
+        if (!value) return true;
+        const user = await query.user.find({ username: value });
+        if (user && user.id !== req.user.id) {
+            return Promise.reject();
+        }
+    })
+    .withMessage("Username is already taken."),
+    body("phone")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .matches(/^\+?[\d\s\-\(\)]+$/)
+    .withMessage("Phone number format is invalid.")
+    .isLength({ min: 10, max: 20 })
+    .withMessage("Phone number length must be between 10 and 20."),
+    body("company")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Company name length must be between 1 and 100."),
+    body("profile_picture")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isURL()
+    .withMessage("Profile picture must be a valid URL.")
+    .isLength({ min: 1, max: 500 })
+    .withMessage("Profile picture URL length must be between 1 and 500.")
+];
+
+const updateProfilePassword = [
+    body("currentPassword", "Current password is required.")
+    .exists({ checkFalsy: true, checkNull: true })
+    .isLength({ min: 8, max: 64 })
+    .withMessage("Current password length must be between 8 and 64.")
+    .custom(async(password, { req }) => {
+        const isMatch = await bcrypt.compare(password, req.user.password);
+        if (!isMatch) return Promise.reject();
+    })
+    .withMessage("Current password is not correct."),
+    body("newPassword", "New password is required.")
+    .exists({ checkFalsy: true, checkNull: true })
+    .isLength({ min: 8, max: 64 })
+    .withMessage("New password length must be between 8 and 64."),
+    body("confirmPassword", "Password confirmation is required.")
+    .exists({ checkFalsy: true, checkNull: true })
+    .custom((confirmPassword, { req }) => {
+        return confirmPassword === req.body.newPassword;
+    })
+    .withMessage("Passwords do not match.")
+];
+
 async function bannedDomain(domain) {
     const isBanned = await query.domain.find({
         address: domain,
@@ -583,4 +658,6 @@ module.exports = {
     resetPassword,
     signup,
     signupEmailTaken,
+    updateProfile,
+    updateProfilePassword,
 }

@@ -24,31 +24,48 @@
                                 <div class="col-md-6">
                                     <div class="laylo-form-group">
                                         <label for="firstName">First Name</label>
-                                        <input type="text" id="firstName" name="firstName" class="laylo-form-control" value="{{user.firstName}}" required>
+                                        <input type="text" id="firstName" name="first_name" class="laylo-form-control" value="{{user.first_name}}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="laylo-form-group">
                                         <label for="lastName">Last Name</label>
-                                        <input type="text" id="lastName" name="lastName" class="laylo-form-control" value="{{user.lastName}}" required>
+                                        <input type="text" id="lastName" name="last_name" class="laylo-form-control" value="{{user.last_name}}">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="laylo-form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" class="laylo-form-control" value="{{user.email}}" required>
+                                <input type="email" id="email" name="email" class="laylo-form-control" value="{{user.email}}" readonly>
+                                <small class="laylo-form-text">Email cannot be changed from this page.</small>
                             </div>
 
                             <div class="laylo-form-group">
                                 <label for="username">Username</label>
-                                <input type="text" id="username" name="username" class="laylo-form-control" value="{{user.username}}" required>
-                                <small class="laylo-form-text">Your public profile URL: bounce2bounce.com/{{user.username}}</small>
+                                <input type="text" id="username" name="username" class="laylo-form-control" value="{{user.username}}">
+                                <small class="laylo-form-text">Your public profile URL: bounce2bounce.com/{{#if user.username}}{{user.username}}{{else}}your-username{{/if}}</small>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="laylo-form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="tel" id="phone" name="phone" class="laylo-form-control" value="{{user.phone}}" placeholder="+1 (555) 123-4567">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="laylo-form-group">
+                                        <label for="company">Company</label>
+                                        <input type="text" id="company" name="company" class="laylo-form-control" value="{{user.company}}" placeholder="Your company name">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="laylo-form-group">
-                                <label for="bio">Bio</label>
-                                <textarea id="bio" name="bio" class="laylo-form-control" rows="4" placeholder="Tell us about yourself...">{{user.bio}}</textarea>
+                                <label for="profilePicture">Profile Picture URL</label>
+                                <input type="url" id="profilePicture" name="profile_picture" class="laylo-form-control" value="{{user.profile_picture}}" placeholder="https://example.com/your-photo.jpg">
+                                <small class="laylo-form-text">Enter a URL to your profile picture (JPG, PNG, or GIF).</small>
                             </div>
 
                             <div class="laylo-form-actions">
@@ -98,13 +115,21 @@
                     </div>
                     <div class="laylo-card-body text-center">
                         <div class="laylo-avatar-large">
-                            <span class="laylo-avatar-initials">B2B</span>
+                            {{#if user.profile_picture}}
+                                <img src="{{user.profile_picture}}" alt="Profile Picture" class="laylo-avatar-image">
+                            {{else}}
+                                <span class="laylo-avatar-initials">
+                                    {{#if user.first_name}}
+                                        {{substring user.first_name 0 1}}{{#if user.last_name}}{{substring user.last_name 0 1}}{{/if}}
+                                    {{else}}
+                                        B2B
+                                    {{/if}}
+                                </span>
+                            {{/if}}
                         </div>
                         <div class="mt-3">
-                            <button class="laylo-btn laylo-btn-outline">Change Photo</button>
-                            <button class="laylo-btn laylo-btn-text">Remove</button>
+                            <p class="laylo-form-text">Update your profile picture URL in the form above.</p>
                         </div>
-                        <small class="laylo-form-text">JPG, GIF or PNG. 1MB max.</small>
                     </div>
                 </div>
 
@@ -144,19 +169,19 @@
 // Profile form handling
 document.getElementById('profileForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
-    
+
     try {
-        const response = await fetch('/api/profile', {
+        const response = await fetch('/api/users/profile', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
-        
+
         if (response.ok) {
             showMessage('Profile updated successfully!', 'success');
         } else {
@@ -170,24 +195,24 @@ document.getElementById('profileForm').addEventListener('submit', async function
 // Password form handling
 document.getElementById('passwordForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
-    
+
     if (data.newPassword !== data.confirmPassword) {
         showMessage('Passwords do not match.', 'error');
         return;
     }
-    
+
     try {
-        const response = await fetch('/api/profile/password', {
+        const response = await fetch('/api/users/profile/password', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
-        
+
         if (response.ok) {
             showMessage('Password updated successfully!', 'success');
             this.reset();
@@ -206,7 +231,7 @@ function showMessage(message, type) {
             ${message}
         </div>
     `;
-    
+
     setTimeout(() => {
         messagesDiv.innerHTML = '';
     }, 5000);

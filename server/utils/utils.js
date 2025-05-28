@@ -391,6 +391,12 @@ function registerHandlebarsHelpers() {
         return name.split(" ").map(n => n[0]).join("").toUpperCase();
     });
 
+    hbs.registerHelper("substring", function(str, start, length) {
+        if (!str) return "";
+        if (typeof str !== "string") return "";
+        return str.substring(start, length || str.length);
+    });
+
     const blocks = {};
 
     hbs.registerHelper("extend", function(name, context) {

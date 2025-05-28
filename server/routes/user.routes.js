@@ -10,64 +10,81 @@ const auth = require("../handlers/auth.handler");
 const router = Router();
 
 router.get(
-  "/",
-  asyncHandler(auth.apikey),
-  asyncHandler(auth.jwt),
-  asyncHandler(user.get)
+    "/",
+    asyncHandler(auth.apikey),
+    asyncHandler(auth.jwt),
+    asyncHandler(user.get)
 );
 
 router.get(
-  "/admin",
-  locals.viewTemplate("partials/admin/users/table"),
-  asyncHandler(auth.apikey),
-  asyncHandler(auth.jwt),
-  asyncHandler(auth.admin),
-  helpers.parseQuery,
-  locals.adminTable,
-  asyncHandler(user.getAdmin)
+    "/admin",
+    locals.viewTemplate("partials/admin/users/table"),
+    asyncHandler(auth.apikey),
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    helpers.parseQuery,
+    locals.adminTable,
+    asyncHandler(user.getAdmin)
 );
 
 router.post(
-  "/admin",
-  locals.viewTemplate("partials/admin/dialog/create_user"),
-  asyncHandler(auth.apikey),
-  asyncHandler(auth.jwt),
-  asyncHandler(auth.admin),
-  validators.createUser,
-  asyncHandler(helpers.verify),
-  asyncHandler(user.create)
+    "/admin",
+    locals.viewTemplate("partials/admin/dialog/create_user"),
+    asyncHandler(auth.apikey),
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    validators.createUser,
+    asyncHandler(helpers.verify),
+    asyncHandler(user.create)
 );
 
 router.post(
-  "/delete",
-  locals.viewTemplate("partials/settings/delete_account"),
-  asyncHandler(auth.apikey),
-  asyncHandler(auth.jwt),
-  validators.deleteUser,
-  asyncHandler(helpers.verify),
-  asyncHandler(user.remove)
+    "/delete",
+    locals.viewTemplate("partials/settings/delete_account"),
+    asyncHandler(auth.apikey),
+    asyncHandler(auth.jwt),
+    validators.deleteUser,
+    asyncHandler(helpers.verify),
+    asyncHandler(user.remove)
 );
 
 router.delete(
-  "/admin/:id",
-  locals.viewTemplate("partials/admin/dialog/delete_user"),
-  asyncHandler(auth.apikey),
-  asyncHandler(auth.jwt),
-  asyncHandler(auth.admin),
-  validators.deleteUserByAdmin,
-  asyncHandler(helpers.verify),
-  asyncHandler(user.removeByAdmin)
+    "/admin/:id",
+    locals.viewTemplate("partials/admin/dialog/delete_user"),
+    asyncHandler(auth.apikey),
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    validators.deleteUserByAdmin,
+    asyncHandler(helpers.verify),
+    asyncHandler(user.removeByAdmin)
 );
 
 router.post(
-  "/admin/ban/:id",
-  locals.viewTemplate("partials/admin/dialog/ban_user"),
-  asyncHandler(auth.apikey),
-  asyncHandler(auth.jwt),
-  asyncHandler(auth.admin),
-  validators.banUser,
-  asyncHandler(helpers.verify),
-  asyncHandler(user.ban)
+    "/admin/ban/:id",
+    locals.viewTemplate("partials/admin/dialog/ban_user"),
+    asyncHandler(auth.apikey),
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    validators.banUser,
+    asyncHandler(helpers.verify),
+    asyncHandler(user.ban)
+);
+
+// Profile update routes
+router.put(
+    "/profile",
+    asyncHandler(auth.jwt),
+    validators.updateProfile,
+    asyncHandler(helpers.verify),
+    asyncHandler(user.updateProfile)
+);
+
+router.put(
+    "/profile/password",
+    asyncHandler(auth.jwt),
+    validators.updateProfilePassword,
+    asyncHandler(helpers.verify),
+    asyncHandler(user.updateProfilePassword)
 );
 
 module.exports = router;

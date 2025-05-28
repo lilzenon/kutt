@@ -103,34 +103,50 @@
                     </svg>
                     <span class="laylo-mobile-nav-text">Settings</span>
                 </a>
-
-                <a href="/accounts" class="laylo-mobile-nav-item">
-                    <svg class="laylo-mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    <span class="laylo-mobile-nav-text">Accounts</span>
-                </a>
             </div>
 
             <!-- Mobile User Section -->
             <div class="laylo-mobile-user-section">
                 <div class="laylo-mobile-user-info">
                     <div class="laylo-mobile-user-avatar">
-                        <div class="laylo-mobile-user-logo">
-                            <span class="laylo-mobile-logo-text">BOUNCE</span>
-                        </div>
+                        {{#if user.profile_picture}}
+                            <img src="{{user.profile_picture}}" alt="Profile" class="laylo-mobile-user-image">
+                        {{else}}
+                            <div class="laylo-mobile-user-logo">
+                                <span class="laylo-mobile-logo-text">
+                                    {{#if user.first_name}}
+                                        {{substring user.first_name 0 1}}{{#if user.last_name}}{{substring user.last_name 0 1}}{{/if}}
+                                    {{else}}
+                                        B2B
+                                    {{/if}}
+                                </span>
+                            </div>
+                        {{/if}}
                     </div>
                     <div class="laylo-mobile-user-details">
-                        <div class="laylo-mobile-user-name">BOUNCE2BOUNCE</div>
-                        <div class="laylo-mobile-user-phone">(640) 500-4727</div>
+                        <div class="laylo-mobile-user-name">
+                            {{#if user.first_name}}
+                                {{user.first_name}}{{#if user.last_name}} {{user.last_name}}{{/if}}
+                            {{else if user.username}}
+                                {{user.username}}
+                            {{else}}
+                                BOUNCE2BOUNCE
+                            {{/if}}
+                        </div>
+                        <div class="laylo-mobile-user-phone">
+                            {{#if user.phone}}
+                                {{user.phone}}
+                            {{else}}
+                                {{user.email}}
+                            {{/if}}
+                        </div>
                     </div>
                 </div>
 
                 <!-- Mobile Drop Button -->
                 <a href="/drops/create" class="laylo-mobile-drop-btn">
                     <span class="laylo-mobile-drop-icon">+</span>
-                    Drop
+                    Create a Drop
                 </a>
             </div>
         </nav>
@@ -203,11 +219,35 @@
                 <!-- User Info Section -->
                 <div class="laylo-user-info">
                     <div class="laylo-user-avatar">
-                        <span class="laylo-user-initials">B2B</span>
+                        {{#if user.profile_picture}}
+                            <img src="{{user.profile_picture}}" alt="Profile" class="laylo-user-image">
+                        {{else}}
+                            <span class="laylo-user-initials">
+                                {{#if user.first_name}}
+                                    {{substring user.first_name 0 1}}{{#if user.last_name}}{{substring user.last_name 0 1}}{{/if}}
+                                {{else}}
+                                    B2B
+                                {{/if}}
+                            </span>
+                        {{/if}}
                     </div>
                     <div class="laylo-user-details">
-                        <div class="laylo-user-name">BOUNCE2BOUNCE</div>
-                        <div class="laylo-user-url">laylo.com/bounce2bounce</div>
+                        <div class="laylo-user-name">
+                            {{#if user.first_name}}
+                                {{user.first_name}}{{#if user.last_name}} {{user.last_name}}{{/if}}
+                            {{else if user.username}}
+                                {{user.username}}
+                            {{else}}
+                                BOUNCE2BOUNCE
+                            {{/if}}
+                        </div>
+                        <div class="laylo-user-url">
+                            {{#if user.username}}
+                                bounce2bounce.com/{{user.username}}
+                            {{else}}
+                                bounce2bounce.com/user
+                            {{/if}}
+                        </div>
                     </div>
                 </div>
 

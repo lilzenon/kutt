@@ -921,6 +921,12 @@
         font-weight: 700 !important;
         font-size: 0.875rem !important;
     }
+    .laylo-mobile-user-image {
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 12px !important;
+        object-fit: cover !important;
+    }
     .laylo-mobile-user-name {
         font-weight: 600 !important;
         color: #1a202c !important;
