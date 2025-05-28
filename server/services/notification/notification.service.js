@@ -314,7 +314,7 @@ class NotificationService extends EventEmitter {
      */
     async checkRateLimit(userId, type, category) {
         const preferences = await this.getUserPreferences(userId, type, category);
-        const limit = preferences.settings ? .frequency_limit || 100; // Default 100/day
+        const limit = preferences.settings ? preferences.settings.frequency_limit || 100 : 100; // Default 100/day
 
         const windowStart = new Date();
         windowStart.setHours(0, 0, 0, 0);
