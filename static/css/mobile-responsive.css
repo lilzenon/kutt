@@ -1,0 +1,657 @@
+/**
+ * 📱 COMPREHENSIVE MOBILE RESPONSIVE DESIGN
+ *
+ * Research-based mobile-first responsive design
+ * Following 2024 best practices for mobile optimization
+ */
+
+
+/* ===== MOBILE-FIRST BASE STYLES ===== */
+
+
+/* Prevent iOS Safari zoom on input focus */
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+body {
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Better font rendering on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent text inflation on mobile */
+    text-size-adjust: 100%;
+}
+
+
+/* ===== MOBILE LAYOUT FIXES ===== */
+
+
+/* Mobile-first layout container */
+
+.laylo-layout {
+    /* Ensure full viewport coverage */
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* Dynamic viewport height for mobile browsers */
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+
+/* Mobile main content area */
+
+.laylo-main {
+    /* Full width on mobile */
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    /* Minimum height for mobile */
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+
+/* ===== MOBILE TYPOGRAPHY ===== */
+
+
+/* Prevent iOS Safari zoom on input focus */
+
+input,
+textarea,
+select {
+    font-size: 16px !important;
+    /* Critical: Prevents iOS zoom */
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+
+
+/* Mobile-optimized text sizes */
+
+h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+}
+
+h3 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+h4 {
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+}
+
+h5 {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+h6 {
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+}
+
+
+/* Body text optimization */
+
+p,
+span,
+div {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    line-height: 1.6;
+}
+
+
+/* ===== MOBILE TOUCH TARGETS ===== */
+
+
+/* Ensure all interactive elements meet 44px minimum */
+
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn,
+.laylo-btn,
+.laylo-nav-item,
+.laylo-mobile-nav-item {
+    min-height: 44px;
+    min-width: 44px;
+    /* Enhanced touch support */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    /* Visual feedback */
+    transition: all 0.2s ease;
+}
+
+
+/* Active state for touch feedback */
+
+button:active,
+a:active,
+.btn:active,
+.laylo-btn:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+
+
+/* ===== MOBILE SPACING ===== */
+
+
+/* Mobile-optimized spacing using rem units */
+
+.laylo-page {
+    padding: 1rem;
+    max-width: 100%;
+}
+
+.laylo-card {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+}
+
+.laylo-card-body {
+    padding: 1rem;
+}
+
+
+/* ===== MOBILE NAVIGATION ENHANCEMENTS ===== */
+
+
+/* Mobile trigger button - enhanced positioning */
+
+.laylo-mobile-trigger {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
+    width: 44px !important;
+    height: 44px !important;
+    z-index: 1001 !important;
+    /* Enhanced visual design */
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    /* Touch optimization */
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+    cursor: pointer !important;
+}
+
+
+/* Mobile navigation menu - enhanced */
+
+.laylo-mobile-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-height: 85vh !important;
+    /* Enhanced visual design */
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border-radius: 20px 20px 0 0 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
+    /* Animation */
+    transform: translateY(100%) !important;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 999 !important;
+    /* Scroll optimization */
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.laylo-mobile-nav.active {
+    transform: translateY(0) !important;
+}
+
+
+/* Mobile overlay - enhanced */
+
+.laylo-mobile-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    z-index: 998 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.laylo-mobile-overlay.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+
+/* ===== MOBILE FORM OPTIMIZATION ===== */
+
+
+/* Mobile form styling */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control,
+.laylo-form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 16px !important;
+    /* Prevent iOS zoom */
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    transition: border-color 0.2s ease;
+    /* Touch optimization */
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-control:focus,
+.laylo-form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+
+/* ===== MOBILE GRID SYSTEM ===== */
+
+
+/* Mobile-first grid */
+
+.mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
+
+/* ===== MOBILE UTILITIES ===== */
+
+
+/* Screen reader only content */
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+
+/* Hide on mobile */
+
+.mobile-hidden {
+    display: none !important;
+}
+
+
+/* Show only on mobile */
+
+.mobile-only {
+    display: block !important;
+}
+
+
+/* Mobile text alignment */
+
+.mobile-text-center {
+    text-align: center !important;
+}
+
+
+/* Mobile spacing utilities */
+
+.mobile-p-0 {
+    padding: 0 !important;
+}
+
+.mobile-p-1 {
+    padding: 0.25rem !important;
+}
+
+.mobile-p-2 {
+    padding: 0.5rem !important;
+}
+
+.mobile-p-3 {
+    padding: 0.75rem !important;
+}
+
+.mobile-p-4 {
+    padding: 1rem !important;
+}
+
+.mobile-m-0 {
+    margin: 0 !important;
+}
+
+.mobile-m-1 {
+    margin: 0.25rem !important;
+}
+
+.mobile-m-2 {
+    margin: 0.5rem !important;
+}
+
+.mobile-m-3 {
+    margin: 0.75rem !important;
+}
+
+.mobile-m-4 {
+    margin: 1rem !important;
+}
+
+
+/* ===== MOBILE PERFORMANCE OPTIMIZATIONS ===== */
+
+
+/* GPU acceleration for smooth animations */
+
+.laylo-mobile-nav,
+.laylo-mobile-overlay,
+.laylo-mobile-trigger {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+
+/* Optimize scrolling performance */
+
+.laylo-mobile-nav {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+
+/* MOBILE: Base styles (up to 767px) - Already defined above */
+
+
+/* TABLET: Medium screens (768px to 1023px) */
+
+@media (min-width: 768px) {
+    .mobile-hidden {
+        display: block !important;
+    }
+    .mobile-only {
+        display: none !important;
+    }
+    .laylo-mobile-trigger {
+        display: none !important;
+    }
+    .laylo-sidebar {
+        display: flex !important;
+    }
+    .laylo-main {
+        margin-left: 280px !important;
+    }
+    .mobile-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    .laylo-page {
+        padding: 2rem;
+    }
+}
+
+
+/* DESKTOP: Large screens (1024px to 1439px) */
+
+@media (min-width: 1024px) {
+    .mobile-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+    .laylo-page {
+        padding: 2.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    /* Enhanced desktop typography */
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 2rem;
+    }
+    h3 {
+        font-size: 1.75rem;
+    }
+    h4 {
+        font-size: 1.5rem;
+    }
+    h5 {
+        font-size: 1.25rem;
+    }
+    h6 {
+        font-size: 1rem;
+    }
+}
+
+
+/* LARGE DESKTOP: Extra large screens (1440px and up) */
+
+@media (min-width: 1440px) {
+    .mobile-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2.5rem;
+    }
+    .laylo-page {
+        padding: 3rem;
+        max-width: 1400px;
+    }
+    /* Premium desktop typography */
+    h1 {
+        font-size: 3rem;
+    }
+    h2 {
+        font-size: 2.25rem;
+    }
+    h3 {
+        font-size: 2rem;
+    }
+    h4 {
+        font-size: 1.75rem;
+    }
+    h5 {
+        font-size: 1.5rem;
+    }
+    h6 {
+        font-size: 1.125rem;
+    }
+}
+
+
+/* ===== MOBILE-SPECIFIC FIXES ===== */
+
+
+/* Mobile Safari specific fixes */
+
+@media screen and (max-width: 767px) {
+    /* Fix viewport height issues on mobile browsers */
+    .laylo-layout {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+    /* Prevent zoom on input focus */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="search"],
+    textarea,
+    select {
+        font-size: 16px !important;
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 8px;
+    }
+    /* Mobile navigation enhancements */
+    .laylo-mobile-nav-item {
+        padding: 1rem 1.5rem !important;
+        font-size: 1rem !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 1rem !important;
+    }
+    .laylo-mobile-nav-icon {
+        width: 24px !important;
+        height: 24px !important;
+        flex-shrink: 0 !important;
+    }
+    .laylo-mobile-nav-text {
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+    }
+    /* Mobile header spacing */
+    .laylo-main-header {
+        padding: 1rem !important;
+        min-height: 60px !important;
+    }
+    /* Mobile content spacing */
+    .laylo-dashboard {
+        padding: 1rem !important;
+        padding-top: 80px !important;
+        /* Space for mobile trigger */
+        padding-bottom: 2rem !important;
+    }
+    /* Mobile card optimization */
+    .laylo-card {
+        border-radius: 12px !important;
+        margin-bottom: 1rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+    .laylo-card-header {
+        padding: 1rem !important;
+    }
+    .laylo-card-body {
+        padding: 1rem !important;
+    }
+    /* Mobile button optimization */
+    .laylo-btn {
+        padding: 0.75rem 1.5rem !important;
+        font-size: 1rem !important;
+        min-height: 44px !important;
+        border-radius: 8px !important;
+    }
+    /* Mobile form optimization */
+    .form-group {
+        margin-bottom: 1.5rem !important;
+    }
+    .form-control {
+        padding: 1rem !important;
+        font-size: 16px !important;
+        border-radius: 8px !important;
+        min-height: 44px !important;
+    }
+}
+
+
+/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+
+
+/* Respect user's motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    .laylo-mobile-nav,
+    .laylo-mobile-overlay,
+    .laylo-mobile-trigger,
+    button,
+    a {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+
+/* High contrast mode support */
+
+@media (prefers-contrast: high) {
+    .laylo-mobile-trigger {
+        border: 2px solid #000 !important;
+        background: #fff !important;
+    }
+    .laylo-mobile-nav {
+        border: 2px solid #000 !important;
+        background: #fff !important;
+    }
+    .laylo-mobile-nav-item {
+        border-bottom: 1px solid #ccc !important;
+    }
+}
+
+
+/* Dark mode support */
+
+@media (prefers-color-scheme: dark) {
+    .laylo-mobile-trigger {
+        background: rgba(30, 30, 30, 0.95) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        color: #fff !important;
+    }
+    .laylo-mobile-nav {
+        background: rgba(30, 30, 30, 0.98) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    .laylo-mobile-nav-item {
+        color: #ccc !important;
+    }
+    .laylo-mobile-nav-item:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+    }
+    .laylo-mobile-nav-item.active {
+        background: rgba(59, 130, 246, 0.2) !important;
+        color: #60a5fa !important;
+    }
+}
