@@ -404,4 +404,17 @@ router.get(
     }
 );
 
+router.get(
+    "/settings",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    (req, res) => {
+        res.render("settings", {
+            title: "Settings - BOUNCE2BOUNCE",
+            layout: "layouts/dashboard",
+            currentPage: "settings"
+        });
+    }
+);
+
 module.exports = router;

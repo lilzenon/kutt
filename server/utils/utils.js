@@ -370,12 +370,43 @@ function registerHandlebarsHelpers() {
 
     hbs.registerHelper("formatDate", function(date, formatString) {
         if (!date) return "";
-        const parsedDate = parseDatetime(date);
-        if (formatString) {
-            return format(parsedDate, formatString);
+        try {
+            let parsedDate;
+
+            // Handle different date types
+            if (date instanceof Date) {
+                parsedDate = date;
+            } else if (typeof date === 'string' || typeof date === 'number') {
+                parsedDate = new Date(date);
+            } else {
+                parsedDate = parseDatetime(date);
+            }
+
+            if (!parsedDate || isNaN(parsedDate.getTime())) {
+                return "";
+            }
+
+            // Use a simple, safe default format
+            if (formatString && typeof formatString === 'string') {
+                return format(parsedDate, formatString);
+            }
+
+            // Default format - simple and safe
+            return format(parsedDate, "MMM d, yyyy");
+        } catch (error) {
+            console.error("Date formatting error:", error, "for date:", date);
+            // Fallback to basic date string
+            try {
+                const fallbackDate = new Date(date);
+                if (!isNaN(fallbackDate.getTime())) {
+                    return fallbackDate.toLocaleDateString();
+                }
+            } catch (e) {
+                // Final fallback
+                return "Invalid date";
+            }
+            return "";
         }
-        // Default format for our new pages
-        return format(parsedDate, "MMM d, yyyy");
     });
 
     hbs.registerHelper("getContrastColor", function(hexColor) {

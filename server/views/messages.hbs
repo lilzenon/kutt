@@ -106,7 +106,7 @@
                                 <div class="laylo-message-preview">{{this.preview}}</div>
                                 <div class="laylo-message-meta">
                                     <span class="laylo-message-recipients">{{this.recipientCount}} recipients</span>
-                                    <span class="laylo-message-date">{{formatDate this.createdAt}}</span>
+                                    <span class="laylo-message-date">{{#if this.createdAt}}{{formatDate this.createdAt}}{{else}}No date{{/if}}</span>
                                 </div>
                             </div>
                             <div class="laylo-message-actions">
@@ -225,10 +225,10 @@ document.querySelectorAll('input[name="scheduleType"]').forEach(radio => {
 // Form submission
 document.getElementById('newMessageForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
-    
+
     try {
         const response = await fetch('/api/messages', {
             method: 'POST',
@@ -237,7 +237,7 @@ document.getElementById('newMessageForm').addEventListener('submit', async funct
             },
             body: JSON.stringify(data)
         });
-        
+
         if (response.ok) {
             location.reload();
         } else {
