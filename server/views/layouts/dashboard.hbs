@@ -101,51 +101,79 @@
             {{{body}}}
         </main>
 
-        <!-- Mobile Bottom Navigation -->
+        <!-- Ultra-Modern Mobile Navigation -->
         <nav class="mobile-nav" role="navigation" aria-label="Mobile navigation">
-            <!-- Mobile Nav Toggle -->
+            <!-- Collapsed State - Minimal Tab Bar -->
+            <div class="mobile-nav-collapsed">
+                <a href="/dashboard" class="mobile-nav-tab" data-nav="home">
+                    <span class="mobile-nav-tab-icon">⌂</span>
+                    <span class="mobile-nav-tab-label">Home</span>
+                </a>
+
+                <a href="/analytics" class="mobile-nav-tab" data-nav="fans">
+                    <span class="mobile-nav-tab-icon">♥</span>
+                    <span class="mobile-nav-tab-label">Fans</span>
+                </a>
+
+                <a href="/messages" class="mobile-nav-tab" data-nav="messages">
+                    <span class="mobile-nav-tab-icon">✉</span>
+                    <span class="mobile-nav-tab-label">Chat</span>
+                </a>
+
+                <a href="/settings" class="mobile-nav-tab" data-nav="settings">
+                    <span class="mobile-nav-tab-icon">⚙</span>
+                    <span class="mobile-nav-tab-label">More</span>
+                </a>
+            </div>
+
+            <!-- Floating Action Button Toggle -->
             <button class="mobile-nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
-                <span class="mobile-nav-toggle-icon">⬆️</span>
+                <span class="mobile-nav-toggle-icon">+</span>
             </button>
 
-            <!-- Mobile Nav Content -->
+            <!-- Theme Toggle (Expanded Only) -->
+            <button class="mobile-theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                <span class="mobile-theme-icon theme-icon">◐</span>
+            </button>
+
+            <!-- Expanded State - Full Menu -->
             <div class="mobile-nav-content">
                 <!-- Navigation Grid -->
                 <div class="mobile-nav-grid">
                     <a href="/dashboard" class="mobile-nav-item" data-nav="home">
-                        <span class="mobile-nav-icon">🏠</span>
-                        <span class="mobile-nav-text">Home</span>
+                        <span class="mobile-nav-icon">⌂</span>
+                        <span class="mobile-nav-text">Dashboard</span>
                     </a>
 
                     <a href="/profile" class="mobile-nav-item" data-nav="profile">
-                        <span class="mobile-nav-icon">👤</span>
+                        <span class="mobile-nav-icon">◉</span>
                         <span class="mobile-nav-text">Profile</span>
                     </a>
 
-                    <a href="/messages" class="mobile-nav-item" data-nav="messages">
-                        <span class="mobile-nav-icon">💬</span>
-                        <span class="mobile-nav-text">Messages</span>
-                    </a>
-
                     <a href="/analytics" class="mobile-nav-item" data-nav="fans">
-                        <span class="mobile-nav-icon">👥</span>
+                        <span class="mobile-nav-icon">♥</span>
                         <span class="mobile-nav-text">Fans</span>
                     </a>
 
+                    <a href="/messages" class="mobile-nav-item" data-nav="messages">
+                        <span class="mobile-nav-icon">✉</span>
+                        <span class="mobile-nav-text">Messages</span>
+                    </a>
+
                     <a href="/settings" class="mobile-nav-item" data-nav="settings">
-                        <span class="mobile-nav-icon">⚙️</span>
+                        <span class="mobile-nav-icon">⚙</span>
                         <span class="mobile-nav-text">Settings</span>
                     </a>
 
-                    <button class="mobile-nav-item" data-theme-toggle>
-                        <span class="mobile-nav-icon theme-icon">🔄</span>
-                        <span class="mobile-nav-text theme-text">Auto</span>
-                    </button>
+                    <a href="/drops" class="mobile-nav-item" data-nav="drops">
+                        <span class="mobile-nav-icon">◈</span>
+                        <span class="mobile-nav-text">My Drops</span>
+                    </a>
                 </div>
 
-                <!-- Mobile Create Drop Button -->
+                <!-- Create Drop Button -->
                 <a href="/drops/create" class="mobile-create-drop">
-                    + Create a Drop
+                    ✦ Create New Drop
                 </a>
             </div>
         </nav>
