@@ -908,3 +908,105 @@ htmx.defineExtension("preload", {
         })
     }
 })
+
+// ===== LAYLO-STYLE MOBILE NAVIGATION =====
+
+// Mobile navigation state
+let mobileNavOpen = false;
+
+// Toggle mobile navigation
+function toggleMobileNav() {
+    if (mobileNavOpen) {
+        closeMobileNav();
+    } else {
+        openMobileNav();
+    }
+}
+
+// Open mobile navigation
+function openMobileNav() {
+    if (mobileNavOpen) return;
+
+    mobileNavOpen = true;
+    const overlay = document.querySelector('.laylo-mobile-overlay');
+    const nav = document.querySelector('.laylo-mobile-nav');
+
+    if (overlay && nav) {
+        overlay.classList.add('active');
+        nav.classList.add('active');
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+
+        // Add haptic feedback on supported devices
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
+}
+
+// Close mobile navigation
+function closeMobileNav() {
+    if (!mobileNavOpen) return;
+
+    mobileNavOpen = false;
+    const overlay = document.querySelector('.laylo-mobile-overlay');
+    const nav = document.querySelector('.laylo-mobile-nav');
+
+    if (overlay && nav) {
+        overlay.classList.remove('active');
+        nav.classList.remove('active');
+
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+}
+
+// Handle escape key to close navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && mobileNavOpen) {
+        closeMobileNav();
+    }
+});
+
+// Handle swipe gestures for mobile navigation
+let touchStartY = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', function(e) {
+    touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipeGesture();
+}, { passive: true });
+
+function handleSwipeGesture() {
+    const swipeDistance = touchStartY - touchEndY;
+    const minSwipeDistance = 50;
+
+    // Only handle swipes on the navigation area
+    const nav = document.querySelector('.laylo-mobile-nav');
+    if (!nav) return;
+
+    if (Math.abs(swipeDistance) < minSwipeDistance) return;
+
+    // Swipe down to close when navigation is open
+    if (swipeDistance < 0 && mobileNavOpen) {
+        closeMobileNav();
+    }
+}
+
+// Auto-close navigation when clicking on navigation items
+document.addEventListener('click', function(e) {
+    if (e.target.matches('.laylo-mobile-nav-item') || e.target.closest('.laylo-mobile-nav-item')) {
+        // Add a small delay to allow the navigation to complete
+        setTimeout(closeMobileNav, 200);
+    }
+});
+
+// Initialize mobile navigation on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🧭 Laylo-style mobile navigation initialized');
+});
