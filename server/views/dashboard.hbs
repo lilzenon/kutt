@@ -1,346 +1,422 @@
-{{!-- Dashboard Home Page with New Navigation --}}
+{{!-- Ultra-Modern Dashboard with Research-Based Design --}}
 
-<div class="dashboard-content">
+<div class="modern-dashboard">
     <!-- Dashboard Header -->
-    <div class="dashboard-header">
-        <div class="dashboard-header-content">
-            <h1 class="dashboard-title">Welcome back, {{user.email}}!</h1>
-            <p class="dashboard-subtitle">Manage your drops and track your audience engagement</p>
-        </div>
-        
-        <div class="dashboard-header-actions">
-            <a href="/drops/create" class="btn btn-primary">
-                <span class="btn-icon">+</span>
-                Create Drop
-            </a>
-        </div>
-    </div>
-    
-    <!-- Dashboard Stats -->
-    <div class="dashboard-stats">
-        <div class="stat-card">
-            <div class="stat-icon">📊</div>
-            <div class="stat-content">
-                <div class="stat-number">{{stats.totalDrops}}</div>
-                <div class="stat-label">Total Drops</div>
+    <div class="dashboard-hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Welcome back</h1>
+                <p class="hero-subtitle">Here's what's happening with your drops today</p>
             </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-content">
-                <div class="stat-number">{{stats.totalFans}}</div>
-                <div class="stat-label">Total Fans</div>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">📱</div>
-            <div class="stat-content">
-                <div class="stat-number">{{stats.totalSMS}}</div>
-                <div class="stat-label">SMS Sent</div>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">🚀</div>
-            <div class="stat-content">
-                <div class="stat-number">{{stats.activeDrops}}</div>
-                <div class="stat-label">Active Drops</div>
+            <div class="hero-actions">
+                <button class="action-btn secondary">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Search
+                </button>
+                <a href="/drops/create" class="action-btn primary">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Create Drop
+                </a>
             </div>
         </div>
     </div>
-    
-    <!-- Recent Activity -->
-    <div class="dashboard-section">
-        <div class="section-header">
-            <h2 class="section-title">Recent Activity</h2>
-            <a href="/analytics" class="section-link">View All</a>
-        </div>
-        
-        <div class="activity-list">
-            {{#if recentActivity}}
-                {{#each recentActivity}}
-                    <div class="activity-item">
-                        <div class="activity-icon">{{icon}}</div>
-                        <div class="activity-content">
-                            <div class="activity-title">{{title}}</div>
-                            <div class="activity-description">{{description}}</div>
-                            <div class="activity-time">{{timeAgo}}</div>
-                        </div>
-                    </div>
-                {{/each}}
-            {{else}}
-                <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <h3>No recent activity</h3>
-                    <p>Create your first drop to get started!</p>
-                    <a href="/drops/create" class="btn btn-primary">Create Drop</a>
+
+    <!-- Key Metrics Grid -->
+    <div class="metrics-grid">
+        <div class="metric-card primary">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21,15 16,10 5,21"/>
+                    </svg>
                 </div>
-            {{/if}}
+                <div class="metric-trend up">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    +12%
+                </div>
+            </div>
+            <div class="metric-value">{{stats.totalDrops}}</div>
+            <div class="metric-label">Total Drops</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="metric-trend up">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    +8%
+                </div>
+            </div>
+            <div class="metric-value">{{stats.totalFans}}</div>
+            <div class="metric-label">Total Fans</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                </div>
+                <div class="metric-trend up">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    +24%
+                </div>
+            </div>
+            <div class="metric-value">{{stats.totalSMS}}</div>
+            <div class="metric-label">SMS Sent</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                </div>
+                <div class="metric-trend neutral">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    0%
+                </div>
+            </div>
+            <div class="metric-value">{{stats.activeDrops}}</div>
+            <div class="metric-label">Active Drops</div>
         </div>
     </div>
-    
-    <!-- Your Drops Section -->
-    <div class="dashboard-section">
-        <div class="section-header">
-            <h2 class="section-title">Your Drops</h2>
-            <a href="/drops" class="section-link">Manage All</a>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+        <!-- Recent Activity -->
+        <div class="content-card">
+            <div class="card-header">
+                <h3 class="card-title">Recent Activity</h3>
+                <a href="/analytics" class="card-action">View All</a>
+            </div>
+            <div class="card-content">
+                {{#if recentActivity}}
+                    <div class="activity-timeline">
+                        {{#each recentActivity}}
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">{{title}}</div>
+                                    <div class="timeline-description">{{description}}</div>
+                                    <div class="timeline-time">{{timeAgo}}</div>
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h4>No recent activity</h4>
+                        <p>Create your first drop to get started!</p>
+                        <a href="/drops/create" class="empty-action">Create Drop</a>
+                    </div>
+                {{/if}}
+            </div>
         </div>
-        
-        {{> drops/section}}
+
+        <!-- Quick Actions -->
+        <div class="content-card">
+            <div class="card-header">
+                <h3 class="card-title">Quick Actions</h3>
+            </div>
+            <div class="card-content">
+                <div class="quick-actions">
+                    <a href="/drops/create" class="quick-action">
+                        <div class="quick-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-text">
+                            <div class="quick-action-title">Create Drop</div>
+                            <div class="quick-action-subtitle">Start a new campaign</div>
+                        </div>
+                    </a>
+
+                    <a href="/analytics" class="quick-action">
+                        <div class="quick-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-text">
+                            <div class="quick-action-title">View Analytics</div>
+                            <div class="quick-action-subtitle">Track performance</div>
+                        </div>
+                    </a>
+
+                    <a href="/messages" class="quick-action">
+                        <div class="quick-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="quick-action-text">
+                            <div class="quick-action-title">Messages</div>
+                            <div class="quick-action-subtitle">Connect with fans</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Drops Section -->
+    <div class="content-card full-width">
+        <div class="card-header">
+            <h3 class="card-title">Your Drops</h3>
+            <a href="/drops" class="card-action">Manage All</a>
+        </div>
+        <div class="card-content">
+            {{> drops/section}}
+        </div>
     </div>
 </div>
 
 <style>
-/* Dashboard Content Styles */
-.dashboard-content {
-    padding: var(--space-xl);
-    max-width: 1400px;
+/* Ultra-Modern Dashboard Styles */
+.modern-dashboard {
+    padding: 32px;
+    max-width: 1600px;
     margin: 0 auto;
+    background: var(--bg-primary);
 }
 
-.dashboard-header {
+/* Hero Section */
+.dashboard-hero {
+    margin-bottom: 40px;
+}
+
+.hero-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: var(--space-2xl);
-    gap: var(--space-xl);
+    gap: 32px;
 }
 
-.dashboard-header-content {
+.hero-text {
     flex: 1;
 }
 
-.dashboard-title {
-    font-size: 2rem;
-    font-weight: 700;
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: var(--space-sm);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
 }
 
-.dashboard-subtitle {
-    font-size: 1.1rem;
+.hero-subtitle {
+    font-size: 1.125rem;
     color: var(--text-secondary);
     margin: 0;
+    font-weight: 400;
 }
 
-.dashboard-header-actions {
+.hero-actions {
+    display: flex;
+    gap: 12px;
     flex-shrink: 0;
 }
 
-.btn {
+.action-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg);
-    border-radius: var(--radius-lg);
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
-    transition: all var(--transition-fast);
+    font-size: 14px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     cursor: pointer;
+    min-height: 44px;
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-    color: var(--text-inverse);
-    box-shadow: var(--shadow-md);
+.action-btn.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
+.action-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
 }
 
-.btn-icon {
-    font-size: 1.2rem;
-    font-weight: 900;
+.action-btn.secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
 }
 
-/* Dashboard Stats */
-.dashboard-stats {
+.action-btn.secondary:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-secondary);
+}
+
+.action-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2.5;
+}
+
+/* Metrics Grid */
+.metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-lg);
-    margin-bottom: var(--space-2xl);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
 }
 
-.stat-card {
+.metric-card {
     background: var(--bg-elevated);
     border: 1px solid var(--border-primary);
-    border-radius: var(--radius-xl);
-    padding: var(--space-xl);
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-fast);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.stat-card:hover {
+.metric-card:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border-color: var(--border-secondary);
 }
 
-.stat-icon {
-    font-size: 2.5rem;
-    width: 60px;
-    height: 60px;
+.metric-card.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.metric-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-tertiary);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.metric-card.primary .metric-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.metric-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-secondary);
+    stroke-width: 2;
+}
+
+.metric-card.primary .metric-icon svg {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.metric-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.metric-trend.up {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.metric-trend.down {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.metric-trend.neutral {
     background: var(--bg-tertiary);
-    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
 }
 
-.stat-number {
-    font-size: 2rem;
-    font-weight: 700;
+.metric-card.primary .metric-trend {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.metric-trend svg {
+    width: 12px;
+    height: 12px;
+}
+
+.metric-value {
+    font-size: 2.25rem;
+    font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: var(--space-xs);
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
 }
 
-.stat-label {
-    font-size: 0.9rem;
+.metric-card.primary .metric-value {
+    color: white;
+}
+
+.metric-label {
+    font-size: 14px;
     color: var(--text-secondary);
     font-weight: 500;
 }
 
-/* Dashboard Sections */
-.dashboard-section {
-    margin-bottom: var(--space-2xl);
+.metric-card.primary .metric-label {
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-lg);
-}
-
-.section-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-.section-link {
-    color: var(--brand-primary);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color var(--transition-fast);
-}
-
-.section-link:hover {
-    color: var(--brand-secondary);
-}
-
-/* Activity List */
-.activity-list {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-}
-
-.activity-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-lg);
-    padding: var(--space-lg);
-    border-bottom: 1px solid var(--border-primary);
-    transition: background-color var(--transition-fast);
-}
-
-.activity-item:last-child {
-    border-bottom: none;
-}
-
-.activity-item:hover {
-    background: var(--bg-tertiary);
-}
-
-.activity-icon {
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-}
-
-.activity-title {
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--space-xs);
-}
-
-.activity-description {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: var(--space-xs);
-}
-
-.activity-time {
-    color: var(--text-tertiary);
-    font-size: 0.8rem;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: var(--space-2xl);
-}
-
-.empty-icon {
-    font-size: 4rem;
-    margin-bottom: var(--space-lg);
-}
-
-.empty-state h3 {
-    font-size: 1.25rem;
-    color: var(--text-primary);
-    margin-bottom: var(--space-sm);
-}
-
-.empty-state p {
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .dashboard-content {
-        padding: var(--space-lg);
-    }
-    
-    .dashboard-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--space-lg);
-    }
-    
-    .dashboard-title {
-        font-size: 1.5rem;
-    }
-    
-    .dashboard-stats {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
-    }
-    
-    .stat-card {
-        padding: var(--space-lg);
-    }
-    
-    .section-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--space-sm);
-    }
-}
+/* Modern Dashboard Styles are now in /css/modern-dashboard.css */
 </style>
