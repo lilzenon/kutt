@@ -1,48 +1,71 @@
-{{!-- Simple Clean Dashboard --}}
+{{!-- Laylo-Style Dashboard --}}
 
-<div class="dashboard-content">
-    <!-- Header -->
+<div class="laylo-dashboard">
+    <!-- Header Section -->
     <div class="dashboard-header">
-        <h1>Dashboard</h1>
-        <a href="/drops/create" class="btn-create">+ Create Drop</a>
+        <h1 class="greeting">Good evening, BOUNCE2BOUNCE</h1>
+
+        <!-- Shortcuts -->
+        <div class="shortcuts">
+            <span class="shortcuts-label">Shortcuts</span>
+            <a href="/messages" class="shortcut-btn">
+                <span class="shortcut-icon">💬</span>
+                Send a message
+            </a>
+            <a href="/campaigns" class="shortcut-btn">
+                <span class="shortcut-icon">📸</span>
+                Run an Instagram Campaign
+            </a>
+            <a href="/drops/create" class="shortcut-btn">
+                <span class="shortcut-icon">🎵</span>
+                Create a multidrop
+            </a>
+            <a href="/merch" class="shortcut-btn">
+                <span class="shortcut-icon">👕</span>
+                Set up a merch Drop
+            </a>
+        </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>{{stats.totalDrops}}</h3>
-            <p>Total Drops</p>
+    <!-- Email Domain Setup Card -->
+    <div class="setup-card">
+        <div class="setup-icon">
+            <div class="icon-gradient"></div>
         </div>
-        <div class="stat-card">
-            <h3>{{stats.totalFans}}</h3>
-            <p>Total Fans</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{stats.totalSMS}}</h3>
-            <p>SMS Sent</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{stats.activeDrops}}</h3>
-            <p>Active Drops</p>
+        <div class="setup-content">
+            <h3>Finish setting up your email domain</h3>
+            <p>Add DMARC records to ensure better deliverability and build more trust with your fans.</p>
+            <a href="/settings/email" class="setup-link">DMARC setup guide</a>
         </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="activity-section">
-        <h2>Recent Activity</h2>
-        {{#if recentActivity}}
-            <div class="activity-list">
-                {{#each recentActivity}}
-                    <div class="activity-item">
-                        <strong>{{title}}</strong>
-                        <p>{{description}}</p>
-                        <small>{{timeAgo}}</small>
+    <!-- Dropping Soon Section -->
+    <div class="dropping-soon">
+        <h2>Dropping soon</h2>
+        <p class="section-subtitle">Announce something new, or see what you have scheduled to drop</p>
+
+        {{#if upcomingDrops.length}}
+            <div class="drops-grid">
+                {{#each upcomingDrops}}
+                    <div class="drop-card">
+                        {{#if image}}
+                            <div class="drop-image" style="background-image: url('{{image}}')"></div>
+                        {{else}}
+                            <div class="drop-image placeholder"></div>
+                        {{/if}}
+                        <div class="drop-info">
+                            <h4>{{title}}</h4>
+                            <p class="drop-date">{{formatDate scheduledDate}}</p>
+                        </div>
                     </div>
                 {{/each}}
             </div>
         {{else}}
-            <div class="empty-state">
-                <p>No recent activity. <a href="/drops/create">Create your first drop!</a></p>
+            <div class="empty-drops">
+                <a href="/drops/create" class="create-drop-btn">
+                    <span class="plus-icon">+</span>
+                    Create a Drop
+                </a>
             </div>
         {{/if}}
     </div>

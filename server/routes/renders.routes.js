@@ -229,16 +229,42 @@ router.get(
     asyncHandler(auth.jwt),
     asyncHandler(locals.user),
     (req, res) => {
+        // Sample data to match Laylo design
+        const upcomingDrops = [{
+                id: 1,
+                title: "JERSEY LOVES BASS PRESALE",
+                image: "/images/jersey-bass.jpg",
+                scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 1 week from now
+            },
+            {
+                id: 2,
+                title: "JULY 4TH PRESALE",
+                image: "/images/july4th.jpg",
+                scheduledDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) // 2 weeks from now
+            }
+        ];
+
         res.render("dashboard", {
             title: "Dashboard - BOUNCE2BOUNCE",
             layout: "layouts/dashboard",
             stats: {
-                totalDrops: 0,
-                totalFans: 0,
-                totalSMS: 0,
-                activeDrops: 0
+                totalDrops: 2,
+                totalFans: 1247,
+                totalSMS: 3891,
+                activeDrops: 1
             },
-            recentActivity: []
+            recentActivity: [{
+                    title: "New fan signup",
+                    description: "Someone joined your JERSEY LOVES BASS drop",
+                    timeAgo: "2 hours ago"
+                },
+                {
+                    title: "Drop published",
+                    description: "JULY 4TH PRESALE is now live",
+                    timeAgo: "1 day ago"
+                }
+            ],
+            upcomingDrops: upcomingDrops
         });
     }
 );
