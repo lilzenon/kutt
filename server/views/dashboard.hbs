@@ -1,268 +1,55 @@
-{{!-- Clean Dashboard Content - No Nested Layout --}}
+{{!-- Simple Clean Dashboard --}}
 
-<!-- Page Header -->
-<div class="page-header">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col">
-                <h1 class="page-title">BOUNCE2BOUNCE Dashboard</h1>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Overview</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="col-auto">
-                <a href="/drops/create" class="btn btn-primary">
-                    <i class="lni lni-plus"></i>
-                    Create Drop
-                </a>
-            </div>
-        </div>
+<div class="dashboard-content">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>Dashboard</h1>
+        <a href="/drops/create" class="btn-create">+ Create Drop</a>
     </div>
-</div>
 
     <!-- Stats Cards -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="single-info">
-                            <div class="info-icon">
-                                <i class="lni lni-cart-full"></i>
-                            </div>
-                            <div class="info-content">
-                                <h6 class="info-title">New Orders</h6>
-                                <h4 class="info-total">34567</h4>
-                                <p class="text-success">+2.00% (30 days)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="single-info">
-                            <div class="info-icon">
-                                <i class="lni lni-dollar"></i>
-                            </div>
-                            <div class="info-content">
-                                <h6 class="info-title">Total Income</h6>
-                                <h4 class="info-total">$74,567</h4>
-                                <p class="text-success">+5.45% Increased</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="single-info">
-                            <div class="info-icon">
-                                <i class="lni lni-credit-cards"></i>
-                            </div>
-                            <div class="info-content">
-                                <h6 class="info-title">Total Expense</h6>
-                                <h4 class="info-total">$24,567</h4>
-                                <p class="text-danger">-2.00% Expense</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="single-info">
-                            <div class="info-icon">
-                                <i class="lni lni-users"></i>
-                            </div>
-                            <div class="info-content">
-                                <h6 class="info-title">New User</h6>
-                                <h4 class="info-total">34567</h4>
-                                <p class="text-danger">-25.00% Earning</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{stats.totalDrops}}</h3>
+            <p>Total Drops</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{stats.totalFans}}</h3>
+            <p>Total Fans</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{stats.totalSMS}}</h3>
+            <p>SMS Sent</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{stats.activeDrops}}</h3>
+            <p>Active Drops</p>
         </div>
     </div>
 
-    <!-- Charts and Tables -->
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Chart Section -->
-            <div class="col-lg-7">
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="card-title">Yearly Stats</h6>
-                        <div class="card-action">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    Yearly
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#0">Yearly</a></li>
-                                    <li><a class="dropdown-item" href="#0">Monthly</a></li>
-                                    <li><a class="dropdown-item" href="#0">Weekly</a></li>
-                                </ul>
-                            </div>
-                        </div>
+    <!-- Recent Activity -->
+    <div class="activity-section">
+        <h2>Recent Activity</h2>
+        {{#if recentActivity}}
+            <div class="activity-list">
+                {{#each recentActivity}}
+                    <div class="activity-item">
+                        <strong>{{title}}</strong>
+                        <p>{{description}}</p>
+                        <small>{{timeAgo}}</small>
                     </div>
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <h4 class="chart-title">$245,479</h4>
-                            <div id="chart1" style="height: 300px; background: #f8f9fa; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6c757d;">
-                                Chart Area - Yearly Stats
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{/each}}
             </div>
+        {{else}}
+            <div class="empty-state">
+                <p>No recent activity. <a href="/drops/create">Create your first drop!</a></p>
+            </div>
+        {{/if}}
+    </div>
 
-            <!-- Sidebar Stats -->
-            <div class="col-lg-5">
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="card-title">Sales/Revenue</h6>
-                        <div class="card-action">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    Yearly
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#0">Yearly</a></li>
-                                    <li><a class="dropdown-item" href="#0">Monthly</a></li>
-                                    <li><a class="dropdown-item" href="#0">Weekly</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="chart2" style="height: 300px; background: #f8f9fa; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6c757d;">
-                            Sales/Revenue Chart
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Top Selling Products Table -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="card-title">Top Selling Products</h6>
-                        <div class="card-action">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    Yearly
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#0">Yearly</a></li>
-                                    <li><a class="dropdown-item" href="#0">Monthly</a></li>
-                                    <li><a class="dropdown-item" href="#0">Weekly</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Products</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Sold</th>
-                                        <th>Profit</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://via.placeholder.com/40x40" alt="Product" class="rounded me-3" width="40" height="40">
-                                                <span>Arm Chair</span>
-                                            </div>
-                                        </td>
-                                        <td>Interior</td>
-                                        <td>$345</td>
-                                        <td>43</td>
-                                        <td>$45</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                    Actions
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#0">Remove</a></li>
-                                                    <li><a class="dropdown-item" href="#0">Edit</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://via.placeholder.com/40x40" alt="Product" class="rounded me-3" width="40" height="40">
-                                                <span>Sofa</span>
-                                            </div>
-                                        </td>
-                                        <td>Interior</td>
-                                        <td>$145</td>
-                                        <td>13</td>
-                                        <td>$15</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                    Actions
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#0">Remove</a></li>
-                                                    <li><a class="dropdown-item" href="#0">Edit</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://via.placeholder.com/40x40" alt="Product" class="rounded me-3" width="40" height="40">
-                                                <span>Dining Table</span>
-                                            </div>
-                                        </td>
-                                        <td>Interior</td>
-                                        <td>$95</td>
-                                        <td>32</td>
-                                        <td>$215</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                                    Actions
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#0">Remove</a></li>
-                                                    <li><a class="dropdown-item" href="#0">Edit</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Your Drops -->
+    <div class="drops-section">
+        <h2>Your Drops</h2>
+        {{> drops/section}}
     </div>
 </div>
