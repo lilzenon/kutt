@@ -1,0 +1,507 @@
+<!-- 🔔 COMPREHENSIVE NOTIFICATION CENTER -->
+<div class="laylo-notification-center">
+    <!-- Notification Bell Icon -->
+    <div class="laylo-notification-trigger" onclick="toggleNotificationCenter()">
+        <svg class="laylo-notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="laylo-notification-badge" id="notificationBadge" style="display: none;">0</span>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div class="laylo-notification-dropdown" id="notificationDropdown">
+        <div class="laylo-notification-header">
+            <h3>Notifications</h3>
+            <div class="laylo-notification-actions">
+                <button class="laylo-btn-text" onclick="markAllAsRead()">Mark all read</button>
+                <button class="laylo-btn-text" onclick="openNotificationSettings()">Settings</button>
+            </div>
+        </div>
+
+        <!-- Notification Filters -->
+        <div class="laylo-notification-filters">
+            <button class="laylo-filter-btn active" data-filter="all">All</button>
+            <button class="laylo-filter-btn" data-filter="unread">Unread</button>
+            <button class="laylo-filter-btn" data-filter="drops">Drops</button>
+            <button class="laylo-filter-btn" data-filter="system">System</button>
+        </div>
+
+        <!-- Notification List -->
+        <div class="laylo-notification-list" id="notificationList">
+            <div class="laylo-notification-loading">
+                <div class="laylo-spinner"></div>
+                <p>Loading notifications...</p>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="laylo-notification-footer">
+            <button class="laylo-btn laylo-btn-outline" id="loadMoreBtn" onclick="loadMoreNotifications()" style="display: none;">
+                Load More
+            </button>
+            <a href="/notifications" class="laylo-btn laylo-btn-text">View All Notifications</a>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Item Template -->
+<template id="notificationTemplate">
+    <div class="laylo-notification-item" data-id="{id}" data-read="{read}">
+        <div class="laylo-notification-icon-wrapper">
+            <div class="laylo-notification-type-icon {type}">
+                <!-- Icon will be set by JavaScript -->
+            </div>
+            <div class="laylo-notification-unread-dot" style="display: {unreadDisplay};"></div>
+        </div>
+        <div class="laylo-notification-content">
+            <div class="laylo-notification-title">{title}</div>
+            <div class="laylo-notification-message">{message}</div>
+            <div class="laylo-notification-meta">
+                <span class="laylo-notification-time">{timeAgo}</span>
+                <span class="laylo-notification-category">{category}</span>
+            </div>
+        </div>
+        <div class="laylo-notification-actions">
+            <button class="laylo-notification-action-btn" onclick="markAsRead('{id}')" title="Mark as read">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                </svg>
+            </button>
+            <button class="laylo-notification-action-btn" onclick="deleteNotification('{id}')" title="Delete">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3,6 5,6 21,6"/>
+                    <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- Notification Settings Modal -->
+<div class="laylo-modal" id="notificationSettingsModal">
+    <div class="laylo-modal-content">
+        <div class="laylo-modal-header">
+            <h2>Notification Settings</h2>
+            <button class="laylo-modal-close" onclick="closeNotificationSettings()">×</button>
+        </div>
+        <div class="laylo-modal-body">
+            <div class="laylo-notification-settings">
+                <!-- Email Notifications -->
+                <div class="laylo-setting-group">
+                    <h3>Email Notifications</h3>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="emailTransactional" checked>
+                            <span class="laylo-toggle-slider"></span>
+                            Transactional emails (receipts, confirmations)
+                        </label>
+                    </div>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="emailMarketing">
+                            <span class="laylo-toggle-slider"></span>
+                            Marketing emails (promotions, updates)
+                        </label>
+                    </div>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="emailSystem" checked>
+                            <span class="laylo-toggle-slider"></span>
+                            System notifications (security, account)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SMS Notifications -->
+                <div class="laylo-setting-group">
+                    <h3>SMS Notifications</h3>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="smsTransactional" checked>
+                            <span class="laylo-toggle-slider"></span>
+                            Transactional SMS (confirmations, alerts)
+                        </label>
+                    </div>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="smsMarketing">
+                            <span class="laylo-toggle-slider"></span>
+                            Marketing SMS (promotions, campaigns)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- In-App Notifications -->
+                <div class="laylo-setting-group">
+                    <h3>In-App Notifications</h3>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="inAppDrops" checked>
+                            <span class="laylo-toggle-slider"></span>
+                            Drop updates and analytics
+                        </label>
+                    </div>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="inAppSystem" checked>
+                            <span class="laylo-toggle-slider"></span>
+                            System notifications
+                        </label>
+                    </div>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="inAppSounds" checked>
+                            <span class="laylo-toggle-slider"></span>
+                            Notification sounds
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Frequency Settings -->
+                <div class="laylo-setting-group">
+                    <h3>Frequency Settings</h3>
+                    <div class="laylo-setting-item">
+                        <label for="emailFrequency">Email frequency limit (per day):</label>
+                        <select id="emailFrequency" class="laylo-form-control">
+                            <option value="5">5 emails</option>
+                            <option value="10" selected>10 emails</option>
+                            <option value="25">25 emails</option>
+                            <option value="100">No limit</option>
+                        </select>
+                    </div>
+                    <div class="laylo-setting-item">
+                        <label for="smsFrequency">SMS frequency limit (per day):</label>
+                        <select id="smsFrequency" class="laylo-form-control">
+                            <option value="2">2 messages</option>
+                            <option value="5" selected>5 messages</option>
+                            <option value="10">10 messages</option>
+                            <option value="25">No limit</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quiet Hours -->
+                <div class="laylo-setting-group">
+                    <h3>Quiet Hours</h3>
+                    <div class="laylo-setting-item">
+                        <label class="laylo-setting-label">
+                            <input type="checkbox" id="enableQuietHours">
+                            <span class="laylo-toggle-slider"></span>
+                            Enable quiet hours (no notifications)
+                        </label>
+                    </div>
+                    <div class="laylo-setting-item" id="quietHoursSettings" style="display: none;">
+                        <div class="laylo-time-range">
+                            <label for="quietStart">From:</label>
+                            <input type="time" id="quietStart" value="22:00" class="laylo-form-control">
+                            <label for="quietEnd">To:</label>
+                            <input type="time" id="quietEnd" value="08:00" class="laylo-form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="laylo-modal-footer">
+            <button class="laylo-btn laylo-btn-outline" onclick="closeNotificationSettings()">Cancel</button>
+            <button class="laylo-btn laylo-btn-primary" onclick="saveNotificationSettings()">Save Settings</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Notification Center Styles */
+.laylo-notification-center {
+    position: relative;
+    display: inline-block;
+}
+
+.laylo-notification-trigger {
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.laylo-notification-trigger:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+}
+
+.laylo-notification-icon {
+    width: 24px;
+    height: 24px;
+    color: #6b7280;
+}
+
+.laylo-notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #ef4444;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.laylo-notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 400px;
+    max-height: 600px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+}
+
+.laylo-notification-dropdown.active {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.laylo-notification-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.laylo-notification-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.laylo-notification-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.laylo-notification-filters {
+    padding: 12px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    gap: 8px;
+}
+
+.laylo-filter-btn {
+    padding: 6px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #6b7280;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.laylo-filter-btn:hover,
+.laylo-filter-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+.laylo-notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.laylo-notification-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.laylo-notification-item:hover {
+    background-color: #f9fafb;
+}
+
+.laylo-notification-item[data-read="false"] {
+    background-color: #fef3c7;
+}
+
+.laylo-notification-icon-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.laylo-notification-type-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.laylo-notification-type-icon.email {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.laylo-notification-type-icon.sms {
+    background: #dcfce7;
+    color: #22c55e;
+}
+
+.laylo-notification-type-icon.in_app {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.laylo-notification-type-icon.system {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.laylo-notification-unread-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.laylo-notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.laylo-notification-title {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.laylo-notification-message {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.laylo-notification-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.laylo-notification-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.laylo-notification-item:hover .laylo-notification-actions {
+    opacity: 1;
+}
+
+.laylo-notification-action-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    color: #6b7280;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.laylo-notification-action-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.laylo-notification-action-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.laylo-notification-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.laylo-notification-loading {
+    padding: 40px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.laylo-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid #6366f1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .laylo-notification-dropdown {
+        width: 320px;
+        max-width: calc(100vw - 40px);
+    }
+    
+    .laylo-notification-item {
+        padding: 12px 16px;
+    }
+    
+    .laylo-notification-header,
+    .laylo-notification-filters,
+    .laylo-notification-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+</style>

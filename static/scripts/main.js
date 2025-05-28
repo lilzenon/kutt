@@ -92,6 +92,493 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// ===== COMPREHENSIVE NOTIFICATION SYSTEM =====
+
+class NotificationCenter {
+    constructor() {
+        this.notifications = [];
+        this.currentFilter = 'all';
+        this.currentOffset = 0;
+        this.hasMore = true;
+        this.isLoading = false;
+        this.unreadCount = 0;
+
+        this.initializeEventListeners();
+        this.loadNotifications();
+        this.startRealTimeUpdates();
+    }
+
+    initializeEventListeners() {
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const notificationCenter = document.querySelector('.laylo-notification-center');
+            if (notificationCenter && !notificationCenter.contains(e.target)) {
+                this.closeNotificationCenter();
+            }
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.laylo-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.setFilter(e.target.dataset.filter);
+            });
+        });
+
+        // Quiet hours toggle
+        const quietHoursToggle = document.getElementById('enableQuietHours');
+        if (quietHoursToggle) {
+            quietHoursToggle.addEventListener('change', (e) => {
+                const settings = document.getElementById('quietHoursSettings');
+                settings.style.display = e.target.checked ? 'block' : 'none';
+            });
+        }
+    }
+
+    async loadNotifications(reset = false) {
+        if (this.isLoading) return;
+
+        this.isLoading = true;
+
+        if (reset) {
+            this.currentOffset = 0;
+            this.notifications = [];
+        }
+
+        try {
+            const params = new URLSearchParams({
+                limit: 20,
+                offset: this.currentOffset,
+                unreadOnly: this.currentFilter === 'unread' ? 'true' : 'false'
+            });
+
+            if (this.currentFilter !== 'all' && this.currentFilter !== 'unread') {
+                params.append('category', this.currentFilter);
+            }
+
+            const response = await fetch(`/api/notifications?${params}`);
+            const data = await response.json();
+
+            if (data.success) {
+                if (reset) {
+                    this.notifications = data.notifications;
+                } else {
+                    this.notifications.push(...data.notifications);
+                }
+
+                this.unreadCount = data.unreadCount;
+                this.hasMore = data.hasMore;
+                this.currentOffset += data.notifications.length;
+
+                this.renderNotifications();
+                this.updateBadge();
+            }
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            this.showError('Failed to load notifications');
+        } finally {
+            this.isLoading = false;
+        }
+    }
+
+    renderNotifications() {
+        const listElement = document.getElementById('notificationList');
+        const template = document.getElementById('notificationTemplate');
+
+        if (!listElement || !template) return;
+
+        // Clear loading state
+        listElement.innerHTML = '';
+
+        if (this.notifications.length === 0) {
+            listElement.innerHTML = `
+                <div class="laylo-notification-empty">
+                    <p>No notifications found</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Render notifications
+        this.notifications.forEach(notification => {
+            const notificationElement = this.createNotificationElement(notification, template);
+            listElement.appendChild(notificationElement);
+        });
+
+        // Show/hide load more button
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = this.hasMore ? 'block' : 'none';
+        }
+    }
+
+    createNotificationElement(notification, template) {
+        const html = template.innerHTML
+            .replace(/{id}/g, notification.id)
+            .replace(/{title}/g, this.escapeHtml(notification.title || 'Notification'))
+            .replace(/{message}/g, this.escapeHtml(notification.message))
+            .replace(/{timeAgo}/g, this.formatTimeAgo(notification.created_at))
+            .replace(/{category}/g, notification.category)
+            .replace(/{type}/g, notification.type)
+            .replace(/{read}/g, notification.read_at ? 'true' : 'false')
+            .replace(/{unreadDisplay}/g, notification.read_at ? 'none' : 'block');
+
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        const element = div.firstElementChild;
+
+        // Set type icon
+        const iconElement = element.querySelector('.laylo-notification-type-icon');
+        if (iconElement) {
+            iconElement.innerHTML = this.getTypeIcon(notification.type);
+        }
+
+        // Add click handler
+        element.addEventListener('click', () => {
+            this.handleNotificationClick(notification);
+        });
+
+        return element;
+    }
+
+    getTypeIcon(type) {
+        const icons = {
+            email: '📧',
+            sms: '📱',
+            in_app: '🔔',
+            system: '⚙️',
+            drop: '🎯',
+            marketing: '📢'
+        };
+        return icons[type] || '🔔';
+    }
+
+    formatTimeAgo(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return 'Just now';
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+        if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+
+        return date.toLocaleDateString();
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    updateBadge() {
+        const badge = document.getElementById('notificationBadge');
+        if (badge) {
+            if (this.unreadCount > 0) {
+                badge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    }
+
+    setFilter(filter) {
+        this.currentFilter = filter;
+
+        // Update active filter button
+        document.querySelectorAll('.laylo-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+
+        // Reload notifications
+        this.loadNotifications(true);
+    }
+
+    async handleNotificationClick(notification) {
+        // Mark as read if unread
+        if (!notification.read_at) {
+            await this.markAsRead(notification.id);
+        }
+
+        // Handle notification-specific actions
+        if (notification.data) {
+            try {
+                const data = typeof notification.data === 'string' ?
+                    JSON.parse(notification.data) :
+                    notification.data;
+
+                if (data.url) {
+                    window.open(data.url, '_blank');
+                } else if (data.action) {
+                    this.handleNotificationAction(data.action, data);
+                }
+            } catch (error) {
+                console.error('Error handling notification click:', error);
+            }
+        }
+    }
+
+    handleNotificationAction(action, data) {
+        switch (action) {
+            case 'view_drop':
+                window.location.href = `/drops/${data.dropId}`;
+                break;
+            case 'view_analytics':
+                window.location.href = `/analytics`;
+                break;
+            case 'view_profile':
+                window.location.href = `/profile`;
+                break;
+            default:
+                console.log('Unknown notification action:', action);
+        }
+    }
+
+    async markAsRead(notificationId) {
+        try {
+            const response = await fetch(`/api/notifications/${notificationId}/read`, {
+                method: 'PUT'
+            });
+
+            if (response.ok) {
+                // Update local state
+                const notification = this.notifications.find(n => n.id === notificationId);
+                if (notification) {
+                    notification.read_at = new Date().toISOString();
+                    this.unreadCount = Math.max(0, this.unreadCount - 1);
+                    this.updateBadge();
+                    this.renderNotifications();
+                }
+            }
+        } catch (error) {
+            console.error('Failed to mark notification as read:', error);
+        }
+    }
+
+    async markAllAsRead() {
+        try {
+            const response = await fetch('/api/notifications/read-all', {
+                method: 'PUT'
+            });
+
+            if (response.ok) {
+                // Update local state
+                this.notifications.forEach(n => {
+                    n.read_at = new Date().toISOString();
+                });
+                this.unreadCount = 0;
+                this.updateBadge();
+                this.renderNotifications();
+            }
+        } catch (error) {
+            console.error('Failed to mark all notifications as read:', error);
+        }
+    }
+
+    async loadMoreNotifications() {
+        await this.loadNotifications(false);
+    }
+
+    startRealTimeUpdates() {
+        // Poll for new notifications every 30 seconds
+        setInterval(() => {
+            this.checkForNewNotifications();
+        }, 30000);
+    }
+
+    async checkForNewNotifications() {
+        try {
+            const response = await fetch('/api/notifications?limit=1&offset=0');
+            const data = await response.json();
+
+            if (data.success && data.notifications.length > 0) {
+                const latestNotification = data.notifications[0];
+                const existingNotification = this.notifications.find(n => n.id === latestNotification.id);
+
+                if (!existingNotification) {
+                    // New notification found
+                    this.notifications.unshift(latestNotification);
+                    this.unreadCount = data.unreadCount;
+                    this.updateBadge();
+                    this.renderNotifications();
+                    this.showNewNotificationToast(latestNotification);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to check for new notifications:', error);
+        }
+    }
+
+    showNewNotificationToast(notification) {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = 'laylo-notification-toast';
+        toast.innerHTML = `
+            <div class="laylo-toast-content">
+                <strong>${this.escapeHtml(notification.title || 'New Notification')}</strong>
+                <p>${this.escapeHtml(notification.message)}</p>
+            </div>
+        `;
+
+        document.body.appendChild(toast);
+
+        // Show toast
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Hide toast after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 5000);
+    }
+
+    showError(message) {
+        const listElement = document.getElementById('notificationList');
+        if (listElement) {
+            listElement.innerHTML = `
+                <div class="laylo-notification-error">
+                    <p>${message}</p>
+                    <button onclick="notificationCenter.loadNotifications(true)">Retry</button>
+                </div>
+            `;
+        }
+    }
+
+    closeNotificationCenter() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            dropdown.classList.remove('active');
+        }
+    }
+}
+
+// Global notification functions
+function toggleNotificationCenter() {
+    const dropdown = document.getElementById('notificationDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+
+        if (dropdown.classList.contains('active')) {
+            // Load notifications when opening
+            if (window.notificationCenter) {
+                window.notificationCenter.loadNotifications(true);
+            }
+        }
+    }
+}
+
+function markAllAsRead() {
+    if (window.notificationCenter) {
+        window.notificationCenter.markAllAsRead();
+    }
+}
+
+function markAsRead(notificationId) {
+    if (window.notificationCenter) {
+        window.notificationCenter.markAsRead(notificationId);
+    }
+}
+
+function loadMoreNotifications() {
+    if (window.notificationCenter) {
+        window.notificationCenter.loadMoreNotifications();
+    }
+}
+
+function openNotificationSettings() {
+    const modal = document.getElementById('notificationSettingsModal');
+    if (modal) {
+        modal.style.display = 'block';
+        loadNotificationSettings();
+    }
+}
+
+function closeNotificationSettings() {
+    const modal = document.getElementById('notificationSettingsModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+async function loadNotificationSettings() {
+    try {
+        const response = await fetch('/api/notifications/preferences');
+        const data = await response.json();
+
+        if (data.success) {
+            // Populate settings form with current preferences
+            data.preferences.forEach(pref => {
+                const elementId = `${pref.notification_type}${pref.category.charAt(0).toUpperCase() + pref.category.slice(1)}`;
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.checked = pref.enabled;
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Failed to load notification settings:', error);
+    }
+}
+
+async function saveNotificationSettings() {
+    try {
+        const preferences = [];
+
+        // Collect all preference settings
+        const settingElements = document.querySelectorAll('#notificationSettingsModal input[type="checkbox"]');
+        settingElements.forEach(element => {
+            const id = element.id;
+            let type, category;
+
+            if (id.startsWith('email')) {
+                type = 'email';
+                category = id.replace('email', '').toLowerCase();
+            } else if (id.startsWith('sms')) {
+                type = 'sms';
+                category = id.replace('sms', '').toLowerCase();
+            } else if (id.startsWith('inApp')) {
+                type = 'in_app';
+                category = id.replace('inApp', '').toLowerCase();
+            }
+
+            if (type && category && category !== 'sounds') {
+                preferences.push({
+                    notification_type: type,
+                    category: category,
+                    enabled: element.checked
+                });
+            }
+        });
+
+        const response = await fetch('/api/notifications/preferences', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ preferences })
+        });
+
+        if (response.ok) {
+            closeNotificationSettings();
+            // Show success message
+            alert('Notification settings saved successfully!');
+        } else {
+            alert('Failed to save notification settings. Please try again.');
+        }
+    } catch (error) {
+        console.error('Failed to save notification settings:', error);
+        alert('Failed to save notification settings. Please try again.');
+    }
+}
+
+// Initialize notification center when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.querySelector('.laylo-notification-center')) {
+        window.notificationCenter = new NotificationCenter();
+    }
+});
+
 // add text/html accept header to receive html instead of json for the requests
 document.body.addEventListener("htmx:configRequest", function(evt) {
     evt.detail.headers["Accept"] = "text/html,*/*";

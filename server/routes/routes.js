@@ -11,6 +11,7 @@ const auth = require("./auth.routes");
 const drops = require("./drops.routes");
 const publicDrops = require("./public_drops.routes");
 const sms = require("./sms.routes");
+const notifications = require("./notification.routes");
 
 const renderRouter = Router();
 renderRouter.use(renders);
@@ -25,6 +26,7 @@ apiRouter.use("/users", user);
 apiRouter.use("/auth", auth);
 apiRouter.use("/drops", drops);
 apiRouter.use("/sms", sms);
+apiRouter.use("/notifications", notifications);
 
 module.exports = {
     api: apiRouter,

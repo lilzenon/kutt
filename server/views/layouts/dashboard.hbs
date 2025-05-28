@@ -268,13 +268,19 @@
 
         <!-- Main Content Area -->
         <main class="laylo-main">
-            <!-- Mobile Navigation Trigger -->
-            <div class="laylo-mobile-trigger" id="mobileTrigger">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
+            <!-- Header with Mobile Trigger and Notifications -->
+            <div class="laylo-main-header">
+                <!-- Mobile Navigation Trigger -->
+                <div class="laylo-mobile-trigger" id="mobileTrigger">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </div>
+
+                <!-- Notification Center -->
+                {{> notification-center}}
             </div>
 
             {{{body}}}
