@@ -1,211 +1,217 @@
-{{!-- Ultra-Modern Dashboard with Research-Based Design --}}
+{{!-- PlainAdmin-Style Dashboard --}}
 
-<div class="modern-dashboard">
+<div class="plainadmin-dashboard">
     <!-- Dashboard Header -->
-    <div class="dashboard-hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">Welcome back</h1>
-                <p class="hero-subtitle">Here's what's happening with your drops today</p>
+    <div class="dashboard-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="page-title">BOUNCE2BOUNCE Dashboard</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Overview</li>
+                    </ol>
+                </nav>
             </div>
-            <div class="hero-actions">
-                <button class="action-btn secondary">
-                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                    Search
-                </button>
-                <a href="/drops/create" class="action-btn primary">
-                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="header-right">
+                <a href="/drops/create" class="btn btn-primary">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
-                    Create Drop
+                    New Drop
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Key Metrics Grid -->
-    <div class="metrics-grid">
-        <div class="metric-card primary">
-            <div class="metric-header">
-                <div class="metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <polyline points="21,15 16,10 5,21"/>
-                    </svg>
-                </div>
-                <div class="metric-trend up">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                        <polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                    +12%
+    <!-- Stats Cards Row -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="stats-info">
+                            <h6 class="stats-title">Total Drops</h6>
+                            <h3 class="stats-value">{{stats.totalDrops}}</h3>
+                            <span class="stats-change text-success">
+                                <i class="icon-arrow-up"></i> +2.00%
+                            </span>
+                        </div>
+                        <div class="stats-icon bg-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21,15 16,10 5,21"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="metric-value">{{stats.totalDrops}}</div>
-            <div class="metric-label">Total Drops</div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <div class="metric-trend up">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                        <polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                    +8%
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="stats-info">
+                            <h6 class="stats-title">Total Fans</h6>
+                            <h3 class="stats-value">{{stats.totalFans}}</h3>
+                            <span class="stats-change text-success">
+                                <i class="icon-arrow-up"></i> +8.45%
+                            </span>
+                        </div>
+                        <div class="stats-icon bg-success">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="metric-value">{{stats.totalFans}}</div>
-            <div class="metric-label">Total Fans</div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    </svg>
-                </div>
-                <div class="metric-trend up">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                        <polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                    +24%
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="stats-info">
+                            <h6 class="stats-title">SMS Sent</h6>
+                            <h3 class="stats-value">{{stats.totalSMS}}</h3>
+                            <span class="stats-change text-success">
+                                <i class="icon-arrow-up"></i> +24.00%
+                            </span>
+                        </div>
+                        <div class="stats-icon bg-info">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="metric-value">{{stats.totalSMS}}</div>
-            <div class="metric-label">SMS Sent</div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-header">
-                <div class="metric-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12,6 12,12 16,14"/>
-                    </svg>
-                </div>
-                <div class="metric-trend neutral">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="20" x2="18" y2="10"/>
-                        <line x1="12" y1="20" x2="12" y2="4"/>
-                        <line x1="6" y1="20" x2="6" y2="14"/>
-                    </svg>
-                    0%
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="stats-info">
+                            <h6 class="stats-title">Active Drops</h6>
+                            <h3 class="stats-value">{{stats.activeDrops}}</h3>
+                            <span class="stats-change text-warning">
+                                <i class="icon-arrow-right"></i> 0.00%
+                            </span>
+                        </div>
+                        <div class="stats-icon bg-warning">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="metric-value">{{stats.activeDrops}}</div>
-            <div class="metric-label">Active Drops</div>
         </div>
     </div>
 
-    <!-- Main Content Grid -->
-    <div class="content-grid">
+    <!-- Main Content Row -->
+    <div class="row">
         <!-- Recent Activity -->
-        <div class="content-card">
-            <div class="card-header">
-                <h3 class="card-title">Recent Activity</h3>
-                <a href="/analytics" class="card-action">View All</a>
-            </div>
-            <div class="card-content">
-                {{#if recentActivity}}
-                    <div class="activity-timeline">
-                        {{#each recentActivity}}
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <div class="timeline-title">{{title}}</div>
-                                    <div class="timeline-description">{{description}}</div>
-                                    <div class="timeline-time">{{timeAgo}}</div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Activity</h5>
+                    <a href="/analytics" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {{#if recentActivity}}
+                        <div class="activity-timeline">
+                            {{#each recentActivity}}
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">{{title}}</div>
+                                        <div class="timeline-description">{{description}}</div>
+                                        <div class="timeline-time">{{timeAgo}}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        {{/each}}
-                    </div>
-                {{else}}
-                    <div class="empty-state">
-                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <h4>No recent activity</h4>
-                        <p>Create your first drop to get started!</p>
-                        <a href="/drops/create" class="empty-action">Create Drop</a>
-                    </div>
-                {{/if}}
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h4>No recent activity</h4>
+                            <p>Create your first drop to get started!</p>
+                            <a href="/drops/create" class="btn btn-primary">Create Drop</a>
+                        </div>
+                    {{/if}}
+                </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="content-card">
-            <div class="card-header">
-                <h3 class="card-title">Quick Actions</h3>
-            </div>
-            <div class="card-content">
-                <div class="quick-actions">
-                    <a href="/drops/create" class="quick-action">
-                        <div class="quick-action-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <!-- Quick Actions Sidebar -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="/drops/create" class="btn btn-outline-primary d-flex align-items-center">
+                            <svg class="me-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
-                        </div>
-                        <div class="quick-action-text">
-                            <div class="quick-action-title">Create Drop</div>
-                            <div class="quick-action-subtitle">Start a new campaign</div>
-                        </div>
-                    </a>
+                            Create New Drop
+                        </a>
 
-                    <a href="/analytics" class="quick-action">
-                        <div class="quick-action-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <a href="/analytics" class="btn btn-outline-success d-flex align-items-center">
+                            <svg class="me-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="18" y1="20" x2="18" y2="10"/>
                                 <line x1="12" y1="20" x2="12" y2="4"/>
                                 <line x1="6" y1="20" x2="6" y2="14"/>
                             </svg>
-                        </div>
-                        <div class="quick-action-text">
-                            <div class="quick-action-title">View Analytics</div>
-                            <div class="quick-action-subtitle">Track performance</div>
-                        </div>
-                    </a>
+                            View Analytics
+                        </a>
 
-                    <a href="/messages" class="quick-action">
-                        <div class="quick-action-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <a href="/messages" class="btn btn-outline-info d-flex align-items-center">
+                            <svg class="me-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                             </svg>
-                        </div>
-                        <div class="quick-action-text">
-                            <div class="quick-action-title">Messages</div>
-                            <div class="quick-action-subtitle">Connect with fans</div>
-                        </div>
-                    </a>
+                            Messages
+                        </a>
+
+                        <a href="/settings" class="btn btn-outline-secondary d-flex align-items-center">
+                            <svg class="me-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            Settings
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Your Drops Section -->
-    <div class="content-card full-width">
-        <div class="card-header">
-            <h3 class="card-title">Your Drops</h3>
-            <a href="/drops" class="card-action">Manage All</a>
-        </div>
-        <div class="card-content">
-            {{> drops/section}}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Your Drops</h5>
+                    <a href="/drops" class="btn btn-sm btn-outline-primary">Manage All</a>
+                </div>
+                <div class="card-body">
+                    {{> drops/section}}
+                </div>
+            </div>
         </div>
     </div>
 </div>

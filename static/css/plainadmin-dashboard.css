@@ -1,0 +1,370 @@
+/**
+ * 🎨 PLAINADMIN DASHBOARD STYLES
+ * 
+ * Professional Bootstrap 5 admin template implementation
+ * Based on PlainAdmin open-source template
+ * Clean, modern, and responsive design
+ */
+
+/* Dashboard Container */
+.plainadmin-dashboard {
+    padding: 0;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+}
+
+.breadcrumb {
+    margin: 0;
+    background: transparent;
+    padding: 0;
+    font-size: 14px;
+}
+
+.breadcrumb-item {
+    color: #6c757d;
+}
+
+.breadcrumb-item a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: #2980b9;
+}
+
+.breadcrumb-item.active {
+    color: #495057;
+}
+
+.header-right {
+    flex-shrink: 0;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+    color: white;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+}
+
+/* Stats Cards */
+.stats-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.stats-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
+}
+
+.stats-card .card-body {
+    padding: 24px;
+}
+
+.stats-info {
+    flex: 1;
+}
+
+.stats-title {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stats-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+    line-height: 1;
+}
+
+.stats-change {
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stats-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stats-icon svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+    stroke-width: 2;
+}
+
+.stats-icon.bg-primary {
+    background: #3498db;
+}
+
+.stats-icon.bg-success {
+    background: #27ae60;
+}
+
+.stats-icon.bg-info {
+    background: #17a2b8;
+}
+
+.stats-icon.bg-warning {
+    background: #f39c12;
+}
+
+/* Content Cards */
+.card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background: white;
+    margin-bottom: 24px;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px 24px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* Tables */
+.table {
+    margin: 0;
+}
+
+.table th {
+    border-top: none;
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+    padding: 16px 12px;
+}
+
+.table td {
+    border-top: 1px solid #e9ecef;
+    padding: 16px 12px;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Activity Timeline */
+.activity-timeline {
+    position: relative;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    position: relative;
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 40px;
+    bottom: -16px;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.timeline-marker {
+    width: 16px;
+    height: 16px;
+    background: #3498db;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.timeline-description {
+    color: #6c757d;
+    font-size: 13px;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.timeline-time {
+    color: #adb5bd;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+}
+
+.empty-state svg {
+    width: 64px;
+    height: 64px;
+    color: #adb5bd;
+    margin-bottom: 20px;
+}
+
+.empty-state h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #495057;
+    margin: 0 0 8px 0;
+}
+
+.empty-state p {
+    color: #6c757d;
+    margin: 0 0 24px 0;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .plainadmin-dashboard {
+        padding: 0;
+    }
+    
+    .dashboard-header {
+        padding: 16px 20px;
+        margin-bottom: 20px;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .stats-card .card-body {
+        padding: 20px;
+    }
+    
+    .stats-value {
+        font-size: 1.75rem;
+    }
+    
+    .stats-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .stats-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+    
+    .card-header {
+        padding: 16px 20px;
+    }
+}
