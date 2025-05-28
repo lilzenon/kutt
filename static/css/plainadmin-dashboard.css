@@ -1,19 +1,108 @@
 /**
  * 🎨 PLAINADMIN DASHBOARD STYLES
- * 
- * Professional Bootstrap 5 admin template implementation
- * Based on PlainAdmin open-source template
+ *
+ * Complete PlainAdmin template implementation
+ * Based on PlainAdmin open-source Bootstrap admin template
  * Clean, modern, and responsive design
  */
 
-/* Dashboard Container */
-.plainadmin-dashboard {
+
+/* Main Content */
+
+.main-content {
     padding: 0;
     background: #f8f9fa;
     min-height: 100vh;
 }
 
+
+/* Breadcrumb Wrapper */
+
+.breadcrumb-wrapper {
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+.page-title h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+}
+
+.breadcrumb {
+    margin: 0;
+    background: transparent;
+    padding: 0;
+    font-size: 14px;
+}
+
+.breadcrumb-item a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+
+/* Single Info Cards */
+
+.single-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.info-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-icon i {
+    font-size: 24px;
+    color: white;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-title {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-total {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 4px 0;
+    line-height: 1;
+}
+
+.info-content p {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 500;
+}
+
+
 /* Dashboard Header */
+
 .dashboard-header {
     background: white;
     border-bottom: 1px solid #e9ecef;
@@ -67,7 +156,9 @@
     flex-shrink: 0;
 }
 
+
 /* Buttons */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -100,7 +191,9 @@
     stroke-width: 2;
 }
 
+
 /* Stats Cards */
+
 .stats-card {
     border: 1px solid #e9ecef;
     border-radius: 8px;
@@ -180,7 +273,9 @@
     background: #f39c12;
 }
 
+
 /* Content Cards */
+
 .card {
     border: 1px solid #e9ecef;
     border-radius: 8px;
@@ -213,7 +308,9 @@
     margin: 0;
 }
 
+
 /* Tables */
+
 .table {
     margin: 0;
 }
@@ -237,7 +334,9 @@
     background-color: #f8f9fa;
 }
 
+
 /* Activity Timeline */
+
 .activity-timeline {
     position: relative;
 }
@@ -295,7 +394,9 @@
     font-weight: 500;
 }
 
+
 /* Empty State */
+
 .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -321,49 +422,42 @@
     font-size: 14px;
 }
 
+
 /* Responsive Design */
+
 @media (max-width: 768px) {
     .plainadmin-dashboard {
         padding: 0;
     }
-    
     .dashboard-header {
         padding: 16px 20px;
         margin-bottom: 20px;
     }
-    
     .header-content {
         flex-direction: column;
         gap: 16px;
         align-items: stretch;
     }
-    
     .page-title {
         font-size: 1.5rem;
     }
-    
     .stats-card .card-body {
         padding: 20px;
     }
-    
     .stats-value {
         font-size: 1.75rem;
     }
-    
     .stats-icon {
         width: 50px;
         height: 50px;
     }
-    
     .stats-icon svg {
         width: 20px;
         height: 20px;
     }
-    
     .card-body {
         padding: 20px;
     }
-    
     .card-header {
         padding: 16px 20px;
     }
