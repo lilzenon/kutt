@@ -1,32 +1,248 @@
 /**
- * 🎨 ULTRA-MODERN DASHBOARD STYLES
- * 
- * Research-based implementation following:
- * - Dribbble dashboard design trends 2024
- * - Material Design 3 principles
- * - Apple Human Interface Guidelines
- * - Modern SaaS dashboard patterns
+ * 🎨 AURORA-STYLE DASHBOARD
+ *
+ * Exact implementation based on Aurora dashboard design:
+ * - Clean white background
+ * - Subtle card shadows
+ * - Professional spacing
+ * - Minimal color palette
  */
 
+
+/* Aurora Dashboard Base */
+
+.modern-dashboard {
+    padding: 32px;
+    max-width: 1600px;
+    margin: 0 auto;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+
+/* Hero Section - Aurora Style */
+
+.dashboard-hero {
+    margin-bottom: 32px;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.01em;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+    margin: 0;
+    font-weight: 400;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    min-height: 40px;
+}
+
+.action-btn.primary {
+    background: #3498db;
+    color: white;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.action-btn.primary:hover {
+    background: #2980b9;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.action-btn.secondary {
+    background: white;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn.secondary:hover {
+    background: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.action-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+}
+
+
+/* Aurora Metrics Grid */
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.metric-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 24px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #dee2e6;
+}
+
+.metric-card.primary {
+    background: #3498db;
+    color: white;
+    border: none;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.metric-icon {
+    width: 40px;
+    height: 40px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.metric-card.primary .metric-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.metric-icon svg {
+    width: 20px;
+    height: 20px;
+    color: #6c757d;
+    stroke-width: 2;
+}
+
+.metric-card.primary .metric-icon svg {
+    color: white;
+}
+
+.metric-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.metric-trend.up {
+    background: #d4edda;
+    color: #155724;
+}
+
+.metric-trend.down {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.metric-trend.neutral {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.metric-card.primary .metric-trend {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.metric-trend svg {
+    width: 12px;
+    height: 12px;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+}
+
+.metric-card.primary .metric-value {
+    color: white;
+}
+
+.metric-label {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.metric-card.primary .metric-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
 /* Content Grid */
+
 .content-grid {
     display: grid;
     grid-template-columns: 1fr 400px;
-    gap: 32px;
-    margin-bottom: 40px;
+    gap: 24px;
+    margin-bottom: 32px;
 }
 
 .content-card {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-primary);
-    border-radius: 16px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
     overflow: hidden;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .content-card:hover {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    border-color: var(--border-secondary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #dee2e6;
 }
 
 .content-card.full-width {
@@ -37,34 +253,36 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 24px 0;
-    margin-bottom: 20px;
+    padding: 20px 20px 0;
+    margin-bottom: 16px;
 }
 
 .card-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2c3e50;
     margin: 0;
 }
 
 .card-action {
-    color: var(--brand-primary);
+    color: #3498db;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 14px;
     transition: color 0.2s ease;
 }
 
 .card-action:hover {
-    color: var(--brand-secondary);
+    color: #2980b9;
 }
 
 .card-content {
-    padding: 0 24px 24px;
+    padding: 0 20px 20px;
 }
 
+
 /* Activity Timeline */
+
 .activity-timeline {
     position: relative;
 }
@@ -122,7 +340,9 @@
     font-weight: 500;
 }
 
+
 /* Quick Actions */
+
 .quick-actions {
     display: flex;
     flex-direction: column;
@@ -183,7 +403,9 @@
     font-size: 12px;
 }
 
+
 /* Empty State */
+
 .empty-state {
     text-align: center;
     padding: 48px 24px;
@@ -228,7 +450,9 @@
     transform: translateY(-1px);
 }
 
+
 /* Mobile Responsive */
+
 @media (max-width: 1024px) {
     .content-grid {
         grid-template-columns: 1fr;
@@ -240,57 +464,45 @@
     .modern-dashboard {
         padding: 20px;
     }
-    
     .hero-content {
         flex-direction: column;
         gap: 20px;
     }
-    
     .hero-title {
         font-size: 2rem;
     }
-    
     .hero-actions {
         width: 100%;
         justify-content: stretch;
     }
-    
     .action-btn {
         flex: 1;
         justify-content: center;
     }
-    
     .metrics-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    
     .metric-card {
         padding: 20px;
     }
-    
     .metric-value {
         font-size: 1.875rem;
     }
-    
     .card-header {
         padding: 20px 20px 0;
         margin-bottom: 16px;
     }
-    
     .card-content {
         padding: 0 20px 20px;
     }
-    
     .quick-action {
         padding: 14px;
     }
-    
     .quick-action-icon {
         width: 36px;
         height: 36px;
     }
-    
     .quick-action-icon svg {
         width: 18px;
         height: 18px;
@@ -301,37 +513,29 @@
     .modern-dashboard {
         padding: 16px;
     }
-    
     .hero-title {
         font-size: 1.75rem;
     }
-    
     .hero-actions {
         flex-direction: column;
     }
-    
     .metrics-grid {
         gap: 12px;
     }
-    
     .metric-card {
         padding: 16px;
     }
-    
     .metric-header {
         margin-bottom: 12px;
     }
-    
     .metric-icon {
         width: 40px;
         height: 40px;
     }
-    
     .metric-icon svg {
         width: 20px;
         height: 20px;
     }
-    
     .metric-value {
         font-size: 1.5rem;
     }

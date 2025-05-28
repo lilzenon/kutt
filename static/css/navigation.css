@@ -19,9 +19,9 @@
 
 .dashboard-sidebar {
     width: var(--nav-width);
-    background-color: var(--nav-bg);
-    border-right: 1px solid var(--nav-border);
-    box-shadow: var(--shadow-lg);
+    background: #2c3e50;
+    border-right: none;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
@@ -44,65 +44,37 @@
 /* ===== SIDEBAR HEADER ===== */
 
 .sidebar-header {
-    padding: var(--space-xl) var(--space-lg);
-    border-bottom: 1px solid var(--nav-border);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    position: relative;
-    overflow: hidden;
-}
-
-.sidebar-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
-    animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0%,
-    100% {
-        transform: translateX(-100%);
-    }
-    50% {
-        transform: translateX(100%);
-    }
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
 }
 
 .sidebar-logo {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    color: var(--text-inverse);
+    gap: 12px;
+    color: white;
     text-decoration: none;
-    font-weight: 800;
-    font-size: 1.25rem;
-    position: relative;
-    z-index: 1;
-    transition: transform var(--transition-fast);
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: opacity 0.2s ease;
 }
 
 .sidebar-logo:hover {
-    transform: scale(1.02);
+    opacity: 0.8;
 }
 
 .sidebar-logo-icon {
-    width: 36px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--radius-lg);
+    width: 32px;
+    height: 32px;
+    background: #3498db;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-inverse);
-    font-weight: 900;
+    color: white;
+    font-weight: 700;
     font-size: 14px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -114,32 +86,28 @@
 
 .create-drop-btn {
     width: 100%;
-    background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-    color: var(--text-inverse);
+    background: #3498db;
+    color: white;
     border: none;
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg) var(--space-xl);
+    border-radius: 8px;
+    padding: 12px 16px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 14px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    box-shadow: var(--shadow-md);
+    gap: 8px;
     text-decoration: none;
 }
 
 .create-drop-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
-    background: linear-gradient(135deg, var(--brand-secondary), var(--brand-primary));
+    background: #2980b9;
 }
 
 .create-drop-btn:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-md);
+    transform: scale(0.98);
 }
 
 .create-drop-icon {
@@ -182,54 +150,26 @@
 .nav-link {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-md) var(--space-lg);
-    color: var(--nav-text);
+    gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    border-radius: var(--radius-lg);
+    border-radius: 8px;
     font-weight: 500;
-    font-size: 0.95rem;
-    transition: all var(--transition-fast);
-    position: relative;
-    overflow: hidden;
-}
-
-.nav-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left var(--transition-slow);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    margin: 2px 16px;
 }
 
 .nav-link:hover {
-    background-color: var(--nav-item-hover);
-    transform: translateX(4px);
-}
-
-.nav-link:hover::before {
-    left: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
 }
 
 .nav-link.active {
-    background-color: var(--nav-item-active);
-    color: var(--nav-text-active);
+    background-color: #3498db;
+    color: white;
     font-weight: 600;
-    box-shadow: var(--shadow-sm);
-}
-
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: var(--brand-primary);
-    border-radius: 0 2px 2px 0;
 }
 
 .nav-icon {
