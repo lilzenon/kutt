@@ -1,6 +1,6 @@
 /**
  * 📧 EMAIL NOTIFICATION CHANNEL
- * 
+ *
  * Enterprise-grade email delivery with:
  * - Multiple provider support (SendGrid, Mailgun, SMTP)
  * - Delivery tracking and webhooks
@@ -17,6 +17,7 @@ class EmailChannel {
     constructor() {
         this.transporter = null;
         this.provider = env.EMAIL_PROVIDER || 'smtp';
+        this.isEnabled = false;
         this.initializeTransporter();
     }
 
@@ -25,50 +26,74 @@ class EmailChannel {
      */
     initializeTransporter() {
         try {
+            // Check if email configuration is available
+            const hasMailConfig = env.MAIL_HOST && env.MAIL_USER && env.MAIL_PASSWORD;
+            const hasSendGridConfig = env.SENDGRID_API_KEY;
+            const hasMailgunConfig = env.MAILGUN_USERNAME && env.MAILGUN_PASSWORD;
+
+            if (!hasMailConfig && !hasSendGridConfig && !hasMailgunConfig) {
+                console.log('📧 Email channel disabled (no configuration found)');
+                this.isEnabled = false;
+                return;
+            }
+
             switch (this.provider.toLowerCase()) {
                 case 'sendgrid':
-                    this.transporter = nodemailer.createTransporter({
-                        service: 'SendGrid',
-                        auth: {
-                            user: 'apikey',
-                            pass: env.SENDGRID_API_KEY
-                        }
-                    });
+                    if (hasSendGridConfig) {
+                        this.transporter = nodemailer.createTransporter({
+                            service: 'SendGrid',
+                            auth: {
+                                user: 'apikey',
+                                pass: env.SENDGRID_API_KEY
+                            }
+                        });
+                        this.isEnabled = true;
+                    }
                     break;
 
                 case 'mailgun':
-                    this.transporter = nodemailer.createTransporter({
-                        service: 'Mailgun',
-                        auth: {
-                            user: env.MAILGUN_USERNAME,
-                            pass: env.MAILGUN_PASSWORD
-                        }
-                    });
+                    if (hasMailgunConfig) {
+                        this.transporter = nodemailer.createTransporter({
+                            service: 'Mailgun',
+                            auth: {
+                                user: env.MAILGUN_USERNAME,
+                                pass: env.MAILGUN_PASSWORD
+                            }
+                        });
+                        this.isEnabled = true;
+                    }
                     break;
 
                 case 'smtp':
                 default:
-                    this.transporter = nodemailer.createTransporter({
-                        host: env.MAIL_HOST,
-                        port: env.MAIL_PORT,
-                        secure: env.MAIL_SECURE === 'true',
-                        auth: {
-                            user: env.MAIL_USER,
-                            pass: env.MAIL_PASSWORD
-                        },
-                        pool: true,
-                        maxConnections: 5,
-                        maxMessages: 100,
-                        rateDelta: 1000,
-                        rateLimit: 5
-                    });
+                    if (hasMailConfig) {
+                        this.transporter = nodemailer.createTransporter({
+                            host: env.MAIL_HOST,
+                            port: env.MAIL_PORT || 587,
+                            secure: env.MAIL_SECURE === 'true',
+                            auth: {
+                                user: env.MAIL_USER,
+                                pass: env.MAIL_PASSWORD
+                            },
+                            pool: true,
+                            maxConnections: 5,
+                            maxMessages: 100,
+                            rateDelta: 1000,
+                            rateLimit: 5
+                        });
+                        this.isEnabled = true;
+                    }
                     break;
             }
 
-            console.log(`📧 Email channel initialized with ${this.provider}`);
+            if (this.isEnabled) {
+                console.log(`📧 Email channel initialized with ${this.provider}`);
+            } else {
+                console.log(`📧 Email channel disabled (${this.provider} not configured)`);
+            }
         } catch (error) {
             console.error('🚨 Failed to initialize email transporter:', error);
-            throw error;
+            this.isEnabled = false;
         }
     }
 
@@ -81,8 +106,8 @@ class EmailChannel {
      */
     async send(recipient, content, options = {}) {
         try {
-            if (!this.transporter) {
-                throw new Error('Email transporter not initialized');
+            if (!this.isEnabled || !this.transporter) {
+                throw new Error('Email service not available');
             }
 
             // Validate email address
@@ -214,7 +239,7 @@ class EmailChannel {
     addTrackingToHtml(html, options) {
         // Add tracking pixel
         const trackingPixel = `<img src="${env.SITE_URL}/api/notifications/${options.notificationId}/track/open" width="1" height="1" style="display:none;" />`;
-        
+
         // Insert tracking pixel before closing body tag
         html = html.replace('</body>', `${trackingPixel}</body>`);
 

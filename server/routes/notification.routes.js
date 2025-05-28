@@ -1,6 +1,6 @@
 /**
  * 🔔 NOTIFICATION API ROUTES
- * 
+ *
  * Comprehensive notification management with:
  * - Send notifications (single/bulk)
  * - User preference management
@@ -13,8 +13,8 @@
 
 const express = require('express');
 const router = express.Router();
-const asyncHandler = require('express-async-handler');
-const auth = require('../handlers/auth');
+const asyncHandler = require('../utils/asyncHandler');
+const auth = require('../handlers/auth.handler');
 const notificationService = require('../services/notification/notification.service');
 const db = require('../knex');
 
@@ -22,9 +22,9 @@ const db = require('../knex');
  * Send a notification
  * POST /api/notifications/send
  */
-router.post('/send', 
+router.post('/send',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const {
                 userId,
@@ -78,7 +78,7 @@ router.post('/send',
  */
 router.post('/send-bulk',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const { notifications } = req.body;
 
@@ -134,15 +134,15 @@ router.post('/send-bulk',
  */
 router.get('/',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const userId = req.user.id;
             const {
                 type = null,
-                category = null,
-                unreadOnly = false,
-                limit = 50,
-                offset = 0
+                    category = null,
+                    unreadOnly = false,
+                    limit = 50,
+                    offset = 0
             } = req.query;
 
             let query = db('notifications')
@@ -198,7 +198,7 @@ router.get('/',
  */
 router.put('/:id/read',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const notificationId = req.params.id;
             const userId = req.user.id;
@@ -245,7 +245,7 @@ router.put('/:id/read',
  */
 router.put('/read-all',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const userId = req.user.id;
 
@@ -284,7 +284,7 @@ router.put('/read-all',
  */
 router.get('/preferences',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const userId = req.user.id;
 
@@ -313,7 +313,7 @@ router.get('/preferences',
  */
 router.put('/preferences',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const userId = req.user.id;
             const { preferences } = req.body;
@@ -372,7 +372,7 @@ router.put('/preferences',
  */
 router.post('/channels',
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const userId = req.user.id;
             const {
@@ -426,7 +426,7 @@ router.post('/channels',
  * Email tracking pixel
  * GET /api/notifications/:id/track/open
  */
-router.get('/:id/track/open', async (req, res) => {
+router.get('/:id/track/open', async(req, res) => {
     try {
         const notificationId = req.params.id;
 
@@ -456,7 +456,7 @@ router.get('/:id/track/open', async (req, res) => {
  * Email click tracking
  * GET /api/notifications/:id/track/click
  */
-router.get('/:id/track/click', async (req, res) => {
+router.get('/:id/track/click', async(req, res) => {
     try {
         const notificationId = req.params.id;
         const targetUrl = req.query.url;

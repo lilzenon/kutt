@@ -140,7 +140,7 @@ async function batchInsert(tableName, data, chunkSize = 1000) {
  * Performance monitoring
  */
 function enableQueryLogging() {
-  if (env.NODE_ENV === 'development') {
+  if (env.NODE_ENV === 'development' && crmDb) {
     crmDb.on('query', (query) => {
       console.log('🔍 CRM Query:', query.sql);
       if (query.bindings && query.bindings.length > 0) {
@@ -151,7 +151,7 @@ function enableQueryLogging() {
 }
 
 // Enable query logging in development
-if (env.NODE_ENV === 'development') {
+if (env.NODE_ENV === 'development' && crmDb) {
   enableQueryLogging();
 }
 

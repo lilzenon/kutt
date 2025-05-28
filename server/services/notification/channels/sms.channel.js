@@ -1,6 +1,6 @@
 /**
  * 📱 SMS NOTIFICATION CHANNEL
- * 
+ *
  * Enterprise-grade SMS delivery with:
  * - Twilio integration with fallback providers
  * - Delivery status tracking
@@ -10,7 +10,13 @@
  * - Message segmentation for long messages
  */
 
-const twilio = require('twilio');
+let twilio;
+try {
+    twilio = require('twilio');
+} catch (error) {
+    console.log('📱 Twilio not installed, SMS channel will be disabled');
+}
+
 const env = require('../../../env');
 
 class SMSChannel {
@@ -30,6 +36,10 @@ class SMSChannel {
         }
 
         try {
+            if (!twilio) {
+                throw new Error('Twilio library not available');
+            }
+
             if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN) {
                 throw new Error('Twilio credentials not configured');
             }
@@ -72,7 +82,7 @@ class SMSChannel {
 
             // Send SMS
             console.log(`📱 Sending SMS to ${normalizedPhone}...`);
-            
+
             const messageOptions = {
                 body: message,
                 to: normalizedPhone,
@@ -219,13 +229,13 @@ class SMSChannel {
 
         // Check for opt-out keywords
         const optOutKeywords = ['STOP', 'UNSUBSCRIBE', 'QUIT', 'END', 'CANCEL'];
-        const isOptOut = optOutKeywords.some(keyword => 
+        const isOptOut = optOutKeywords.some(keyword =>
             body.toUpperCase().trim().includes(keyword)
         );
 
         if (isOptOut) {
             await this.processOptOut(from);
-            
+
             // Send confirmation
             await this.sendOptOutConfirmation(from);
         }
@@ -237,10 +247,10 @@ class SMSChannel {
     async processOptOut(phoneNumber) {
         try {
             console.log(`📱 Processing opt-out for ${phoneNumber}`);
-            
+
             // This would update your database to mark the phone number as opted out
             // and disable SMS notifications for this user
-            
+
         } catch (error) {
             console.error('🚨 Error processing opt-out:', error);
         }
@@ -252,7 +262,7 @@ class SMSChannel {
     async sendOptOutConfirmation(phoneNumber) {
         try {
             const confirmationMessage = 'You have been unsubscribed from SMS notifications. Reply START to resubscribe.';
-            
+
             await this.client.messages.create({
                 body: confirmationMessage,
                 to: phoneNumber,
