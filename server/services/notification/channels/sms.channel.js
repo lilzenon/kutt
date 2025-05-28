@@ -22,7 +22,7 @@ const env = require('../../../env');
 class SMSChannel {
     constructor() {
         this.client = null;
-        this.isEnabled = env.SMS_ENABLED === 'true';
+        this.isEnabled = process.env.SMS_ENABLED === 'true';
         this.initializeClient();
     }
 
@@ -40,11 +40,11 @@ class SMSChannel {
                 throw new Error('Twilio library not available');
             }
 
-            if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN) {
+            if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
                 throw new Error('Twilio credentials not configured');
             }
 
-            this.client = twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
+            this.client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
             console.log('📱 SMS channel initialized with Twilio');
         } catch (error) {
             console.error('🚨 Failed to initialize SMS client:', error);
@@ -86,18 +86,18 @@ class SMSChannel {
             const messageOptions = {
                 body: message,
                 to: normalizedPhone,
-                from: env.TWILIO_PHONE_NUMBER
+                from: process.env.TWILIO_PHONE_NUMBER
             };
 
             // Use messaging service if available
-            if (env.TWILIO_MESSAGING_SERVICE_SID) {
-                messageOptions.messagingServiceSid = env.TWILIO_MESSAGING_SERVICE_SID;
+            if (process.env.TWILIO_MESSAGING_SERVICE_SID) {
+                messageOptions.messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
                 delete messageOptions.from;
             }
 
             // Add status callback for delivery tracking
-            if (env.SITE_URL) {
-                messageOptions.statusCallback = `${env.SITE_URL}/api/notifications/sms/webhook/status`;
+            if (process.env.SITE_URL) {
+                messageOptions.statusCallback = `${process.env.SITE_URL}/api/notifications/sms/webhook/status`;
             }
 
             const result = await this.client.messages.create(messageOptions);
@@ -266,7 +266,7 @@ class SMSChannel {
             await this.client.messages.create({
                 body: confirmationMessage,
                 to: phoneNumber,
-                from: env.TWILIO_PHONE_NUMBER
+                from: process.env.TWILIO_PHONE_NUMBER
             });
 
             console.log(`✅ Opt-out confirmation sent to ${phoneNumber}`);
@@ -285,7 +285,7 @@ class SMSChannel {
             }
 
             // Test by fetching account info
-            const account = await this.client.api.accounts(env.TWILIO_ACCOUNT_SID).fetch();
+            const account = await this.client.api.accounts(process.env.TWILIO_ACCOUNT_SID).fetch();
             console.log(`✅ SMS connection test successful - Account: ${account.friendlyName}`);
             return true;
         } catch (error) {

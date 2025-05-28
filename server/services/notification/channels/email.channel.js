@@ -16,7 +16,7 @@ const env = require('../../../env');
 class EmailChannel {
     constructor() {
         this.transporter = null;
-        this.provider = env.EMAIL_PROVIDER || 'smtp';
+        this.provider = process.env.EMAIL_PROVIDER || 'smtp';
         this.isEnabled = false;
         this.initializeTransporter();
     }
@@ -27,9 +27,9 @@ class EmailChannel {
     initializeTransporter() {
         try {
             // Check if email configuration is available
-            const hasMailConfig = env.MAIL_HOST && env.MAIL_USER && env.MAIL_PASSWORD;
-            const hasSendGridConfig = env.SENDGRID_API_KEY;
-            const hasMailgunConfig = env.MAILGUN_USERNAME && env.MAILGUN_PASSWORD;
+            const hasMailConfig = process.env.MAIL_HOST && process.env.MAIL_USER && process.env.MAIL_PASSWORD;
+            const hasSendGridConfig = process.env.SENDGRID_API_KEY;
+            const hasMailgunConfig = process.env.MAILGUN_USERNAME && process.env.MAILGUN_PASSWORD;
 
             if (!hasMailConfig && !hasSendGridConfig && !hasMailgunConfig) {
                 console.log('📧 Email channel disabled (no configuration found)');
@@ -44,7 +44,7 @@ class EmailChannel {
                             service: 'SendGrid',
                             auth: {
                                 user: 'apikey',
-                                pass: env.SENDGRID_API_KEY
+                                pass: process.env.SENDGRID_API_KEY
                             }
                         });
                         this.isEnabled = true;
@@ -56,8 +56,8 @@ class EmailChannel {
                         this.transporter = nodemailer.createTransporter({
                             service: 'Mailgun',
                             auth: {
-                                user: env.MAILGUN_USERNAME,
-                                pass: env.MAILGUN_PASSWORD
+                                user: process.env.MAILGUN_USERNAME,
+                                pass: process.env.MAILGUN_PASSWORD
                             }
                         });
                         this.isEnabled = true;
@@ -68,12 +68,12 @@ class EmailChannel {
                 default:
                     if (hasMailConfig) {
                         this.transporter = nodemailer.createTransporter({
-                            host: env.MAIL_HOST,
-                            port: env.MAIL_PORT || 587,
-                            secure: env.MAIL_SECURE === 'true',
+                            host: process.env.MAIL_HOST,
+                            port: process.env.MAIL_PORT || 587,
+                            secure: process.env.MAIL_SECURE === 'true',
                             auth: {
-                                user: env.MAIL_USER,
-                                pass: env.MAIL_PASSWORD
+                                user: process.env.MAIL_USER,
+                                pass: process.env.MAIL_PASSWORD
                             },
                             pool: true,
                             maxConnections: 5,
@@ -117,7 +117,7 @@ class EmailChannel {
 
             // Prepare email options
             const mailOptions = {
-                from: env.MAIL_FROM || env.MAIL_USER,
+                from: process.env.MAIL_FROM || process.env.MAIL_USER,
                 to: recipient,
                 subject: content.title || 'Notification from BOUNCE2BOUNCE',
                 text: content.message,
@@ -130,7 +130,7 @@ class EmailChannel {
             };
 
             // Add tracking pixels and links if enabled
-            if (env.EMAIL_TRACKING_ENABLED === 'true') {
+            if (process.env.EMAIL_TRACKING_ENABLED === 'true') {
                 mailOptions.html = this.addTrackingToHtml(mailOptions.html, options);
             }
 
@@ -238,7 +238,7 @@ class EmailChannel {
      */
     addTrackingToHtml(html, options) {
         // Add tracking pixel
-        const trackingPixel = `<img src="${env.SITE_URL}/api/notifications/${options.notificationId}/track/open" width="1" height="1" style="display:none;" />`;
+        const trackingPixel = `<img src="${process.env.SITE_URL}/api/notifications/${options.notificationId}/track/open" width="1" height="1" style="display:none;" />`;
 
         // Insert tracking pixel before closing body tag
         html = html.replace('</body>', `${trackingPixel}</body>`);
@@ -246,7 +246,7 @@ class EmailChannel {
         // Add click tracking to links (simplified implementation)
         html = html.replace(
             /<a\s+href="([^"]+)"/g,
-            `<a href="${env.SITE_URL}/api/notifications/${options.notificationId}/track/click?url=$1"`
+            `<a href="${process.env.SITE_URL}/api/notifications/${options.notificationId}/track/click?url=$1"`
         );
 
         return html;
