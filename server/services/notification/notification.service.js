@@ -1,6 +1,6 @@
 /**
  * 🔔 COMPREHENSIVE NOTIFICATION SERVICE
- * 
+ *
  * Enterprise-grade notification system with:
  * - Multi-channel delivery (email, SMS, push, in-app)
  * - Real-time delivery tracking
@@ -10,7 +10,7 @@
  * - Event-driven architecture
  * - GDPR compliance
  * - Retry mechanisms with exponential backoff
- * 
+ *
  * Based on industry best practices from:
  * - Firebase Cloud Messaging
  * - AWS SNS/SES
@@ -21,7 +21,7 @@
 const db = require("../../knex");
 const { crmDb } = require("../../config/crm-database");
 const EventEmitter = require('events');
-const handlebars = require('handlebars');
+const hbs = require('hbs');
 
 class NotificationService extends EventEmitter {
     constructor() {
@@ -30,10 +30,10 @@ class NotificationService extends EventEmitter {
         this.rateLimits = new Map();
         this.retryQueue = [];
         this.isProcessing = false;
-        
+
         // Initialize channels
         this.initializeChannels();
-        
+
         // Start background processors
         this.startRetryProcessor();
         this.startRateLimitCleaner();
@@ -45,18 +45,18 @@ class NotificationService extends EventEmitter {
     initializeChannels() {
         // Email channel
         this.channels.set('email', require('./channels/email.channel'));
-        
+
         // SMS channel
         this.channels.set('sms', require('./channels/sms.channel'));
-        
+
         // Push notification channels
         this.channels.set('push_ios', require('./channels/push-ios.channel'));
         this.channels.set('push_android', require('./channels/push-android.channel'));
         this.channels.set('push_web', require('./channels/push-web.channel'));
-        
+
         // In-app notification channel
         this.channels.set('in_app', require('./channels/in-app.channel'));
-        
+
         console.log('🔔 Notification channels initialized');
     }
 
@@ -121,10 +121,10 @@ class NotificationService extends EventEmitter {
 
             // Send notification
             const result = await this.deliverNotification(notification);
-            
+
             // Update rate limit counter
             await this.updateRateLimit(userId, type, category);
-            
+
             return result;
 
         } catch (error) {
@@ -288,16 +288,19 @@ class NotificationService extends EventEmitter {
                 .first();
 
             if (template) {
-                const compiledTemplate = handlebars.compile(template.body_template);
+                // Use hbs.handlebars to access the Handlebars instance
+                const Handlebars = hbs.handlebars;
+
+                const compiledTemplate = Handlebars.compile(template.body_template);
                 content.message = compiledTemplate(content.data);
 
                 if (template.subject) {
-                    const compiledSubject = handlebars.compile(template.subject);
+                    const compiledSubject = Handlebars.compile(template.subject);
                     content.title = compiledSubject(content.data);
                 }
 
                 if (template.html_template) {
-                    const compiledHtml = handlebars.compile(template.html_template);
+                    const compiledHtml = Handlebars.compile(template.html_template);
                     content.html = compiledHtml(content.data);
                 }
             }
@@ -311,7 +314,7 @@ class NotificationService extends EventEmitter {
      */
     async checkRateLimit(userId, type, category) {
         const preferences = await this.getUserPreferences(userId, type, category);
-        const limit = preferences.settings?.frequency_limit || 100; // Default 100/day
+        const limit = preferences.settings ? .frequency_limit || 100; // Default 100/day
 
         const windowStart = new Date();
         windowStart.setHours(0, 0, 0, 0);
@@ -422,7 +425,7 @@ class NotificationService extends EventEmitter {
      * Start retry processor
      */
     startRetryProcessor() {
-        setInterval(async () => {
+        setInterval(async() => {
             if (this.isProcessing || this.retryQueue.length === 0) return;
 
             this.isProcessing = true;
@@ -446,7 +449,7 @@ class NotificationService extends EventEmitter {
      * Start rate limit cleaner
      */
     startRateLimitCleaner() {
-        setInterval(async () => {
+        setInterval(async() => {
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
 
