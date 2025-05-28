@@ -371,11 +371,24 @@ function registerHandlebarsHelpers() {
     hbs.registerHelper("formatDate", function(date, formatString) {
         if (!date) return "";
         const parsedDate = parseDatetime(date);
-        return format(parsedDate, formatString);
+        if (formatString) {
+            return format(parsedDate, formatString);
+        }
+        // Default format for our new pages
+        return format(parsedDate, "MMM d, yyyy");
     });
 
     hbs.registerHelper("getContrastColor", function(hexColor) {
         return getContrastColor(hexColor);
+    });
+
+    hbs.registerHelper("eq", function(a, b) {
+        return a === b;
+    });
+
+    hbs.registerHelper("getInitials", function(name) {
+        if (!name) return "";
+        return name.split(" ").map(n => n[0]).join("").toUpperCase();
     });
 
     const blocks = {};

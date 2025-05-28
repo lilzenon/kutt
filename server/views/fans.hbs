@@ -1,0 +1,319 @@
+<!-- Fans Page -->
+<div class="laylo-page">
+    <!-- Page Header -->
+    <div class="laylo-page-header">
+        <div class="laylo-page-title">
+            <h1>Fans</h1>
+            <p class="laylo-page-subtitle">Manage your fan base and view analytics</p>
+        </div>
+        <div class="laylo-page-actions">
+            <button class="laylo-btn laylo-btn-outline" onclick="exportFans()">
+                <svg class="laylo-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7,10 12,15 17,10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export
+            </button>
+            <button class="laylo-btn laylo-btn-primary" data-bs-toggle="modal" data-bs-target="#importFansModal">
+                <svg class="laylo-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Import Fans
+            </button>
+        </div>
+    </div>
+
+    <!-- Fans Content -->
+    <div class="laylo-page-content">
+        <!-- Fan Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.totalFans}}</div>
+                        <div class="laylo-stat-label">Total Fans</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.newFansThisWeek}}</div>
+                        <div class="laylo-stat-label">New This Week</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.engagementRate}}%</div>
+                        <div class="laylo-stat-label">Engagement Rate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v6.5l4.5 4.5"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.avgResponseTime}}</div>
+                        <div class="laylo-stat-label">Avg Response Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fans Table -->
+        <div class="laylo-card">
+            <div class="laylo-card-header">
+                <h3>Fan List</h3>
+                <div class="laylo-card-actions">
+                    <div class="laylo-search-box">
+                        <input type="text" id="fanSearch" class="laylo-form-control" placeholder="Search fans...">
+                        <svg class="laylo-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <select class="laylo-form-control" id="fanFilter">
+                        <option value="all">All Fans</option>
+                        <option value="active">Active</option>
+                        <option value="new">New</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="laylo-card-body">
+                {{#if fans.length}}
+                    <div class="laylo-table-responsive">
+                        <table class="laylo-table">
+                            <thead>
+                                <tr>
+                                    <th>Contact</th>
+                                    <th>Location</th>
+                                    <th>Join Date</th>
+                                    <th>Acq. Channel</th>
+                                    <th>RSVP Count</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each fans}}
+                                <tr class="laylo-fan-row" data-fan-id="{{this.id}}">
+                                    <td>
+                                        <div class="laylo-fan-contact">
+                                            <div class="laylo-fan-avatar">
+                                                {{#if this.avatar}}
+                                                    <img src="{{this.avatar}}" alt="{{this.name}}">
+                                                {{else}}
+                                                    <span class="laylo-fan-initials">{{getInitials this.name}}</span>
+                                                {{/if}}
+                                            </div>
+                                            <div class="laylo-fan-info">
+                                                <div class="laylo-fan-name">{{this.name}}</div>
+                                                <div class="laylo-fan-email">{{this.email}}</div>
+                                                {{#if this.phone}}
+                                                    <div class="laylo-fan-phone">{{this.phone}}</div>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="laylo-fan-location">
+                                            {{#if this.location}}
+                                                {{this.location.city}}, {{this.location.state}}
+                                            {{else}}
+                                                <span class="text-muted">Unknown</span>
+                                            {{/if}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="laylo-fan-date">{{formatDate this.joinedAt}}</div>
+                                    </td>
+                                    <td>
+                                        <span class="laylo-badge laylo-badge-{{this.acquisitionChannel}}">
+                                            {{this.acquisitionChannel}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="laylo-fan-rsvp">{{this.rsvpCount}}</div>
+                                    </td>
+                                    <td>
+                                        <span class="laylo-badge laylo-badge-{{this.status}}">
+                                            {{this.status}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="laylo-table-actions">
+                                            <button class="laylo-btn laylo-btn-sm laylo-btn-outline" onclick="viewFan('{{this.id}}')">
+                                                View
+                                            </button>
+                                            <button class="laylo-btn laylo-btn-sm laylo-btn-text" onclick="sendMessage('{{this.id}}')">
+                                                Message
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="laylo-pagination">
+                        <div class="laylo-pagination-info">
+                            Showing {{pagination.start}} to {{pagination.end}} of {{pagination.total}} fans
+                        </div>
+                        <div class="laylo-pagination-controls">
+                            {{#if pagination.hasPrev}}
+                                <button class="laylo-btn laylo-btn-outline laylo-btn-sm" onclick="loadPage({{pagination.prevPage}})">
+                                    Previous
+                                </button>
+                            {{/if}}
+                            {{#if pagination.hasNext}}
+                                <button class="laylo-btn laylo-btn-outline laylo-btn-sm" onclick="loadPage({{pagination.nextPage}})">
+                                    Next
+                                </button>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="laylo-empty-state">
+                        <div class="laylo-empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3>No fans yet</h3>
+                        <p>Start building your fan base by creating and sharing drops.</p>
+                        <a href="/drops/create" class="laylo-btn laylo-btn-primary">
+                            Create Your First Drop
+                        </a>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Fans Modal -->
+<div class="modal fade" id="importFansModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Import Fans</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="importFansForm" class="laylo-form">
+                    <div class="laylo-form-group">
+                        <label for="fanFile">CSV File</label>
+                        <input type="file" id="fanFile" name="file" class="laylo-form-control" accept=".csv" required>
+                        <small class="laylo-form-text">
+                            Upload a CSV file with columns: name, email, phone (optional)
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="laylo-btn laylo-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="importFansForm" class="laylo-btn laylo-btn-primary">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Search functionality
+document.getElementById('fanSearch').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('.laylo-fan-row');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+});
+
+// Filter functionality
+document.getElementById('fanFilter').addEventListener('change', function() {
+    const filter = this.value;
+    const rows = document.querySelectorAll('.laylo-fan-row');
+    
+    rows.forEach(row => {
+        if (filter === 'all') {
+            row.style.display = '';
+        } else {
+            const status = row.querySelector('.laylo-badge').textContent.toLowerCase();
+            row.style.display = status === filter ? '' : 'none';
+        }
+    });
+});
+
+// Fan actions
+function viewFan(id) {
+    window.location.href = `/fans/${id}`;
+}
+
+function sendMessage(id) {
+    window.location.href = `/messages/new?recipient=${id}`;
+}
+
+function exportFans() {
+    window.location.href = '/api/fans/export';
+}
+
+function loadPage(page) {
+    window.location.href = `/fans?page=${page}`;
+}
+
+// Import form handling
+document.getElementById('importFansForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    try {
+        const response = await fetch('/api/fans/import', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Failed to import fans. Please check your file format.');
+        }
+    } catch (error) {
+        alert('An error occurred. Please try again.');
+    }
+});
+</script>

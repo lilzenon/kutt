@@ -1,0 +1,214 @@
+<!-- Profile Page -->
+<div class="laylo-page">
+    <!-- Page Header -->
+    <div class="laylo-page-header">
+        <div class="laylo-page-title">
+            <h1>Profile</h1>
+            <p class="laylo-page-subtitle">Manage your account settings and preferences</p>
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="laylo-page-content">
+        <div class="row">
+            <!-- Profile Information -->
+            <div class="col-lg-8">
+                <div class="laylo-card">
+                    <div class="laylo-card-header">
+                        <h3>Profile Information</h3>
+                        <p>Update your account's profile information and email address.</p>
+                    </div>
+                    <div class="laylo-card-body">
+                        <form id="profileForm" class="laylo-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="laylo-form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" id="firstName" name="firstName" class="laylo-form-control" value="{{user.firstName}}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="laylo-form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName" class="laylo-form-control" value="{{user.lastName}}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="laylo-form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" class="laylo-form-control" value="{{user.email}}" required>
+                            </div>
+
+                            <div class="laylo-form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" class="laylo-form-control" value="{{user.username}}" required>
+                                <small class="laylo-form-text">Your public profile URL: bounce2bounce.com/{{user.username}}</small>
+                            </div>
+
+                            <div class="laylo-form-group">
+                                <label for="bio">Bio</label>
+                                <textarea id="bio" name="bio" class="laylo-form-control" rows="4" placeholder="Tell us about yourself...">{{user.bio}}</textarea>
+                            </div>
+
+                            <div class="laylo-form-actions">
+                                <button type="submit" class="laylo-btn laylo-btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="laylo-card">
+                    <div class="laylo-card-header">
+                        <h3>Change Password</h3>
+                        <p>Ensure your account is using a long, random password to stay secure.</p>
+                    </div>
+                    <div class="laylo-card-body">
+                        <form id="passwordForm" class="laylo-form">
+                            <div class="laylo-form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" name="currentPassword" class="laylo-form-control" required>
+                            </div>
+
+                            <div class="laylo-form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" name="newPassword" class="laylo-form-control" required>
+                            </div>
+
+                            <div class="laylo-form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="laylo-form-control" required>
+                            </div>
+
+                            <div class="laylo-form-actions">
+                                <button type="submit" class="laylo-btn laylo-btn-primary">Update Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Sidebar -->
+            <div class="col-lg-4">
+                <!-- Profile Avatar -->
+                <div class="laylo-card">
+                    <div class="laylo-card-header">
+                        <h3>Profile Photo</h3>
+                    </div>
+                    <div class="laylo-card-body text-center">
+                        <div class="laylo-avatar-large">
+                            <span class="laylo-avatar-initials">B2B</span>
+                        </div>
+                        <div class="mt-3">
+                            <button class="laylo-btn laylo-btn-outline">Change Photo</button>
+                            <button class="laylo-btn laylo-btn-text">Remove</button>
+                        </div>
+                        <small class="laylo-form-text">JPG, GIF or PNG. 1MB max.</small>
+                    </div>
+                </div>
+
+                <!-- Account Stats -->
+                <div class="laylo-card">
+                    <div class="laylo-card-header">
+                        <h3>Account Statistics</h3>
+                    </div>
+                    <div class="laylo-card-body">
+                        <div class="laylo-stat-item">
+                            <div class="laylo-stat-label">Total Drops</div>
+                            <div class="laylo-stat-value">{{stats.totalDrops}}</div>
+                        </div>
+                        <div class="laylo-stat-item">
+                            <div class="laylo-stat-label">Total Fans</div>
+                            <div class="laylo-stat-value">{{stats.totalFans}}</div>
+                        </div>
+                        <div class="laylo-stat-item">
+                            <div class="laylo-stat-label">Total Links</div>
+                            <div class="laylo-stat-value">{{stats.totalLinks}}</div>
+                        </div>
+                        <div class="laylo-stat-item">
+                            <div class="laylo-stat-label">Member Since</div>
+                            <div class="laylo-stat-value">{{formatDate user.createdAt}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success/Error Messages -->
+<div id="profileMessages"></div>
+
+<script>
+// Profile form handling
+document.getElementById('profileForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/profile', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            showMessage('Profile updated successfully!', 'success');
+        } else {
+            showMessage('Failed to update profile. Please try again.', 'error');
+        }
+    } catch (error) {
+        showMessage('An error occurred. Please try again.', 'error');
+    }
+});
+
+// Password form handling
+document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    if (data.newPassword !== data.confirmPassword) {
+        showMessage('Passwords do not match.', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/profile/password', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            showMessage('Password updated successfully!', 'success');
+            this.reset();
+        } else {
+            showMessage('Failed to update password. Please check your current password.', 'error');
+        }
+    } catch (error) {
+        showMessage('An error occurred. Please try again.', 'error');
+    }
+});
+
+function showMessage(message, type) {
+    const messagesDiv = document.getElementById('profileMessages');
+    messagesDiv.innerHTML = `
+        <div class="laylo-alert laylo-alert-${type}">
+            ${message}
+        </div>
+    `;
+    
+    setTimeout(() => {
+        messagesDiv.innerHTML = '';
+    }, 5000);
+}
+</script>

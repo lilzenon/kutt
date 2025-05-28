@@ -46,7 +46,13 @@ router.get(
     "/settings",
     asyncHandler(auth.jwtPage),
     asyncHandler(locals.user),
-    asyncHandler(renders.settings)
+    (req, res) => {
+        res.render("settings", {
+            title: "Settings - BOUNCE2BOUNCE",
+            layout: "layouts/dashboard",
+            currentPage: "settings"
+        });
+    }
 );
 
 router.get(
@@ -247,6 +253,7 @@ router.get(
         res.render("dashboard", {
             title: "Dashboard - BOUNCE2BOUNCE",
             layout: "layouts/dashboard",
+            currentPage: "dashboard",
             stats: {
                 totalDrops: 2,
                 totalFans: 1247,
@@ -275,6 +282,125 @@ router.get(
     asyncHandler(locals.user),
     (req, res) => {
         res.render("sms_dashboard", { title: "SMS Dashboard - BOUNCE2BOUNCE" });
+    }
+);
+
+// New Laylo-style pages
+router.get(
+    "/profile",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    (req, res) => {
+        res.render("profile", {
+            title: "Profile - BOUNCE2BOUNCE",
+            layout: "layouts/dashboard",
+            currentPage: "profile",
+            stats: {
+                totalDrops: 2,
+                totalFans: 1247,
+                totalLinks: 156,
+            }
+        });
+    }
+);
+
+router.get(
+    "/messages",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    (req, res) => {
+        const messages = [{
+                id: 1,
+                subject: "Welcome to JERSEY LOVES BASS",
+                preview: "Thanks for joining! Get ready for an amazing experience...",
+                status: "sent",
+                recipientCount: 1247,
+                createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+            },
+            {
+                id: 2,
+                subject: "JULY 4TH PRESALE Announcement",
+                preview: "Big news! Our July 4th presale is coming soon...",
+                status: "scheduled",
+                recipientCount: 1500,
+                createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
+            }
+        ];
+
+        res.render("messages", {
+            title: "Messages - BOUNCE2BOUNCE",
+            layout: "layouts/dashboard",
+            currentPage: "messages",
+            stats: {
+                totalMessages: 12,
+                deliveryRate: 98.5,
+                openRate: 76.3,
+                totalRecipients: 1247
+            },
+            messages: messages
+        });
+    }
+);
+
+router.get(
+    "/fans",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    (req, res) => {
+        const fans = [{
+                id: 1,
+                name: "Alex Johnson",
+                email: "alex@example.com",
+                phone: "+1 (555) 123-4567",
+                location: { city: "New York", state: "NY" },
+                joinedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+                acquisitionChannel: "drop",
+                rsvpCount: 3,
+                status: "active"
+            },
+            {
+                id: 2,
+                name: "Sarah Williams",
+                email: "sarah@example.com",
+                phone: "+1 (555) 987-6543",
+                location: { city: "Los Angeles", state: "CA" },
+                joinedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+                acquisitionChannel: "social",
+                rsvpCount: 1,
+                status: "active"
+            },
+            {
+                id: 3,
+                name: "Mike Chen",
+                email: "mike@example.com",
+                location: { city: "Chicago", state: "IL" },
+                joinedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                acquisitionChannel: "referral",
+                rsvpCount: 2,
+                status: "new"
+            }
+        ];
+
+        res.render("fans", {
+            title: "Fans - BOUNCE2BOUNCE",
+            layout: "layouts/dashboard",
+            currentPage: "fans",
+            stats: {
+                totalFans: 1247,
+                newFansThisWeek: 23,
+                engagementRate: 76.3,
+                avgResponseTime: "2.3h"
+            },
+            fans: fans,
+            pagination: {
+                start: 1,
+                end: 3,
+                total: 1247,
+                hasPrev: false,
+                hasNext: true,
+                nextPage: 2
+            }
+        });
     }
 );
 

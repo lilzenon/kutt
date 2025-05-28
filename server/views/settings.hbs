@@ -1,19 +1,171 @@
-{{> header}}
-<section id="settings" class="section-container">
-  <h1 class="settings-welcome">
-    Welcome, <span>{{user.email}}</span>.
-  </h1>
-  <hr />
-  {{> settings/domain/index}}
-  <hr />
-  {{> settings/apikey}}
-  <hr />
-  {{> settings/change_password}}
-  <hr />
-  {{#if mail_enabled}}
-    {{> settings/change_email}}
-    <hr />
-  {{/if}}
-  {{> settings/delete_account}}
-</section>
-{{> footer}}
+<!-- Settings Page -->
+<div class="laylo-page">
+    <!-- Page Header -->
+    <div class="laylo-page-header">
+        <div class="laylo-page-title">
+            <h1>Settings</h1>
+            <p class="laylo-page-subtitle">Manage your account preferences and integrations</p>
+        </div>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="laylo-page-content">
+        <div class="row">
+            <!-- Settings Navigation -->
+            <div class="col-lg-3">
+                <div class="laylo-settings-nav">
+                    <a href="#general" class="laylo-settings-nav-item active" data-section="general">
+                        <svg class="laylo-settings-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        General
+                    </a>
+                    <a href="#account" class="laylo-settings-nav-item" data-section="account">
+                        <svg class="laylo-settings-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Account
+                    </a>
+                    <a href="#domains" class="laylo-settings-nav-item" data-section="domains">
+                        <svg class="laylo-settings-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        Domains
+                    </a>
+                    <a href="#api" class="laylo-settings-nav-item" data-section="api">
+                        <svg class="laylo-settings-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16,18 22,12 16,6"/>
+                            <polyline points="8,6 2,12 8,18"/>
+                        </svg>
+                        API Keys
+                    </a>
+                    <a href="#security" class="laylo-settings-nav-item" data-section="security">
+                        <svg class="laylo-settings-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        Security
+                    </a>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div class="col-lg-9">
+                <!-- General Settings -->
+                <div id="general-section" class="laylo-settings-section active">
+                    <div class="laylo-card">
+                        <div class="laylo-card-header">
+                            <h3>General Settings</h3>
+                            <p>Manage your basic account preferences</p>
+                        </div>
+                        <div class="laylo-card-body">
+                            <form class="laylo-form">
+                                <div class="laylo-form-group">
+                                    <label for="timezone">Timezone</label>
+                                    <select id="timezone" name="timezone" class="laylo-form-control">
+                                        <option value="America/New_York">Eastern Time (ET)</option>
+                                        <option value="America/Chicago">Central Time (CT)</option>
+                                        <option value="America/Denver">Mountain Time (MT)</option>
+                                        <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                                    </select>
+                                </div>
+
+                                <div class="laylo-form-group">
+                                    <label for="language">Language</label>
+                                    <select id="language" name="language" class="laylo-form-control">
+                                        <option value="en">English</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                    </select>
+                                </div>
+
+                                <div class="laylo-form-actions">
+                                    <button type="submit" class="laylo-btn laylo-btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div id="account-section" class="laylo-settings-section">
+                    <div class="laylo-card">
+                        <div class="laylo-card-header">
+                            <h3>Account Information</h3>
+                            <p>Welcome, <strong>{{user.email}}</strong></p>
+                        </div>
+                        <div class="laylo-card-body">
+                            {{#if mail_enabled}}
+                            {{> settings/change_email}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domains Settings -->
+                <div id="domains-section" class="laylo-settings-section">
+                    <div class="laylo-card">
+                        <div class="laylo-card-header">
+                            <h3>Custom Domains</h3>
+                            <p>Manage your custom domains for shortened links</p>
+                        </div>
+                        <div class="laylo-card-body">
+                            {{> settings/domain/index}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Settings -->
+                <div id="api-section" class="laylo-settings-section">
+                    <div class="laylo-card">
+                        <div class="laylo-card-header">
+                            <h3>API Keys</h3>
+                            <p>Manage your API keys for programmatic access</p>
+                        </div>
+                        <div class="laylo-card-body">
+                            {{> settings/apikey}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div id="security-section" class="laylo-settings-section">
+                    <div class="laylo-card">
+                        <div class="laylo-card-header">
+                            <h3>Security Settings</h3>
+                            <p>Protect your account with additional security measures</p>
+                        </div>
+                        <div class="laylo-card-body">
+                            {{> settings/change_password}}
+                            <hr class="my-4">
+                            {{> settings/delete_account}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Settings navigation
+document.querySelectorAll('.laylo-settings-nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Remove active class from all nav items and sections
+        document.querySelectorAll('.laylo-settings-nav-item').forEach(nav => nav.classList.remove('active'));
+        document.querySelectorAll('.laylo-settings-section').forEach(section => section.classList.remove('active'));
+
+        // Add active class to clicked nav item
+        this.classList.add('active');
+
+        // Show corresponding section
+        const sectionId = this.getAttribute('data-section') + '-section';
+        document.getElementById(sectionId).classList.add('active');
+    });
+});
+</script>

@@ -6,12 +6,832 @@
  */
 
 
-/* Clean Layout Container */
+/* Laylo Layout Container */
 
 .laylo-layout {
+    display: flex;
     background: #f8fafc;
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+
+/* Laylo Sidebar */
+
+.laylo-sidebar {
+    width: 280px;
+    background: white;
+    border-right: 1px solid #e5e7eb;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+
+/* Laylo Logo */
+
+.laylo-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 8px 12px;
+}
+
+.laylo-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #6366f1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.laylo-logo-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.laylo-logo-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+
+/* Create Drop Button */
+
+.laylo-create-btn {
+    background: #06b6d4;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    transition: all 0.2s ease;
+}
+
+.laylo-create-btn:hover {
+    background: #0891b2;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.laylo-create-icon {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* Navigation Menu */
+
+.laylo-nav-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.laylo-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.laylo-nav-item:hover {
+    background: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+}
+
+.laylo-nav-item.active {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.laylo-nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.laylo-nav-text {
+    font-weight: 500;
+}
+
+
+/* Sidebar Bottom */
+
+.laylo-sidebar-bottom {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+}
+
+
+/* User Info */
+
+.laylo-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin: 16px 0;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.laylo-user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #6366f1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.laylo-user-details {
+    flex: 1;
+}
+
+.laylo-user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.laylo-user-url {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+
+/* Credits Info */
+
+.laylo-credits {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+.laylo-credits-icon {
+    width: 20px;
+    height: 20px;
+    color: #d97706;
+    flex-shrink: 0;
+}
+
+.laylo-credits-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.laylo-credits-text {
+    flex: 1;
+}
+
+.laylo-credits-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: #92400e;
+    margin-bottom: 4px;
+}
+
+.laylo-credits-info {
+    font-size: 11px;
+    color: #a16207;
+    line-height: 1.4;
+}
+
+
+/* Main Content */
+
+.laylo-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 0;
+    background: #f8fafc;
+}
+
+
+/* Page Components */
+
+.laylo-page {
+    padding: 24px 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.laylo-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.laylo-page-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 8px 0;
+}
+
+.laylo-page-subtitle {
+    font-size: 16px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.laylo-page-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.laylo-page-content {
+    /* Content styling */
+}
+
+
+/* Cards */
+
+.laylo-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.laylo-card-header {
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.laylo-card-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 4px 0;
+}
+
+.laylo-card-header p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.laylo-card-body {
+    padding: 24px;
+}
+
+.laylo-card-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+
+/* Buttons */
+
+.laylo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.laylo-btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.laylo-btn-primary:hover {
+    background: #1d4ed8;
+    color: white;
+    text-decoration: none;
+}
+
+.laylo-btn-outline {
+    background: white;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.laylo-btn-outline:hover {
+    background: #f9fafb;
+    color: #374151;
+    text-decoration: none;
+}
+
+.laylo-btn-text {
+    background: transparent;
+    color: #6b7280;
+    padding: 8px 12px;
+}
+
+.laylo-btn-text:hover {
+    background: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+}
+
+.laylo-btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.laylo-btn-icon {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* Forms */
+
+.laylo-form {
+    /* Form container */
+}
+
+.laylo-form-group {
+    margin-bottom: 20px;
+}
+
+.laylo-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.laylo-form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #111827;
+    background: white;
+    transition: border-color 0.2s ease;
+}
+
+.laylo-form-control:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.laylo-form-text {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+    display: block;
+}
+
+.laylo-form-actions {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #f3f4f6;
+}
+
+
+/* Stat Cards */
+
+.laylo-stat-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.laylo-stat-icon {
+    width: 48px;
+    height: 48px;
+    background: #eff6ff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2563eb;
+}
+
+.laylo-stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.laylo-stat-content {
+    flex: 1;
+}
+
+.laylo-stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.laylo-stat-label {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+
+/* Badges */
+
+.laylo-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.laylo-badge-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.laylo-badge-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.laylo-badge-error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.laylo-badge-info {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+
+/* Alerts */
+
+.laylo-alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.laylo-alert-success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.laylo-alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+
+/* Settings Navigation */
+
+.laylo-settings-nav {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 24px;
+}
+
+.laylo-settings-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.laylo-settings-nav-item:hover {
+    background: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+}
+
+.laylo-settings-nav-item.active {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.laylo-settings-nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.laylo-settings-section {
+    display: none;
+}
+
+.laylo-settings-section.active {
+    display: block;
+}
+
+
+/* Tables */
+
+.laylo-table-responsive {
+    overflow-x: auto;
+}
+
+.laylo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.laylo-table th {
+    background: #f9fafb;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.laylo-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+.laylo-table-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+
+/* Fan Components */
+
+.laylo-fan-contact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.laylo-fan-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.laylo-fan-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.laylo-fan-initials {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.laylo-fan-info {
+    flex: 1;
+}
+
+.laylo-fan-name {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.laylo-fan-email {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.laylo-fan-phone {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+
+/* Empty States */
+
+.laylo-empty-state {
+    text-align: center;
+    padding: 48px 24px;
+}
+
+.laylo-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 24px;
+    color: #d1d5db;
+}
+
+.laylo-empty-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.laylo-empty-state h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.laylo-empty-state p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+
+/* Search Box */
+
+.laylo-search-box {
+    position: relative;
+    display: inline-block;
+}
+
+.laylo-search-box input {
+    padding-right: 40px;
+}
+
+.laylo-search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #9ca3af;
+}
+
+
+/* Pagination */
+
+.laylo-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.laylo-pagination-info {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.laylo-pagination-controls {
+    display: flex;
+    gap: 8px;
+}
+
+
+/* Checkboxes and Radios */
+
+.laylo-checkbox,
+.laylo-radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+}
+
+.laylo-checkbox input,
+.laylo-radio input {
+    margin: 0;
+}
+
+.laylo-checkbox-mark,
+.laylo-radio-mark {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+.laylo-radio-mark {
+    border-radius: 50%;
+}
+
+
+/* Progress Bar */
+
+.laylo-progress {
+    width: 100%;
+    height: 8px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.laylo-progress-bar {
+    height: 100%;
+    background: #2563eb;
+    transition: width 0.3s ease;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .laylo-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    .laylo-main {
+        margin-left: 0;
+    }
+    .laylo-page {
+        padding: 16px 20px;
+    }
+    .laylo-page-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    .laylo-page-actions {
+        justify-content: flex-start;
+    }
+    .laylo-stat-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .laylo-table-responsive {
+        font-size: 12px;
+    }
+    .laylo-fan-contact {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
 }
 
 

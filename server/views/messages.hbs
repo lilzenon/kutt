@@ -1,0 +1,264 @@
+<!-- Messages Page -->
+<div class="laylo-page">
+    <!-- Page Header -->
+    <div class="laylo-page-header">
+        <div class="laylo-page-title">
+            <h1>Messages</h1>
+            <p class="laylo-page-subtitle">Send SMS campaigns and manage your messaging</p>
+        </div>
+        <div class="laylo-page-actions">
+            <button class="laylo-btn laylo-btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                <svg class="laylo-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                Send Message
+            </button>
+        </div>
+    </div>
+
+    <!-- Messages Content -->
+    <div class="laylo-page-content">
+        <!-- Message Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.totalMessages}}</div>
+                        <div class="laylo-stat-label">Total Messages</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.deliveryRate}}%</div>
+                        <div class="laylo-stat-label">Delivery Rate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.openRate}}%</div>
+                        <div class="laylo-stat-label">Open Rate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="laylo-stat-card">
+                    <div class="laylo-stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="laylo-stat-content">
+                        <div class="laylo-stat-number">{{stats.totalRecipients}}</div>
+                        <div class="laylo-stat-label">Total Recipients</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages List -->
+        <div class="laylo-card">
+            <div class="laylo-card-header">
+                <h3>Recent Messages</h3>
+                <div class="laylo-card-actions">
+                    <select class="laylo-form-control" id="messageFilter">
+                        <option value="all">All Messages</option>
+                        <option value="sent">Sent</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="draft">Drafts</option>
+                    </select>
+                </div>
+            </div>
+            <div class="laylo-card-body">
+                {{#if messages.length}}
+                    <div class="laylo-messages-list">
+                        {{#each messages}}
+                        <div class="laylo-message-item" data-message-id="{{this.id}}">
+                            <div class="laylo-message-content">
+                                <div class="laylo-message-header">
+                                    <h4 class="laylo-message-subject">{{this.subject}}</h4>
+                                    <div class="laylo-message-status">
+                                        <span class="laylo-badge laylo-badge-{{this.status}}">{{this.status}}</span>
+                                    </div>
+                                </div>
+                                <div class="laylo-message-preview">{{this.preview}}</div>
+                                <div class="laylo-message-meta">
+                                    <span class="laylo-message-recipients">{{this.recipientCount}} recipients</span>
+                                    <span class="laylo-message-date">{{formatDate this.createdAt}}</span>
+                                </div>
+                            </div>
+                            <div class="laylo-message-actions">
+                                <button class="laylo-btn laylo-btn-sm laylo-btn-outline" onclick="viewMessage('{{this.id}}')">View</button>
+                                {{#if (eq this.status 'draft')}}
+                                <button class="laylo-btn laylo-btn-sm laylo-btn-primary" onclick="editMessage('{{this.id}}')">Edit</button>
+                                {{/if}}
+                                <button class="laylo-btn laylo-btn-sm laylo-btn-text" onclick="duplicateMessage('{{this.id}}')">Duplicate</button>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <div class="laylo-empty-state">
+                        <div class="laylo-empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <h3>No messages yet</h3>
+                        <p>Start engaging with your fans by sending your first message.</p>
+                        <button class="laylo-btn laylo-btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                            Send Your First Message
+                        </button>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Message Modal -->
+<div class="modal fade" id="newMessageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Send New Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newMessageForm" class="laylo-form">
+                    <div class="laylo-form-group">
+                        <label for="messageSubject">Subject</label>
+                        <input type="text" id="messageSubject" name="subject" class="laylo-form-control" required>
+                    </div>
+
+                    <div class="laylo-form-group">
+                        <label for="messageRecipients">Recipients</label>
+                        <select id="messageRecipients" name="recipients" class="laylo-form-control" required>
+                            <option value="">Select recipient group</option>
+                            <option value="all_fans">All Fans</option>
+                            <option value="recent_signups">Recent Signups</option>
+                            <option value="active_fans">Active Fans</option>
+                            <option value="custom">Custom List</option>
+                        </select>
+                    </div>
+
+                    <div class="laylo-form-group">
+                        <label for="messageContent">Message</label>
+                        <textarea id="messageContent" name="content" class="laylo-form-control" rows="6" placeholder="Write your message..." required></textarea>
+                        <small class="laylo-form-text">
+                            <span id="characterCount">0</span>/160 characters
+                        </small>
+                    </div>
+
+                    <div class="laylo-form-group">
+                        <label for="scheduleType">Send Options</label>
+                        <div class="laylo-radio-group">
+                            <label class="laylo-radio">
+                                <input type="radio" name="scheduleType" value="now" checked>
+                                <span class="laylo-radio-mark"></span>
+                                Send Now
+                            </label>
+                            <label class="laylo-radio">
+                                <input type="radio" name="scheduleType" value="schedule">
+                                <span class="laylo-radio-mark"></span>
+                                Schedule for Later
+                            </label>
+                            <label class="laylo-radio">
+                                <input type="radio" name="scheduleType" value="draft">
+                                <span class="laylo-radio-mark"></span>
+                                Save as Draft
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="scheduleDateTime" class="laylo-form-group" style="display: none;">
+                        <label for="scheduledAt">Schedule Date & Time</label>
+                        <input type="datetime-local" id="scheduledAt" name="scheduledAt" class="laylo-form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="laylo-btn laylo-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="newMessageForm" class="laylo-btn laylo-btn-primary">Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Character counter
+document.getElementById('messageContent').addEventListener('input', function() {
+    const count = this.value.length;
+    document.getElementById('characterCount').textContent = count;
+});
+
+// Schedule type handling
+document.querySelectorAll('input[name="scheduleType"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const scheduleDiv = document.getElementById('scheduleDateTime');
+        scheduleDiv.style.display = this.value === 'schedule' ? 'block' : 'none';
+    });
+});
+
+// Form submission
+document.getElementById('newMessageForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Failed to send message. Please try again.');
+        }
+    } catch (error) {
+        alert('An error occurred. Please try again.');
+    }
+});
+
+// Message actions
+function viewMessage(id) {
+    window.location.href = `/messages/${id}`;
+}
+
+function editMessage(id) {
+    window.location.href = `/messages/${id}/edit`;
+}
+
+function duplicateMessage(id) {
+    // Implementation for duplicating message
+    console.log('Duplicate message:', id);
+}
+</script>
