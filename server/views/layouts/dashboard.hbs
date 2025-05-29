@@ -274,7 +274,9 @@
             <!-- Header with Mobile Trigger -->
             <div class="laylo-main-header">
                 <!-- Mobile Navigation Trigger -->
-                <div class="laylo-mobile-trigger" id="mobileTrigger">
+                <div class="laylo-mobile-trigger" id="mobileTrigger"
+                     onclick="handleMobileTriggerClick(event)"
+                     ontouchstart="handleMobileTriggerTouch(event)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="3" y1="6" x2="21" y2="6"/>
                         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -302,6 +304,80 @@
             <script src="{{this}}"></script>
         {{/each}}
     {{/if}}
+
+    <!-- Mobile Navigation Inline Handlers -->
+    <script>
+        // Immediate mobile navigation handlers for maximum compatibility
+        let mobileNavTouchHandled = false;
+
+        function handleMobileTriggerClick(event) {
+            console.log('📱 Inline click handler triggered, touchHandled:', mobileNavTouchHandled);
+            if (!mobileNavTouchHandled) {
+                event.preventDefault();
+                event.stopPropagation();
+                toggleMobileNavigation();
+            }
+            // Reset touch handled flag
+            setTimeout(() => {
+                mobileNavTouchHandled = false;
+            }, 300);
+        }
+
+        function handleMobileTriggerTouch(event) {
+            console.log('📱 Inline touch handler triggered');
+            event.preventDefault();
+            event.stopPropagation();
+            mobileNavTouchHandled = true;
+
+            // Add visual feedback
+            const trigger = event.currentTarget;
+            trigger.style.transform = 'scale(0.95)';
+            trigger.style.opacity = '0.8';
+
+            setTimeout(() => {
+                trigger.style.transform = '';
+                trigger.style.opacity = '';
+                toggleMobileNavigation();
+            }, 150);
+
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        function toggleMobileNavigation() {
+            console.log('📱 toggleMobileNavigation called');
+            const overlay = document.getElementById('mobileOverlay');
+            const nav = document.getElementById('mobileNav');
+
+            if (overlay && nav) {
+                const isActive = nav.classList.contains('active');
+                console.log('📱 Current state:', isActive ? 'open' : 'closed');
+
+                if (isActive) {
+                    // Close navigation
+                    overlay.classList.remove('active');
+                    nav.classList.remove('active');
+                    document.body.style.overflow = '';
+                    console.log('📱 Navigation closed');
+                } else {
+                    // Open navigation
+                    overlay.classList.add('active');
+                    nav.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    console.log('📱 Navigation opened');
+                }
+            } else {
+                console.error('📱 Mobile navigation elements not found');
+                console.log('📱 Available elements:', {
+                    overlay: !!overlay,
+                    nav: !!nav,
+                    allMobileElements: document.querySelectorAll('[id*="mobile"]').length
+                });
+            }
+        }
+    </script>
 
     <!-- Theme initialization script -->
     <script>

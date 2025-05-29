@@ -1,6 +1,6 @@
 /**
  * 📱 COMPREHENSIVE MOBILE NAVIGATION SYSTEM
- * 
+ *
  * Research-based mobile navigation implementation
  * Following 2024 mobile UX best practices
  */
@@ -49,26 +49,48 @@ class MobileNavigationManager {
     setupEventListeners() {
         if (!this.mobileTrigger) return;
 
-        // Mobile trigger button - multiple event types for maximum compatibility
-        this.mobileTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            this.toggleNavigation();
-            console.log('📱 Mobile trigger clicked');
-        });
+        // Track if we've handled a touch event to prevent duplicate events
+        let touchHandled = false;
 
+        // Mobile trigger button - comprehensive touch handling
         this.mobileTrigger.addEventListener('touchstart', (e) => {
+            console.log('📱 Mobile trigger touchstart');
             e.preventDefault();
             e.stopPropagation();
+            touchHandled = true;
             this.addTouchFeedback(this.mobileTrigger);
-            console.log('📱 Mobile trigger touched');
         }, { passive: false });
 
-        this.mobileTrigger.addEventListener('pointerdown', (e) => {
+        this.mobileTrigger.addEventListener('touchend', (e) => {
+            console.log('📱 Mobile trigger touchend');
             e.preventDefault();
             e.stopPropagation();
-            this.addTouchFeedback(this.mobileTrigger);
-            console.log('📱 Mobile trigger pointer down');
+            if (touchHandled) {
+                this.toggleNavigation();
+                touchHandled = false;
+                // Reset touch handled after a delay to allow click events on desktop
+                setTimeout(() => {
+                    touchHandled = false;
+                }, 300);
+            }
+        }, { passive: false });
+
+        // Fallback click handler for desktop and devices that don't support touch
+        this.mobileTrigger.addEventListener('click', (e) => {
+            console.log('📱 Mobile trigger click, touchHandled:', touchHandled);
+            if (!touchHandled) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleNavigation();
+            }
+        });
+
+        // Pointer events for modern browsers
+        this.mobileTrigger.addEventListener('pointerdown', (e) => {
+            console.log('📱 Mobile trigger pointerdown');
+            if (e.pointerType === 'touch') {
+                this.addTouchFeedback(this.mobileTrigger);
+            }
         });
 
         // Close button
