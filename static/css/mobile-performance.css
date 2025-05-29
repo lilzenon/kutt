@@ -1,0 +1,376 @@
+/**
+ * 🚀 MOBILE PERFORMANCE OPTIMIZATION
+ * 
+ * Eliminates mobile jankiness and touch delays
+ * Makes the mobile site feel native and responsive
+ */
+
+/* ===== ELIMINATE 300MS TOUCH DELAY ===== */
+
+/* Global touch-action optimization */
+* {
+    /* Eliminate 300ms delay on all elements */
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Specific touch optimizations for interactive elements */
+button,
+a,
+input,
+textarea,
+select,
+[role="button"],
+[onclick],
+[ontouchstart],
+.btn,
+.laylo-btn,
+.laylo-mobile-trigger,
+.laylo-mobile-nav-item,
+.laylo-card,
+.clickable {
+    /* Immediate touch response */
+    touch-action: manipulation !important;
+    -ms-touch-action: manipulation !important;
+    
+    /* Remove iOS touch highlights */
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    
+    /* Optimize for touch */
+    cursor: pointer;
+    
+    /* Prevent text selection on touch */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+/* ===== MOBILE PERFORMANCE OPTIMIZATIONS ===== */
+
+/* Optimize scrolling performance */
+html {
+    /* Smooth scrolling with hardware acceleration */
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    
+    /* Prevent bounce scrolling */
+    overscroll-behavior: contain;
+    -webkit-overscroll-behavior: contain;
+    
+    /* Optimize text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    /* Hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Optimize scrolling */
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    
+    /* Prevent text size adjustment */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* ===== INSTANT TOUCH FEEDBACK ===== */
+
+/* Immediate visual feedback for all interactive elements */
+button:active,
+a:active,
+input:active,
+[role="button"]:active,
+[onclick]:active,
+[ontouchstart]:active,
+.btn:active,
+.laylo-btn:active,
+.laylo-mobile-trigger:active,
+.laylo-mobile-nav-item:active,
+.laylo-card:active,
+.clickable:active {
+    /* Instant feedback - no delay */
+    transform: scale(0.98) !important;
+    opacity: 0.8 !important;
+    transition: none !important; /* Remove transition for instant feedback */
+}
+
+/* Reset active state quickly */
+button,
+a,
+input,
+[role="button"],
+[onclick],
+[ontouchstart],
+.btn,
+.laylo-btn,
+.laylo-mobile-trigger,
+.laylo-mobile-nav-item,
+.laylo-card,
+.clickable {
+    transition: transform 0.1s ease, opacity 0.1s ease !important;
+}
+
+/* ===== MOBILE NAVIGATION PERFORMANCE ===== */
+
+/* Optimize mobile navigation for 60fps */
+.laylo-mobile-nav,
+.laylo-mobile-overlay,
+.laylo-mobile-trigger {
+    /* Hardware acceleration */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Optimize animations */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    
+    /* Smooth rendering */
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+}
+
+/* Fast mobile navigation animations */
+.laylo-mobile-nav {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.laylo-mobile-overlay {
+    transition: opacity 0.2s ease !important;
+}
+
+/* ===== FORM PERFORMANCE ===== */
+
+/* Optimize form inputs for mobile */
+input,
+textarea,
+select {
+    /* Prevent zoom on iOS */
+    font-size: 16px !important;
+    
+    /* Immediate response */
+    touch-action: manipulation !important;
+    
+    /* Remove iOS styling */
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-border-radius: 0 !important;
+    border-radius: 8px !important;
+    
+    /* Optimize rendering */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Focus optimization */
+input:focus,
+textarea:focus,
+select:focus {
+    /* Instant focus feedback */
+    transition: border-color 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+/* ===== MOBILE CARD PERFORMANCE ===== */
+
+/* Optimize cards for touch */
+.laylo-card,
+.card {
+    /* Hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    
+    /* Optimize for touch */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Fast hover/active states */
+    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.laylo-card:active,
+.card:active {
+    transform: scale(0.99) translateZ(0) !important;
+}
+
+/* ===== MOBILE BUTTON OPTIMIZATION ===== */
+
+/* Make all buttons feel instant */
+.laylo-btn,
+.btn,
+button {
+    /* Remove any delays */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    
+    /* Instant feedback */
+    transition: all 0.1s ease !important;
+    
+    /* Hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Instant button feedback */
+.laylo-btn:active,
+.btn:active,
+button:active {
+    transform: scale(0.96) translateZ(0) !important;
+    transition: none !important;
+}
+
+/* ===== MOBILE SCROLL OPTIMIZATION ===== */
+
+/* Optimize all scrollable areas */
+.laylo-main,
+.laylo-dashboard,
+.laylo-mobile-nav,
+.modal-body,
+.scrollable {
+    /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch !important;
+    overflow-scrolling: touch !important;
+    
+    /* Prevent bounce */
+    overscroll-behavior: contain !important;
+    -webkit-overscroll-behavior: contain !important;
+    
+    /* Hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* ===== MOBILE ANIMATION PERFORMANCE ===== */
+
+/* Optimize all animations for mobile */
+@media (max-width: 767px) {
+    /* Faster animations on mobile */
+    * {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.1s !important;
+    }
+    
+    /* Exception for navigation animations */
+    .laylo-mobile-nav {
+        transition-duration: 0.25s !important;
+    }
+    
+    .laylo-mobile-overlay {
+        transition-duration: 0.2s !important;
+    }
+}
+
+/* ===== MOBILE PERFORMANCE UTILITIES ===== */
+
+/* Instant response class */
+.instant-touch {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    transition: none !important;
+}
+
+.instant-touch:active {
+    transform: scale(0.95) !important;
+    opacity: 0.7 !important;
+}
+
+/* No delay class */
+.no-delay {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Hardware accelerated class */
+.gpu-accelerated {
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+}
+
+/* ===== MOBILE DEBUGGING ===== */
+
+/* Visual feedback for debugging touch issues */
+.debug-touch {
+    position: relative;
+}
+
+.debug-touch::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 0, 0, 0.1);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+
+.debug-touch:active::after {
+    opacity: 1;
+}
+
+/* ===== MOBILE SPECIFIC FIXES ===== */
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    /* iOS specific optimizations */
+    input,
+    textarea,
+    select {
+        /* Prevent zoom */
+        font-size: 16px !important;
+        -webkit-appearance: none !important;
+    }
+    
+    /* Fix iOS scroll issues */
+    .laylo-main {
+        -webkit-overflow-scrolling: touch !important;
+        overflow-scrolling: touch !important;
+    }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    /* Android specific optimizations */
+    button,
+    input,
+    select,
+    textarea {
+        touch-action: manipulation !important;
+    }
+}
+
+/* ===== PERFORMANCE MONITORING ===== */
+
+/* Mark elements that should be hardware accelerated */
+.laylo-mobile-trigger,
+.laylo-mobile-nav,
+.laylo-mobile-overlay,
+.laylo-btn,
+.laylo-card {
+    /* Force hardware acceleration */
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+}

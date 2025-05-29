@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no">
     <meta name="theme-color" content="#ffffff">
     <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-touch-fullscreen" content="yes">
     <title>{{title}} - BOUNCE2BOUNCE</title>
 
     <!-- Preload critical resources -->
@@ -23,6 +26,7 @@
     <link rel="stylesheet" href="/css/themes.css">
     <link rel="stylesheet" href="/css/navigation.css">
     <link rel="stylesheet" href="/css/plainadmin-dashboard.css">
+    <link rel="stylesheet" href="/css/mobile-performance.css">
     <link rel="stylesheet" href="/css/mobile-responsive.css">
     <link rel="stylesheet" href="/css/styles.css">
     {{#if additionalCSS}}
@@ -305,77 +309,102 @@
         {{/each}}
     {{/if}}
 
-    <!-- Mobile Navigation Inline Handlers -->
+    <!-- Ultra-Responsive Mobile Navigation Inline Handlers -->
     <script>
-        // Immediate mobile navigation handlers for maximum compatibility
-        let mobileNavTouchHandled = false;
+        // INSTANT mobile navigation handlers - zero delays
+        let lastTouchTime = 0;
+        let touchInProgress = false;
 
         function handleMobileTriggerClick(event) {
-            console.log('📱 Inline click handler triggered, touchHandled:', mobileNavTouchHandled);
-            if (!mobileNavTouchHandled) {
+            const timeSinceTouch = Date.now() - lastTouchTime;
+
+            // Only handle click if no recent touch (desktop/mouse users)
+            if (timeSinceTouch > 300) {
+                console.log('🚀 INSTANT inline click');
                 event.preventDefault();
                 event.stopPropagation();
-                toggleMobileNavigation();
+                toggleMobileNavigationInstant();
             }
-            // Reset touch handled flag
-            setTimeout(() => {
-                mobileNavTouchHandled = false;
-            }, 300);
         }
 
         function handleMobileTriggerTouch(event) {
-            console.log('📱 Inline touch handler triggered');
+            console.log('🚀 INSTANT inline touch');
             event.preventDefault();
             event.stopPropagation();
-            mobileNavTouchHandled = true;
 
-            // Add visual feedback
+            touchInProgress = true;
+            lastTouchTime = Date.now();
+
+            // INSTANT visual feedback
             const trigger = event.currentTarget;
-            trigger.style.transform = 'scale(0.95)';
-            trigger.style.opacity = '0.8';
+            trigger.style.transform = 'scale(0.96)';
+            trigger.style.opacity = '0.7';
+            trigger.style.transition = 'none';
 
-            setTimeout(() => {
-                trigger.style.transform = '';
-                trigger.style.opacity = '';
-                toggleMobileNavigation();
-            }, 150);
-
-            // Haptic feedback
+            // INSTANT haptic feedback
             if (navigator.vibrate) {
-                navigator.vibrate(50);
+                navigator.vibrate(25);
             }
+
+            // Toggle navigation immediately on touchend
+            const handleTouchEnd = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (touchInProgress) {
+                    // Reset visual feedback
+                    trigger.style.transform = '';
+                    trigger.style.opacity = '';
+                    trigger.style.transition = '';
+
+                    // Toggle navigation INSTANTLY
+                    toggleMobileNavigationInstant();
+
+                    touchInProgress = false;
+                }
+
+                // Remove the touchend listener
+                trigger.removeEventListener('touchend', handleTouchEnd);
+            };
+
+            // Add touchend listener for this specific touch
+            trigger.addEventListener('touchend', handleTouchEnd, { passive: false, once: true });
         }
 
-        function toggleMobileNavigation() {
-            console.log('📱 toggleMobileNavigation called');
+        function toggleMobileNavigationInstant() {
+            console.log('🚀 INSTANT toggleMobileNavigation');
             const overlay = document.getElementById('mobileOverlay');
             const nav = document.getElementById('mobileNav');
 
             if (overlay && nav) {
                 const isActive = nav.classList.contains('active');
-                console.log('📱 Current state:', isActive ? 'open' : 'closed');
+                console.log('🚀 Current state:', isActive ? 'open' : 'closed');
 
                 if (isActive) {
-                    // Close navigation
+                    // Close navigation INSTANTLY
                     overlay.classList.remove('active');
                     nav.classList.remove('active');
                     document.body.style.overflow = '';
-                    console.log('📱 Navigation closed');
+                    document.body.style.position = '';
+                    document.body.style.width = '';
+                    console.log('🚀 Navigation closed INSTANTLY');
                 } else {
-                    // Open navigation
+                    // Open navigation INSTANTLY
                     overlay.classList.add('active');
                     nav.classList.add('active');
                     document.body.style.overflow = 'hidden';
-                    console.log('📱 Navigation opened');
+                    document.body.style.position = 'fixed';
+                    document.body.style.width = '100%';
+                    console.log('🚀 Navigation opened INSTANTLY');
                 }
             } else {
-                console.error('📱 Mobile navigation elements not found');
-                console.log('📱 Available elements:', {
-                    overlay: !!overlay,
-                    nav: !!nav,
-                    allMobileElements: document.querySelectorAll('[id*="mobile"]').length
-                });
+                console.error('🚀 Mobile navigation elements not found');
             }
+        }
+
+        // Legacy function for compatibility
+        function toggleMobileNavigation() {
+            toggleMobileNavigationInstant();
         }
     </script>
 

@@ -1,8 +1,8 @@
 /**
- * 📱 COMPREHENSIVE MOBILE NAVIGATION SYSTEM
+ * 🚀 ULTRA-RESPONSIVE MOBILE NAVIGATION SYSTEM
  *
- * Research-based mobile navigation implementation
- * Following 2024 mobile UX best practices
+ * Eliminates all delays and jankiness
+ * Provides instant, native-like mobile experience
  */
 
 class MobileNavigationManager {
@@ -15,18 +15,20 @@ class MobileNavigationManager {
         this.touchStartY = 0;
         this.touchCurrentY = 0;
         this.isDragging = false;
+        this.touchStartTime = 0;
+        this.lastTouchEnd = 0;
 
         this.init();
     }
 
     init() {
         this.setupElements();
-        this.setupEventListeners();
+        this.setupInstantEventListeners();
         this.setupTouchGestures();
         this.setupKeyboardNavigation();
         this.setupAccessibility();
 
-        console.log('📱 Mobile Navigation Manager initialized');
+        console.log('🚀 Ultra-Responsive Mobile Navigation initialized');
     }
 
     setupElements() {
@@ -46,52 +48,75 @@ class MobileNavigationManager {
         this.mobileNav.setAttribute('aria-hidden', 'true');
     }
 
-    setupEventListeners() {
+    setupInstantEventListeners() {
         if (!this.mobileTrigger) return;
 
-        // Track if we've handled a touch event to prevent duplicate events
-        let touchHandled = false;
+        // INSTANT TOUCH HANDLING - No delays, no conflicts
+        let touchActive = false;
+        let touchStarted = false;
 
-        // Mobile trigger button - comprehensive touch handling
+        // Immediate touchstart response
         this.mobileTrigger.addEventListener('touchstart', (e) => {
-            console.log('📱 Mobile trigger touchstart');
+            console.log('🚀 INSTANT touchstart');
             e.preventDefault();
             e.stopPropagation();
-            touchHandled = true;
-            this.addTouchFeedback(this.mobileTrigger);
-        }, { passive: false });
 
-        this.mobileTrigger.addEventListener('touchend', (e) => {
-            console.log('📱 Mobile trigger touchend');
-            e.preventDefault();
-            e.stopPropagation();
-            if (touchHandled) {
-                this.toggleNavigation();
-                touchHandled = false;
-                // Reset touch handled after a delay to allow click events on desktop
-                setTimeout(() => {
-                    touchHandled = false;
-                }, 300);
+            touchActive = true;
+            touchStarted = true;
+            this.touchStartTime = Date.now();
+
+            // INSTANT visual feedback
+            this.addInstantFeedback(this.mobileTrigger);
+
+            // Haptic feedback immediately
+            if (navigator.vibrate) {
+                navigator.vibrate(25); // Shorter, snappier vibration
             }
         }, { passive: false });
 
-        // Fallback click handler for desktop and devices that don't support touch
+        // Immediate touchend response
+        this.mobileTrigger.addEventListener('touchend', (e) => {
+            console.log('🚀 INSTANT touchend');
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (touchActive && touchStarted) {
+                const touchDuration = Date.now() - this.touchStartTime;
+
+                // Only toggle if it was a quick tap (not a long press)
+                if (touchDuration < 500) {
+                    this.toggleNavigationInstant();
+                }
+
+                this.removeInstantFeedback(this.mobileTrigger);
+                touchActive = false;
+                touchStarted = false;
+
+                // Prevent click events for a short time
+                this.lastTouchEnd = Date.now();
+            }
+        }, { passive: false });
+
+        // Fallback click handler (only for non-touch devices)
         this.mobileTrigger.addEventListener('click', (e) => {
-            console.log('📱 Mobile trigger click, touchHandled:', touchHandled);
-            if (!touchHandled) {
+            const timeSinceTouch = Date.now() - this.lastTouchEnd;
+
+            // Only handle click if no recent touch event
+            if (timeSinceTouch > 300) {
+                console.log('🚀 INSTANT click (non-touch device)');
                 e.preventDefault();
                 e.stopPropagation();
-                this.toggleNavigation();
+                this.toggleNavigationInstant();
             }
         });
 
-        // Pointer events for modern browsers
-        this.mobileTrigger.addEventListener('pointerdown', (e) => {
-            console.log('📱 Mobile trigger pointerdown');
-            if (e.pointerType === 'touch') {
-                this.addTouchFeedback(this.mobileTrigger);
-            }
-        });
+        // Cancel touch if user moves finger away
+        this.mobileTrigger.addEventListener('touchcancel', (e) => {
+            console.log('🚀 Touch cancelled');
+            touchActive = false;
+            touchStarted = false;
+            this.removeInstantFeedback(this.mobileTrigger);
+        }, { passive: false });
 
         // Close button
         if (this.mobileClose) {
@@ -237,30 +262,84 @@ class MobileNavigationManager {
         this.announcer = announcer;
     }
 
-    addTouchFeedback(element) {
-        // Visual feedback for touch interactions
-        element.style.transform = 'scale(0.95)';
-        element.style.opacity = '0.8';
+    addInstantFeedback(element) {
+        // INSTANT visual feedback - no delays
+        element.style.transform = 'scale(0.96)';
+        element.style.opacity = '0.7';
+        element.style.transition = 'none'; // Remove any transition delays
+    }
 
-        setTimeout(() => {
-            element.style.transform = '';
-            element.style.opacity = '';
-        }, 150);
+    removeInstantFeedback(element) {
+        // Reset visual feedback instantly
+        element.style.transform = '';
+        element.style.opacity = '';
+        element.style.transition = ''; // Restore transitions
+    }
 
-        // Haptic feedback on supported devices
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
+    toggleNavigationInstant() {
+        // INSTANT navigation toggle - no animation delays
+        console.log('🚀 INSTANT navigation toggle');
+
+        if (this.isOpen) {
+            this.closeNavigationInstant();
+        } else {
+            this.openNavigationInstant();
         }
     }
 
-    toggleNavigation() {
-        if (this.isAnimating) return;
+    openNavigationInstant() {
+        if (this.isOpen) return;
 
-        if (this.isOpen) {
-            this.closeNavigation();
-        } else {
-            this.openNavigation();
-        }
+        console.log('🚀 INSTANT navigation open');
+        this.isOpen = true;
+
+        // Update ARIA attributes
+        this.mobileTrigger.setAttribute('aria-expanded', 'true');
+        this.mobileNav.setAttribute('aria-hidden', 'false');
+
+        // Show overlay and navigation INSTANTLY
+        this.mobileOverlay.classList.add('active');
+        this.mobileNav.classList.add('active');
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+
+        // Dispatch event
+        this.dispatchEvent('opened');
+    }
+
+    closeNavigationInstant() {
+        if (!this.isOpen) return;
+
+        console.log('🚀 INSTANT navigation close');
+        this.isOpen = false;
+
+        // Update ARIA attributes
+        this.mobileTrigger.setAttribute('aria-expanded', 'false');
+        this.mobileNav.setAttribute('aria-hidden', 'true');
+
+        // Hide overlay and navigation INSTANTLY
+        this.mobileOverlay.classList.remove('active');
+        this.mobileNav.classList.remove('active');
+
+        // Restore body scroll
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+
+        // Dispatch event
+        this.dispatchEvent('closed');
+    }
+
+    // Legacy methods for compatibility
+    toggleNavigation() {
+        this.toggleNavigationInstant();
+    }
+
+    addTouchFeedback(element) {
+        this.addInstantFeedback(element);
     }
 
     openNavigation() {

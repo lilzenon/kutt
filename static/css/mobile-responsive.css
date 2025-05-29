@@ -200,10 +200,18 @@ a:active,
     border: 1px solid rgba(0, 0, 0, 0.1) !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-    /* Touch optimization */
+    /* ULTRA-RESPONSIVE touch optimization */
     -webkit-tap-highlight-color: transparent !important;
     touch-action: manipulation !important;
     cursor: pointer !important;
+    /* Hardware acceleration for instant response */
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    /* Ultra-fast transitions */
+    transition: transform 0.05s ease, opacity 0.05s ease !important;
 }
 
 
