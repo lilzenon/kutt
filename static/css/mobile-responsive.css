@@ -215,7 +215,7 @@ a:active,
 }
 
 
-/* Mobile navigation menu - enhanced */
+/* Mobile navigation menu - SIMPLIFIED AND WORKING */
 
 .laylo-mobile-nav {
     position: fixed !important;
@@ -223,23 +223,21 @@ a:active,
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    max-height: 85vh !important;
-    /* Enhanced visual design */
-    background: rgba(255, 255, 255, 0.98) !important;
-    backdrop-filter: blur(30px) !important;
-    -webkit-backdrop-filter: blur(30px) !important;
-    border-radius: 20px 20px 0 0 !important;
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
-    /* Animation */
+    height: 60vh !important;
+    /* SIMPLE SOLID BACKGROUND FOR VISIBILITY */
+    background: white !important;
+    border-top: 2px solid #e2e8f0 !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+    /* SIMPLE ANIMATION */
     transform: translateY(100%) !important;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    z-index: 999 !important;
-    /* Scroll optimization */
+    transition: transform 0.3s ease !important;
+    z-index: 9999 !important;
+    /* CONTENT STYLING */
+    padding: 2rem !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    /* Debugging - temporary red border */
-    border: 3px solid red !important;
+    /* DEBUGGING - RED BORDER TO SEE IT */
+    border: 5px solid red !important;
 }
 
 .laylo-mobile-nav.active {
@@ -247,7 +245,29 @@ a:active,
 }
 
 
-/* Mobile overlay - enhanced */
+/* Mobile navigation items styling */
+
+.laylo-mobile-nav-item {
+    display: block !important;
+    padding: 1rem !important;
+    margin: 0.5rem 0 !important;
+    background: #f8f9fa !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    color: #333 !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    border: 2px solid #ddd !important;
+}
+
+.laylo-mobile-nav-item:hover,
+.laylo-mobile-nav-item:active {
+    background: #e9ecef !important;
+    color: #000 !important;
+}
+
+
+/* Mobile overlay - SIMPLIFIED AND WORKING */
 
 .laylo-mobile-overlay {
     position: fixed !important;
@@ -255,15 +275,13 @@ a:active,
     left: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    background: rgba(0, 0, 0, 0.6) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    z-index: 998 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    z-index: 9998 !important;
     opacity: 0 !important;
     visibility: hidden !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    /* Debugging - temporary blue border */
-    border: 3px solid blue !important;
+    transition: opacity 0.3s ease !important;
+    /* DEBUGGING - BLUE BORDER TO SEE IT */
+    border: 5px solid blue !important;
 }
 
 .laylo-mobile-overlay.active {
