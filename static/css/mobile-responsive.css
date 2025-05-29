@@ -233,11 +233,13 @@ a:active,
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
     /* Animation */
     transform: translateY(100%) !important;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     z-index: 999 !important;
     /* Scroll optimization */
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    /* Debugging - temporary red border */
+    border: 3px solid red !important;
 }
 
 .laylo-mobile-nav.active {
@@ -259,7 +261,9 @@ a:active,
     z-index: 998 !important;
     opacity: 0 !important;
     visibility: hidden !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    /* Debugging - temporary blue border */
+    border: 3px solid blue !important;
 }
 
 .laylo-mobile-overlay.active {

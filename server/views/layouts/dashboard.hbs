@@ -376,6 +376,13 @@
             const overlay = document.getElementById('mobileOverlay');
             const nav = document.getElementById('mobileNav');
 
+            console.log('🚀 Elements found:', {
+                overlay: !!overlay,
+                nav: !!nav,
+                overlayClasses: overlay ? overlay.className : 'not found',
+                navClasses: nav ? nav.className : 'not found'
+            });
+
             if (overlay && nav) {
                 const isActive = nav.classList.contains('active');
                 console.log('🚀 Current state:', isActive ? 'open' : 'closed');
@@ -396,9 +403,24 @@
                     document.body.style.position = 'fixed';
                     document.body.style.width = '100%';
                     console.log('🚀 Navigation opened INSTANTLY');
+
+                    // Force visibility for debugging
+                    nav.style.transform = 'translateY(0)';
+                    nav.style.zIndex = '9999';
+                    overlay.style.opacity = '1';
+                    overlay.style.visibility = 'visible';
+                    overlay.style.zIndex = '9998';
                 }
+
+                console.log('🚀 After toggle:', {
+                    overlayClasses: overlay.className,
+                    navClasses: nav.className,
+                    overlayStyle: overlay.style.cssText,
+                    navStyle: nav.style.cssText
+                });
             } else {
                 console.error('🚀 Mobile navigation elements not found');
+                console.log('🚀 Available elements:', document.querySelectorAll('[id*="mobile"]'));
             }
         }
 
