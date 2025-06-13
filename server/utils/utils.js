@@ -417,6 +417,18 @@ function registerHandlebarsHelpers() {
         return a === b;
     });
 
+    hbs.registerHelper("or", function(...args) {
+        // Remove the last argument which is the Handlebars options object
+        const values = args.slice(0, -1);
+        return values.some(value => !!value);
+    });
+
+    hbs.registerHelper("and", function(...args) {
+        // Remove the last argument which is the Handlebars options object
+        const values = args.slice(0, -1);
+        return values.every(value => !!value);
+    });
+
     hbs.registerHelper("getInitials", function(name) {
         if (!name) return "";
         return name.split(" ").map(n => n[0]).join("").toUpperCase();
