@@ -242,8 +242,8 @@ router.get(
             // Get user's drops with stats
             const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 5 });
 
-            // Get user's links
-            const userLinks = await query.link.findByUser(req.user.id, { limit: 5 });
+            // Get user's links using existing function
+            const userLinks = await query.link.get({ "links.user_id": req.user.id }, { skip: 0, limit: 5 });
 
             // Calculate stats from actual data
             const totalDrops = userDrops.length;
@@ -467,12 +467,18 @@ router.get(
         try {
             const query = require("../queries");
 
-            // Get user's links
-            const userLinks = await query.link.findByUser(req.user.id, { limit: 20 });
+            // Get user's links using existing function
+            const userLinks = await query.link.get({ "links.user_id": req.user.id }, { skip: 0, limit: 20 });
 
-            // Calculate stats
-            const totalLinks = await query.link.countByUser(req.user.id);
-            const totalClicks = await query.link.getTotalClicksByUser(req.user.id);
+            // Calculate stats from actual data
+            const totalLinks = userLinks.length;
+            const totalClicks = userLinks.reduce((sum, link) => sum + (link.visit_count || 0), 0);
+
+            console.log(`📊 Links page loaded for user ${req.user.id}:`, {
+                totalLinks,
+                totalClicks,
+                linksFound: userLinks.length
+            });
 
             res.render("modern-links", {
                 title: "Links",
@@ -487,7 +493,7 @@ router.get(
                 }
             });
         } catch (error) {
-            console.error('Links error:', error);
+            console.error('❌ Links error:', error);
 
             res.render("modern-links", {
                 title: "Links",
@@ -514,16 +520,24 @@ router.get(
         try {
             const query = require("../queries");
 
-            // Get analytics data
-            const totalDrops = await query.drop.countByUser(req.user.id);
-            const activeDrops = await query.drop.countActiveByUser(req.user.id);
-            const totalLinks = await query.link.countByUser(req.user.id);
-            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
-            const totalClicks = await query.link.getTotalClicksByUser(req.user.id);
+            // Get analytics data using existing functions
+            const recentDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 10 });
+            const recentLinks = await query.link.get({ "links.user_id": req.user.id }, { skip: 0, limit: 10 });
 
-            // Get recent activity
-            const recentDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 5 });
-            const recentLinks = await query.link.findByUser(req.user.id, { limit: 5 });
+            // Calculate stats from actual data
+            const totalDrops = recentDrops.length;
+            const activeDrops = recentDrops.filter(drop => drop.is_active).length;
+            const totalLinks = recentLinks.length;
+            const totalFans = recentDrops.reduce((sum, drop) => sum + (drop.signup_count || 0), 0);
+            const totalClicks = recentLinks.reduce((sum, link) => sum + (link.visit_count || 0), 0);
+
+            console.log(`📊 Analytics page loaded for user ${req.user.id}:`, {
+                totalDrops,
+                activeDrops,
+                totalLinks,
+                totalFans,
+                totalClicks
+            });
 
             res.render("modern-analytics", {
                 title: "Analytics",
@@ -542,7 +556,7 @@ router.get(
                 recentLinks: recentLinks || []
             });
         } catch (error) {
-            console.error('Analytics error:', error);
+            console.error('❌ Analytics error:', error);
 
             res.render("modern-analytics", {
                 title: "Analytics",
