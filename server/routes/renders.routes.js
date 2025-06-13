@@ -234,6 +234,66 @@ router.get(
     "/dashboard",
     asyncHandler(auth.jwt),
     asyncHandler(locals.user),
+    async(req, res) => {
+        try {
+            // Get real data from database
+            const query = require("../queries");
+
+            // Get user's drops
+            const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 5 });
+
+            // Get user's links
+            const userLinks = await query.link.findByUser(req.user.id, { limit: 5 });
+
+            // Calculate stats
+            const totalDrops = await query.drop.countByUser(req.user.id);
+            const activeDrops = await query.drop.countActiveByUser(req.user.id);
+            const totalLinks = await query.link.countByUser(req.user.id);
+            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
+
+            res.render("modern-dashboard", {
+                title: "Dashboard",
+                pageTitle: "Dashboard",
+                layout: "layouts/modern-dashboard",
+                currentPage: "dashboard",
+                user: req.user,
+                stats: {
+                    totalDrops: totalDrops || 0,
+                    activeDrops: activeDrops || 0,
+                    totalLinks: totalLinks || 0,
+                    totalFans: totalFans || 0
+                },
+                recentDrops: userDrops || [],
+                recentLinks: userLinks || []
+            });
+        } catch (error) {
+            console.error('Dashboard error:', error);
+
+            // Fallback with sample data if database queries fail
+            res.render("modern-dashboard", {
+                title: "Dashboard",
+                pageTitle: "Dashboard",
+                layout: "layouts/modern-dashboard",
+                currentPage: "dashboard",
+                user: req.user,
+                stats: {
+                    totalDrops: 0,
+                    activeDrops: 0,
+                    totalLinks: 0,
+                    totalFans: 0
+                },
+                recentDrops: [],
+                recentLinks: []
+            });
+        }
+    }
+);
+
+// Legacy dashboard route for backup
+router.get(
+    "/dashboard-old",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
     (req, res) => {
         // Sample data to match Laylo design
         const upcomingDrops = [{
