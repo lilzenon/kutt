@@ -1785,10 +1785,18 @@
 }
 
 
-/* Preview now uses the same CSS as the actual drop landing page */
+/* GLASSMORPHISM PREVIEW INTEGRATION */
 
 
-/* All styling is handled by the existing drop landing page CSS classes */
+/* Preview now uses the same glassmorphism CSS as the actual drop landing page */
+
+
+/* Ensure glassmorphism effects work in preview iframe */
+
+.preview-viewport iframe {
+    /* Enable backdrop-filter support in iframe */
+    isolation: isolate;
+}
 
 
 /* Preview-specific overrides to ensure proper display within viewport */
