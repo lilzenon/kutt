@@ -236,20 +236,27 @@ router.get(
     asyncHandler(locals.user),
     async(req, res) => {
         try {
-            // Get real data from database
+            // Get real data from database using existing queries
             const query = require("../queries");
 
-            // Get user's drops
+            // Get user's drops with stats
             const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 5 });
 
             // Get user's links
             const userLinks = await query.link.findByUser(req.user.id, { limit: 5 });
 
-            // Calculate stats
-            const totalDrops = await query.drop.countByUser(req.user.id);
-            const activeDrops = await query.drop.countActiveByUser(req.user.id);
-            const totalLinks = await query.link.countByUser(req.user.id);
-            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
+            // Calculate stats from actual data
+            const totalDrops = userDrops.length;
+            const activeDrops = userDrops.filter(drop => drop.is_active).length;
+            const totalLinks = userLinks.length;
+            const totalFans = userDrops.reduce((sum, drop) => sum + (drop.signup_count || 0), 0);
+
+            console.log(`📊 Dashboard loaded for user ${req.user.id}:`, {
+                totalDrops,
+                activeDrops,
+                totalLinks,
+                totalFans
+            });
 
             res.render("modern-dashboard", {
                 title: "Dashboard",
@@ -257,6 +264,7 @@ router.get(
                 layout: "layouts/modern-dashboard",
                 currentPage: "dashboard",
                 user: req.user,
+                domain: env.DEFAULT_DOMAIN,
                 stats: {
                     totalDrops: totalDrops || 0,
                     activeDrops: activeDrops || 0,
@@ -267,15 +275,16 @@ router.get(
                 recentLinks: userLinks || []
             });
         } catch (error) {
-            console.error('Dashboard error:', error);
+            console.error('❌ Dashboard error:', error);
 
-            // Fallback with sample data if database queries fail
+            // Fallback with empty data if database queries fail
             res.render("modern-dashboard", {
                 title: "Dashboard",
                 pageTitle: "Dashboard",
                 layout: "layouts/modern-dashboard",
                 currentPage: "dashboard",
                 user: req.user,
+                domain: env.DEFAULT_DOMAIN,
                 stats: {
                     totalDrops: 0,
                     activeDrops: 0,
@@ -283,7 +292,8 @@ router.get(
                     totalFans: 0
                 },
                 recentDrops: [],
-                recentLinks: []
+                recentLinks: [],
+                error: "Failed to load dashboard data"
             });
         }
     }
@@ -390,7 +400,7 @@ router.get(
     }
 );
 
-// Drops page
+// Drops page - Integrated with existing drop system
 router.get(
     "/drops",
     asyncHandler(auth.jwt),
@@ -399,13 +409,20 @@ router.get(
         try {
             const query = require("../queries");
 
-            // Get user's drops with stats
-            const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 20 });
+            // Get user's drops with stats using existing queries
+            const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 50 });
 
-            // Calculate stats
-            const totalDrops = await query.drop.countByUser(req.user.id);
-            const activeDrops = await query.drop.countActiveByUser(req.user.id);
-            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
+            // Calculate stats from the actual data
+            const totalDrops = userDrops.length;
+            const activeDrops = userDrops.filter(drop => drop.is_active).length;
+            const totalFans = userDrops.reduce((sum, drop) => sum + (drop.signup_count || 0), 0);
+
+            console.log(`📊 Drops page loaded for user ${req.user.id}:`, {
+                totalDrops,
+                activeDrops,
+                totalFans,
+                dropsFound: userDrops.length
+            });
 
             res.render("modern-drops", {
                 title: "Drops",
@@ -421,7 +438,7 @@ router.get(
                 }
             });
         } catch (error) {
-            console.error('Drops error:', error);
+            console.error('❌ Drops page error:', error);
 
             res.render("modern-drops", {
                 title: "Drops",
@@ -434,7 +451,8 @@ router.get(
                     totalDrops: 0,
                     activeDrops: 0,
                     totalFans: 0
-                }
+                },
+                error: "Failed to load drops data"
             });
         }
     }

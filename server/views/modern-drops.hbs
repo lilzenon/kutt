@@ -11,12 +11,12 @@
             </p>
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4">
-            <a href="/drops/create" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+            <button onclick="createDrop()" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
                 Create Drop
-            </a>
+            </button>
         </div>
     </div>
 
@@ -122,16 +122,16 @@
                                 <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
-                                View
+                                View Live
                             </a>
-                            
+
                             <a href="/drops/{{this.id}}/edit" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                                 <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                                 Edit
                             </a>
-                            
+
                             <button onclick="deleteDrop('{{this.id}}', '{{this.title}}')" class="inline-flex items-center px-3 py-2 border border-red-300 shadow-sm text-sm leading-4 font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                 <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -152,12 +152,12 @@
                 <h3 class="mt-2 text-sm font-medium text-gray-900">No drops yet</h3>
                 <p class="mt-1 text-sm text-gray-500">Get started by creating your first drop to engage with your fans.</p>
                 <div class="mt-6">
-                    <a href="/drops/create" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <button onclick="createDrop()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                         <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                         Create Your First Drop
-                    </a>
+                    </button>
                 </div>
             </div>
             {{/if}}
@@ -192,9 +192,21 @@
     </div>
 </div>
 
-<!-- Drops JavaScript -->
+<!-- Drops JavaScript - Integrated with Existing System -->
 <script>
 let dropToDelete = null;
+
+// Create drop function - uses existing dialog system
+function createDrop() {
+    // Check if the existing create drop dialog exists
+    if (typeof window.createDrop === 'function') {
+        // Use existing function from main.js
+        window.createDrop();
+    } else {
+        // Fallback: redirect to homepage with create dialog
+        window.location.href = '/#create-drop';
+    }
+}
 
 function deleteDrop(dropId, dropTitle) {
     dropToDelete = dropId;
@@ -204,12 +216,12 @@ function deleteDrop(dropId, dropTitle) {
 
 document.getElementById('confirmDelete').addEventListener('click', async function() {
     if (!dropToDelete) return;
-    
+
     try {
         const response = await fetch(`/api/drops/${dropToDelete}`, {
             method: 'DELETE'
         });
-        
+
         if (response.ok) {
             showToast('Drop deleted successfully!', 'success');
             // Reload the page to update the list
@@ -223,7 +235,7 @@ document.getElementById('confirmDelete').addEventListener('click', async functio
     } catch (error) {
         showToast('Failed to delete drop', 'error');
     }
-    
+
     document.getElementById('deleteModal').classList.add('hidden');
     dropToDelete = null;
 });
@@ -249,9 +261,14 @@ function showToast(message, type) {
     }`;
     toast.textContent = message;
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
         document.body.removeChild(toast);
     }, 3000);
 }
+
+// Load existing main.js for drop creation functionality
+const script = document.createElement('script');
+script.src = '/scripts/main.js';
+document.head.appendChild(script);
 </script>
