@@ -524,6 +524,9 @@ router.get(
             const recentDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 10 });
             const recentLinks = await query.link.get({ "links.user_id": req.user.id }, { skip: 0, limit: 10 });
 
+            // Get recent fan signups for analytics page
+            const fanAnalytics = await query.drop.getFanAnalytics(req.user.id, { limit: 50 });
+
             // Calculate stats from actual data
             const totalDrops = recentDrops.length;
             const activeDrops = recentDrops.filter(drop => drop.is_active).length;
@@ -536,7 +539,8 @@ router.get(
                 activeDrops,
                 totalLinks,
                 totalFans,
-                totalClicks
+                totalClicks,
+                recentFanSignups: fanAnalytics.fans.length
             });
 
             res.render("modern-analytics", {
@@ -553,7 +557,8 @@ router.get(
                     totalClicks: totalClicks || 0
                 },
                 recentDrops: recentDrops || [],
-                recentLinks: recentLinks || []
+                recentLinks: recentLinks || [],
+                fanAnalytics: fanAnalytics || { fans: [], totalCount: 0 }
             });
         } catch (error) {
             console.error('❌ Analytics error:', error);
