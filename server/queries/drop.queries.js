@@ -68,10 +68,41 @@ async function findByUser(userId, options = {}) {
     return await query;
 }
 
-// Update a drop
+// Update a drop with enhanced error handling and logging
 async function update(id, data) {
-    await knex("drops").where("id", id).update(data);
-    return await knex("drops").where("id", id).first();
+    try {
+        console.log(`🔄 Updating drop ${id} in database with fields:`, Object.keys(data));
+
+        // Perform the update
+        const updateResult = await knex("drops").where("id", id).update(data);
+
+        console.log(`✅ Drop ${id} update result:`, updateResult);
+
+        // Fetch and return the updated drop
+        const updatedDrop = await knex("drops").where("id", id).first();
+
+        if (!updatedDrop) {
+            throw new Error(`Drop ${id} not found after update`);
+        }
+
+        console.log(`✅ Drop ${id} updated successfully`);
+        return updatedDrop;
+
+    } catch (error) {
+        console.error(`❌ Error updating drop ${id}:`, {
+            error: error.message,
+            code: error.code,
+            detail: error.detail,
+            fields: Object.keys(data)
+        });
+
+        // Re-throw with additional context
+        const enhancedError = new Error(`Failed to update drop ${id}: ${error.message}`);
+        enhancedError.originalError = error;
+        enhancedError.code = error.code;
+        enhancedError.detail = error.detail;
+        throw enhancedError;
+    }
 }
 
 // Delete a drop

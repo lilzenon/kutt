@@ -134,7 +134,7 @@ async function getDrop(req, res) {
     });
 }
 
-// Update drop
+// Update drop with enhanced error handling and column validation
 async function updateDrop(req, res) {
     const { id } = req.params;
     const userId = req.user.id;
@@ -154,18 +154,111 @@ async function updateDrop(req, res) {
             }
         }
 
-        const updatedDrop = await drop.update(id, req.body);
+        // Validate and sanitize update data to prevent column errors
+        const sanitizedData = validateAndSanitizeDropData(req.body);
+
+        console.log(`🔄 Updating drop ${id} with data:`, Object.keys(sanitizedData));
+
+        const updatedDrop = await drop.update(id, sanitizedData);
         const dropWithStats = await drop.findWithStats({ id: updatedDrop.id });
+
+        console.log(`✅ Drop ${id} updated successfully`);
 
         res.json({
             success: true,
             data: dropWithStats
         });
     } catch (error) {
+        console.error(`❌ Error updating drop ${id}:`, error);
+
         if (error.code === 'ER_DUP_ENTRY' || error.code === 'SQLITE_CONSTRAINT') {
             throw new CustomError("A drop with this slug already exists", 400);
         }
+
+        // Handle PostgreSQL column errors
+        if (error.code === '42703') {
+            console.error('🚨 PostgreSQL column error:', error.message);
+            throw new CustomError("Invalid field in update request", 400);
+        }
+
         throw error;
+    }
+}
+
+// Validate and sanitize drop data to prevent database column errors
+function validateAndSanitizeDropData(data) {
+    // Define allowed columns based on actual database schema
+    const allowedColumns = [
+        'title',
+        'description',
+        'slug',
+        'cover_image',
+        'background_color',
+        'text_color',
+        'title_color',
+        'description_color',
+        'card_color',
+        'button_color',
+        'form_field_color',
+        'button_text',
+        'custom_css',
+        'is_active',
+        'collect_email',
+        'collect_phone',
+        'website_link',
+        'instagram_link',
+        'twitter_link',
+        'youtube_link',
+        'spotify_link',
+        'tiktok_link',
+        'apple_music_url',
+        'soundcloud_url'
+    ];
+
+    const sanitizedData = {};
+
+    // Only include fields that exist in the database schema
+    for (const [key, value] of Object.entries(data)) {
+        if (allowedColumns.includes(key)) {
+            // Additional validation for specific field types
+            if (key.includes('color') && value) {
+                // Validate color format
+                if (/^#[0-9A-F]{6}$/i.test(value)) {
+                    sanitizedData[key] = value;
+                } else {
+                    console.warn(`⚠️ Invalid color format for ${key}: ${value}`);
+                }
+            } else if (key.includes('_link') || key.includes('_url') || key === 'cover_image') {
+                // Validate URL format (optional)
+                if (!value || value === '' || isValidUrl(value)) {
+                    sanitizedData[key] = value || null;
+                } else {
+                    console.warn(`⚠️ Invalid URL format for ${key}: ${value}`);
+                }
+            } else if (typeof value === 'boolean' || key === 'is_active' || key === 'collect_email' || key === 'collect_phone') {
+                // Handle boolean fields
+                sanitizedData[key] = Boolean(value);
+            } else {
+                // Include other valid fields
+                sanitizedData[key] = value;
+            }
+        } else {
+            console.warn(`⚠️ Ignoring unknown field: ${key}`);
+        }
+    }
+
+    console.log(`🔍 Sanitized ${Object.keys(data).length} fields to ${Object.keys(sanitizedData).length} valid fields`);
+
+    return sanitizedData;
+}
+
+// URL validation helper
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
     }
 }
 
