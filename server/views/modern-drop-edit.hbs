@@ -133,27 +133,37 @@
                                         <input type="url" id="edit-cover-image" name="cover_image" value="{{drop.cover_image}}" placeholder="https://example.com/image.jpg" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <div>
                                             <label for="edit-background-color" class="block text-sm font-medium text-gray-700">Background Color</label>
-                                            <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                                            <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
                                         </div>
 
                                         <div>
                                             <label for="edit-card-color" class="block text-sm font-medium text-gray-700">Card Color</label>
-                                            <input type="color" id="edit-card-color" name="card_color" value="{{drop.card_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                                            <input type="color" id="edit-card-color" name="card_color" value="{{drop.card_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                        </div>
+
+                                        <div>
+                                            <label for="edit-button-color" class="block text-sm font-medium text-gray-700">Button Color</label>
+                                            <input type="color" id="edit-button-color" name="button_color" value="{{drop.button_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
                                         </div>
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <div>
-                                            <label for="edit-title-text-color" class="block text-sm font-medium text-gray-700">Title Text Color</label>
-                                            <input type="color" id="edit-title-text-color" name="title_text_color" value="{{drop.title_text_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                                            <label for="edit-title-color" class="block text-sm font-medium text-gray-700">Title Text Color</label>
+                                            <input type="color" id="edit-title-color" name="title_color" value="{{drop.title_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
                                         </div>
 
                                         <div>
-                                            <label for="edit-description-text-color" class="block text-sm font-medium text-gray-700">Description Text Color</label>
-                                            <input type="color" id="edit-description-text-color" name="description_text_color" value="{{drop.description_text_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                                            <label for="edit-description-color" class="block text-sm font-medium text-gray-700">Description Text Color</label>
+                                            <input type="color" id="edit-description-color" name="description_color" value="{{drop.description_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                        </div>
+
+                                        <div>
+                                            <label for="edit-form-field-color" class="block text-sm font-medium text-gray-700">Form Field Color</label>
+                                            <input type="color" id="edit-form-field-color" name="form_field_color" value="{{drop.form_field_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
                                         </div>
                                     </div>
                                 </div>
@@ -172,26 +182,74 @@
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
-                                            <label for="edit-spotify-url" class="block text-sm font-medium text-gray-700">Spotify URL</label>
-                                            <input type="url" id="edit-spotify-url" name="spotify_url" value="{{drop.spotify_url}}" placeholder="https://open.spotify.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                            <label for="edit-website-link" class="block text-sm font-medium text-gray-700">Website</label>
+                                            <input type="url" id="edit-website-link" name="website_link" value="{{drop.website_link}}" placeholder="https://yourwebsite.com" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         </div>
 
                                         <div>
-                                            <label for="edit-apple-music-url" class="block text-sm font-medium text-gray-700">Apple Music URL</label>
-                                            <input type="url" id="edit-apple-music-url" name="apple_music_url" value="{{drop.apple_music_url}}" placeholder="https://music.apple.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                            <label for="edit-instagram-link" class="block text-sm font-medium text-gray-700">Instagram</label>
+                                            <input type="url" id="edit-instagram-link" name="instagram_link" value="{{drop.instagram_link}}" placeholder="https://instagram.com/yourusername" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         </div>
                                     </div>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
+                                            <label for="edit-twitter-link" class="block text-sm font-medium text-gray-700">Twitter/X</label>
+                                            <input type="url" id="edit-twitter-link" name="twitter_link" value="{{drop.twitter_link}}" placeholder="https://twitter.com/yourusername" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                        </div>
+
+                                        <div>
+                                            <label for="edit-spotify-url" class="block text-sm font-medium text-gray-700">Spotify URL</label>
+                                            <input type="url" id="edit-spotify-url" name="spotify_url" value="{{drop.spotify_url}}" placeholder="https://open.spotify.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="edit-apple-music-url" class="block text-sm font-medium text-gray-700">Apple Music URL</label>
+                                            <input type="url" id="edit-apple-music-url" name="apple_music_url" value="{{drop.apple_music_url}}" placeholder="https://music.apple.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                        </div>
+
+                                        <div>
                                             <label for="edit-youtube-url" class="block text-sm font-medium text-gray-700">YouTube URL</label>
                                             <input type="url" id="edit-youtube-url" name="youtube_url" value="{{drop.youtube_url}}" placeholder="https://youtube.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         </div>
+                                    </div>
 
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
                                             <label for="edit-soundcloud-url" class="block text-sm font-medium text-gray-700">SoundCloud URL</label>
                                             <input type="url" id="edit-soundcloud-url" name="soundcloud_url" value="{{drop.soundcloud_url}}" placeholder="https://soundcloud.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         </div>
+
+                                        <div>
+                                            <label for="edit-tiktok-link" class="block text-sm font-medium text-gray-700">TikTok</label>
+                                            <input type="url" id="edit-tiktok-link" name="tiktok_link" value="{{drop.tiktok_link}}" placeholder="https://tiktok.com/@yourusername" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Collection Settings -->
+                            <div class="border-t border-gray-200 pt-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Form Collection</h3>
+                                <p class="text-sm text-gray-500 mb-4">Configure what information to collect from fans</p>
+
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <label for="edit-collect-email" class="text-sm font-medium text-gray-900">Collect Email</label>
+                                            <p class="text-sm text-gray-500">Require email address for signups</p>
+                                        </div>
+                                        <input type="checkbox" id="edit-collect-email" name="collect_email" {{#if drop.collect_email}}checked{{/if}} class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                    </div>
+
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <label for="edit-collect-phone" class="text-sm font-medium text-gray-900">Collect Phone</label>
+                                            <p class="text-sm text-gray-500">Require phone number for signups</p>
+                                        </div>
+                                        <input type="checkbox" id="edit-collect-phone" name="collect_phone" {{#if drop.collect_phone}}checked{{/if}} class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                                     </div>
                                 </div>
                             </div>
@@ -393,10 +451,64 @@
     </div>
 </div>
 
-<!-- Modern Drop Edit JavaScript -->
+<!-- Modern Drop Edit JavaScript - Enhanced Real-Time Preview System -->
 <script>
-// Tab functionality
+// Global variables for preview elements
+let previewIframe;
+let previewDocument;
+let previewTitle, previewDescription, previewButtonText, previewUrlSlug;
+let previewCoverImage, previewCover;
+
+// Form input elements
+let titleInput, descriptionInput, slugInput, buttonTextInput, coverImageInput;
+let backgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput, buttonColorInput, formFieldColorInput;
+let collectEmailToggle, collectPhoneToggle;
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Initializing modern drop edit system...');
+
+    // Initialize form elements
+    initializeFormElements();
+
+    // Initialize tab functionality
+    initializeTabSystem();
+
+    // Initialize preview system
+    initializePreviewSystem();
+
+    // Initialize form submission
+    initializeFormSubmission();
+
+    // Initialize real-time updates
+    initializeRealTimeUpdates();
+
+    console.log('✅ Modern drop edit system initialized successfully');
+});
+
+function initializeFormElements() {
+    // Get all form input elements
+    titleInput = document.getElementById('edit-title');
+    descriptionInput = document.getElementById('edit-description');
+    slugInput = document.getElementById('edit-slug');
+    buttonTextInput = document.getElementById('edit-button-text');
+    coverImageInput = document.getElementById('edit-cover-image');
+
+    // Color inputs
+    backgroundColorInput = document.getElementById('edit-background-color');
+    cardColorInput = document.getElementById('edit-card-color');
+    titleColorInput = document.getElementById('edit-title-color');
+    descriptionColorInput = document.getElementById('edit-description-color');
+    buttonColorInput = document.getElementById('edit-button-color');
+    formFieldColorInput = document.getElementById('edit-form-field-color');
+
+    // Toggle inputs
+    collectEmailToggle = document.getElementById('edit-collect-email');
+    collectPhoneToggle = document.getElementById('edit-collect-phone');
+
+    console.log('📝 Form elements initialized');
+}
+
+function initializeTabSystem() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -423,12 +535,52 @@ document.addEventListener('DOMContentLoaded', function() {
             if (targetContent) {
                 targetContent.classList.add('active');
             }
+
+            // Load analytics if analytics tab is clicked
+            if (targetTab === 'analytics') {
+                loadAnalytics();
+            }
         });
+    });
+
+    console.log('🗂️ Tab system initialized');
+}
+
+function initializePreviewSystem() {
+    previewIframe = document.getElementById('preview-iframe');
+
+    // Wait for iframe to load
+    previewIframe.addEventListener('load', function() {
+        try {
+            previewDocument = previewIframe.contentDocument || previewIframe.contentWindow.document;
+
+            // Get preview elements
+            previewTitle = previewDocument.querySelector('.drop-title');
+            previewDescription = previewDocument.querySelector('.drop-description p');
+            previewButtonText = previewDocument.querySelector('.signup-button .button-text');
+            previewUrlSlug = previewDocument.querySelector('.drop-url-slug');
+            previewCoverImage = previewDocument.querySelector('.drop-cover-image img');
+            previewCover = previewDocument.querySelector('.drop-cover-image');
+
+            console.log('🖼️ Preview elements found:', {
+                title: !!previewTitle,
+                description: !!previewDescription,
+                buttonText: !!previewButtonText,
+                urlSlug: !!previewUrlSlug,
+                coverImage: !!previewCoverImage
+            });
+
+            // Initialize preview content
+            updatePreviewContent();
+            updatePreviewColors();
+
+        } catch (error) {
+            console.warn('⚠️ Preview iframe access restricted (cross-origin), using refresh method');
+        }
     });
 
     // Preview mode switching
     const previewButtons = document.querySelectorAll('.preview-mode-btn');
-    const previewIframe = document.getElementById('preview-iframe');
 
     previewButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -436,19 +588,145 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active', 'bg-primary-50', 'text-primary-600', 'border-primary-300');
 
             const mode = this.id.replace('preview-', '');
+            const container = document.getElementById('preview-container');
+
             if (mode === 'mobile') {
-                previewIframe.style.width = '375px';
+                container.style.maxWidth = '375px';
+                container.style.margin = '0 auto';
                 previewIframe.style.height = '667px';
-                previewIframe.style.margin = '0 auto';
             } else {
-                previewIframe.style.width = '100%';
+                container.style.maxWidth = '100%';
+                container.style.margin = '0';
                 previewIframe.style.height = '400px';
-                previewIframe.style.margin = '0';
             }
         });
     });
 
-    // Form submission
+    console.log('🖥️ Preview system initialized');
+}
+
+function initializeRealTimeUpdates() {
+    // Content updates
+    if (titleInput) titleInput.addEventListener('input', updatePreviewContent);
+    if (descriptionInput) descriptionInput.addEventListener('input', updatePreviewContent);
+    if (buttonTextInput) buttonTextInput.addEventListener('input', updatePreviewContent);
+    if (coverImageInput) coverImageInput.addEventListener('input', updatePreviewContent);
+
+    // Color updates
+    if (backgroundColorInput) backgroundColorInput.addEventListener('input', updatePreviewColors);
+    if (cardColorInput) cardColorInput.addEventListener('input', updatePreviewColors);
+    if (titleColorInput) titleColorInput.addEventListener('input', updatePreviewColors);
+    if (descriptionColorInput) descriptionColorInput.addEventListener('input', updatePreviewColors);
+    if (buttonColorInput) buttonColorInput.addEventListener('input', updatePreviewColors);
+    if (formFieldColorInput) formFieldColorInput.addEventListener('input', updatePreviewColors);
+
+    // Form field toggles
+    if (collectEmailToggle) collectEmailToggle.addEventListener('change', updatePreviewFormFields);
+    if (collectPhoneToggle) collectPhoneToggle.addEventListener('change', updatePreviewFormFields);
+
+    console.log('⚡ Real-time updates initialized');
+}
+
+function updatePreviewContent() {
+    try {
+        if (previewTitle && titleInput) {
+            previewTitle.textContent = titleInput.value || 'Drop Title';
+        }
+        if (previewDescription && descriptionInput) {
+            previewDescription.textContent = descriptionInput.value || 'Drop description';
+        }
+        if (previewButtonText && buttonTextInput) {
+            previewButtonText.textContent = buttonTextInput.value || 'Get Notified';
+        }
+        if (previewUrlSlug && slugInput) {
+            previewUrlSlug.textContent = slugInput.value || 'drop-slug';
+        }
+
+        // Handle cover image
+        if (previewCoverImage && previewCover && coverImageInput) {
+            const coverImageUrl = coverImageInput.value;
+            if (coverImageUrl && isValidUrl(coverImageUrl)) {
+                previewCoverImage.src = coverImageUrl;
+                previewCover.style.display = 'block';
+            } else {
+                previewCover.style.display = 'none';
+            }
+        }
+
+        console.log('📝 Preview content updated');
+    } catch (error) {
+        console.warn('⚠️ Preview content update failed, refreshing iframe');
+        refreshPreview();
+    }
+}
+
+function updatePreviewColors() {
+    try {
+        if (!previewDocument) return;
+
+        const backgroundColor = backgroundColorInput?.value || '#ffffff';
+        const cardColor = cardColorInput?.value || '#ffffff';
+        const titleColor = titleColorInput?.value || '#000000';
+        const descriptionColor = descriptionColorInput?.value || '#666666';
+        const buttonColor = buttonColorInput?.value || '#007bff';
+        const formFieldColor = formFieldColorInput?.value || '#ffffff';
+
+        // Apply colors using CSS custom properties
+        const documentRoot = previewDocument.documentElement;
+
+        documentRoot.style.setProperty('--drop-background-color', backgroundColor);
+        documentRoot.style.setProperty('--drop-card-color', cardColor);
+        documentRoot.style.setProperty('--drop-title-color', titleColor);
+        documentRoot.style.setProperty('--drop-description-color', descriptionColor);
+        documentRoot.style.setProperty('--drop-button-color', buttonColor);
+        documentRoot.style.setProperty('--drop-form-field-color', formFieldColor);
+
+        console.log('🎨 Preview colors updated');
+    } catch (error) {
+        console.warn('⚠️ Preview color update failed, refreshing iframe');
+        refreshPreview();
+    }
+}
+
+function updatePreviewFormFields() {
+    try {
+        if (!previewDocument) return;
+
+        const emailField = previewDocument.querySelector('.email-field');
+        const phoneField = previewDocument.querySelector('.phone-field');
+
+        if (emailField && collectEmailToggle) {
+            emailField.style.display = collectEmailToggle.checked ? 'block' : 'none';
+        }
+        if (phoneField && collectPhoneToggle) {
+            phoneField.style.display = collectPhoneToggle.checked ? 'block' : 'none';
+        }
+
+        console.log('📱 Preview form fields updated');
+    } catch (error) {
+        console.warn('⚠️ Preview form fields update failed');
+    }
+}
+
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+function refreshPreview() {
+    const iframe = document.getElementById('preview-iframe');
+    const currentSrc = iframe.src;
+    iframe.src = '';
+    setTimeout(() => {
+        iframe.src = currentSrc;
+    }, 100);
+}
+
+function initializeFormSubmission() {
     const form = document.getElementById('drop-edit-form');
     const saveBtn = document.getElementById('save-btn');
     const saveBtnText = document.getElementById('save-btn-text');
@@ -466,8 +744,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(form);
             const data = Object.fromEntries(formData);
 
-            // Convert checkbox to boolean
+            // Convert checkboxes to booleans
             data.is_active = formData.has('is_active');
+            data.collect_email = formData.has('collect_email');
+            data.collect_phone = formData.has('collect_phone');
 
             const response = await fetch(`/api/drops/{{drop.id}}`, {
                 method: 'PUT',
@@ -479,7 +759,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 showToast('Drop updated successfully!', 'success');
-                refreshPreview();
+                setTimeout(() => {
+                    refreshPreview();
+                }, 500);
             } else {
                 const error = await response.json();
                 showToast(error.message || 'Failed to update drop', 'error');
@@ -493,25 +775,6 @@ document.addEventListener('DOMContentLoaded', function() {
             saveBtnSpinner.classList.add('hidden');
         }
     });
-
-    // Auto-save on input changes (debounced)
-    let autoSaveTimeout;
-    const formInputs = form.querySelectorAll('input, textarea, select');
-
-    formInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            clearTimeout(autoSaveTimeout);
-            autoSaveTimeout = setTimeout(() => {
-                refreshPreview();
-            }, 1000);
-        });
-    });
-});
-
-// Utility functions
-function refreshPreview() {
-    const iframe = document.getElementById('preview-iframe');
-    iframe.src = iframe.src;
 }
 
 function showToast(message, type) {
@@ -523,30 +786,30 @@ function showToast(message, type) {
     document.body.appendChild(toast);
 
     setTimeout(() => {
-        document.body.removeChild(toast);
+        if (document.body.contains(toast)) {
+            document.body.removeChild(toast);
+        }
     }, 3000);
 }
 
-// Load analytics data
 async function loadAnalytics() {
     try {
         const response = await fetch(`/api/drops/{{drop.id}}/analytics`);
         if (response.ok) {
-            const data = await response.json();
+            const result = await response.json();
+            const data = result.data;
 
             // Update analytics display
             document.getElementById('analytics-views').textContent = data.views || 0;
             document.getElementById('analytics-fans').textContent = data.fans || 0;
-
-            const conversionRate = data.views > 0 ? ((data.fans / data.views) * 100).toFixed(1) : 0;
-            document.getElementById('analytics-conversion').textContent = `${conversionRate}%`;
+            document.getElementById('analytics-conversion').textContent = `${data.conversionRate || 0}%`;
 
             // Update recent signups
             const signupsContainer = document.getElementById('recent-signups');
             if (data.recentSignups && data.recentSignups.length > 0) {
                 signupsContainer.innerHTML = data.recentSignups.map(signup => `
                     <div class="flex items-center justify-between py-2">
-                        <span class="text-sm text-gray-900">${signup.email || signup.phone}</span>
+                        <span class="text-sm text-gray-900">${signup.email || signup.phone || 'Anonymous'}</span>
                         <span class="text-xs text-gray-500">${new Date(signup.created_at).toLocaleDateString()}</span>
                     </div>
                 `).join('');
@@ -558,9 +821,6 @@ async function loadAnalytics() {
         console.error('Failed to load analytics:', error);
     }
 }
-
-// Load analytics when analytics tab is clicked
-document.querySelector('[data-tab="analytics"]').addEventListener('click', loadAnalytics);
 </script>
 
 <style>
@@ -583,20 +843,109 @@ document.querySelector('[data-tab="analytics"]').addEventListener('click', loadA
     transition: all 0.3s ease;
 }
 
+/* Enhanced Modern Color Picker Design */
+.modern-color-input {
+    width: 100% !important;
+    height: 48px !important;
+    padding: 0 !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+    background: white !important;
+    transition: all 0.2s ease !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.modern-color-input:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-1px) !important;
+}
+
+.modern-color-input:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.modern-color-input::-webkit-color-swatch-wrapper {
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 10px !important;
+}
+
+.modern-color-input::-webkit-color-swatch {
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.modern-color-input::-moz-color-swatch {
+    border: none !important;
+    border-radius: 10px !important;
+}
+
 /* Form styling improvements */
-.drop-form input[type="color"] {
-    padding: 0;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    cursor: pointer;
+.drop-form input:focus,
+.drop-form textarea:focus,
+.drop-form select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
-.drop-form input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
+/* Enhanced preview iframe styling */
+#preview-iframe {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.drop-form input[type="color"]::-webkit-color-swatch {
-    border: none;
-    border-radius: 0.25rem;
+/* Responsive grid improvements */
+@media (max-width: 640px) {
+    .grid.grid-cols-1.sm\\:grid-cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .modern-color-input {
+        height: 40px !important;
+    }
+}
+
+/* Loading state styling */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Toast notification styling */
+.toast-notification {
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 </style>
