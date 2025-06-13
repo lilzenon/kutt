@@ -309,8 +309,12 @@ async function dropEdit(req, res) {
             });
         }
 
-        res.render("drop_edit", {
+        res.render("modern-drop-edit", {
             title: `Edit ${drop.title}`,
+            pageTitle: `Edit ${drop.title}`,
+            layout: "layouts/modern-dashboard",
+            currentPage: "drops",
+            user: req.user,
             drop: drop,
             domain: env.DEFAULT_DOMAIN
         });

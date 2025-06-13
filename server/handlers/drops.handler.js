@@ -396,27 +396,36 @@ async function getFanSummaryStats(req, res) {
     }
 }
 
-// Get analytics for specific drop
+// Get analytics for specific drop (for edit page)
 async function getDropAnalytics(req, res) {
     const { id } = req.params;
     const userId = req.user.id;
 
     // Check if drop belongs to user
-    const foundDrop = await drop.findOne({ id, user_id: userId });
+    const foundDrop = await drop.findWithStats({ id, user_id: userId });
     if (!foundDrop) {
         throw new CustomError("Drop not found", 404);
     }
 
-    // Get fan analytics for this specific drop
-    const fanAnalytics = await drop.getFanAnalytics(userId, { dropId: parseInt(id) });
-    const summaryStats = await drop.getFanSummaryStats(userId, parseInt(id));
+    // Get recent signups for this drop
+    const recentSignups = await drop.findSignups({ drop_id: parseInt(id) }, { limit: 5 });
+
+    // Calculate basic analytics
+    const views = foundDrop.view_count || 0;
+    const fans = foundDrop.signup_count || 0;
+    const conversionRate = views > 0 ? ((fans / views) * 100).toFixed(1) : 0;
 
     res.json({
         success: true,
         data: {
-            drop: foundDrop,
-            fanAnalytics,
-            summaryStats
+            views,
+            fans,
+            conversionRate,
+            recentSignups: recentSignups.map(signup => ({
+                email: signup.email,
+                phone: signup.phone,
+                created_at: signup.created_at
+            }))
         }
     });
 }
