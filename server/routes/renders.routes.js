@@ -350,17 +350,199 @@ router.get(
     "/profile",
     asyncHandler(auth.jwt),
     asyncHandler(locals.user),
-    (req, res) => {
-        res.render("profile", {
-            title: "Profile - BOUNCE2BOUNCE",
-            layout: "layouts/dashboard",
-            currentPage: "profile",
-            stats: {
-                totalDrops: 2,
-                totalFans: 1247,
-                totalLinks: 156,
-            }
-        });
+    async(req, res) => {
+        try {
+            const query = require("../queries");
+
+            // Get user stats
+            const totalDrops = await query.drop.countByUser(req.user.id);
+            const totalLinks = await query.link.countByUser(req.user.id);
+            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
+
+            res.render("modern-profile", {
+                title: "Profile",
+                pageTitle: "Profile",
+                layout: "layouts/modern-dashboard",
+                currentPage: "profile",
+                user: req.user,
+                stats: {
+                    totalDrops: totalDrops || 0,
+                    totalLinks: totalLinks || 0,
+                    totalFans: totalFans || 0
+                }
+            });
+        } catch (error) {
+            console.error('Profile error:', error);
+
+            res.render("modern-profile", {
+                title: "Profile",
+                pageTitle: "Profile",
+                layout: "layouts/modern-dashboard",
+                currentPage: "profile",
+                user: req.user,
+                stats: {
+                    totalDrops: 0,
+                    totalLinks: 0,
+                    totalFans: 0
+                }
+            });
+        }
+    }
+);
+
+// Drops page
+router.get(
+    "/drops",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    async(req, res) => {
+        try {
+            const query = require("../queries");
+
+            // Get user's drops with stats
+            const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 20 });
+
+            // Calculate stats
+            const totalDrops = await query.drop.countByUser(req.user.id);
+            const activeDrops = await query.drop.countActiveByUser(req.user.id);
+            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
+
+            res.render("modern-drops", {
+                title: "Drops",
+                pageTitle: "Drops",
+                layout: "layouts/modern-dashboard",
+                currentPage: "drops",
+                user: req.user,
+                drops: userDrops || [],
+                stats: {
+                    totalDrops: totalDrops || 0,
+                    activeDrops: activeDrops || 0,
+                    totalFans: totalFans || 0
+                }
+            });
+        } catch (error) {
+            console.error('Drops error:', error);
+
+            res.render("modern-drops", {
+                title: "Drops",
+                pageTitle: "Drops",
+                layout: "layouts/modern-dashboard",
+                currentPage: "drops",
+                user: req.user,
+                drops: [],
+                stats: {
+                    totalDrops: 0,
+                    activeDrops: 0,
+                    totalFans: 0
+                }
+            });
+        }
+    }
+);
+
+// Links page
+router.get(
+    "/links",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    async(req, res) => {
+        try {
+            const query = require("../queries");
+
+            // Get user's links
+            const userLinks = await query.link.findByUser(req.user.id, { limit: 20 });
+
+            // Calculate stats
+            const totalLinks = await query.link.countByUser(req.user.id);
+            const totalClicks = await query.link.getTotalClicksByUser(req.user.id);
+
+            res.render("modern-links", {
+                title: "Links",
+                pageTitle: "Links",
+                layout: "layouts/modern-dashboard",
+                currentPage: "links",
+                user: req.user,
+                links: userLinks || [],
+                stats: {
+                    totalLinks: totalLinks || 0,
+                    totalClicks: totalClicks || 0
+                }
+            });
+        } catch (error) {
+            console.error('Links error:', error);
+
+            res.render("modern-links", {
+                title: "Links",
+                pageTitle: "Links",
+                layout: "layouts/modern-dashboard",
+                currentPage: "links",
+                user: req.user,
+                links: [],
+                stats: {
+                    totalLinks: 0,
+                    totalClicks: 0
+                }
+            });
+        }
+    }
+);
+
+// Analytics page
+router.get(
+    "/analytics",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    async(req, res) => {
+        try {
+            const query = require("../queries");
+
+            // Get analytics data
+            const totalDrops = await query.drop.countByUser(req.user.id);
+            const activeDrops = await query.drop.countActiveByUser(req.user.id);
+            const totalLinks = await query.link.countByUser(req.user.id);
+            const totalFans = await query.drop.getTotalFansByUser(req.user.id);
+            const totalClicks = await query.link.getTotalClicksByUser(req.user.id);
+
+            // Get recent activity
+            const recentDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 5 });
+            const recentLinks = await query.link.findByUser(req.user.id, { limit: 5 });
+
+            res.render("modern-analytics", {
+                title: "Analytics",
+                pageTitle: "Analytics",
+                layout: "layouts/modern-dashboard",
+                currentPage: "analytics",
+                user: req.user,
+                stats: {
+                    totalDrops: totalDrops || 0,
+                    activeDrops: activeDrops || 0,
+                    totalLinks: totalLinks || 0,
+                    totalFans: totalFans || 0,
+                    totalClicks: totalClicks || 0
+                },
+                recentDrops: recentDrops || [],
+                recentLinks: recentLinks || []
+            });
+        } catch (error) {
+            console.error('Analytics error:', error);
+
+            res.render("modern-analytics", {
+                title: "Analytics",
+                pageTitle: "Analytics",
+                layout: "layouts/modern-dashboard",
+                currentPage: "analytics",
+                user: req.user,
+                stats: {
+                    totalDrops: 0,
+                    activeDrops: 0,
+                    totalLinks: 0,
+                    totalFans: 0,
+                    totalClicks: 0
+                },
+                recentDrops: [],
+                recentLinks: []
+            });
+        }
     }
 );
 
