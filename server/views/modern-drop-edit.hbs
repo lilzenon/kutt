@@ -122,48 +122,79 @@
                                 </div>
                             </div>
 
-                            <!-- Styling Section -->
+                            <!-- Enhanced Styling Section -->
                             <div class="border-t border-gray-200 pt-6">
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">Styling</h3>
                                 <p class="text-sm text-gray-500 mb-4">Customize the appearance of your drop page</p>
 
-                                <div class="space-y-4">
+                                <div class="space-y-6">
+                                    <!-- Cover Image -->
                                     <div>
                                         <label for="edit-cover-image" class="block text-sm font-medium text-gray-700">Cover Image URL</label>
                                         <input type="url" id="edit-cover-image" name="cover_image" value="{{drop.cover_image}}" placeholder="https://example.com/image.jpg" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                        <div>
-                                            <label for="edit-background-color" class="block text-sm font-medium text-gray-700">Background Color</label>
-                                            <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-card-color" class="block text-sm font-medium text-gray-700">Card Color</label>
-                                            <input type="color" id="edit-card-color" name="card_color" value="{{drop.card_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-button-color" class="block text-sm font-medium text-gray-700">Button Color</label>
-                                            <input type="color" id="edit-button-color" name="button_color" value="{{drop.button_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                    <!-- Background Settings -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Background</h4>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label for="edit-background-type" class="block text-sm font-medium text-gray-700">Background Type</label>
+                                                <select id="edit-background-type" name="background_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                                    <option value="gradient" {{#if (eq drop.background_type "gradient")}}selected{{/if}}>Gradient</option>
+                                                    <option value="solid" {{#if (eq drop.background_type "solid")}}selected{{/if}}>Solid Color</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="edit-background-color" class="block text-sm font-medium text-gray-700">Background Color</label>
+                                                <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <!-- Card Settings -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Card Background</h4>
                                         <div>
-                                            <label for="edit-title-color" class="block text-sm font-medium text-gray-700">Title Text Color</label>
-                                            <input type="color" id="edit-title-color" name="title_color" value="{{drop.title_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            <label for="edit-card-background-type" class="block text-sm font-medium text-gray-700">Card Style</label>
+                                            <select id="edit-card-background-type" name="card_background_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                                <option value="solid_white" {{#if (eq drop.card_background_type "solid_white")}}selected{{/if}}>Solid White</option>
+                                                <option value="solid_dark" {{#if (eq drop.card_background_type "solid_dark")}}selected{{/if}}>Solid Dark</option>
+                                                <option value="translucent_light" {{#if (eq drop.card_background_type "translucent_light")}}selected{{/if}}>Translucent Light</option>
+                                                <option value="translucent_dark" {{#if (eq drop.card_background_type "translucent_dark")}}selected{{/if}}>Translucent Dark</option>
+                                            </select>
                                         </div>
+                                    </div>
 
-                                        <div>
-                                            <label for="edit-description-color" class="block text-sm font-medium text-gray-700">Description Text Color</label>
-                                            <input type="color" id="edit-description-color" name="description_color" value="{{drop.description_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                    <!-- Text Colors -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Text Colors</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="edit-title-color" class="block text-sm font-medium text-gray-700">Title Color</label>
+                                                <input type="color" id="edit-title-color" name="title_color" value="{{drop.title_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            </div>
+
+                                            <div>
+                                                <label for="edit-description-color" class="block text-sm font-medium text-gray-700">Subtitle Color</label>
+                                                <input type="color" id="edit-description-color" name="description_color" value="{{drop.description_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            </div>
                                         </div>
+                                    </div>
 
-                                        <div>
-                                            <label for="edit-form-field-color" class="block text-sm font-medium text-gray-700">Form Field Color</label>
-                                            <input type="color" id="edit-form-field-color" name="form_field_color" value="{{drop.form_field_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                    <!-- Button Settings -->
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Button Styling</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="edit-button-color" class="block text-sm font-medium text-gray-700">Button Background</label>
+                                                <input type="color" id="edit-button-color" name="button_color" value="{{drop.button_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            </div>
+
+                                            <div>
+                                                <label for="edit-button-text-color" class="block text-sm font-medium text-gray-700">Button Text Color</label>
+                                                <input type="color" id="edit-button-text-color" name="button_text_color" value="{{drop.button_text_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -395,6 +426,11 @@
 
             <!-- Form Actions -->
             <div class="mt-6 flex items-center justify-end space-x-3">
+                <!-- SUPER OBVIOUS DEBUG BUTTON -->
+                <button type="button" id="debug-test-btn" style="background: red !important; color: white !important; padding: 20px !important; font-size: 20px !important; border: 5px solid yellow !important; z-index: 9999 !important; position: relative !important;">
+                    🔧 CLICK ME - DEBUG TEST
+                </button>
+
                 <button type="button" id="cancel-btn" onclick="window.history.back()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                     Cancel
                 </button>
@@ -402,7 +438,7 @@
                     <span id="save-btn-text">Save Changes</span>
                     <svg id="save-btn-spinner" class="hidden animate-spin -mr-1 ml-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </button>
             </div>
@@ -465,6 +501,8 @@ let backgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput
 let collectEmailToggle, collectPhoneToggle;
 
 document.addEventListener('DOMContentLoaded', function() {
+    // SUPER OBVIOUS DEBUG ALERT
+    alert('🚀 EDIT PAGE JAVASCRIPT IS RUNNING! If you see this alert, the page is loading.');
     console.log('🚀 Initializing modern drop edit system...');
 
     // Initialize form elements
@@ -482,7 +520,100 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize real-time updates
     initializeRealTimeUpdates();
 
+    // Initialize debug test button
+    initializeDebugTest();
+
     console.log('✅ Modern drop edit system initialized successfully');
+
+    // Enhanced form field debugging and validation
+    setTimeout(() => {
+        console.log('🔍 ENHANCED FORM FIELDS DEBUG');
+        console.log('='.repeat(50));
+
+        const form = document.getElementById('drop-edit-form');
+        if (!form) {
+            console.error('❌ Form element not found!');
+            return;
+        }
+
+        // Check all form elements
+        const allInputs = form.querySelectorAll('input, select, textarea');
+        console.log(`📊 Total form elements found: ${allInputs.length}`);
+
+        // Verify styling fields specifically
+        const stylingFields = [
+            { name: 'background_type', type: 'select', expected: '{{drop.background_type}}' },
+            { name: 'card_background_type', type: 'select', expected: '{{drop.card_background_type}}' },
+            { name: 'background_color', type: 'color', expected: '{{drop.background_color}}' },
+            { name: 'button_color', type: 'color', expected: '{{drop.button_color}}' },
+            { name: 'button_text_color', type: 'color', expected: '{{drop.button_text_color}}' },
+            { name: 'title_color', type: 'color', expected: '{{drop.title_color}}' },
+            { name: 'description_color', type: 'color', expected: '{{drop.description_color}}' }
+        ];
+
+        console.log('\n🎨 STYLING FIELDS VERIFICATION');
+        console.log('-'.repeat(40));
+
+        let allStylingFieldsFound = true;
+
+        stylingFields.forEach(field => {
+            const element = document.querySelector(`[name="${field.name}"]`);
+            if (element) {
+                const value = element.value;
+                const isPopulated = value && value !== '';
+                console.log(`   ✅ ${field.name} (${field.type}): "${value}" ${isPopulated ? '✅' : '⚠️ EMPTY'}`);
+
+                // Check if element is visible
+                const isVisible = element.offsetParent !== null;
+                if (!isVisible) {
+                    console.warn(`   ⚠️ ${field.name} element is hidden!`);
+                }
+
+                // For select elements, check options
+                if (field.type === 'select' && element.tagName === 'SELECT') {
+                    console.log(`     📋 Options: ${Array.from(element.options).map(opt => `"${opt.value}"`).join(', ')}`);
+                    console.log(`     🎯 Selected: "${element.selectedOptions[0]?.value || 'none'}"`);
+                }
+            } else {
+                console.error(`   ❌ ${field.name}: ELEMENT NOT FOUND!`);
+                allStylingFieldsFound = false;
+            }
+        });
+
+        // Test form data collection
+        console.log('\n📦 FORM DATA COLLECTION TEST');
+        console.log('-'.repeat(40));
+
+        try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            console.log('📊 Collected form data:');
+            stylingFields.forEach(field => {
+                const value = data[field.name];
+                console.log(`   ${field.name}: "${value || 'MISSING'}"`);
+            });
+
+            // Check for any missing styling data
+            const missingStylingData = stylingFields.filter(field => !data[field.name]);
+            if (missingStylingData.length > 0) {
+                console.warn('⚠️ Missing styling data:', missingStylingData.map(f => f.name));
+            } else {
+                console.log('✅ All styling fields have data');
+            }
+
+        } catch (error) {
+            console.error('❌ Error collecting form data:', error);
+        }
+
+        // Summary
+        console.log('\n📋 SUMMARY');
+        console.log('-'.repeat(40));
+        console.log(`Form found: ${form ? '✅' : '❌'}`);
+        console.log(`Total elements: ${allInputs.length}`);
+        console.log(`Styling fields found: ${allStylingFieldsFound ? '✅' : '❌'}`);
+
+    }, 1500);
 });
 
 function initializeFormElements() {
@@ -495,11 +626,12 @@ function initializeFormElements() {
 
     // Color inputs
     backgroundColorInput = document.getElementById('edit-background-color');
-    cardColorInput = document.getElementById('edit-card-color');
+    const backgroundTypeSelect = document.getElementById('edit-background-type');
+    const cardBackgroundTypeSelect = document.getElementById('edit-card-background-type');
     titleColorInput = document.getElementById('edit-title-color');
     descriptionColorInput = document.getElementById('edit-description-color');
     buttonColorInput = document.getElementById('edit-button-color');
-    formFieldColorInput = document.getElementById('edit-form-field-color');
+    const buttonTextColorInput = document.getElementById('edit-button-text-color');
 
     // Toggle inputs
     collectEmailToggle = document.getElementById('edit-collect-email');
@@ -614,11 +746,16 @@ function initializeRealTimeUpdates() {
 
     // Color updates
     if (backgroundColorInput) backgroundColorInput.addEventListener('input', updatePreviewColors);
-    if (cardColorInput) cardColorInput.addEventListener('input', updatePreviewColors);
+    const backgroundTypeSelect = document.getElementById('edit-background-type');
+    const cardBackgroundTypeSelect = document.getElementById('edit-card-background-type');
+    const buttonTextColorInput = document.getElementById('edit-button-text-color');
+
+    if (backgroundTypeSelect) backgroundTypeSelect.addEventListener('change', updatePreviewColors);
+    if (cardBackgroundTypeSelect) cardBackgroundTypeSelect.addEventListener('change', updatePreviewColors);
     if (titleColorInput) titleColorInput.addEventListener('input', updatePreviewColors);
     if (descriptionColorInput) descriptionColorInput.addEventListener('input', updatePreviewColors);
     if (buttonColorInput) buttonColorInput.addEventListener('input', updatePreviewColors);
-    if (formFieldColorInput) formFieldColorInput.addEventListener('input', updatePreviewColors);
+    if (buttonTextColorInput) buttonTextColorInput.addEventListener('input', updatePreviewColors);
 
     // Form field toggles
     if (collectEmailToggle) collectEmailToggle.addEventListener('change', updatePreviewFormFields);
@@ -718,12 +855,43 @@ function isValidUrl(string) {
 }
 
 function refreshPreview() {
+    console.log('🔄 Refreshing preview iframe...');
+
     const iframe = document.getElementById('preview-iframe');
+    if (!iframe) {
+        console.error('❌ Preview iframe not found');
+        return;
+    }
+
     const currentSrc = iframe.src;
+    console.log('🌐 Current preview URL:', currentSrc);
+
+    // Add a timestamp to force refresh and bypass cache
+    const url = new URL(currentSrc);
+    url.searchParams.set('_refresh', Date.now());
+    url.searchParams.set('preview', 'true');
+
+    console.log('🔄 Refreshing with URL:', url.toString());
+
+    // Show loading state
+    iframe.style.opacity = '0.5';
+
     iframe.src = '';
     setTimeout(() => {
-        iframe.src = currentSrc;
-    }, 100);
+        iframe.src = url.toString();
+
+        // Reset opacity when loaded
+        iframe.onload = () => {
+            iframe.style.opacity = '1';
+            console.log('✅ Preview refreshed successfully');
+        };
+
+        // Handle load errors
+        iframe.onerror = () => {
+            iframe.style.opacity = '1';
+            console.error('❌ Preview failed to load');
+        };
+    }, 200);
 }
 
 function initializeFormSubmission() {
@@ -735,12 +903,20 @@ function initializeFormSubmission() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        console.log('🚀 FORM SUBMISSION TRIGGERED');
+        console.log('='.repeat(50));
+
         // Show loading state
         saveBtn.disabled = true;
         saveBtnText.textContent = 'Saving...';
         saveBtnSpinner.classList.remove('hidden');
 
+        // Show immediate feedback
+        showToast('🔄 Saving changes...', 'info', 2000);
+
         try {
+            console.log('🚀 Starting form submission...');
+
             const formData = new FormData(form);
             const data = Object.fromEntries(formData);
 
@@ -749,47 +925,304 @@ function initializeFormSubmission() {
             data.collect_email = formData.has('collect_email');
             data.collect_phone = formData.has('collect_phone');
 
+            // Enhanced debugging: Log comprehensive form data
+            console.log('🔍 FORM SUBMISSION DEBUG');
+            console.log('='.repeat(50));
+            console.log('📋 Complete form data:', data);
+            console.log('📊 Form data count:', Object.keys(data).length, 'fields');
+
+            // Verify styling fields specifically
+            const stylingFields = {
+                background_type: data.background_type,
+                card_background_type: data.card_background_type,
+                background_color: data.background_color,
+                button_color: data.button_color,
+                button_text_color: data.button_text_color,
+                title_color: data.title_color,
+                description_color: data.description_color
+            };
+
+            console.log('🎨 Styling fields verification:');
+            Object.entries(stylingFields).forEach(([key, value]) => {
+                const status = value ? '✅' : '❌';
+                console.log(`   ${status} ${key}: ${value || 'MISSING'}`);
+            });
+
+            // Check for missing required styling fields
+            const missingStylingFields = Object.entries(stylingFields)
+                .filter(([key, value]) => !value)
+                .map(([key]) => key);
+
+            if (missingStylingFields.length > 0) {
+                console.warn('⚠️ Missing styling fields:', missingStylingFields);
+            }
+
+            // Validate data before sending
+            if (!data.title || !data.slug) {
+                throw new Error('Title and slug are required');
+            }
+
+            console.log('📡 Sending API request...');
+            console.log('🌐 URL:', `/api/drops/{{drop.id}}`);
+            console.log('📦 Payload size:', JSON.stringify(data).length, 'bytes');
+
             const response = await fetch(`/api/drops/{{drop.id}}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    // Note: Authentication should be handled automatically via cookies
                 },
+                credentials: 'same-origin', // Ensure cookies are sent
                 body: JSON.stringify(data)
             });
 
+            console.log('📡 Response received:', {
+                status: response.status,
+                statusText: response.statusText,
+                ok: response.ok,
+                headers: Object.fromEntries(response.headers.entries())
+            });
+
             if (response.ok) {
-                showToast('Drop updated successfully!', 'success');
+                const result = await response.json();
+                console.log('✅ DROP UPDATE SUCCESS');
+                console.log('='.repeat(30));
+                console.log('📊 Server response:', result);
+
+                if (result.data) {
+                    console.log('🎨 Updated styling data:', {
+                        background_type: result.data.background_type,
+                        card_background_type: result.data.card_background_type,
+                        background_color: result.data.background_color,
+                        button_text_color: result.data.button_text_color
+                    });
+                }
+
+                showToast('✅ Drop styling updated successfully!', 'success');
+
+                // Refresh preview after a short delay
                 setTimeout(() => {
+                    console.log('🔄 Refreshing preview...');
                     refreshPreview();
-                }, 500);
+                }, 1000);
+
             } else {
-                const error = await response.json();
-                showToast(error.message || 'Failed to update drop', 'error');
+                console.error('❌ DROP UPDATE FAILED');
+                console.error('='.repeat(30));
+                console.error('📊 Response status:', response.status, response.statusText);
+
+                const errorText = await response.text();
+                console.error('📄 Error response body:', errorText);
+
+                let errorMessage = 'Failed to update drop';
+
+                try {
+                    const error = JSON.parse(errorText);
+                    errorMessage = error.message || error.error || errorMessage;
+                    console.error('🚨 Parsed error:', error);
+                } catch (parseError) {
+                    console.error('🚨 Could not parse error response:', parseError);
+                    errorMessage = `${errorMessage} (${response.status}: ${response.statusText})`;
+                }
+
+                // Show specific error messages for common issues
+                if (response.status === 401) {
+                    errorMessage = 'Authentication failed. Please refresh the page and try again.';
+                } else if (response.status === 403) {
+                    errorMessage = 'You do not have permission to edit this drop.';
+                } else if (response.status === 404) {
+                    errorMessage = 'Drop not found. It may have been deleted.';
+                } else if (response.status >= 500) {
+                    errorMessage = 'Server error. Please try again later.';
+                }
+
+                showToast(`❌ ${errorMessage}`, 'error');
             }
         } catch (error) {
-            showToast('Failed to update drop', 'error');
+            console.error('🚨 FORM SUBMISSION ERROR');
+            console.error('='.repeat(30));
+            console.error('🚨 Error details:', error);
+            console.error('🚨 Error stack:', error.stack);
+
+            let errorMessage = 'Network error. Please check your connection and try again.';
+
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                errorMessage = 'Could not connect to server. Please check your internet connection.';
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
+            showToast(`🚨 ${errorMessage}`, 'error');
         } finally {
             // Reset button state
             saveBtn.disabled = false;
             saveBtnText.textContent = 'Save Changes';
             saveBtnSpinner.classList.add('hidden');
+
+            console.log('🔄 Form submission completed (finally block)');
         }
+    });
+
+    // Add global error handler for debugging
+    window.addEventListener('error', function(e) {
+        console.error('🚨 GLOBAL ERROR:', e.error);
+        console.error('🚨 Error details:', {
+            message: e.message,
+            filename: e.filename,
+            lineno: e.lineno,
+            colno: e.colno
+        });
+    });
+
+    // Add unhandled promise rejection handler
+    window.addEventListener('unhandledrejection', function(e) {
+        console.error('🚨 UNHANDLED PROMISE REJECTION:', e.reason);
+        console.error('🚨 Promise:', e.promise);
     });
 }
 
-function showToast(message, type) {
+function showToast(message, type = 'info', duration = 5000) {
+    console.log(`🍞 Toast: ${type.toUpperCase()} - ${message}`);
+
+    // Remove any existing toasts
+    const existingToasts = document.querySelectorAll('.toast-notification');
+    existingToasts.forEach(toast => toast.remove());
+
     const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 px-4 py-2 rounded-md shadow-lg z-50 ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-    }`;
-    toast.textContent = message;
+    toast.className = `toast-notification fixed top-4 right-4 px-6 py-4 rounded-lg shadow-xl z-50 max-w-md transition-all duration-300 transform translate-x-full`;
+
+    // Style based on type
+    if (type === 'success') {
+        toast.className += ' bg-green-500 text-white border-l-4 border-green-600';
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="font-medium">${message}</span>
+            </div>
+        `;
+    } else if (type === 'error') {
+        toast.className += ' bg-red-500 text-white border-l-4 border-red-600';
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                </svg>
+                <span class="font-medium">${message}</span>
+            </div>
+        `;
+    } else {
+        toast.className += ' bg-blue-500 text-white border-l-4 border-blue-600';
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                <span class="font-medium">${message}</span>
+            </div>
+        `;
+    }
+
     document.body.appendChild(toast);
 
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+        toast.classList.add('translate-x-0');
+    }, 100);
+
+    // Auto-remove after duration
     setTimeout(() => {
         if (document.body.contains(toast)) {
-            document.body.removeChild(toast);
+            toast.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    document.body.removeChild(toast);
+                }
+            }, 300);
         }
-    }, 3000);
+    }, duration);
+}
+
+function initializeDebugTest() {
+    const debugBtn = document.getElementById('debug-test-btn');
+    if (!debugBtn) return;
+
+    debugBtn.addEventListener('click', async function() {
+        console.log('🔧 MANUAL DEBUG TEST STARTED');
+        console.log('='.repeat(50));
+
+        try {
+            // Test 1: Check current form data
+            console.log('1️⃣ Checking current form data...');
+
+            const form = document.getElementById('drop-edit-form');
+            if (form) {
+                const formData = new FormData(form);
+                const currentData = Object.fromEntries(formData);
+                console.log('📋 Current form data:', currentData);
+
+                // Check specific styling fields
+                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'button_text_color'];
+                stylingFields.forEach(field => {
+                    const element = form.querySelector(`[name="${field}"]`);
+                    if (element) {
+                        console.log(`✅ ${field}: "${element.value}" (element found)`);
+                    } else {
+                        console.error(`❌ ${field}: element not found!`);
+                    }
+                });
+            }
+
+            // Test 2: Simple API connectivity test
+            console.log('2️⃣ Testing API connectivity...');
+
+            const testData = {
+                background_color: '#00FF00', // Bright green to make it obvious
+                background_type: 'solid',
+                card_background_type: 'solid_white',
+                button_color: '#FF0000',
+                button_text_color: '#FFFFFF'
+            };
+
+            console.log('📤 Sending test data:', testData);
+
+            const response = await fetch(`/api/drops/{{drop.id}}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(testData)
+            });
+
+            console.log('📡 Response status:', response.status);
+            console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ SUCCESS! API response:', result);
+                showToast('🔧 Debug test successful! Check if background changed to green.', 'success');
+
+                // Force refresh the preview
+                setTimeout(() => {
+                    refreshPreview();
+                }, 1000);
+
+            } else {
+                const errorText = await response.text();
+                console.error('❌ API Error:', errorText);
+                showToast(`🔧 Debug test failed: ${response.status} ${response.statusText}`, 'error');
+            }
+
+        } catch (error) {
+            console.error('🚨 Debug test error:', error);
+            showToast(`🔧 Debug test error: ${error.message}`, 'error');
+        }
+    });
 }
 
 async function loadAnalytics() {

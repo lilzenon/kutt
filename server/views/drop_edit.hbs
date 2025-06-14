@@ -105,7 +105,16 @@
                             <p class="section-description">Customize the visual appearance of your drop page</p>
                         </div>
 
-                        <div class="color-picker-grid">
+                        <!-- Background Settings -->
+                        <div class="styling-section">
+                            <h3 class="subsection-title">Background</h3>
+                            <div class="form-group">
+                                <label for="edit-background-type" class="form-label">Background Type</label>
+                                <select id="edit-background-type" name="background_type" class="form-select">
+                                    <option value="gradient" {{#if (eq drop.background_type "gradient")}}selected{{/if}}>Gradient</option>
+                                    <option value="solid" {{#if (eq drop.background_type "solid")}}selected{{/if}}>Solid Color</option>
+                                </select>
+                            </div>
                             <div class="color-picker-group">
                                 <label for="edit-background-color" class="color-picker-label">
                                     Background Color
@@ -113,45 +122,63 @@
                                 <input type="color" id="edit-background-color" name="background_color"
                                        value="{{drop.background_color}}" class="modern-color-input">
                             </div>
+                        </div>
 
-                            <div class="color-picker-group">
-                                <label for="edit-card-color" class="color-picker-label">
-                                    Card Color
-                                </label>
-                                <input type="color" id="edit-card-color" name="card_color"
-                                       value="{{drop.card_color}}" class="modern-color-input">
+                        <!-- Card Settings -->
+                        <div class="styling-section">
+                            <h3 class="subsection-title">Card Background</h3>
+                            <div class="form-group">
+                                <label for="edit-card-background-type" class="form-label">Card Style</label>
+                                <select id="edit-card-background-type" name="card_background_type" class="form-select">
+                                    <option value="solid_white" {{#if (eq drop.card_background_type "solid_white")}}selected{{/if}}>Solid White</option>
+                                    <option value="solid_dark" {{#if (eq drop.card_background_type "solid_dark")}}selected{{/if}}>Solid Dark</option>
+                                    <option value="translucent_light" {{#if (eq drop.card_background_type "translucent_light")}}selected{{/if}}>Translucent Light</option>
+                                    <option value="translucent_dark" {{#if (eq drop.card_background_type "translucent_dark")}}selected{{/if}}>Translucent Dark</option>
+                                </select>
                             </div>
+                        </div>
 
-                            <div class="color-picker-group">
-                                <label for="edit-title-color" class="color-picker-label">
-                                    Title Text Color
-                                </label>
-                                <input type="color" id="edit-title-color" name="title_color"
-                                       value="{{drop.title_color}}" class="modern-color-input">
+                        <!-- Text Colors -->
+                        <div class="styling-section">
+                            <h3 class="subsection-title">Text Colors</h3>
+                            <div class="color-picker-grid">
+                                <div class="color-picker-group">
+                                    <label for="edit-title-color" class="color-picker-label">
+                                        Title Color
+                                    </label>
+                                    <input type="color" id="edit-title-color" name="title_color"
+                                           value="{{drop.title_color}}" class="modern-color-input">
+                                </div>
+
+                                <div class="color-picker-group">
+                                    <label for="edit-description-color" class="color-picker-label">
+                                        Subtitle Color
+                                    </label>
+                                    <input type="color" id="edit-description-color" name="description_color"
+                                           value="{{drop.description_color}}" class="modern-color-input">
+                                </div>
                             </div>
+                        </div>
 
-                            <div class="color-picker-group">
-                                <label for="edit-description-color" class="color-picker-label">
-                                    Description Text Color
-                                </label>
-                                <input type="color" id="edit-description-color" name="description_color"
-                                       value="{{drop.description_color}}" class="modern-color-input">
-                            </div>
+                        <!-- Button Settings -->
+                        <div class="styling-section">
+                            <h3 class="subsection-title">Button Styling</h3>
+                            <div class="color-picker-grid">
+                                <div class="color-picker-group">
+                                    <label for="edit-button-color" class="color-picker-label">
+                                        Button Background
+                                    </label>
+                                    <input type="color" id="edit-button-color" name="button_color"
+                                           value="{{drop.button_color}}" class="modern-color-input">
+                                </div>
 
-                            <div class="color-picker-group">
-                                <label for="edit-button-color" class="color-picker-label">
-                                    Button Color
-                                </label>
-                                <input type="color" id="edit-button-color" name="button_color"
-                                       value="{{drop.button_color}}" class="modern-color-input">
-                            </div>
-
-                            <div class="color-picker-group">
-                                <label for="edit-form-field-color" class="color-picker-label">
-                                    Form Field Color
-                                </label>
-                                <input type="color" id="edit-form-field-color" name="form_field_color"
-                                       value="{{drop.form_field_color}}" class="modern-color-input">
+                                <div class="color-picker-group">
+                                    <label for="edit-button-text-color" class="color-picker-label">
+                                        Button Text Color
+                                    </label>
+                                    <input type="color" id="edit-button-text-color" name="button_text_color"
+                                           value="{{drop.button_text_color}}" class="modern-color-input">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -705,11 +732,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const slugInput = document.getElementById('edit-slug');
     const buttonTextInput = document.getElementById('edit-button-text');
     const buttonColorInput = document.getElementById('edit-button-color');
+    const buttonTextColorInput = document.getElementById('edit-button-text-color');
     const backgroundColorInput = document.getElementById('edit-background-color');
-    const cardColorInput = document.getElementById('edit-card-color');
+    const backgroundTypeSelect = document.getElementById('edit-background-type');
+    const cardBackgroundTypeSelect = document.getElementById('edit-card-background-type');
     const titleColorInput = document.getElementById('edit-title-color');
     const descriptionColorInput = document.getElementById('edit-description-color');
-    const formFieldColorInput = document.getElementById('edit-form-field-color');
     const coverImageInput = document.getElementById('edit-cover-image');
 
     const previewDrop = document.getElementById('drop-preview');
@@ -765,26 +793,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // BULLETPROOF CSS CUSTOM PROPERTIES SYSTEM
     // Based on MDN best practices and research findings
     function updatePreviewColors() {
-        const backgroundColor = backgroundColorInput.value || '#ffffff';
-        const cardColor = cardColorInput.value || '#ffffff';
-        const titleColor = titleColorInput.value || '#000000';
-        const descriptionColor = descriptionColorInput.value || '#666666';
-        const buttonColor = buttonColorInput.value || '#007bff';
-        const formFieldColor = formFieldColorInput.value || '#ffffff';
+        const backgroundColor = backgroundColorInput.value || '#DC2626';
+        const backgroundType = backgroundTypeSelect ? backgroundTypeSelect.value : 'gradient';
+        const cardBackgroundType = cardBackgroundTypeSelect ? cardBackgroundTypeSelect.value : 'solid_dark';
+        const titleColor = titleColorInput.value || '#ffffff';
+        const descriptionColor = descriptionColorInput.value || '#ffffff';
+        const buttonColor = buttonColorInput.value || '#DC2626';
+        const buttonTextColor = buttonTextColorInput ? buttonTextColorInput.value : '#ffffff';
 
-        console.log('🎨 Updating preview colors:', { backgroundColor, cardColor, titleColor, descriptionColor, buttonColor, formFieldColor });
+        console.log('🎨 Updating preview colors:', {
+            backgroundColor, backgroundType, cardBackgroundType,
+            titleColor, descriptionColor, buttonColor, buttonTextColor
+        });
 
-        // RESEARCH-BASED APPROACH: Apply CSS custom properties to :root for maximum inheritance
-        // This ensures variables cascade properly to all child elements
+        // ENHANCED APPROACH: Apply CSS custom properties to :root for maximum inheritance
         const documentRoot = document.documentElement;
 
         // Set CSS variables with preview-specific prefixes to avoid conflicts
         documentRoot.style.setProperty('--preview-drop-background-color', backgroundColor);
-        documentRoot.style.setProperty('--preview-drop-card-color', cardColor);
+        documentRoot.style.setProperty('--preview-drop-background-type', backgroundType);
+        documentRoot.style.setProperty('--preview-drop-card-background-type', cardBackgroundType);
         documentRoot.style.setProperty('--preview-drop-title-color', titleColor);
         documentRoot.style.setProperty('--preview-drop-description-color', descriptionColor);
         documentRoot.style.setProperty('--preview-drop-button-color', buttonColor);
-        documentRoot.style.setProperty('--preview-drop-form-field-color', formFieldColor);
+        documentRoot.style.setProperty('--preview-drop-button-text-color', buttonTextColor);
 
         // FIXED: Also set the standard variables for better compatibility
         documentRoot.style.setProperty('--drop-background-color', backgroundColor);
@@ -889,19 +921,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Color update listeners with immediate feedback
     buttonColorInput.addEventListener('input', updatePreviewColors);
+    if (buttonTextColorInput) buttonTextColorInput.addEventListener('input', updatePreviewColors);
     backgroundColorInput.addEventListener('input', updatePreviewColors);
-    cardColorInput.addEventListener('input', updatePreviewColors);
+    if (backgroundTypeSelect) backgroundTypeSelect.addEventListener('change', updatePreviewColors);
+    if (cardBackgroundTypeSelect) cardBackgroundTypeSelect.addEventListener('change', updatePreviewColors);
     titleColorInput.addEventListener('input', updatePreviewColors);
     descriptionColorInput.addEventListener('input', updatePreviewColors);
-    formFieldColorInput.addEventListener('input', updatePreviewColors);
 
     // Also add 'change' event listeners for better compatibility
     buttonColorInput.addEventListener('change', updatePreviewColors);
+    if (buttonTextColorInput) buttonTextColorInput.addEventListener('change', updatePreviewColors);
     backgroundColorInput.addEventListener('change', updatePreviewColors);
-    cardColorInput.addEventListener('change', updatePreviewColors);
     titleColorInput.addEventListener('change', updatePreviewColors);
     descriptionColorInput.addEventListener('change', updatePreviewColors);
-    formFieldColorInput.addEventListener('change', updatePreviewColors);
 
     // MOBILE-ONLY PREVIEW: No device switching needed
     function initializeMobilePreview() {

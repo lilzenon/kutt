@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Page Load Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-button { 
+            background: yellow; 
+            border: 2px solid orange; 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer;
+            margin: 10px;
+        }
+        .test-section { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0; 
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 DEBUG: Edit Page Load Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Basic Button Visibility</h2>
+        <button class="debug-button" onclick="alert('Button works!')">🔧 Test Debug Button</button>
+        <p>If you can see this yellow button, then basic HTML/CSS is working.</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: JavaScript Execution</h2>
+        <button class="debug-button" onclick="testJavaScript()">🧪 Test JavaScript</button>
+        <div id="js-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Form Elements</h2>
+        <form id="test-form">
+            <label>Background Type:</label>
+            <select name="background_type">
+                <option value="solid">Solid</option>
+                <option value="gradient">Gradient</option>
+            </select>
+            <br><br>
+            
+            <label>Background Color:</label>
+            <input type="color" name="background_color" value="#FF0000">
+            <br><br>
+            
+            <button type="button" onclick="testFormData()">🔍 Test Form Data</button>
+        </form>
+        <div id="form-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: API Test</h2>
+        <button class="debug-button" onclick="testAPI()">🌐 Test API Call</button>
+        <div id="api-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 5: Navigation Links</h2>
+        <a href="/drops/22/edit" style="background: lightblue; padding: 10px; text-decoration: none;">
+            🔗 Go to Real Edit Page
+        </a>
+        <br><br>
+        <a href="/drop/laylo-test-drop" style="background: lightgreen; padding: 10px; text-decoration: none;">
+            🌐 Go to Live Drop Page
+        </a>
+    </div>
+
+    <script>
+        function testJavaScript() {
+            const result = document.getElementById('js-result');
+            result.innerHTML = '<p style="color: green;">✅ JavaScript is working!</p>';
+            console.log('🧪 JavaScript test executed');
+        }
+        
+        function testFormData() {
+            const form = document.getElementById('test-form');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            const result = document.getElementById('form-result');
+            result.innerHTML = `
+                <p><strong>Form Data:</strong></p>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+            console.log('📋 Form data:', data);
+        }
+        
+        async function testAPI() {
+            const result = document.getElementById('api-result');
+            result.innerHTML = '<p>🔄 Testing API...</p>';
+            
+            try {
+                const response = await fetch('/api/drops/22', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                });
+                
+                const status = response.status;
+                const statusText = response.statusText;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.innerHTML = `
+                        <p style="color: green;">✅ API Success (${status})</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    const errorText = await response.text();
+                    result.innerHTML = `
+                        <p style="color: red;">❌ API Error (${status}: ${statusText})</p>
+                        <pre>${errorText}</pre>
+                    `;
+                }
+            } catch (error) {
+                result.innerHTML = `
+                    <p style="color: red;">🚨 Network Error</p>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+        
+        // Auto-run basic tests
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Debug page loaded');
+            console.log('📍 Current URL:', window.location.href);
+            console.log('🍪 Cookies:', document.cookie);
+        });
+    </script>
+</body>
+</html>
