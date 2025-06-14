@@ -1160,23 +1160,37 @@ function updateGradientPreview() {
 
     const gradientCSS = generateGradientCSS();
     console.log('🎨 Generated gradient CSS:', gradientCSS);
+    console.log('🎨 Current gradient data:', JSON.stringify(gradientData, null, 2));
+
     preview.style.background = gradientCSS;
 
     if (cssOutput) {
         cssOutput.value = gradientCSS;
     }
 
-    // Update hidden input for form submission
+    // Update hidden input for form submission - CRITICAL FIX
     const hiddenInput = document.getElementById('gradient-data');
     if (hiddenInput) {
-        hiddenInput.value = JSON.stringify(gradientData);
+        const gradientDataString = JSON.stringify(gradientData);
+        hiddenInput.value = gradientDataString;
+        console.log('🎨 Updated hidden input with gradient data:', gradientDataString);
+
+        // Force trigger change event to ensure form recognizes the update
+        hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+        console.error('🎨 Hidden gradient-data input not found!');
     }
 
     // Update background color input to match first color stop
     const backgroundColorInput = document.getElementById('edit-background-color');
     if (backgroundColorInput && gradientData.stops.length > 0) {
         backgroundColorInput.value = gradientData.stops[0].color;
+        // Trigger change event for background color input too
+        backgroundColorInput.dispatchEvent(new Event('change', { bubbles: true }));
     }
+
+    // Update the live preview iframe if available
+    updateLivePreviewGradient(gradientCSS);
 }
 
 function generateGradientCSS() {
@@ -1226,6 +1240,32 @@ function copyGradientCSS() {
     }
 }
 
+function updateLivePreviewGradient(gradientCSS) {
+    try {
+        const iframe = document.getElementById('preview-iframe');
+        if (!iframe || !iframe.contentDocument) {
+            console.log('🎨 Preview iframe not accessible, will refresh instead');
+            return;
+        }
+
+        const previewDocument = iframe.contentDocument;
+        const dropPageContainer = previewDocument.querySelector('.drop-page-container');
+
+        if (dropPageContainer) {
+            dropPageContainer.style.background = gradientCSS;
+            console.log('🎨 Updated live preview gradient:', gradientCSS);
+        } else {
+            console.warn('🎨 Drop page container not found in preview iframe');
+        }
+    } catch (error) {
+        console.warn('🎨 Could not update live preview gradient (cross-origin):', error.message);
+        // Fallback: refresh the preview iframe
+        setTimeout(() => {
+            refreshPreview();
+        }, 500);
+    }
+}
+
 function initializeFormSubmission() {
     const form = document.getElementById('drop-edit-form');
     const saveBtn = document.getElementById('save-btn');
@@ -1256,6 +1296,17 @@ function initializeFormSubmission() {
             data.is_active = formData.has('is_active');
             data.collect_email = formData.has('collect_email');
             data.collect_phone = formData.has('collect_phone');
+
+            // CRITICAL FIX: Ensure gradient data is captured
+            const gradientDataInput = document.getElementById('gradient-data');
+            if (gradientDataInput && gradientDataInput.value) {
+                data.gradient_data = gradientDataInput.value;
+                console.log('🎨 Captured gradient data for submission:', data.gradient_data);
+            } else if (data.background_type === 'gradient') {
+                // If background type is gradient but no gradient data, use current gradientData
+                data.gradient_data = JSON.stringify(gradientData);
+                console.log('🎨 Using current gradientData for submission:', data.gradient_data);
+            }
 
             // Enhanced debugging: Log comprehensive form data
             console.log('🔍 FORM SUBMISSION DEBUG');

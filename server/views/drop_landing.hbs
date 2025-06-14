@@ -179,7 +179,7 @@
             grid-column: 2;
         }
 
-        /* Title - Enhanced with Dynamic Colors and Proper Alignment */
+        /* Title - Enhanced with Dynamic Colors and Content Card Width Matching */
         .drop-title {
             font-size: 64px;
             line-height: 1.1;
@@ -191,9 +191,12 @@
             text-wrap: wrap;
             white-space-collapse: preserve-breaks;
             color: {{#if drop.title_color}}{{drop.title_color}}{{else}}var(--laylo-text-primary){{/if}};
+            /* Match content card width exactly */
+            width: 100%;
+            max-width: 400px;
         }
 
-        /* User Container - Proper Alignment */
+        /* User Container - Left-Aligned Subtitle */
         .user-container {
             display: flex;
             flex-direction: row;
@@ -202,6 +205,9 @@
             cursor: pointer;
             margin-bottom: 24px;
             text-align: left;
+            justify-content: flex-start;
+            width: 100%;
+            max-width: 400px;
         }
 
         .avatar {
@@ -713,7 +719,7 @@
         .laylo-branding-link {
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
             text-decoration: none;
             color: var(--laylo-text-secondary);
             transition: color 0.2s ease;
@@ -721,10 +727,6 @@
 
         .laylo-branding-link:hover {
             color: #1795B0;
-        }
-
-        .laylo-branding-arrow {
-            margin-left: 4px;
         }
 
         /* Success/Error Messages - Exact Laylo Style */
@@ -808,6 +810,12 @@
                 font-size: clamp(28px, 6vw, 36px);
                 line-height: 1.2;
                 text-align: center;
+                max-width: 100%;
+            }
+
+            .user-container {
+                justify-content: center;
+                max-width: 100%;
             }
         }
 
@@ -845,6 +853,12 @@
                 line-height: 1.2;
                 text-align: center;
                 margin: 8px 0;
+                max-width: 100%;
+            }
+
+            .user-container {
+                justify-content: center;
+                max-width: 100%;
             }
 
             .rsvp-card-container {
@@ -903,6 +917,12 @@
                 line-height: 1.3;
                 text-align: center;
                 margin: 6px 0;
+                max-width: 100%;
+            }
+
+            .user-container {
+                justify-content: center;
+                max-width: 100%;
             }
 
             .rsvp-card-container {
@@ -1105,20 +1125,17 @@
 
                         <!-- Form Footer -->
                         <div class="laylo-form-footer">
-                            This site is protected by reCaptcha. By submitting my information, I agree to receive recurring automated messages to the contact information provided and to <a href="https://laylo.com/terms" target="_blank">Laylo's Terms of Service</a>, <a href="https://laylo.com/cookies" target="_blank">Cookie Policy</a> and <a href="https://laylo.com/privacy" target="_blank">Privacy Policy</a>. Msg & Data Rates may apply. Reply STOP to cancel, HELP for help.
+                            This site is protected by reCaptcha. By submitting my information, I agree to receive recurring automated messages to the contact information provided and to Bounce2Bounce's <a href="https://terms.bounce2bounce.com" target="_blank">Terms of Service</a>, <a href="https://terms.bounce2bounce.com" target="_blank">Cookie Policy</a> and <a href="https://terms.bounce2bounce.com" target="_blank">Privacy Policy</a>. Msg & Data Rates may apply. Reply STOP to cancel, HELP for help.
                         </div>
 
                         <!-- Laylo Branding -->
                         <div class="laylo-branding">
                             <div class="laylo-branding-link">
-                                <svg width="45" height="13" viewBox="5 3 110 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M22.4994 35.0021C28.3365 35.0021 33.395 31.6682 35.8745 26.8006C38.2189 26.3869 39.9998 24.3397 39.9998 21.8766C39.9998 19.9366 38.895 18.2546 37.2802 17.4255C36.059 10.3678 29.906 5 22.4994 5C15.0925 5 8.93944 10.3681 7.71848 17.4261C6.10431 18.2553 5 19.937 5 21.8766C5 24.3393 6.78032 26.3862 9.12416 26.8004C11.6036 31.6681 16.6621 35.0021 22.4994 35.0021ZM10.0017 20.0014C10.0017 21.2156 10.1748 22.3893 10.4977 23.4993C13.8413 26.0122 17.9982 27.5014 22.5029 27.5014C27.0072 27.5014 31.1638 26.0125 34.5072 23.5C34.8302 22.3898 35.0034 21.2158 35.0034 20.0014C35.0034 13.0973 29.4066 7.50049 22.5026 7.50049C15.5985 7.50049 10.0017 13.0973 10.0017 20.0014ZM12.5086 18.7445C12.4227 19.4344 12.9945 20.0007 13.6897 20.0007C14.3849 20.0007 14.9374 19.4329 15.0519 18.7473C15.5809 15.5805 18.0805 13.0809 21.2472 12.552C21.9329 12.4374 22.5007 11.8849 22.5007 11.1897C22.5007 10.4945 21.9343 9.92274 21.2445 10.0086C16.6875 10.5757 13.0756 14.1876 12.5086 18.7445ZM44.9998 28.6138H58.6941V24.1321H50.5013V8.12605H44.9998V28.6138ZM64.6748 28.8539C66.6537 28.8539 68.1478 28.1737 69.068 26.453H69.1868V28.6138H74.2924V18.0898C74.2924 15.2488 71.6308 13.0479 67.287 13.0479C62.7453 13.0479 60.5091 15.4488 60.3211 18.2499H65.3476C65.4762 17.2995 66.1689 16.8494 67.2078 16.8494C68.1577 16.8494 68.8306 17.2895 68.8306 18.0898V18.1299C68.8306 19.0202 67.8609 19.3003 65.308 19.4904C62.1714 19.7205 59.7274 21.0009 59.7274 24.3722C59.7274 27.4334 61.7657 28.8539 64.6748 28.8539ZM66.4558 25.3726C65.5257 25.3726 64.8727 24.9124 64.8727 24.0521C64.8727 23.2618 65.4268 22.6516 66.6933 22.4515C67.564 22.3114 68.2962 22.1314 68.8701 21.8913V23.1718C68.8701 24.5723 67.6927 25.3726 66.4558 25.3726ZM85.5767 29.8943C84.7356 32.4353 82.9447 34.376 79.1253 34.376C77.8687 34.376 76.6912 34.176 75.8403 33.8358L77.0276 29.9143C78.3733 30.3945 79.4321 30.4245 79.7982 29.5742L79.9169 29.2941L74.5738 13.248H80.2731L82.727 23.8921H82.8853L85.3788 13.248H91.1178L85.5767 29.8943ZM97.5758 8.12605H92.114V28.6138H97.5758V8.12605ZM115 20.9709C115 25.6927 112.071 28.894 107.124 28.894C102.176 28.894 99.2474 25.6927 99.2474 20.9709C99.2474 16.2491 102.176 13.0479 107.124 13.0479C112.071 13.0479 115 16.2491 115 20.9709ZM104.828 20.9309C104.828 23.3418 105.699 24.8124 107.163 24.8124C108.548 24.8124 109.419 23.3418 109.419 20.9309C109.419 18.52 108.548 17.0494 107.163 17.0494C105.699 17.0494 104.828 18.52 104.828 20.9309Z" fill="#687178"/>
+                                <svg width="45" height="13" viewBox="0 0 3784.81 1161.8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M162.87,658.37c39.48.14,79.1-.14,118.58,0,0,41.61-9.47,60.49-25.25,102.1,51.78-27.66,101.5-41.4,153.15-41.28,58.13.14,100.23,16.36,121.11,48.56,21.23,32.22,14.3,80.19-17.8,143.99-15.9,32.14-32.01,60.31-47.89,84.53-15.94,24.23-30.49,43.83-45.08,58.79-14.6,14.98-30.41,27.13-48.3,36.46-17.88,9.34-35.63,15.74-53.86,19.21-18.22,3.46-38.83,5.23-61.93,5.31-58.86.21-105.02-14.84-131.25-45.23-2.88,14.1-4.83,28.19-5.64,42.29-39.57.13-79.15.27-118.72.4,9.13-159.43,162.87-295.71,162.87-455.14ZM189.97,891.75c-8.96,17.92-17.84,35.84-26.21,53.77-.05,20.4,7.37,33.89,21.28,40.43,13.91,6.55,37.39,9.79,70.26,9.74,58.42-.1,97.28-27.06,123.88-80.9,4.45-9.05,7.94-17.41,10.44-25.11,2.49-7.69,4.03-14.14,4.6-19.34.56-5.19-.04-9.95-1.79-14.25-1.77-4.3-3.31-7.69-4.63-10.19-1.32-2.48-4.25-4.64-8.79-6.46-4.54-1.8-7.83-3.06-9.87-3.74-2.04-.68-5.83-1.25-11.37-1.71-5.54-.45-8.73-.69-9.58-.69-.85,0-3.8,0-8.89,0-69.37-.06-118.88,19.42-149.34,58.45Z" fill="#687178"/>
                                 </svg>
-                                <span class="laylo-branding-text">Make a Drop like this</span>
-                                <svg class="laylo-branding-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#687178" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
+
+
                             </div>
                         </div>
                     </div>
