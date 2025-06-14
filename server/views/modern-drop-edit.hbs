@@ -971,6 +971,261 @@ function refreshPreview() {
     }, 200);
 }
 
+// Advanced Gradient Editor System
+let gradientData = {
+    type: 'linear',
+    angle: 90,
+    stops: [
+        { color: '#667eea', position: 0 },
+        { color: '#764ba2', position: 100 }
+    ]
+};
+
+function initializeGradientEditor() {
+    console.log('🎨 Initializing gradient editor...');
+
+    const backgroundTypeSelect = document.getElementById('edit-background-type');
+    const gradientEditor = document.getElementById('gradient-editor');
+
+    // Show/hide gradient editor based on background type
+    if (backgroundTypeSelect) {
+        backgroundTypeSelect.addEventListener('change', function() {
+            console.log('🎨 Background type changed to:', this.value);
+            if (this.value === 'gradient') {
+                gradientEditor.style.display = 'block';
+                initializeColorStops();
+                updateGradientPreview();
+            } else {
+                gradientEditor.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize gradient type buttons
+    const gradientTypeButtons = document.querySelectorAll('.gradient-type-btn');
+    console.log('🎨 Found gradient type buttons:', gradientTypeButtons.length);
+    gradientTypeButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Gradient type clicked:', this.id);
+            gradientTypeButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            gradientData.type = this.id.replace('gradient-', '');
+
+            const directionSection = document.getElementById('gradient-direction-section');
+            if (gradientData.type === 'linear') {
+                directionSection.style.display = 'block';
+            } else {
+                directionSection.style.display = 'none';
+            }
+
+            updateGradientPreview();
+        });
+    });
+
+    // Initialize direction buttons
+    const directionButtons = document.querySelectorAll('.gradient-direction-btn');
+    console.log('🎨 Found direction buttons:', directionButtons.length);
+    directionButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Direction clicked:', this.dataset.angle);
+            directionButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            gradientData.angle = parseInt(this.dataset.angle);
+            updateGradientPreview();
+        });
+    });
+
+    // Initialize preset buttons
+    const presetButtons = document.querySelectorAll('.gradient-preset');
+    console.log('🎨 Found preset buttons:', presetButtons.length);
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Preset clicked:', this.dataset.gradient);
+            const gradientCSS = this.dataset.gradient;
+            parseGradientFromCSS(gradientCSS);
+            updateGradientPreview();
+            initializeColorStops();
+        });
+    });
+
+    // Initialize add/remove color stop buttons
+    const addStopBtn = document.getElementById('add-color-stop');
+    const removeStopBtn = document.getElementById('remove-color-stop');
+
+    if (addStopBtn) {
+        addStopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Adding color stop');
+            addColorStop();
+        });
+    }
+
+    if (removeStopBtn) {
+        removeStopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Removing color stop');
+            removeColorStop();
+        });
+    }
+
+    // Initialize copy CSS button
+    const copyCSSBtn = document.getElementById('copy-gradient-css');
+    if (copyCSSBtn) {
+        copyCSSBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🎨 Copying CSS');
+            copyGradientCSS();
+        });
+    }
+
+    // Initialize color stops
+    initializeColorStops();
+    updateGradientPreview();
+
+    console.log('🎨 Gradient editor initialized successfully');
+}
+
+function initializeColorStops() {
+    const container = document.getElementById('color-stops-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    gradientData.stops.forEach((stop, index) => {
+        const stopElement = createColorStopElement(stop, index);
+        container.appendChild(stopElement);
+    });
+}
+
+function createColorStopElement(stop, index) {
+    const div = document.createElement('div');
+    div.className = 'color-stop-item';
+    div.innerHTML = `
+        <input type="color" class="color-stop-color" value="${stop.color}" data-index="${index}">
+        <input type="number" class="color-stop-position" value="${stop.position}" min="0" max="100" data-index="${index}">
+        <span class="text-xs text-gray-500">%</span>
+    `;
+
+    // Add event listeners
+    const colorInput = div.querySelector('.color-stop-color');
+    const positionInput = div.querySelector('.color-stop-position');
+
+    colorInput.addEventListener('input', function() {
+        gradientData.stops[index].color = this.value;
+        updateGradientPreview();
+    });
+
+    positionInput.addEventListener('input', function() {
+        gradientData.stops[index].position = parseInt(this.value);
+        updateGradientPreview();
+    });
+
+    return div;
+}
+
+function addColorStop() {
+    if (gradientData.stops.length >= 4) return;
+
+    const newPosition = gradientData.stops.length > 0 ?
+        Math.min(100, Math.max(...gradientData.stops.map(s => s.position)) + 25) : 50;
+
+    gradientData.stops.push({
+        color: '#ffffff',
+        position: newPosition
+    });
+
+    initializeColorStops();
+    updateGradientPreview();
+}
+
+function removeColorStop() {
+    if (gradientData.stops.length <= 2) return;
+
+    gradientData.stops.pop();
+    initializeColorStops();
+    updateGradientPreview();
+}
+
+function updateGradientPreview() {
+    const preview = document.getElementById('gradient-preview');
+    const cssOutput = document.getElementById('gradient-css-output');
+
+    if (!preview) {
+        console.warn('🎨 Gradient preview element not found');
+        return;
+    }
+
+    const gradientCSS = generateGradientCSS();
+    console.log('🎨 Generated gradient CSS:', gradientCSS);
+    preview.style.background = gradientCSS;
+
+    if (cssOutput) {
+        cssOutput.value = gradientCSS;
+    }
+
+    // Update hidden input for form submission
+    const hiddenInput = document.getElementById('gradient-data');
+    if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(gradientData);
+    }
+
+    // Update background color input to match first color stop
+    const backgroundColorInput = document.getElementById('edit-background-color');
+    if (backgroundColorInput && gradientData.stops.length > 0) {
+        backgroundColorInput.value = gradientData.stops[0].color;
+    }
+}
+
+function generateGradientCSS() {
+    const sortedStops = [...gradientData.stops].sort((a, b) => a.position - b.position);
+    const stopsCSS = sortedStops.map(stop => `${stop.color} ${stop.position}%`).join(', ');
+
+    if (gradientData.type === 'linear') {
+        return `linear-gradient(${gradientData.angle}deg, ${stopsCSS})`;
+    } else {
+        return `radial-gradient(circle, ${stopsCSS})`;
+    }
+}
+
+function parseGradientFromCSS(css) {
+    // Simple parser for preset gradients
+    const match = css.match(/linear-gradient\((\d+)deg,\s*(.+)\)/);
+    if (match) {
+        gradientData.type = 'linear';
+        gradientData.angle = parseInt(match[1]);
+
+        const stopsStr = match[2];
+        const stops = stopsStr.split(',').map((stop, index) => {
+            const colorMatch = stop.trim().match(/^(#[0-9a-fA-F]{6})/);
+            return {
+                color: colorMatch ? colorMatch[1] : '#ffffff',
+                position: index * (100 / (stopsStr.split(',').length - 1))
+            };
+        });
+
+        gradientData.stops = stops;
+    }
+}
+
+function copyGradientCSS() {
+    const cssOutput = document.getElementById('gradient-css-output');
+    if (cssOutput) {
+        cssOutput.select();
+        document.execCommand('copy');
+
+        // Show feedback
+        const btn = document.getElementById('copy-gradient-css');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 1000);
+    }
+}
+
 function initializeFormSubmission() {
     const form = document.getElementById('drop-edit-form');
     const saveBtn = document.getElementById('save-btn');
@@ -1016,7 +1271,8 @@ function initializeFormSubmission() {
                 button_color: data.button_color,
                 button_text_color: data.button_text_color,
                 title_color: data.title_color,
-                description_color: data.description_color
+                description_color: data.description_color,
+                gradient_data: data.gradient_data
             };
 
             console.log('🎨 Styling fields verification:');
@@ -1242,7 +1498,7 @@ function initializeDebugTest() {
                 console.log('📋 Current form data:', currentData);
 
                 // Check specific styling fields
-                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'button_text_color'];
+                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'button_text_color', 'gradient_data'];
                 stylingFields.forEach(field => {
                     const element = form.querySelector(`[name="${field}"]`);
                     if (element) {
@@ -1336,229 +1592,6 @@ async function loadAnalytics() {
 <style>
 .tab-content {
     display: none;
-}
-
-// Advanced Gradient Editor System
-let gradientData = {
-    type: 'linear',
-    angle: 90,
-    stops: [
-        { color: '#667eea', position: 0 },
-        { color: '#764ba2', position: 100 }
-    ]
-};
-
-function initializeGradientEditor() {
-    console.log('🎨 Initializing gradient editor...');
-
-    const backgroundTypeSelect = document.getElementById('edit-background-type');
-    const gradientEditor = document.getElementById('gradient-editor');
-
-    // Show/hide gradient editor based on background type
-    if (backgroundTypeSelect) {
-        backgroundTypeSelect.addEventListener('change', function() {
-            if (this.value === 'gradient') {
-                gradientEditor.style.display = 'block';
-                initializeColorStops();
-                updateGradientPreview();
-            } else {
-                gradientEditor.style.display = 'none';
-            }
-        });
-    }
-
-    // Initialize gradient type buttons
-    const gradientTypeButtons = document.querySelectorAll('.gradient-type-btn');
-    gradientTypeButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            gradientTypeButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            gradientData.type = this.id.replace('gradient-', '');
-
-            const directionSection = document.getElementById('gradient-direction-section');
-            if (gradientData.type === 'linear') {
-                directionSection.style.display = 'block';
-            } else {
-                directionSection.style.display = 'none';
-            }
-
-            updateGradientPreview();
-        });
-    });
-
-    // Initialize direction buttons
-    const directionButtons = document.querySelectorAll('.gradient-direction-btn');
-    directionButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            directionButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            gradientData.angle = parseInt(this.dataset.angle);
-            updateGradientPreview();
-        });
-    });
-
-    // Initialize preset buttons
-    const presetButtons = document.querySelectorAll('.gradient-preset');
-    presetButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const gradientCSS = this.dataset.gradient;
-            parseGradientFromCSS(gradientCSS);
-            updateGradientPreview();
-            initializeColorStops();
-        });
-    });
-
-    // Initialize add/remove color stop buttons
-    const addStopBtn = document.getElementById('add-color-stop');
-    const removeStopBtn = document.getElementById('remove-color-stop');
-
-    if (addStopBtn) {
-        addStopBtn.addEventListener('click', addColorStop);
-    }
-
-    if (removeStopBtn) {
-        removeStopBtn.addEventListener('click', removeColorStop);
-    }
-
-    // Initialize copy CSS button
-    const copyCSSBtn = document.getElementById('copy-gradient-css');
-    if (copyCSSBtn) {
-        copyCSSBtn.addEventListener('click', copyGradientCSS);
-    }
-
-    // Initialize color stops
-    initializeColorStops();
-    updateGradientPreview();
-
-    console.log('🎨 Gradient editor initialized');
-}
-
-function initializeColorStops() {
-    const container = document.getElementById('color-stops-container');
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    gradientData.stops.forEach((stop, index) => {
-        const stopElement = createColorStopElement(stop, index);
-        container.appendChild(stopElement);
-    });
-}
-
-function createColorStopElement(stop, index) {
-    const div = document.createElement('div');
-    div.className = 'color-stop-item';
-    div.innerHTML = `
-        <input type="color" class="color-stop-color" value="${stop.color}" data-index="${index}">
-        <input type="number" class="color-stop-position" value="${stop.position}" min="0" max="100" data-index="${index}">
-        <span class="text-xs text-gray-500">%</span>
-    `;
-
-    // Add event listeners
-    const colorInput = div.querySelector('.color-stop-color');
-    const positionInput = div.querySelector('.color-stop-position');
-
-    colorInput.addEventListener('input', function() {
-        gradientData.stops[index].color = this.value;
-        updateGradientPreview();
-    });
-
-    positionInput.addEventListener('input', function() {
-        gradientData.stops[index].position = parseInt(this.value);
-        updateGradientPreview();
-    });
-
-    return div;
-}
-
-function addColorStop() {
-    if (gradientData.stops.length >= 4) return;
-
-    const newPosition = gradientData.stops.length > 0 ?
-        Math.min(100, Math.max(...gradientData.stops.map(s => s.position)) + 25) : 50;
-
-    gradientData.stops.push({
-        color: '#ffffff',
-        position: newPosition
-    });
-
-    initializeColorStops();
-    updateGradientPreview();
-}
-
-function removeColorStop() {
-    if (gradientData.stops.length <= 2) return;
-
-    gradientData.stops.pop();
-    initializeColorStops();
-    updateGradientPreview();
-}
-
-function updateGradientPreview() {
-    const preview = document.getElementById('gradient-preview');
-    const cssOutput = document.getElementById('gradient-css-output');
-
-    if (!preview) return;
-
-    const gradientCSS = generateGradientCSS();
-    preview.style.background = gradientCSS;
-
-    if (cssOutput) {
-        cssOutput.value = gradientCSS;
-    }
-
-    // Update hidden input for form submission
-    const hiddenInput = document.getElementById('gradient-data');
-    if (hiddenInput) {
-        hiddenInput.value = JSON.stringify(gradientData);
-    }
-}
-
-function generateGradientCSS() {
-    const sortedStops = [...gradientData.stops].sort((a, b) => a.position - b.position);
-    const stopsCSS = sortedStops.map(stop => `${stop.color} ${stop.position}%`).join(', ');
-
-    if (gradientData.type === 'linear') {
-        return `linear-gradient(${gradientData.angle}deg, ${stopsCSS})`;
-    } else {
-        return `radial-gradient(circle, ${stopsCSS})`;
-    }
-}
-
-function parseGradientFromCSS(css) {
-    // Simple parser for preset gradients
-    const match = css.match(/linear-gradient\((\d+)deg,\s*(.+)\)/);
-    if (match) {
-        gradientData.type = 'linear';
-        gradientData.angle = parseInt(match[1]);
-
-        const stopsStr = match[2];
-        const stops = stopsStr.split(',').map((stop, index) => {
-            const colorMatch = stop.trim().match(/^(#[0-9a-fA-F]{6})/);
-            return {
-                color: colorMatch ? colorMatch[1] : '#ffffff',
-                position: index * (100 / (stopsStr.split(',').length - 1))
-            };
-        });
-
-        gradientData.stops = stops;
-    }
-}
-
-function copyGradientCSS() {
-    const cssOutput = document.getElementById('gradient-css-output');
-    if (cssOutput) {
-        cssOutput.select();
-        document.execCommand('copy');
-
-        // Show feedback
-        const btn = document.getElementById('copy-gradient-css');
-        const originalText = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => {
-            btn.textContent = originalText;
-        }, 1000);
-    }
 }
 
 .tab-content.active {

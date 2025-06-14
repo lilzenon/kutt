@@ -444,6 +444,33 @@ function registerHandlebarsHelpers() {
         return str.substring(start, length || str.length);
     });
 
+    hbs.registerHelper("parseGradientData", function(gradientData) {
+        if (!gradientData) return "";
+
+        try {
+            const data = typeof gradientData === 'string' ? JSON.parse(gradientData) : gradientData;
+
+            if (!data || !data.stops || !Array.isArray(data.stops)) {
+                return "";
+            }
+
+            // Sort stops by position
+            const sortedStops = [...data.stops].sort((a, b) => a.position - b.position);
+            const stopsCSS = sortedStops.map(stop => `${stop.color} ${stop.position}%`).join(', ');
+
+            if (data.type === 'linear') {
+                return `linear-gradient(${data.angle || 90}deg, ${stopsCSS})`;
+            } else if (data.type === 'radial') {
+                return `radial-gradient(circle, ${stopsCSS})`;
+            }
+
+            return "";
+        } catch (error) {
+            console.error('Error parsing gradient data:', error);
+            return "";
+        }
+    });
+
     const blocks = {};
 
     hbs.registerHelper("extend", function(name, context) {

@@ -97,13 +97,19 @@
             {{#if (eq drop.background_type "solid")}}
             background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}};
             {{else}}
-            background: linear-gradient(
-                179deg,
-                {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
-                {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
-                {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
-                rgba(0, 0, 0, 0.9) 100%
-            );
+                {{#if drop.gradient_data}}
+                    {{! Use gradient data if available }}
+                    background: {{{parseGradientData drop.gradient_data}}};
+                {{else}}
+                    {{! Fallback gradient }}
+                    background: linear-gradient(
+                        179deg,
+                        {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
+                        {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
+                        {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
+                        rgba(0, 0, 0, 0.9) 100%
+                    );
+                {{/if}}
             {{/if}}
             background-attachment: fixed;
             background-size: cover;
@@ -808,24 +814,28 @@
         /* Mobile Large: 375px - 767px */
         @media only screen and (max-width: 767px) and (min-width: 375px) {
             .drop-page-container {
-                padding: clamp(16px, 4vh, 40px) clamp(16px, 4vw, 32px) 60px;
+                padding: clamp(16px, 4vh, 40px) clamp(12px, 3vw, 20px) 60px;
             }
 
             .drop-container {
                 grid-template-columns: 1fr;
-                gap: clamp(12px, 3vw, 24px);
+                gap: clamp(16px, 4vw, 24px);
                 text-align: center;
+                max-width: min(400px, 95vw);
+                margin: 0 auto;
             }
 
             .drop-image-container {
                 grid-column: 1;
-                max-width: min(350px, 85vw);
+                width: 100%;
+                max-width: 100%;
                 margin: 0 auto;
             }
 
             .rsvp-container {
                 grid-column: 1;
-                max-width: min(350px, 90vw);
+                width: 100%;
+                max-width: 100%;
                 margin: 0 auto;
                 padding-bottom: 16px;
             }
@@ -865,21 +875,25 @@
         /* Mobile Small: 320px - 374px */
         @media only screen and (max-width: 374px) {
             .drop-page-container {
-                padding: 16px 12px 50px;
+                padding: 16px 8px 50px;
             }
 
             .drop-container {
                 grid-template-columns: 1fr;
                 gap: 16px;
+                max-width: 100%;
+                margin: 0 auto;
             }
 
             .drop-image-container {
-                max-width: 95vw;
+                width: 100%;
+                max-width: 100%;
                 margin: 0 auto;
             }
 
             .rsvp-container {
-                max-width: 95vw;
+                width: 100%;
+                max-width: 100%;
                 margin: 0 auto;
                 padding-bottom: 12px;
             }
