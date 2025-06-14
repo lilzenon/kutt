@@ -485,7 +485,7 @@
         }
         {{/if}}
 
-        /* Native Country Select - Fixed for Phone Input */
+        /* Native Country Select - Limited to Flag Icon Area Only */
         .phone-country-select {
             position: absolute;
             left: 8px;
@@ -495,6 +495,7 @@
             align-items: center;
             z-index: 3;
             pointer-events: none; /* Allow clicks to pass through to phone input */
+            width: 60px; /* Limit width to flag area only */
         }
 
         .country-select-wrapper {
@@ -504,13 +505,14 @@
             pointer-events: auto; /* Re-enable pointer events for the select area only */
             background-color: rgba(0, 0, 0, 0.1);
             border-radius: 6px;
-            padding: 4px;
-            height: 32px;
+            padding: 2px 4px;
+            height: 28px;
+            width: 56px; /* Compact width for flag + dropdown arrow only */
         }
 
         .country-flag-display {
             position: absolute;
-            left: 8px;
+            left: 4px;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
@@ -530,17 +532,18 @@
             background-color: transparent;
             border: none;
             outline: none;
-            color: white;
+            color: transparent; /* Hide text, show only flag */
             font-family: "Inter", sans-serif;
             font-weight: 500;
             font-size: 0.875rem;
-            padding: 8px 24px 8px 40px;
+            padding: 4px 16px 4px 24px;
             border-radius: 6px;
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            min-width: 80px;
+            width: 52px; /* Compact width */
+            height: 24px;
         }
 
         .country-select:hover {
@@ -575,16 +578,19 @@
 
             .phone-country-select {
                 left: 6px;
+                width: 50px; /* Smaller on mobile */
             }
 
             .country-select-wrapper {
-                height: 28px;
-                padding: 2px;
+                height: 24px;
+                padding: 1px 2px;
+                width: 46px; /* Compact mobile width */
             }
 
             .country-select {
-                padding: 6px 20px 6px 36px;
-                min-width: 70px;
+                padding: 2px 12px 2px 20px;
+                width: 42px;
+                height: 20px;
             }
         }
 
@@ -671,7 +677,7 @@
             font-size: 1.125rem;
             line-height: 1.5;
             letter-spacing: 0.00938em;
-            padding: 16px 90px 16px 90px; /* Left padding for country selector */
+            padding: 16px 90px 16px 70px; /* Reduced left padding for smaller country selector */
             height: 100%;
             box-sizing: border-box;
         }
@@ -1107,7 +1113,7 @@
             }
 
             .phone-input-field {
-                padding: 12px 75px 12px 90px; /* Maintain left padding for country selector */
+                padding: 12px 75px 12px 60px; /* Reduced left padding for smaller country selector */
                 font-size: 16px; /* Keep 16px for zoom prevention */
             }
         }
@@ -1175,34 +1181,37 @@
             }
 
             .phone-input-field {
-                padding: 10px 65px 10px 85px; /* Maintain left padding for country selector */
+                padding: 10px 65px 10px 55px; /* Reduced left padding for smaller country selector */
                 font-size: 16px; /* Keep 16px for zoom prevention */
             }
 
             /* Smaller country selector for small screens */
             .phone-country-select {
                 left: 4px;
+                width: 44px; /* Even smaller on small screens */
             }
 
             .country-select-wrapper {
-                height: 24px;
+                height: 20px;
                 padding: 1px;
+                width: 40px; /* Very compact for small screens */
             }
 
             .country-select {
-                padding: 4px 16px 4px 32px;
-                min-width: 65px;
+                padding: 1px 8px 1px 16px;
+                width: 36px;
+                height: 16px;
                 font-size: 14px;
             }
 
             .country-flag-display {
-                left: 6px;
+                left: 4px;
             }
 
             .country-flag-display img {
-                width: 18px;
-                height: 13px;
-                margin-right: 4px;
+                width: 16px;
+                height: 12px;
+                margin-right: 2px;
             }
         }
 
