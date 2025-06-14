@@ -485,20 +485,26 @@
         }
         {{/if}}
 
-        /* Native Country Select */
+        /* Native Country Select - Fixed for Phone Input */
         .phone-country-select {
-            position: relative;
-            align-self: stretch;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
             display: flex;
             align-items: center;
-            margin-right: 0.5em;
-            flex-shrink: 0;
+            z-index: 3;
+            pointer-events: none; /* Allow clicks to pass through to phone input */
         }
 
         .country-select-wrapper {
             position: relative;
             display: flex;
             align-items: center;
+            pointer-events: auto; /* Re-enable pointer events for the select area only */
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 6px 0 0 6px;
+            padding: 4px;
         }
 
         .country-flag-display {
@@ -574,6 +580,21 @@
             text-align: center;
         }
 
+        .drop-sub-header-title {
+            font-family: "Inter", sans-serif;
+            font-weight: 600;
+            font-size: 1.125rem;
+            line-height: 1.4;
+            letter-spacing: 0.00938em;
+            {{#if (eq drop.card_background_type "solid_white")}}
+            color: #374151;
+            {{else}}
+            color: rgba(255, 255, 255, 0.9);
+            {{/if}}
+            margin: 0 0 8px 0;
+            padding: 0 16px;
+        }
+
         .drop-sub-header-content {
             font-family: "Inter", sans-serif;
             font-weight: 400;
@@ -596,6 +617,11 @@
                 max-width: 100%;
             }
 
+            .drop-sub-header-title {
+                font-size: 1rem;
+                padding: 0 12px;
+            }
+
             .drop-sub-header-content {
                 font-size: 0.9rem;
                 padding: 0 12px;
@@ -607,16 +633,20 @@
                 margin-top: 12px;
             }
 
+            .drop-sub-header-title {
+                font-size: 0.95rem;
+                padding: 0 8px;
+            }
+
             .drop-sub-header-content {
                 font-size: 0.85rem;
                 padding: 0 8px;
             }
         }
 
-        /* Phone Input Field - Standardized */
+        /* Phone Input Field - Fixed for Country Select */
         .phone-input-field {
-            flex: 1;
-            min-width: 0;
+            width: 100%;
             background-color: transparent;
             border: none;
             outline: none;
@@ -626,9 +656,16 @@
             font-size: 1.125rem;
             line-height: 1.5;
             letter-spacing: 0.00938em;
-            padding: 0 90px 0 0;
+            padding: 16px 90px 16px 90px; /* Left padding for country selector */
             height: 100%;
             box-sizing: border-box;
+        }
+
+        /* Phone Input Container */
+        .phone-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
 
         /* Mobile font-size fix to prevent zoom */
@@ -1315,6 +1352,11 @@
                 <!-- Sub-header Section -->
                 {{#if drop.sub_header}}
                 <div class="drop-sub-header">
+                    {{#if drop.sub_header_title}}
+                    <div class="drop-sub-header-title">
+                        {{drop.sub_header_title}}
+                    </div>
+                    {{/if}}
                     <div class="drop-sub-header-content">
                         {{drop.sub_header}}
                     </div>
