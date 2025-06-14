@@ -24,14 +24,20 @@
     <!-- Favicon -->
     <link rel="icon" href="/images/favicon.ico">
 
+    <!-- Fonts - HTML GlobalBank Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,300,500&display=swap" rel="stylesheet">
+
     <!-- Styles -->
     <link rel="stylesheet" href="/css/styles.css">
 
     <!-- Modular Drop System -->
     <link rel="stylesheet" href="/css/drop-shared.css">
 
-    <!-- Open React Template Foundation -->
-    <link rel="stylesheet" href="/css/open-react-foundation.css">
+    <!-- HTML GlobalBank Template Foundation -->
+    <link rel="stylesheet" href="/css/html-globalbank-foundation.css">
 
     <!-- Glassmorphism Styling (Separate from Dashboard) -->
     <link rel="stylesheet" href="/css/drop-glassmorphism.css">
@@ -50,7 +56,8 @@
         }
 
         body.drop-landing-page {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            /* HTML GlobalBank Foundation */
+            font-family: 'Clash Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
@@ -61,15 +68,20 @@
             -webkit-overflow-scrolling: touch;
             /* MODERN: Better box-sizing */
             box-sizing: border-box;
-            /* GLASSMORPHISM: Enhanced gradient background with depth */
+            /* HTML GLOBALBANK: Dark theme with professional gradients */
             background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, var(--drop-background-color, #f8fafc) 0%, color-mix(in srgb, var(--drop-background-color, #f8fafc) 85%, #ffffff) 100%);
+                radial-gradient(circle at 20% 80%, rgba(204, 255, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(71, 80, 98, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(137, 137, 137, 0.05) 0%, transparent 50%),
+                linear-gradient(135deg, var(--drop-background-color, #0E0F11) 0%, color-mix(in srgb, var(--drop-background-color, #0E0F11) 85%, #1F2937) 100%);
             min-height: 100vh;
+            /* HTML GLOBALBANK: Professional dark theme */
+            color: #ffffff;
             /* GLASSMORPHISM: Add subtle texture */
             position: relative;
+            /* HTML GLOBALBANK: Enhanced font rendering */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body.drop-landing-page::before {
@@ -185,26 +197,27 @@
             </div>
         </header>
 
-        <!-- Main Content - Open React Template Hero Section -->
+        <!-- Main Content - HTML GlobalBank Hero Section -->
         <main class="drop-main">
             <!-- Hero Section -->
-            <section class="open-hero-section">
-                <div class="open-hero-container">
-                    <div class="open-hero-content">
+            <section class="globalbank-hero-section">
+                <div class="globalbank-hero-container">
+                    <div class="globalbank-hero-content">
                         {{#if drop.cover_image}}
                         <div class="drop-cover-image" style="margin-bottom: 32px;">
-                            <img src="{{drop.cover_image}}" alt="{{drop.title}}" loading="lazy" style="max-width: 200px; height: auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                            <img src="{{drop.cover_image}}" alt="{{drop.title}}" loading="lazy" style="max-width: 200px; height: auto;">
                         </div>
                         {{/if}}
 
-                        <h1 class="open-hero-title">{{drop.title}}</h1>
+                        <span class="globalbank-hero-badge">{{drop.category}}</span>
+                        <h1 class="globalbank-hero-title">{{drop.title}}</h1>
 
                         {{#if drop.description}}
-                        <p class="open-hero-description">{{drop.description}}</p>
+                        <p class="globalbank-hero-description">{{drop.description}}</p>
                         {{/if}}
 
                         {{#if drop.signup_count}}
-                        <div class="open-hero-stats">
+                        <div class="globalbank-hero-stats">
                             <span class="signup-count">{{drop.signup_count}} people have already signed up</span>
                         </div>
                         {{/if}}
@@ -212,14 +225,14 @@
                 </div>
             </section>
 
-            <!-- Platform Links - Open React Template Style -->
+            <!-- Platform Links - HTML GlobalBank Style -->
             {{#if (or drop.website_link drop.instagram_link drop.twitter_link drop.spotify_link drop.youtube_link drop.apple_music_url drop.soundcloud_url drop.tiktok_link)}}
-            <section class="open-platform-section">
-                <div class="open-platform-container">
-                    <div class="open-platform-grid glassmorphism-container">
+            <section class="globalbank-platform-section">
+                <div class="globalbank-platform-container">
+                    <div class="globalbank-platform-grid glassmorphism-container">
                         {{#if drop.website_link}}
-                        <a href="{{drop.website_link}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.website_link}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                             </svg>
                             <span>Website</span>
@@ -227,8 +240,8 @@
                         {{/if}}
 
                         {{#if drop.instagram_link}}
-                        <a href="{{drop.instagram_link}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.instagram_link}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
                             </svg>
                             <span>Instagram</span>
@@ -236,8 +249,8 @@
                         {{/if}}
 
                         {{#if drop.twitter_link}}
-                        <a href="{{drop.twitter_link}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.twitter_link}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
                             </svg>
                             <span>Twitter</span>
@@ -245,8 +258,8 @@
                         {{/if}}
 
                         {{#if drop.spotify_link}}
-                        <a href="{{drop.spotify_link}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.spotify_link}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 14.5c-.17.29-.48.46-.81.46-.16 0-.33-.04-.47-.13-1.44-.83-3.22-1.21-5.25-1.21-1.52 0-2.8.19-2.8.19-.55 0-1-.45-1-1s.45-1 1-1c0 0 1.54-.23 3.55-.23 2.29 0 4.29.48 5.94 1.44.49.28.66.89.38 1.38l.46.1zm1.14-2.8c-.2.33-.56.53-.94.53-.18 0-.36-.05-.53-.14-1.8-1.04-4.02-1.51-6.63-1.51-1.78 0-3.14.18-3.14.18-.64 0-1.16-.52-1.16-1.16s.52-1.16 1.16-1.16c0 0 1.54-.21 3.67-.21 2.74 0 5.3.6 7.44 1.68.58.29.82 1.02.53 1.6l.6.19zm1.07-3.14c-.22.37-.63.59-1.07.59-.2 0-.41-.05-.6-.16-2.23-1.21-5.25-1.79-8.73-1.79-2.078 0-3.66.21-3.66.21-.72 0-1.31-.59-1.31-1.31s.59-1.31 1.31-1.31c0 0 1.74-.24 4.19-.24 3.64 0 7.17.77 9.77 2.15.67.35.93 1.15.58 1.82l.52.04z"/>
                             </svg>
                             <span>Spotify</span>
@@ -254,8 +267,8 @@
                         {{/if}}
 
                         {{#if drop.youtube_link}}
-                        <a href="{{drop.youtube_link}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.youtube_link}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>
                             </svg>
                             <span>YouTube</span>
@@ -263,8 +276,8 @@
                         {{/if}}
 
                         {{#if drop.apple_music_url}}
-                        <a href="{{drop.apple_music_url}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.apple_music_url}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M23.997 6.124c0-.738-.065-1.47-.24-2.19-.317-1.31-1.062-2.31-2.18-3.043C21.003.517 20.373.285 19.7.164c-.517-.093-1.038-.135-1.564-.15-.04-.003-.083-.01-.124-.013H5.988c-.152.01-.303.017-.455.034C4.786.07 4.043.15 3.34.428 2.004.958 1.04 1.88.475 3.208c-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18-.013.43-.024.86-.024 1.29v9.884c0 .21.006.42.014.63.01.367.025.735.06 1.101.09 1.004.32 1.972.86 2.837.592 .951 1.42 1.618 2.52 1.993.742.253 1.518.328 2.304.36.36.015.72.025 1.08.025h12.016c.17 0 .34-.01.51-.014.493-.01.98-.044 1.464-.123 1.005-.165 1.933-.475 2.754-1.108.88-.677 1.477-1.54 1.767-2.62.138-.512.196-1.04.237-1.57.024-.302.032-.604.04-.906.007-.3.012-.6.012-.9V6.124zM12.24 4.011c2.928 0 5.289 2.37 5.289 5.289 0 2.928-2.36 5.298-5.289 5.298S6.951 12.228 6.951 9.3c0-2.918 2.36-5.289 5.289-5.289zm0 9.878c2.52 0 4.579-2.05 4.579-4.589a4.584 4.584 0 0 0-4.579-4.579c-2.539 0-4.589 2.04-4.589 4.579 0 2.539 2.05 4.589 4.589 4.589z"/>
                             </svg>
                             <span>Apple Music</span>
@@ -272,8 +285,8 @@
                         {{/if}}
 
                         {{#if drop.soundcloud_url}}
-                        <a href="{{drop.soundcloud_url}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.soundcloud_url}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M1.175 12.225c-.051 0-.094.046-.101.105l-.233 2.154.233 2.105c.007.059.05.104.101.104.05 0 .093-.045.101-.104L1.509 14.484l-.233-2.154c-.008-.059-.051-.105-.101-.105zm1.49.105c-.059 0-.109.053-.117.12l-.184 2.045.184 2.024c.008.067.058.12.117.12.058 0 .108-.053.117-.12l.201-2.024-.201-2.045c-.009-.067-.059-.12-.117-.12zm1.609.075c-.067 0-.122.058-.131.135l-.142 1.965.142 1.946c.009.077.064.135.131.135.066 0 .121-.058.13-.135l.158-1.946-.158-1.965c-.009-.077-.064-.135-.13-.135zm1.554.054c-.075 0-.137.067-.146.15l-.109 1.91.109 1.893c.009.083.071.15.146.15.074 0 .136-.067.145-.15l.125-1.893-.125-1.91c-.009-.083-.071-.15-.145-.15z"/>
                             </svg>
                             <span>SoundCloud</span>
@@ -281,8 +294,8 @@
                         {{/if}}
 
                         {{#if drop.tiktok_link}}
-                        <a href="{{drop.tiktok_link}}" target="_blank" rel="noopener noreferrer" class="open-platform-link glass-button">
-                            <svg class="open-platform-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <a href="{{drop.tiktok_link}}" target="_blank" rel="noopener noreferrer" class="globalbank-platform-link glass-button">
+                            <svg class="globalbank-platform-icon" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
                             </svg>
                             <span>TikTok</span>
@@ -293,9 +306,9 @@
             </section>
             {{/if}}
 
-            <!-- CTA Section - Open React Template Style -->
-            <section class="open-cta-section">
-                <div class="open-cta-container">
+            <!-- CTA Section - HTML GlobalBank Style -->
+            <section class="globalbank-cta-section">
+                <div class="globalbank-cta-container">
                     <form id="drop-signup-form" class="signup-form glassmorphism-container">
                         {{#if drop.collect_email}}
                         <div class="form-group">
@@ -337,7 +350,7 @@
 
                         <button
                             type="submit"
-                            class="open-primary-button glass-button"
+                            class="globalbank-primary-button glass-button"
                         >
                             <span class="button-content">
                                 <span class="button-text">{{drop.button_text}}</span>
@@ -380,7 +393,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('drop-signup-form');
-            const submitButton = form.querySelector('.signup-button');
+            const submitButton = form.querySelector('.globalbank-primary-button');
             const buttonText = submitButton.querySelector('.button-text');
             const buttonSpinner = submitButton.querySelector('.button-spinner');
             const successMessage = document.getElementById('success-message');

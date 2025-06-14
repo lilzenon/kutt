@@ -1,0 +1,497 @@
+/* ===== HTML GLOBALBANK TEMPLATE FOUNDATION ===== */
+
+
+/* Professional banking/financial design system based on HTML GlobalBank template */
+
+
+/* Completely separate from dashboard TailwindCSS styling */
+
+
+/* ===== HTML GLOBALBANK TYPOGRAPHY SYSTEM ===== */
+
+:root {
+    /* HTML GlobalBank Font System */
+    --font-clash-grotesk: 'Clash Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-playfair: 'Playfair Display', Georgia, serif;
+    /* HTML GlobalBank Typography Scale */
+    --text-xs: 0.75rem;
+    --text-xs--line-height: 1rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: 1.25rem;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: 1.75rem;
+    --text-xl: 1.25rem;
+    --text-xl--line-height: 1.75rem;
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: 2rem;
+    --text-3xl: 2rem;
+    --text-3xl--line-height: 2.25rem;
+    --text-4xl: 2.5rem;
+    --text-4xl--line-height: 2.5rem;
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-6xl: 3.5rem;
+    --text-6xl--line-height: 1;
+    --text-7xl: 3.875rem;
+    --text-7xl--line-height: 1;
+    --text-8xl: 4.5rem;
+    --text-8xl--line-height: 1;
+    --text-9xl: 5rem;
+    --text-9xl--line-height: 1;
+    --text-10xl: 6rem;
+    --text-10xl--line-height: 1;
+    /* HTML GlobalBank Letter Spacing */
+    --tracking-tighter: -0.026em;
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0em;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
+    --tracking-2xl: -0.48px;
+    --tracking-3xl: -0.64px;
+    --tracking-4xl: -2px;
+    --tracking-5xl: -0.96px;
+    --tracking-6xl: -1.44px;
+    --tracking-7xl: -1.86px;
+    --tracking-8xl: -3.6px;
+    --tracking-9xl: -4px;
+    --tracking-10xl: -4.8px;
+    /* HTML GlobalBank Color System */
+    --color-body-bg: #0E0F11;
+    --color-body-text: #ffffff;
+    --color-green-50: #FDFFE4;
+    --color-green-100: #F9FFC4;
+    --color-green-200: #F1FF90;
+    --color-green-300: #E2FF50;
+    --color-green-400: #CCFF00;
+    --color-green-500: #B2E600;
+    --color-green-600: #8AB800;
+    --color-green-700: #688B00;
+    --color-green-800: #526D07;
+    --color-green-900: #455C0B;
+    --color-gray-50: #F6F6F6;
+    --color-gray-100: #E7E7E7;
+    --color-gray-200: #D1D1D1;
+    --color-gray-300: #B0B0B0;
+    --color-gray-400: #888888;
+    --color-gray-500: #6D6D6D;
+    --color-gray-600: #5D5D5D;
+    --color-gray-700: #4C4C4C;
+    --color-gray-800: #454545;
+    --color-gray-900: #3D3D3D;
+    --color-bluegray-50: #F4F6F7;
+    --color-bluegray-100: #E4E7E9;
+    --color-bluegray-200: #CBD1D6;
+    --color-bluegray-300: #A7B0B9;
+    --color-bluegray-400: #7B8795;
+    --color-bluegray-500: #606C7A;
+    --color-bluegray-600: #535B67;
+    --color-bluegray-700: #474E57;
+    --color-bluegray-800: #3F434B;
+    --color-bluegray-900: #383C41;
+    --color-bluegray-950: #1F2937;
+    /* HTML GlobalBank Gradient System */
+    --gradient-radial-dark: radial-gradient(72.20% 78.49% at 49.87% 50.10%, rgba(71, 80, 98, 0.26) 0%, rgba(137, 137, 137, 0.00) 100%);
+    --gradient-radial-dark-light: radial-gradient(80.63% 80.22% at 52.97% 50.00%, rgba(71, 80, 98, 0.46) 0%, rgba(137, 137, 137, 0.00) 100%);
+    --gradient-radial-light: radial-gradient(90.27% 103.98% at 73.03% 35.14%, rgba(232, 239, 254, 0.26) 0%, rgba(51, 56, 65, 0.13) 100%);
+    --gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(0, 0, 0, 0.00) 6.77%, #000 100%);
+    /* HTML GlobalBank Border Radius */
+    --radius-sm: 0.125rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.25rem;
+    --radius-4xl: 1.5rem;
+    --radius-5xl: 1.875rem;
+    --radius-6xl: 3.125rem;
+    --radius-7xl: 5rem;
+    --radius-full: 9999px;
+    /* HTML GlobalBank Spacing */
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+    --spacing-20: 5rem;
+    --spacing-24: 6rem;
+    --spacing-32: 8rem;
+    --spacing-40: 10rem;
+    --spacing-48: 12rem;
+    --spacing-56: 14rem;
+    --spacing-64: 16rem;
+    --spacing-72: 18rem;
+    --spacing-80: 20rem;
+    --spacing-96: 24rem;
+}
+
+
+/* ===== HTML GLOBALBANK HERO SECTION ===== */
+
+.globalbank-hero-section {
+    /* Hero section foundation with dark theme */
+    position: relative;
+    padding: var(--spacing-20) 0 var(--spacing-24);
+    overflow: hidden;
+    background: var(--color-body-bg);
+    color: var(--color-body-text);
+}
+
+.globalbank-hero-container {
+    /* Hero container layout */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-4);
+    position: relative;
+    z-index: 2;
+}
+
+.globalbank-hero-content {
+    /* Hero content layout */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.globalbank-hero-badge {
+    /* Hero badge styling */
+    display: inline-block;
+    margin-bottom: var(--spacing-2);
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-green-400);
+    letter-spacing: var(--tracking-tighter);
+}
+
+.globalbank-hero-title {
+    /* Hero title styling with large typography */
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-7xl);
+    line-height: var(--text-7xl--line-height);
+    letter-spacing: var(--tracking-7xl);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-10);
+    /* Dynamic color integration */
+    color: var(--drop-title-color, var(--color-body-text));
+}
+
+.globalbank-hero-description {
+    /* Hero description styling */
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    font-weight: 400;
+    margin: 0 0 var(--spacing-20);
+    /* Dynamic color integration */
+    color: var(--drop-description-color, var(--color-gray-300));
+    /* Enhanced readability */
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.globalbank-hero-stats {
+    /* Hero stats styling */
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    font-weight: 500;
+    margin: 0 0 var(--spacing-20);
+    color: var(--color-gray-300);
+}
+
+
+/* ===== HTML GLOBALBANK CTA SECTION ===== */
+
+.globalbank-cta-section {
+    /* CTA section foundation */
+    position: relative;
+    padding: var(--spacing-12) 0;
+    text-align: center;
+    background: var(--color-body-bg);
+}
+
+.globalbank-cta-container {
+    /* CTA container layout */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-4);
+}
+
+.globalbank-primary-button {
+    /* Primary button styling with GlobalBank green theme */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    /* Typography */
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: var(--tracking-tighter);
+    /* Layout */
+    padding: var(--spacing-4) var(--spacing-8);
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    /* GlobalBank green theme */
+    background: var(--drop-button-color, var(--color-green-400));
+    color: var(--drop-button-text-color, #000000);
+    /* Professional shadow system */
+    box-shadow: 0 10px 25px rgba(204, 255, 0, 0.3), 0 4px 12px rgba(204, 255, 0, 0.2);
+    /* Smooth transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.globalbank-primary-button:hover {
+    /* Enhanced hover state */
+    background: var(--color-green-500);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(204, 255, 0, 0.4), 0 6px 16px rgba(204, 255, 0, 0.25);
+}
+
+.globalbank-primary-button:active {
+    /* Active press state */
+    transform: translateY(0);
+    box-shadow: 0 8px 20px rgba(204, 255, 0, 0.3), 0 3px 8px rgba(204, 255, 0, 0.2);
+}
+
+.globalbank-primary-button:focus {
+    /* Focus ring for accessibility */
+    outline: none;
+    box-shadow: 0 15px 35px rgba(204, 255, 0, 0.4), 0 6px 16px rgba(204, 255, 0, 0.25), 0 0 0 4px rgba(204, 255, 0, 0.4);
+}
+
+
+/* ===== HTML GLOBALBANK PLATFORM LINKS ===== */
+
+.globalbank-platform-section {
+    /* Platform section foundation */
+    position: relative;
+    padding: var(--spacing-12) 0;
+    margin: var(--spacing-8) 0;
+    background: var(--color-body-bg);
+}
+
+.globalbank-platform-container {
+    /* Platform container layout */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-4);
+}
+
+.globalbank-platform-grid {
+    /* Platform grid layout */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--spacing-3);
+    margin: var(--spacing-6) 0;
+}
+
+.globalbank-platform-link {
+    /* Platform link styling with GlobalBank theme */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    /* Typography */
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-body-text);
+    /* Layout */
+    padding: var(--spacing-2) var(--spacing-5);
+    border-radius: var(--radius-5xl);
+    border: 1px solid var(--color-gray-800);
+    background: transparent;
+    /* Smooth transitions */
+    transition: all 0.3s ease;
+}
+
+.globalbank-platform-link:hover {
+    /* Enhanced hover state */
+    background: var(--gradient-radial-dark);
+    border-color: var(--color-gray-700);
+    transform: translateY(-1px);
+}
+
+.globalbank-platform-icon {
+    /* Platform icon styling */
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.globalbank-platform-link:hover .globalbank-platform-icon {
+    opacity: 1;
+}
+
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+@media (max-width: 1024px) {
+    .globalbank-hero-title {
+        font-size: var(--text-6xl);
+        line-height: var(--text-6xl--line-height);
+        letter-spacing: var(--tracking-6xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .globalbank-hero-section {
+        padding: var(--spacing-16) 0 var(--spacing-20);
+    }
+    .globalbank-hero-title {
+        font-size: var(--text-5xl);
+        line-height: var(--text-5xl--line-height);
+        letter-spacing: var(--tracking-5xl);
+        margin-bottom: var(--spacing-8);
+    }
+    .globalbank-hero-description {
+        font-size: var(--text-base);
+        line-height: var(--text-base--line-height);
+        margin-bottom: var(--spacing-16);
+    }
+    .globalbank-platform-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: var(--spacing-2);
+    }
+    .globalbank-platform-link {
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--text-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .globalbank-hero-container,
+    .globalbank-cta-container,
+    .globalbank-platform-container {
+        padding: 0 var(--spacing-4);
+    }
+    .globalbank-hero-title {
+        font-size: var(--text-4xl);
+        line-height: var(--text-4xl--line-height);
+        letter-spacing: var(--tracking-4xl);
+    }
+    .globalbank-platform-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+/* ===== GLASSMORPHISM INTEGRATION ===== */
+
+
+/* Enhance GlobalBank elements with glassmorphism */
+
+.globalbank-platform-link.glass-button {
+    /* Override platform link styling for glassmorphism integration */
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.globalbank-platform-link.glass-button:hover {
+    /* Enhanced glassmorphism hover state */
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.globalbank-primary-button.glass-button {
+    /* Enhance primary button with glassmorphism */
+    box-shadow: 0 10px 25px rgba(204, 255, 0, 0.3), 0 4px 12px rgba(204, 255, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.globalbank-primary-button.glass-button:hover {
+    /* Enhanced glassmorphism button hover */
+    box-shadow: 0 15px 35px rgba(204, 255, 0, 0.4), 0 6px 16px rgba(204, 255, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+
+/* Form input integration with GlobalBank */
+
+.glass-input {
+    /* Enhanced form inputs for GlobalBank template */
+    font-family: var(--font-clash-grotesk) !important;
+    font-size: var(--text-base) !important;
+    line-height: var(--text-base--line-height) !important;
+    letter-spacing: var(--tracking-tighter) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--radius-lg) !important;
+    color: var(--color-body-text) !important;
+}
+
+.glass-input:focus {
+    /* Enhanced focus state for inputs */
+    border-color: var(--color-green-400) !important;
+    box-shadow: 0 0 0 4px rgba(204, 255, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-input::placeholder {
+    /* Enhanced placeholder styling */
+    color: var(--color-gray-400) !important;
+}
+
+
+/* Success and error messages integration */
+
+.success-message,
+.error-message {
+    /* Enhanced messages for GlobalBank template */
+    font-family: var(--font-clash-grotesk);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* Cover image integration */
+
+.drop-cover-image img {
+    /* Enhanced cover image styling */
+    border-radius: var(--radius-4xl);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.drop-cover-image:hover img {
+    /* Subtle hover effect for cover image */
+    transform: scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Dark theme body integration */
+
+.globalbank-body {
+    /* GlobalBank body styling */
+    background: var(--color-body-bg);
+    color: var(--color-body-text);
+    font-family: var(--font-clash-grotesk);
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
