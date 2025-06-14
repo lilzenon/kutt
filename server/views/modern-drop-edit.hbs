@@ -1098,8 +1098,20 @@ function initializeGradientEditor() {
                 gradientEditor.style.display = 'block';
                 initializeColorStops();
                 updateGradientPreview();
+
+                // Immediately update the live preview with current gradient
+                setTimeout(() => {
+                    const currentGradientCSS = generateGradientCSS();
+                    updateLivePreviewGradient(currentGradientCSS);
+                }, 100);
             } else {
                 gradientEditor.style.display = 'none';
+
+                // Update live preview to show solid color instead
+                const backgroundColorInput = document.getElementById('edit-background-color');
+                if (backgroundColorInput && backgroundColorInput.value) {
+                    updateLivePreviewGradient(backgroundColorInput.value);
+                }
             }
         });
     }
@@ -1218,11 +1230,13 @@ function createColorStopElement(stop, index) {
 
     colorInput.addEventListener('input', function() {
         gradientData.stops[index].color = this.value;
+        console.log('🎨 Color stop color changed:', index, this.value);
         updateGradientPreview();
     });
 
     positionInput.addEventListener('input', function() {
         gradientData.stops[index].position = parseInt(this.value);
+        console.log('🎨 Color stop position changed:', index, this.value);
         updateGradientPreview();
     });
 
@@ -1253,6 +1267,8 @@ function removeColorStop() {
 }
 
 function updateGradientPreview() {
+    console.log('🎨 updateGradientPreview() called');
+
     const preview = document.getElementById('gradient-preview');
     const cssOutput = document.getElementById('gradient-css-output');
 
@@ -1346,22 +1362,35 @@ function copyGradientCSS() {
 function updateLivePreviewGradient(gradientCSS) {
     try {
         const iframe = document.getElementById('preview-iframe');
-        if (!iframe || !iframe.contentDocument) {
+        if (!iframe || !iframe.contentWindow) {
             console.log('🎨 Preview iframe not accessible, will refresh instead');
+            setTimeout(() => {
+                refreshPreview();
+            }, 500);
             return;
         }
 
-        const previewDocument = iframe.contentDocument;
-        const dropPageContainer = previewDocument.querySelector('.drop-page-container');
+        // Use postMessage to communicate with iframe (cross-origin safe)
+        const message = {
+            type: 'UPDATE_GRADIENT',
+            gradientCSS: gradientCSS,
+            timestamp: Date.now()
+        };
 
-        if (dropPageContainer) {
-            dropPageContainer.style.background = gradientCSS;
-            console.log('🎨 Updated live preview gradient:', gradientCSS);
-        } else {
-            console.warn('🎨 Drop page container not found in preview iframe');
-        }
+        console.log('🎨 Sending gradient update to iframe:', message);
+        iframe.contentWindow.postMessage(message, '*');
+
+        // Fallback: If no response after 2 seconds, refresh the iframe
+        setTimeout(() => {
+            if (!window.lastGradientUpdateConfirmed ||
+                (Date.now() - window.lastGradientUpdateConfirmed) > 2000) {
+                console.log('🎨 No gradient update confirmation received, refreshing iframe');
+                refreshPreview();
+            }
+        }, 2000);
+
     } catch (error) {
-        console.warn('🎨 Could not update live preview gradient (cross-origin):', error.message);
+        console.warn('🎨 Could not update live preview gradient:', error.message);
         // Fallback: refresh the preview iframe
         setTimeout(() => {
             refreshPreview();
@@ -1566,6 +1595,15 @@ function initializeFormSubmission() {
     window.addEventListener('unhandledrejection', function(e) {
         console.error('🚨 UNHANDLED PROMISE REJECTION:', e.reason);
         console.error('🚨 Promise:', e.promise);
+    });
+
+    // Add postMessage listener for iframe communication
+    window.addEventListener('message', function(event) {
+        // Accept messages from any origin for iframe communication
+        if (event.data && event.data.type === 'GRADIENT_UPDATE_CONFIRMED') {
+            console.log('🎨 Gradient update confirmed by iframe:', event.data);
+            window.lastGradientUpdateConfirmed = Date.now();
+        }
     });
 }
 

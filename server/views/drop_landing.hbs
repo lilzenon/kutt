@@ -1698,6 +1698,40 @@
                     window.open('https://bounce2bounce.com', '_blank');
                 });
             }
+
+            // PostMessage listener for real-time gradient updates from edit page
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'UPDATE_GRADIENT') {
+                    console.log('🎨 Received gradient update from edit page:', event.data);
+
+                    const dropPageContainer = document.querySelector('.drop-page-container');
+                    if (dropPageContainer && event.data.gradientCSS) {
+                        dropPageContainer.style.background = event.data.gradientCSS;
+                        console.log('🎨 Applied gradient to landing page:', event.data.gradientCSS);
+
+                        // Send confirmation back to edit page
+                        if (event.source) {
+                            event.source.postMessage({
+                                type: 'GRADIENT_UPDATE_CONFIRMED',
+                                timestamp: event.data.timestamp,
+                                success: true
+                            }, '*');
+                        }
+                    } else {
+                        console.warn('🎨 Could not apply gradient - container not found or no CSS provided');
+
+                        // Send failure confirmation back to edit page
+                        if (event.source) {
+                            event.source.postMessage({
+                                type: 'GRADIENT_UPDATE_CONFIRMED',
+                                timestamp: event.data.timestamp,
+                                success: false,
+                                error: 'Container not found'
+                            }, '*');
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>
