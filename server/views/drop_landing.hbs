@@ -215,13 +215,14 @@
             grid-column: 2;
         }
 
-        /* Title - Perfect Content Card Width Matching */
+        /* Title - Modern Typography Hierarchy with Research-Based Spacing */
         .drop-title {
             font-size: 64px;
             line-height: 1.1;
             letter-spacing: 0px;
             text-align: left;
-            margin: 0 0 8px 0;
+            /* RESEARCH-BASED: 8px grid system - 32px provides optimal breathing room for 64px title */
+            margin: 0 0 32px 0;
             font-weight: 800;
             text-size-adjust: 100%;
             text-wrap: wrap;
@@ -231,16 +232,21 @@
             width: 100%;
             max-width: 400px;
             box-sizing: border-box;
+            /* MODERN: Enhanced text rendering for better visual hierarchy */
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* User Container - Perfect Left-Aligned Subtitle */
+        /* User Container - Modern Subtitle Spacing with Visual Hierarchy */
         .user-container {
             display: flex;
             flex-direction: row;
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            margin-bottom: 16px;
+            /* RESEARCH-BASED: 24px provides optimal separation from form card while maintaining visual connection */
+            margin-bottom: 24px;
             text-align: left;
             justify-content: flex-start;
             width: 100%;
@@ -267,8 +273,12 @@
         .username {
             font-size: 14px;
             font-weight: bold;
-            line-height: 21px;
+            /* RESEARCH-BASED: Line height follows 8px grid (24px = 3 × 8px) for optimal readability */
+            line-height: 24px;
             color: {{#if drop.description_color}}{{drop.description_color}}{{else}}var(--laylo-text-primary){{/if}};
+            /* MODERN: Enhanced text rendering for subtitle clarity */
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
         }
 
         .username:hover {
@@ -928,6 +938,8 @@
             .drop-title {
                 font-size: clamp(36px, 5vw, 48px);
                 line-height: 1.1;
+                /* RESEARCH-BASED: Proportional spacing for medium desktop - 24px for smaller title */
+                margin: 0 0 24px 0;
             }
         }
 
@@ -961,11 +973,15 @@
                 line-height: 1.2;
                 text-align: center;
                 max-width: 100%;
+                /* RESEARCH-BASED: Tablet spacing - 24px maintains hierarchy while being responsive */
+                margin: 0 0 24px 0;
             }
 
             .user-container {
                 justify-content: center;
                 max-width: 100%;
+                /* RESEARCH-BASED: Consistent 16px bottom margin for tablet layout */
+                margin-bottom: 16px;
             }
         }
 
@@ -1002,13 +1018,16 @@
                 font-size: clamp(24px, 7vw, 32px);
                 line-height: 1.2;
                 text-align: center;
-                margin: 8px 0;
+                /* RESEARCH-BASED: Mobile large spacing - 16px provides optimal hierarchy for smaller screens */
+                margin: 0 0 16px 0;
                 max-width: 100%;
             }
 
             .user-container {
                 justify-content: center;
                 max-width: 100%;
+                /* RESEARCH-BASED: Mobile spacing - 16px maintains visual connection */
+                margin-bottom: 16px;
             }
 
             .rsvp-card-container {
@@ -1066,13 +1085,16 @@
                 font-size: clamp(20px, 6vw, 28px);
                 line-height: 1.3;
                 text-align: center;
-                margin: 6px 0;
+                /* RESEARCH-BASED: Mobile small spacing - 16px maintains hierarchy even on smallest screens */
+                margin: 0 0 16px 0;
                 max-width: 100%;
             }
 
             .user-container {
                 justify-content: center;
                 max-width: 100%;
+                /* RESEARCH-BASED: Compact mobile spacing - 12px for tight layouts */
+                margin-bottom: 12px;
             }
 
             .rsvp-card-container {
