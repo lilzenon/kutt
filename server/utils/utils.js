@@ -429,6 +429,10 @@ function registerHandlebarsHelpers() {
         return values.every(value => !!value);
     });
 
+    hbs.registerHelper("not", function(value) {
+        return !value;
+    });
+
     hbs.registerHelper("getInitials", function(name) {
         if (!name) return "";
         return name.split(" ").map(n => n[0]).join("").toUpperCase();

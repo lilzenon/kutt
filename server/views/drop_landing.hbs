@@ -310,6 +310,62 @@
             box-shadow: 0 0 0 1px #EF4444;
         }
 
+        /* Email Input Container - Matches Phone Input Design */
+        .email-input-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--laylo-input-bg);
+            border-radius: 50px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            position: relative;
+            height: 56px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .email-input-container:focus-within {
+            background-color: var(--laylo-input-focus);
+        }
+
+        .email-input-container.valid {
+            border-color: #10B981;
+            box-shadow: 0 0 0 1px #10B981;
+        }
+
+        .email-input-container.invalid {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 1px #EF4444;
+        }
+
+        /* Email Input Field */
+        .email-input-field {
+            flex: 1;
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-family: "Inter", sans-serif;
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1.5;
+            letter-spacing: 0.00938em;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .email-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+            opacity: 1;
+        }
+
+        .email-input-field:focus {
+            outline: none;
+        }
+
         /* Country Select - Stabilized */
         .phone-country-select {
             position: relative;
@@ -399,6 +455,7 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+            /* Debug: Button color value = {{drop.button_color}} */
             outline: 0;
             border: 0;
             margin: 0;
@@ -445,6 +502,33 @@
         .laylo-rsvp-button:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Standalone Button for Email-Only Mode */
+        .laylo-rsvp-button.standalone {
+            position: static;
+            transform: none;
+            width: 100%;
+            margin-top: 16px;
+            height: 56px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: auto;
+            padding: 16px 24px;
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+        }
+
+        .laylo-rsvp-button.standalone:hover {
+            transform: scale(1.02);
+        }
+
+        .laylo-rsvp-button.standalone:active {
+            transform: scale(0.98);
+        }
+
+        .laylo-rsvp-button.standalone:disabled {
+            transform: none;
         }
 
         /* Form Footer - Adaptive Color */
@@ -789,9 +873,25 @@
                         <!-- Card Title -->
                         <h3 class="laylo-card-title">Get notified</h3>
 
-                        <!-- Form -->
+                        <!-- Dynamic Form Based on Collection Settings -->
                         <form id="drop-signup-form">
-                            <!-- Phone Input Container with Inlaid Button -->
+                            {{#if drop.collect_email}}
+                            <!-- Email Input Field -->
+                            <div class="email-input-container">
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="your@email.com"
+                                    class="email-input-field"
+                                    value=""
+                                    autocomplete="email"
+                                    {{#if drop.collect_email}}required{{/if}}
+                                />
+                            </div>
+                            {{/if}}
+
+                            {{#if drop.collect_phone}}
+                            <!-- Phone Input Container with Conditional Inlaid Button -->
                             <div class="phone-input-container">
                                 <!-- Country Select -->
                                 <div class="phone-country-select">
@@ -812,11 +912,26 @@
                                     {{#if drop.collect_phone}}required{{/if}}
                                 />
 
-                                <!-- Inlaid RSVP Button -->
-                                <button type="submit" class="laylo-rsvp-button" name="rsvp" alt="Confirm RSVP" title="Confirm RSVP">
-                                    {{drop.button_text}}
+                                {{#if (and drop.collect_phone (not drop.collect_email))}}
+                                <!-- Inlaid Button for Phone-Only Mode -->
+                                <button type="submit" class="laylo-rsvp-button inlaid" name="rsvp" alt="Confirm RSVP" title="Confirm RSVP">
+                                    {{#if drop.button_text}}{{drop.button_text}}{{else}}RSVP{{/if}}
                                 </button>
+                                {{else if (and drop.collect_phone drop.collect_email)}}
+                                <!-- Inlaid Button for Both Fields Mode -->
+                                <button type="submit" class="laylo-rsvp-button inlaid" name="rsvp" alt="Confirm RSVP" title="Confirm RSVP">
+                                    {{#if drop.button_text}}{{drop.button_text}}{{else}}RSVP{{/if}}
+                                </button>
+                                {{/if}}
                             </div>
+                            {{/if}}
+
+                            {{#if (and drop.collect_email (not drop.collect_phone))}}
+                            <!-- Standalone Button for Email-Only Mode -->
+                            <button type="submit" class="laylo-rsvp-button standalone" name="rsvp" alt="Confirm RSVP" title="Confirm RSVP">
+                                {{#if drop.button_text}}{{drop.button_text}}{{else}}RSVP{{/if}}
+                            </button>
+                            {{/if}}
                         </form>
 
                         <!-- Form Footer -->
@@ -848,18 +963,28 @@
         // Production-ready drop landing page
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Debug: Log drop configuration
+            console.log('🔍 Drop Configuration:', {
+                collect_phone: {{#if drop.collect_phone}}true{{else}}false{{/if}},
+                collect_email: {{#if drop.collect_email}}true{{else}}false{{/if}},
+                button_color: '{{drop.button_color}}',
+                button_text: '{{drop.button_text}}'
+            });
+
             const form = document.getElementById('drop-signup-form');
             const phoneInput = document.querySelector('input[name="phone"]');
+            const emailInput = document.querySelector('input[name="email"]');
             const submitButton = form.querySelector('button[type="submit"]');
             const successMessage = document.getElementById('success-message');
             const errorMessage = document.getElementById('error-message');
 
-            // Form submission handler
+            // Enhanced Form submission handler for dynamic fields
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
                 const formData = new FormData(form);
                 const phone = formData.get('phone');
+                const email = formData.get('email');
 
                 // Hide previous messages
                 successMessage.classList.add('hidden');
@@ -870,9 +995,12 @@
                 const originalText = submitButton.textContent;
                 submitButton.textContent = 'RSVP...';
 
-                // Prepare data to send
+                // Prepare data to send based on what fields are collected
                 const dataToSend = {};
-                if (phone) dataToSend.phone = phone;
+                if (phone && phone.trim()) dataToSend.phone = phone;
+                if (email && email.trim()) dataToSend.email = email;
+
+                console.log('📤 Submitting form data:', dataToSend);
 
                 try {
                     const response = await fetch('/drop/signup/{{drop.slug}}', {
@@ -888,12 +1016,13 @@
                     if (response.ok) {
                         successMessage.classList.remove('hidden');
                         document.getElementById('success-text').textContent = 'Thank you! You\'re on the list.';
-                        // Don't reset form to keep the phone number visible
+                        // Don't reset form to keep the data visible
                     } else {
                         errorMessage.classList.remove('hidden');
                         document.getElementById('error-text').textContent = result.message || 'Something went wrong. Please try again.';
                     }
                 } catch (error) {
+                    console.error('❌ Form submission error:', error);
                     errorMessage.classList.remove('hidden');
                     document.getElementById('error-text').textContent = 'Network error. Please try again.';
                 } finally {
@@ -1007,6 +1136,69 @@
                         }
                     });
                 }
+            }
+
+            // Email Input Validation
+            if (emailInput) {
+                // Email validation function
+                function isValidEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                }
+
+                // Add visual feedback for email validation
+                function updateEmailValidationState(isValid) {
+                    const container = emailInput.closest('.email-input-container');
+                    if (isValid) {
+                        container.style.borderColor = '#10B981';
+                        container.style.boxShadow = '0 0 0 1px #10B981';
+                        container.classList.add('valid');
+                        container.classList.remove('invalid');
+                    } else if (emailInput.value.length > 0) {
+                        container.style.borderColor = '#EF4444';
+                        container.style.boxShadow = '0 0 0 1px #EF4444';
+                        container.classList.add('invalid');
+                        container.classList.remove('valid');
+                    } else {
+                        container.style.borderColor = '';
+                        container.style.boxShadow = '';
+                        container.classList.remove('valid', 'invalid');
+                    }
+                }
+
+                // Real-time email validation
+                emailInput.addEventListener('input', function(e) {
+                    updateEmailValidationState(isValidEmail(e.target.value));
+                });
+
+                // Focus styling
+                emailInput.addEventListener('focus', function(e) {
+                    e.target.closest('.email-input-container').style.backgroundColor = 'var(--laylo-input-focus)';
+                });
+
+                // Blur styling and validation
+                emailInput.addEventListener('blur', function(e) {
+                    e.target.closest('.email-input-container').style.backgroundColor = 'var(--laylo-input-bg)';
+                    updateEmailValidationState(isValidEmail(e.target.value));
+                });
+
+                // Form validation enhancement for email
+                form.addEventListener('submit', function(e) {
+                    if (emailInput.hasAttribute('required') && !isValidEmail(emailInput.value)) {
+                        e.preventDefault();
+                        updateEmailValidationState(false);
+                        emailInput.focus();
+
+                        // Show error message
+                        const errorMessage = document.getElementById('error-message');
+                        const errorText = document.getElementById('error-text');
+                        if (errorMessage && errorText) {
+                            errorText.textContent = 'Please enter a valid email address.';
+                            errorMessage.classList.remove('hidden');
+                        }
+                        return false;
+                    }
+                });
             }
 
             // Laylo branding link
