@@ -315,6 +315,15 @@ function incrementVisit(match) {
     return knex("links").where(match).increment("visit_count", 1);
 }
 
+// Count links by user
+async function countByUser(userId) {
+    const result = await knex("links")
+        .where("user_id", userId)
+        .count("id as count")
+        .first();
+    return parseInt(result.count) || 0;
+}
+
 module.exports = {
     normalizeMatch,
     batchRemove,
@@ -327,4 +336,5 @@ module.exports = {
     total,
     totalAdmin,
     update,
+    countByUser,
 }

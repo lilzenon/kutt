@@ -29,15 +29,15 @@ router.get(
 
         const foundDrop = await drop.findBySlug(slug);
 
-        console.log('🔍 Found drop data:', {
-            id: foundDrop ? .id,
-            title: foundDrop ? .title,
-            background_color: foundDrop ? .background_color,
-            background_type: foundDrop ? .background_type,
-            card_background_type: foundDrop ? .card_background_type,
-            button_color: foundDrop ? .button_color,
-            button_text_color: foundDrop ? .button_text_color
-        });
+        console.log('🔍 Found drop data:', foundDrop ? {
+            id: foundDrop.id,
+            title: foundDrop.title,
+            background_color: foundDrop.background_color,
+            background_type: foundDrop.background_type,
+            card_background_type: foundDrop.card_background_type,
+            button_color: foundDrop.button_color,
+            button_text_color: foundDrop.button_text_color
+        } : null);
 
         if (!foundDrop) {
             return res.status(404).render("404", {

@@ -213,6 +213,25 @@ async function isEmailSignedUp(dropId, email) {
     return !!signup;
 }
 
+// Count drops by user
+async function countByUser(userId) {
+    const result = await knex("drops")
+        .where("user_id", userId)
+        .count("id as count")
+        .first();
+    return parseInt(result.count) || 0;
+}
+
+// Get total fans by user (across all drops)
+async function getTotalFansByUser(userId) {
+    const result = await knex("drop_signups as ds")
+        .join("drops as d", "ds.drop_id", "d.id")
+        .where("d.user_id", userId)
+        .countDistinct("ds.email as count")
+        .first();
+    return parseInt(result.count) || 0;
+}
+
 // 🚀 ADVANCED ANALYTICS - LAYLO-STYLE FANS SYSTEM
 
 // Get comprehensive fan analytics for a user's drops
@@ -495,6 +514,8 @@ module.exports = {
     findSignups,
     getSignupCount,
     isEmailSignedUp,
+    countByUser,
+    getTotalFansByUser,
     // 🚀 Advanced Analytics
     getFanAnalytics,
     getFanSummaryStats,
