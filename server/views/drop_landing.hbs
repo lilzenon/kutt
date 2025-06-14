@@ -173,13 +173,13 @@
             grid-column: 2;
         }
 
-        /* Title - Enhanced with Dynamic Colors */
+        /* Title - Enhanced with Dynamic Colors and Proper Alignment */
         .drop-title {
             font-size: 64px;
-            line-height: 64px;
+            line-height: 1.1;
             letter-spacing: 0px;
             text-align: left;
-            margin: 8px 0;
+            margin: 0 0 16px 0;
             font-weight: 800;
             text-size-adjust: 100%;
             text-wrap: wrap;
@@ -187,13 +187,15 @@
             color: {{#if drop.title_color}}{{drop.title_color}}{{else}}var(--laylo-text-primary){{/if}};
         }
 
-        /* User Container - Exact Laylo Style */
+        /* User Container - Proper Alignment */
         .user-container {
             display: flex;
             flex-direction: row;
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            margin-bottom: 24px;
+            text-align: left;
         }
 
         .avatar {
@@ -310,7 +312,7 @@
             box-shadow: 0 0 0 1px #EF4444;
         }
 
-        /* Email Input Container - Matches Phone Input Design */
+        /* Email Input Container - Identical to Phone Input Design */
         .email-input-container {
             display: flex;
             align-items: center;
@@ -324,10 +326,14 @@
             box-sizing: border-box;
             transition: all 0.3s ease;
             border: 1px solid transparent;
+            /* Remove any unwanted glow or border artifacts */
+            box-shadow: none;
+            outline: none;
         }
 
         .email-input-container:focus-within {
             background-color: var(--laylo-input-focus);
+            box-shadow: none;
         }
 
         .email-input-container.valid {
@@ -366,7 +372,7 @@
             outline: none;
         }
 
-        /* Country Select - Stabilized */
+        /* Functional Country Select */
         .phone-country-select {
             position: relative;
             align-self: stretch;
@@ -377,20 +383,111 @@
         }
 
         .phone-country-flag {
-            width: 24px;
-            height: 16px;
-            background-color: rgba(0,0,0,.1);
-            box-shadow: 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0,0,0,.5);
+            width: auto;
+            height: 18px;
             border-radius: 2px;
-            overflow: hidden;
+            overflow: visible;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 2px 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .phone-country-flag:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
         }
 
         .phone-country-flag img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border-radius: 2px;
+            width: 21px;
+            height: 15px;
             object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .country-code {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-left: 2px;
+        }
+
+        .dropdown-arrow {
+            margin-left: 2px;
+            transition: transform 0.2s ease;
+        }
+
+        .phone-country-select.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Country Dropdown */
+        .country-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .country-search {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .country-search input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 6px 8px;
+            color: white;
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .country-search input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .country-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .country-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .country-option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .country-option img {
+            width: 21px;
+            height: 15px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .country-option span {
+            color: white;
+            font-size: 0.875rem;
         }
 
         /* Phone Input Field - Standardized */
@@ -893,10 +990,39 @@
                             {{#if drop.collect_phone}}
                             <!-- Phone Input Container with Conditional Inlaid Button -->
                             <div class="phone-input-container">
-                                <!-- Country Select -->
-                                <div class="phone-country-select">
-                                    <div class="phone-country-flag">
+                                <!-- Functional Country Select -->
+                                <div class="phone-country-select" id="country-selector">
+                                    <div class="phone-country-flag" id="selected-country">
                                         <img alt="United States" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQjIyMjM0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIxVjFIMFYwWk0wIDJIMjFWM0gwVjJaTTAgNEgyMVY1SDBWNFpNMCA2SDIxVjdIMFY2Wk0wIDhIMjFWOUgwVjhaTTAgMTBIMjFWMTFIMFYxMFpNMCAxMkgyMVYxM0gwVjEyWiIgZmlsbD0id2hpdGUiLz4KPHJlY3Qgd2lkdGg9IjkiIGhlaWdodD0iOCIgZmlsbD0iIzNDM0I2RSIvPgo8L3N2Zz4K" />
+                                        <span class="country-code">+1</span>
+                                        <svg class="dropdown-arrow" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                            <path d="M1 1L6 6L11 1" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Country Dropdown -->
+                                    <div class="country-dropdown hidden" id="country-dropdown">
+                                        <div class="country-search">
+                                            <input type="text" placeholder="Search countries..." id="country-search" />
+                                        </div>
+                                        <div class="country-list" id="country-list">
+                                            <div class="country-option" data-code="+1" data-country="US">
+                                                <img alt="United States" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQjIyMjM0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIxVjFIMFYwWk0wIDJIMjFWM0gwVjJaTTAgNEgyMVY1SDBWNFpNMCA2SDIxVjdIMFY2Wk0wIDhIMjFWOUgwVjhaTTAgMTBIMjFWMTFIMFYxMFpNMCAxMkgyMVYxM0gwVjEyWiIgZmlsbD0id2hpdGUiLz4KPHJlY3Qgd2lkdGg9IjkiIGhlaWdodD0iOCIgZmlsbD0iIzNDM0I2RSIvPgo8L3N2Zz4K" />
+                                                <span>United States (+1)</span>
+                                            </div>
+                                            <div class="country-option" data-code="+44" data-country="GB">
+                                                <img alt="United Kingdom" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+CjxwYXRoIGQ9Ik0wIDBoMjF2MTVIMHoiIGZpbGw9IiMwMTIxNjkiLz4KPHBhdGggZD0iTTAgMGgyMXYxNUgweiIgZmlsbD0iIzAxMjE2OSIvPgo8L3N2Zz4K" />
+                                                <span>United Kingdom (+44)</span>
+                                            </div>
+                                            <div class="country-option" data-code="+1" data-country="CA">
+                                                <img alt="Canada" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkYwMDAwIi8+CjxwYXRoIGQ9Ik03IDBoN3YxNUg3eiIgZmlsbD0iI0ZGRkZGRiIvPgo8L3N2Zz4K" />
+                                                <span>Canada (+1)</span>
+                                            </div>
+                                            <div class="country-option" data-code="+61" data-country="AU">
+                                                <img alt="Australia" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+Cjwvc3ZnPgo=" />
+                                                <span>Australia (+61)</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1001,6 +1127,7 @@
                 if (email && email.trim()) dataToSend.email = email;
 
                 console.log('📤 Submitting form data:', dataToSend);
+                console.log('📍 Endpoint:', '/drop/signup/{{drop.slug}}');
 
                 try {
                     const response = await fetch('/drop/signup/{{drop.slug}}', {
@@ -1011,20 +1138,25 @@
                         body: JSON.stringify(dataToSend)
                     });
 
+                    console.log('📥 Response status:', response.status);
+                    console.log('📥 Response headers:', Object.fromEntries(response.headers.entries()));
+
                     const result = await response.json();
+                    console.log('📥 Response data:', result);
 
                     if (response.ok) {
                         successMessage.classList.remove('hidden');
                         document.getElementById('success-text').textContent = 'Thank you! You\'re on the list.';
                         // Don't reset form to keep the data visible
                     } else {
+                        console.error('❌ Server error:', result);
                         errorMessage.classList.remove('hidden');
-                        document.getElementById('error-text').textContent = result.message || 'Something went wrong. Please try again.';
+                        document.getElementById('error-text').textContent = result.message || `Server error: ${response.status}`;
                     }
                 } catch (error) {
                     console.error('❌ Form submission error:', error);
                     errorMessage.classList.remove('hidden');
-                    document.getElementById('error-text').textContent = 'Network error. Please try again.';
+                    document.getElementById('error-text').textContent = `Network error: ${error.message}`;
                 } finally {
                     submitButton.disabled = false;
                     submitButton.textContent = originalText;
@@ -1198,6 +1330,86 @@
                         }
                         return false;
                     }
+                });
+            }
+
+            // Functional Country Selector
+            const countrySelector = document.getElementById('country-selector');
+            const selectedCountry = document.getElementById('selected-country');
+            const countryDropdown = document.getElementById('country-dropdown');
+            const countrySearch = document.getElementById('country-search');
+            const countryList = document.getElementById('country-list');
+
+            if (countrySelector && selectedCountry && countryDropdown) {
+                let currentCountryCode = '+1';
+
+                // Toggle dropdown
+                selectedCountry.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    countryDropdown.classList.toggle('hidden');
+                    countrySelector.classList.toggle('open');
+
+                    if (!countryDropdown.classList.contains('hidden')) {
+                        countrySearch.focus();
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!countrySelector.contains(e.target)) {
+                        countryDropdown.classList.add('hidden');
+                        countrySelector.classList.remove('open');
+                    }
+                });
+
+                // Country search functionality
+                if (countrySearch) {
+                    countrySearch.addEventListener('input', function(e) {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const countryOptions = countryList.querySelectorAll('.country-option');
+
+                        countryOptions.forEach(option => {
+                            const countryName = option.textContent.toLowerCase();
+                            if (countryName.includes(searchTerm)) {
+                                option.style.display = 'flex';
+                            } else {
+                                option.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+
+                // Country selection
+                const countryOptions = countryList.querySelectorAll('.country-option');
+                countryOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const code = this.dataset.code;
+                        const country = this.dataset.country;
+                        const img = this.querySelector('img').cloneNode(true);
+
+                        // Update selected country display
+                        const selectedFlag = selectedCountry.querySelector('img');
+                        const selectedCode = selectedCountry.querySelector('.country-code');
+
+                        selectedFlag.src = img.src;
+                        selectedFlag.alt = img.alt;
+                        selectedCode.textContent = code;
+
+                        currentCountryCode = code;
+
+                        // Close dropdown
+                        countryDropdown.classList.add('hidden');
+                        countrySelector.classList.remove('open');
+
+                        // Clear search
+                        countrySearch.value = '';
+                        countryOptions.forEach(opt => opt.style.display = 'flex');
+
+                        // Update phone number formatting based on country
+                        if (phoneInput) {
+                            phoneInput.focus();
+                        }
+                    });
                 });
             }
 
