@@ -204,6 +204,7 @@ function validateAndSanitizeDropData(data) {
         'button_text',
         'background_type',
         'card_background_type',
+        'gradient_data',
         'custom_css',
         'is_active',
         'collect_email',
@@ -241,6 +242,21 @@ function validateAndSanitizeDropData(data) {
             } else if (typeof value === 'boolean' || key === 'is_active' || key === 'collect_email' || key === 'collect_phone') {
                 // Handle boolean fields
                 sanitizedData[key] = Boolean(value);
+            } else if (key === 'gradient_data') {
+                // Handle gradient data - validate JSON format
+                if (value && typeof value === 'string') {
+                    try {
+                        const parsed = JSON.parse(value);
+                        if (parsed && typeof parsed === 'object') {
+                            sanitizedData[key] = value; // Store as JSON string
+                            console.log('🎨 Valid gradient data captured:', value);
+                        } else {
+                            console.warn(`⚠️ Invalid gradient data format: ${value}`);
+                        }
+                    } catch (error) {
+                        console.warn(`⚠️ Invalid gradient data JSON: ${value}`, error.message);
+                    }
+                }
             } else {
                 // Include other valid fields
                 sanitizedData[key] = value;
