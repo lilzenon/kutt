@@ -78,16 +78,22 @@
             min-height: 100vh;
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overscroll-behavior: none;
+            background: transparent !important;
+            overflow-x: hidden;
         }
 
-        /* Enhanced Background System */
+        /* Enhanced Background System - Fixed for Industry-Leading Quality */
         .drop-page-container {
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 12vh 185.5px 24px;
+            padding: clamp(16px, 12vh, 120px) clamp(16px, 12vw, 185.5px) 24px;
             min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
             {{#if (eq drop.background_type "solid")}}
             background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}};
             {{else}}
@@ -100,45 +106,46 @@
             );
             {{/if}}
             background-attachment: fixed;
-            background-size: 100% 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
         }
 
         .drop-container {
-            display: flex;
-            flex-direction: row;
-            height: 100%;
-            gap: 48px;
-            max-width: 100%;
-            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: clamp(24px, 5vw, 48px);
+            width: 100%;
+            max-width: 1400px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
         }
 
-        /* Image Container - Exact Laylo Style */
+        /* Image Container - Industry-Leading Responsive Design */
         .drop-image-container {
-            position: sticky;
-            top: 12%;
-            max-width: 58.3333%;
-            max-height: 80vh;
+            position: relative;
             width: 100%;
+            max-width: min(690px, 58.3333vw);
+            height: auto;
             display: flex;
-            flex-direction: row;
             justify-content: center;
             align-items: center;
-            min-width: 690px;
-            min-height: min(40vh, 364px);
-            height: auto;
+            background: transparent;
+            grid-column: 1;
         }
 
         .drop-image-container img {
             width: 100%;
-            max-width: 690px;
             height: auto;
-            max-height: 100%;
+            max-width: 100%;
             border-radius: 12px;
-            overflow: hidden;
             object-fit: cover;
+            background: transparent;
             opacity: 0;
             animation: bloom 0.3s cubic-bezier(0.2, 0.2, 0.25, 1) normal forwards;
             animation-delay: 0.15s;
+            display: block;
         }
 
         @keyframes bloom {
@@ -154,15 +161,16 @@
             }
         }
 
-        /* RSVP Container - Exact Laylo Style */
+        /* RSVP Container - Industry-Leading Responsive Design */
         .rsvp-container {
-            min-width: 398px;
-            max-width: 398px;
+            width: 100%;
+            max-width: min(398px, 100%);
             padding-bottom: 48px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            margin-right: 48px;
+            background: transparent;
+            grid-column: 2;
         }
 
         /* Title - Enhanced with Dynamic Colors */
@@ -507,83 +515,109 @@
             color: white;
         }
 
-        /* Responsive Design - Exact Laylo Breakpoints */
-        @media only screen and (max-width: 1439px) {
+        /* Industry-Leading Responsive Design System */
+
+        /* Large Desktop: 1920px+ */
+        @media only screen and (min-width: 1920px) {
             .drop-page-container {
-                padding: 12vh 128px 24px;
-            }
-
-            .drop-title {
-                font-size: 48px;
-                line-height: 54px;
-            }
-
-            .rsvp-container {
-                margin-right: 0;
-            }
-        }
-
-        @media only screen and (max-width: 1199px) {
-            .drop-page-container {
-                padding: 8px 84px;
+                padding: clamp(60px, 12vh, 120px) clamp(200px, 15vw, 300px) 24px;
             }
 
             .drop-container {
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 16px;
-            }
-
-            .drop-image-container {
-                width: 364px;
-                position: relative;
-                top: 0;
-                min-width: auto;
-            }
-
-            .drop-title {
-                font-size: 36px;
-                line-height: 42px;
-                margin: 0;
-            }
-
-            .rsvp-container {
-                margin-top: 0;
-                max-width: 364px;
-                width: 100%;
-                min-width: inherit;
-                padding-bottom: 0;
-            }
-
-            .rsvp-card-container {
-                max-width: 100%;
+                max-width: 1600px;
             }
         }
 
-        @media only screen and (max-width: 639px) {
+        /* Desktop: 1440px - 1919px */
+        @media only screen and (max-width: 1919px) and (min-width: 1440px) {
             .drop-page-container {
-                padding: 16px 8px 100px;
+                padding: clamp(40px, 10vh, 100px) clamp(120px, 12vw, 200px) 24px;
+            }
+        }
+
+        /* Medium Desktop: 1024px - 1439px */
+        @media only screen and (max-width: 1439px) and (min-width: 1024px) {
+            .drop-page-container {
+                padding: clamp(32px, 8vh, 80px) clamp(80px, 10vw, 150px) 24px;
             }
 
             .drop-title {
-                padding: 0 16px;
+                font-size: clamp(36px, 5vw, 48px);
+                line-height: 1.1;
+            }
+        }
+
+        /* Tablet: 768px - 1023px */
+        @media only screen and (max-width: 1023px) and (min-width: 768px) {
+            .drop-page-container {
+                padding: clamp(24px, 6vh, 60px) clamp(40px, 8vw, 80px) 24px;
+            }
+
+            .drop-container {
+                grid-template-columns: 1fr;
+                gap: clamp(16px, 4vw, 32px);
+                text-align: center;
+            }
+
+            .drop-image-container {
+                grid-column: 1;
+                max-width: min(500px, 80vw);
+                margin: 0 auto;
             }
 
             .rsvp-container {
-                min-width: 200px;
+                grid-column: 1;
+                max-width: min(400px, 90vw);
+                margin: 0 auto;
+                padding-bottom: 24px;
+            }
+
+            .drop-title {
+                font-size: clamp(28px, 6vw, 36px);
+                line-height: 1.2;
+                text-align: center;
+            }
+        }
+
+        /* Mobile Large: 375px - 767px */
+        @media only screen and (max-width: 767px) and (min-width: 375px) {
+            .drop-page-container {
+                padding: clamp(16px, 4vh, 40px) clamp(16px, 4vw, 32px) 60px;
+            }
+
+            .drop-container {
+                grid-template-columns: 1fr;
+                gap: clamp(12px, 3vw, 24px);
+                text-align: center;
+            }
+
+            .drop-image-container {
+                grid-column: 1;
+                max-width: min(350px, 85vw);
+                margin: 0 auto;
+            }
+
+            .rsvp-container {
+                grid-column: 1;
+                max-width: min(350px, 90vw);
+                margin: 0 auto;
+                padding-bottom: 16px;
+            }
+
+            .drop-title {
+                font-size: clamp(24px, 7vw, 32px);
+                line-height: 1.2;
+                text-align: center;
+                margin: 8px 0;
             }
 
             .rsvp-card-container {
-                min-width: 200px;
-                margin-top: 24px;
+                margin-top: 16px;
+                min-width: auto;
+                max-width: 100%;
             }
 
-            .user-container {
-                padding: 0 16px;
-            }
-
-            /* Mobile form adjustments */
+            /* Mobile form optimizations */
             .phone-input-container {
                 height: 52px;
                 padding: 10px 14px;
@@ -597,18 +631,63 @@
             }
 
             .phone-input-field {
-                padding: 0 80px 0 0;
+                padding: 0 75px 0 0;
                 font-size: 0.9rem;
             }
         }
 
-        @media only screen and (max-width: 364px) {
+        /* Mobile Small: 320px - 374px */
+        @media only screen and (max-width: 374px) {
             .drop-page-container {
-                display: block;
+                padding: 16px 12px 50px;
+            }
+
+            .drop-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
 
             .drop-image-container {
-                width: 100%;
+                max-width: 95vw;
+                margin: 0 auto;
+            }
+
+            .rsvp-container {
+                max-width: 95vw;
+                margin: 0 auto;
+                padding-bottom: 12px;
+            }
+
+            .drop-title {
+                font-size: clamp(20px, 6vw, 28px);
+                line-height: 1.3;
+                text-align: center;
+                margin: 6px 0;
+            }
+
+            .rsvp-card-container {
+                margin-top: 12px;
+            }
+
+            .laylo-rsvp-card {
+                padding: 20px;
+            }
+
+            .phone-input-container {
+                height: 48px;
+                padding: 8px 12px;
+            }
+
+            .laylo-rsvp-button {
+                height: 36px;
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                min-width: 55px;
+            }
+
+            .phone-input-field {
+                padding: 0 65px 0 0;
+                font-size: 0.85rem;
             }
         }
 
@@ -629,25 +708,7 @@
             border: 0 !important;
         }
 
-        /* Gradient Color System Support */
-        {{#if drop.background_color}}
-        .drop-page-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                179deg,
-                {{drop.background_color}} 0%,
-                {{drop.background_color}}CC 30%,
-                {{drop.background_color}}80 60%,
-                rgba(0, 0, 0, 0.9) 100%
-            );
-            z-index: -1;
-        }
-        {{/if}}
+        /* Removed duplicate background system to prevent layering issues */
 
         /* Ensure proper stacking */
         .drop-container {
@@ -749,30 +810,9 @@
 
     <!-- JavaScript for Form Handling -->
     <script>
-        // DEBUG: Log the drop data being passed to template
-        console.log('🔍 DROP DATA DEBUG');
-        console.log('='.repeat(50));
-        console.log('Drop data passed to template:', {
-            id: '{{drop.id}}',
-            title: '{{drop.title}}',
-            slug: '{{drop.slug}}',
-            background_color: '{{drop.background_color}}',
-            background_type: '{{drop.background_type}}',
-            card_background_type: '{{drop.card_background_type}}',
-            button_color: '{{drop.button_color}}',
-            button_text_color: '{{drop.button_text_color}}',
-            title_color: '{{drop.title_color}}',
-            description_color: '{{drop.description_color}}'
-        });
+        // Production-ready drop landing page
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if values are actually being applied
-            const pageContainer = document.querySelector('.drop-page-container');
-            if (pageContainer) {
-                const computedStyle = window.getComputedStyle(pageContainer);
-                console.log('🎨 Computed background:', computedStyle.background);
-                console.log('🎨 Computed background-color:', computedStyle.backgroundColor);
-            }
             const form = document.getElementById('drop-signup-form');
             const phoneInput = document.querySelector('input[name="phone"]');
             const submitButton = form.querySelector('button[type="submit"]');
