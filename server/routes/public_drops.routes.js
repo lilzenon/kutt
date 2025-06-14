@@ -67,6 +67,13 @@ router.get(
 
         const deviceType = (isMobile || isMobileByWidth) ? 'mobile' : 'desktop';
 
+        // Check if this is a preview request
+        const isPreview = req.query.preview === 'true';
+
+        if (isPreview) {
+            console.log('🖼️ Rendering preview mode for drop:', foundDrop.slug);
+        }
+
         res.render("drop_landing", {
             drop: {
                 ...foundDrop,
@@ -77,7 +84,8 @@ router.get(
             metaImage: foundDrop.cover_image,
             deviceType: deviceType,
             isMobile: deviceType === 'mobile',
-            isDesktop: deviceType === 'desktop'
+            isDesktop: deviceType === 'desktop',
+            isPreview: isPreview
         });
     })
 );

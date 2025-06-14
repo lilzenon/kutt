@@ -149,6 +149,82 @@
                                                 <label for="edit-background-color" class="block text-sm font-medium text-gray-700">Background Color</label>
                                                 <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
                                             </div>
+
+                                            <!-- Advanced Gradient Editor -->
+                                            <div id="gradient-editor" style="display: {{#if (eq drop.background_type "gradient")}}block{{else}}none{{/if}};">
+                                                <label class="block text-sm font-medium text-gray-700 mb-3">Advanced Gradient Designer</label>
+
+                                                <!-- Gradient Preview -->
+                                                <div class="mb-3">
+                                                    <div id="gradient-preview" class="w-full h-16 rounded-md border border-gray-300 shadow-sm" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
+                                                </div>
+
+                                                <!-- Gradient Controls -->
+                                                <div class="space-y-3">
+                                                    <!-- Gradient Type -->
+                                                    <div>
+                                                        <label class="block text-xs font-medium text-gray-600 mb-1">Type</label>
+                                                        <div class="flex space-x-1">
+                                                            <button type="button" id="gradient-linear" class="gradient-type-btn active flex-1 px-2 py-1 text-xs font-medium border rounded">Linear</button>
+                                                            <button type="button" id="gradient-radial" class="gradient-type-btn flex-1 px-2 py-1 text-xs font-medium border rounded">Radial</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Gradient Direction -->
+                                                    <div id="gradient-direction-section">
+                                                        <label class="block text-xs font-medium text-gray-600 mb-1">Direction</label>
+                                                        <div class="grid grid-cols-4 gap-1">
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="0">0°</button>
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="45">45°</button>
+                                                            <button type="button" class="gradient-direction-btn active px-2 py-1 text-xs border rounded" data-angle="90">90°</button>
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="135">135°</button>
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="180">180°</button>
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="225">225°</button>
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="270">270°</button>
+                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="315">315°</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Color Stops -->
+                                                    <div>
+                                                        <div class="flex items-center justify-between mb-1">
+                                                            <label class="block text-xs font-medium text-gray-600">Colors</label>
+                                                            <div class="flex space-x-1">
+                                                                <button type="button" id="add-color-stop" class="px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded hover:bg-primary-200">+</button>
+                                                                <button type="button" id="remove-color-stop" class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">-</button>
+                                                            </div>
+                                                        </div>
+                                                        <div id="color-stops-container" class="space-y-1">
+                                                            <!-- Color stops will be dynamically generated -->
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Quick Presets -->
+                                                    <div>
+                                                        <label class="block text-xs font-medium text-gray-600 mb-1">Presets</label>
+                                                        <div class="grid grid-cols-6 gap-1">
+                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #667eea 0%, #764ba2 100%)" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></button>
+                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #f093fb 0%, #f5576c 100%)" style="background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);"></button>
+                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #4facfe 0%, #00f2fe 100%)" style="background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);"></button>
+                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)" style="background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);"></button>
+                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #fa709a 0%, #fee140 100%)" style="background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);"></button>
+                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #a8edea 0%, #fed6e3 100%)" style="background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);"></button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- CSS Export -->
+                                                    <div>
+                                                        <label class="block text-xs font-medium text-gray-600 mb-1">CSS</label>
+                                                        <div class="flex space-x-1">
+                                                            <input type="text" id="gradient-css-output" readonly class="flex-1 px-2 py-1 text-xs border border-gray-300 rounded bg-gray-50" placeholder="Generated CSS">
+                                                            <button type="button" id="copy-gradient-css" class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Copy</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Hidden inputs for form submission -->
+                                                <input type="hidden" id="gradient-data" name="gradient_data" value="">
+                                            </div>
                                         </div>
                                     </div>
 
@@ -520,6 +596,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize debug test button
     initializeDebugTest();
+
+    // Initialize gradient editor
+    initializeGradientEditor();
 
     console.log('✅ Modern drop edit system initialized successfully');
 
@@ -1259,6 +1338,229 @@ async function loadAnalytics() {
     display: none;
 }
 
+// Advanced Gradient Editor System
+let gradientData = {
+    type: 'linear',
+    angle: 90,
+    stops: [
+        { color: '#667eea', position: 0 },
+        { color: '#764ba2', position: 100 }
+    ]
+};
+
+function initializeGradientEditor() {
+    console.log('🎨 Initializing gradient editor...');
+
+    const backgroundTypeSelect = document.getElementById('edit-background-type');
+    const gradientEditor = document.getElementById('gradient-editor');
+
+    // Show/hide gradient editor based on background type
+    if (backgroundTypeSelect) {
+        backgroundTypeSelect.addEventListener('change', function() {
+            if (this.value === 'gradient') {
+                gradientEditor.style.display = 'block';
+                initializeColorStops();
+                updateGradientPreview();
+            } else {
+                gradientEditor.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize gradient type buttons
+    const gradientTypeButtons = document.querySelectorAll('.gradient-type-btn');
+    gradientTypeButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            gradientTypeButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            gradientData.type = this.id.replace('gradient-', '');
+
+            const directionSection = document.getElementById('gradient-direction-section');
+            if (gradientData.type === 'linear') {
+                directionSection.style.display = 'block';
+            } else {
+                directionSection.style.display = 'none';
+            }
+
+            updateGradientPreview();
+        });
+    });
+
+    // Initialize direction buttons
+    const directionButtons = document.querySelectorAll('.gradient-direction-btn');
+    directionButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            directionButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            gradientData.angle = parseInt(this.dataset.angle);
+            updateGradientPreview();
+        });
+    });
+
+    // Initialize preset buttons
+    const presetButtons = document.querySelectorAll('.gradient-preset');
+    presetButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const gradientCSS = this.dataset.gradient;
+            parseGradientFromCSS(gradientCSS);
+            updateGradientPreview();
+            initializeColorStops();
+        });
+    });
+
+    // Initialize add/remove color stop buttons
+    const addStopBtn = document.getElementById('add-color-stop');
+    const removeStopBtn = document.getElementById('remove-color-stop');
+
+    if (addStopBtn) {
+        addStopBtn.addEventListener('click', addColorStop);
+    }
+
+    if (removeStopBtn) {
+        removeStopBtn.addEventListener('click', removeColorStop);
+    }
+
+    // Initialize copy CSS button
+    const copyCSSBtn = document.getElementById('copy-gradient-css');
+    if (copyCSSBtn) {
+        copyCSSBtn.addEventListener('click', copyGradientCSS);
+    }
+
+    // Initialize color stops
+    initializeColorStops();
+    updateGradientPreview();
+
+    console.log('🎨 Gradient editor initialized');
+}
+
+function initializeColorStops() {
+    const container = document.getElementById('color-stops-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    gradientData.stops.forEach((stop, index) => {
+        const stopElement = createColorStopElement(stop, index);
+        container.appendChild(stopElement);
+    });
+}
+
+function createColorStopElement(stop, index) {
+    const div = document.createElement('div');
+    div.className = 'color-stop-item';
+    div.innerHTML = `
+        <input type="color" class="color-stop-color" value="${stop.color}" data-index="${index}">
+        <input type="number" class="color-stop-position" value="${stop.position}" min="0" max="100" data-index="${index}">
+        <span class="text-xs text-gray-500">%</span>
+    `;
+
+    // Add event listeners
+    const colorInput = div.querySelector('.color-stop-color');
+    const positionInput = div.querySelector('.color-stop-position');
+
+    colorInput.addEventListener('input', function() {
+        gradientData.stops[index].color = this.value;
+        updateGradientPreview();
+    });
+
+    positionInput.addEventListener('input', function() {
+        gradientData.stops[index].position = parseInt(this.value);
+        updateGradientPreview();
+    });
+
+    return div;
+}
+
+function addColorStop() {
+    if (gradientData.stops.length >= 4) return;
+
+    const newPosition = gradientData.stops.length > 0 ?
+        Math.min(100, Math.max(...gradientData.stops.map(s => s.position)) + 25) : 50;
+
+    gradientData.stops.push({
+        color: '#ffffff',
+        position: newPosition
+    });
+
+    initializeColorStops();
+    updateGradientPreview();
+}
+
+function removeColorStop() {
+    if (gradientData.stops.length <= 2) return;
+
+    gradientData.stops.pop();
+    initializeColorStops();
+    updateGradientPreview();
+}
+
+function updateGradientPreview() {
+    const preview = document.getElementById('gradient-preview');
+    const cssOutput = document.getElementById('gradient-css-output');
+
+    if (!preview) return;
+
+    const gradientCSS = generateGradientCSS();
+    preview.style.background = gradientCSS;
+
+    if (cssOutput) {
+        cssOutput.value = gradientCSS;
+    }
+
+    // Update hidden input for form submission
+    const hiddenInput = document.getElementById('gradient-data');
+    if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(gradientData);
+    }
+}
+
+function generateGradientCSS() {
+    const sortedStops = [...gradientData.stops].sort((a, b) => a.position - b.position);
+    const stopsCSS = sortedStops.map(stop => `${stop.color} ${stop.position}%`).join(', ');
+
+    if (gradientData.type === 'linear') {
+        return `linear-gradient(${gradientData.angle}deg, ${stopsCSS})`;
+    } else {
+        return `radial-gradient(circle, ${stopsCSS})`;
+    }
+}
+
+function parseGradientFromCSS(css) {
+    // Simple parser for preset gradients
+    const match = css.match(/linear-gradient\((\d+)deg,\s*(.+)\)/);
+    if (match) {
+        gradientData.type = 'linear';
+        gradientData.angle = parseInt(match[1]);
+
+        const stopsStr = match[2];
+        const stops = stopsStr.split(',').map((stop, index) => {
+            const colorMatch = stop.trim().match(/^(#[0-9a-fA-F]{6})/);
+            return {
+                color: colorMatch ? colorMatch[1] : '#ffffff',
+                position: index * (100 / (stopsStr.split(',').length - 1))
+            };
+        });
+
+        gradientData.stops = stops;
+    }
+}
+
+function copyGradientCSS() {
+    const cssOutput = document.getElementById('gradient-css-output');
+    if (cssOutput) {
+        cssOutput.select();
+        document.execCommand('copy');
+
+        // Show feedback
+        const btn = document.getElementById('copy-gradient-css');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 1000);
+    }
+}
+
 .tab-content.active {
     display: block;
 }
@@ -1336,6 +1638,88 @@ async function loadAnalytics() {
     border-radius: 8px;
     background: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Advanced Gradient Editor Styling */
+.gradient-type-btn {
+    background: white;
+    border-color: #d1d5db;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.gradient-type-btn.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.gradient-direction-btn {
+    background: white;
+    border-color: #d1d5db;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.gradient-direction-btn.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.gradient-direction-btn:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.gradient-preset {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.gradient-preset:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.color-stop-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background: white;
+}
+
+.color-stop-color {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.color-stop-position {
+    flex: 1;
+    padding: 2px 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.color-stop-remove {
+    padding: 2px 6px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 3px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.color-stop-remove:hover {
+    background: #fecaca;
 }
 
 /* Responsive grid improvements */

@@ -346,14 +346,15 @@
             box-shadow: 0 0 0 1px #EF4444;
         }
 
-        /* Email Input Field */
+        /* Email Input Field - Force Identical Styling to Phone Field */
         .email-input-field {
             flex: 1;
             width: 100%;
-            background-color: transparent;
-            border: none;
-            outline: none;
-            color: white;
+            background-color: transparent !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            color: white !important;
             font-family: "Inter", sans-serif;
             font-weight: 400;
             font-size: 1rem;
@@ -361,15 +362,34 @@
             letter-spacing: 0.00938em;
             height: 100%;
             box-sizing: border-box;
+            /* Force remove any browser defaults */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            box-shadow: none !important;
         }
 
         .email-input-field::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-            opacity: 1;
+            color: rgba(255, 255, 255, 0.7) !important;
+            opacity: 1 !important;
         }
 
         .email-input-field:focus {
-            outline: none;
+            outline: none !important;
+            background-color: transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .email-input-field:active {
+            background-color: transparent !important;
+            background: transparent !important;
+        }
+
+        /* Force email container to match phone container exactly */
+        .email-input-container {
+            background-color: var(--laylo-input-bg) !important;
+            background: var(--laylo-input-bg) !important;
         }
 
         /* Functional Country Select */
@@ -424,20 +444,23 @@
             transform: rotate(180deg);
         }
 
-        /* Country Dropdown */
+        /* Country Dropdown - Optimized Sizing */
         .country-dropdown {
             position: absolute;
             top: 100%;
             left: 0;
-            right: 0;
+            min-width: 280px;
+            width: max-content;
+            max-width: 320px;
             background: rgba(0, 0, 0, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            max-height: 200px;
+            max-height: 180px;
             overflow-y: auto;
             z-index: 1000;
             margin-top: 4px;
             backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
         .country-search {
@@ -461,17 +484,20 @@
         }
 
         .country-list {
-            max-height: 150px;
+            max-height: 140px;
             overflow-y: auto;
+            padding: 4px 0;
         }
 
         .country-option {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
+            gap: 10px;
+            padding: 10px 16px;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            white-space: nowrap;
+            min-height: 36px;
         }
 
         .country-option:hover {
@@ -552,6 +578,7 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
             /* Debug: Button color value = {{drop.button_color}} */
             outline: 0;
             border: 0;
@@ -614,6 +641,8 @@
             min-width: auto;
             padding: 16px 24px;
             background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+            color: {{#if drop.button_text_color}}{{drop.button_text_color}}{{else}}#ffffff{{/if}} !important;
         }
 
         .laylo-rsvp-button.standalone:hover {
