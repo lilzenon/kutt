@@ -11,6 +11,10 @@ const createDropValidation = [
     .optional()
     .isLength({ max: 1000 })
     .withMessage("Description must be less than 1000 characters"),
+    body("sub_header")
+    .optional()
+    .isLength({ max: 500 })
+    .withMessage("Sub-header must be less than 500 characters"),
     body("slug")
     .optional()
     .isLength({ max: 100 })
@@ -191,6 +195,7 @@ function validateAndSanitizeDropData(data) {
     const allowedColumns = [
         'title',
         'description',
+        'sub_header',
         'slug',
         'cover_image',
         'background_color',

@@ -5,6 +5,7 @@ async function createDropTable(knex) {
             table.increments("id").primary();
             table.string("title", 255).notNullable();
             table.text("description");
+            table.text("sub_header");
             table.string("slug", 100).notNullable().unique();
             table.string("cover_image", 2040);
             table.string("background_color", 7).defaultTo("#ffffff");
