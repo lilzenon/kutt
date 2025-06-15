@@ -6,7 +6,7 @@
 <div class="drop-edit-container">
     <div class="drop-edit-header">
         <div class="header-content">
-            <button type="button" class="back-button" onclick="window.history.back()">
+            <button type="button" class="back-button" onclick="navigateBack()">
                 {{> icons/arrow_left}}
                 <span>Back</span>
             </button>
@@ -722,6 +722,36 @@
 <script src="/js/drop-color-system.js"></script>
 
 <script>
+// Intelligent navigation function for back button
+function navigateBack() {
+    console.log('🔙 Navigating back...');
+
+    // Check if we have a referrer and it's from the same domain
+    const referrer = document.referrer;
+    const currentDomain = window.location.origin;
+
+    console.log('🔍 Referrer:', referrer);
+    console.log('🔍 Current domain:', currentDomain);
+
+    // If referrer exists and is from same domain, use history.back()
+    if (referrer && referrer.startsWith(currentDomain)) {
+        console.log('✅ Using history.back() - valid referrer from same domain');
+        window.history.back();
+        return;
+    }
+
+    // Check if we have history entries to go back to
+    if (window.history.length > 1) {
+        console.log('✅ Using history.back() - history entries available');
+        window.history.back();
+        return;
+    }
+
+    // Fallback: navigate to drops list
+    console.log('🔄 Fallback: navigating to drops list');
+    window.location.href = '/drops';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('drop-edit-form');
     const dropId = '{{drop.id}}';
@@ -976,11 +1006,106 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', () => {
             const targetTab = button.dataset.tab;
             switchTab(targetTab);
+
+            // Scroll active tab into view on mobile
+            const tabNavigation = document.querySelector('.tab-navigation');
+            if (window.innerWidth <= 768 && tabNavigation) {
+                scrollTabIntoView(button, tabNavigation);
+            }
         });
+    });
+
+    // Initialize mobile tab enhancements
+    if (window.innerWidth <= 768) {
+        initializeMobileTabEnhancements();
+    }
+
+    // Re-initialize on window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+            initializeMobileTabEnhancements();
+        }
     });
 
     // Initialize with first tab active (Page)
     switchTab('page');
+
+    // Mobile tab enhancement functions
+    function initializeMobileTabEnhancements() {
+        const tabNavigation = document.querySelector('.tab-navigation');
+        if (!tabNavigation) return;
+
+        // Add scroll event listener for scroll indicators
+        tabNavigation.addEventListener('scroll', function() {
+            updateScrollIndicators(this);
+        });
+
+        // Initial scroll indicator update
+        updateScrollIndicators(tabNavigation);
+
+        // Add touch event handlers for better mobile experience
+        let isScrolling = false;
+
+        tabNavigation.addEventListener('touchstart', function() {
+            isScrolling = false;
+        });
+
+        tabNavigation.addEventListener('touchmove', function() {
+            isScrolling = true;
+        });
+
+        // Prevent tab clicks during scrolling
+        const tabButtons = tabNavigation.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+            button.addEventListener('touchend', function(e) {
+                if (isScrolling) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+        });
+
+        console.log('📱 Mobile tab enhancements initialized');
+    }
+
+    function scrollTabIntoView(activeTab, container) {
+        if (!activeTab || !container) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const tabRect = activeTab.getBoundingClientRect();
+
+        // Calculate if tab is outside visible area
+        const isTabOutsideLeft = tabRect.left < containerRect.left;
+        const isTabOutsideRight = tabRect.right > containerRect.right;
+
+        if (isTabOutsideLeft || isTabOutsideRight) {
+            // Calculate scroll position to center the tab
+            const tabCenter = activeTab.offsetLeft + (activeTab.offsetWidth / 2);
+            const containerCenter = container.offsetWidth / 2;
+            const scrollPosition = tabCenter - containerCenter;
+
+            container.scrollTo({
+                left: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    function updateScrollIndicators(container) {
+        if (!container) return;
+
+        const scrollLeft = container.scrollLeft;
+        const scrollWidth = container.scrollWidth;
+        const clientWidth = container.clientWidth;
+        const maxScrollLeft = scrollWidth - clientWidth;
+
+        // Update scroll indicators via CSS custom properties
+        const showLeftIndicator = scrollLeft > 10;
+        const showRightIndicator = scrollLeft < maxScrollLeft - 10;
+
+        container.style.setProperty('--scroll-indicator-left-opacity', showLeftIndicator ? '1' : '0');
+        container.style.setProperty('--scroll-indicator-right-opacity', showRightIndicator ? '1' : '0');
+    }
 
     // 🚀 ANALYTICS SYSTEM INITIALIZATION
     initializeAnalytics();

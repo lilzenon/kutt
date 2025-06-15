@@ -3,7 +3,7 @@
     <!-- Header with Back Button -->
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
-            <button type="button" onclick="window.history.back()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+            <button type="button" onclick="navigateBack()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -522,7 +522,7 @@
                     🔧 Debug
                 </button>
 
-                <button type="button" id="cancel-btn" onclick="window.history.back()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                <button type="button" id="cancel-btn" onclick="navigateBack()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                     Cancel
                 </button>
                 <button type="submit" id="save-btn" form="drop-edit-form" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
@@ -590,6 +590,36 @@ let previewCoverImage, previewCover;
 let titleInput, descriptionInput, subHeaderInput, subHeaderTitleInput, slugInput, buttonTextInput, coverImageInput;
 let backgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput, buttonColorInput, formFieldColorInput;
 let collectEmailToggle, collectPhoneToggle;
+
+// Intelligent navigation function for back button
+function navigateBack() {
+    console.log('🔙 Navigating back...');
+
+    // Check if we have a referrer and it's from the same domain
+    const referrer = document.referrer;
+    const currentDomain = window.location.origin;
+
+    console.log('🔍 Referrer:', referrer);
+    console.log('🔍 Current domain:', currentDomain);
+
+    // If referrer exists and is from same domain, use history.back()
+    if (referrer && referrer.startsWith(currentDomain)) {
+        console.log('✅ Using history.back() - valid referrer from same domain');
+        window.history.back();
+        return;
+    }
+
+    // Check if we have history entries to go back to
+    if (window.history.length > 1) {
+        console.log('✅ Using history.back() - history entries available');
+        window.history.back();
+        return;
+    }
+
+    // Fallback: navigate to drops list
+    console.log('🔄 Fallback: navigating to drops list');
+    window.location.href = '/drops';
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Initializing modern drop edit system...');
@@ -838,6 +868,7 @@ function initializeFormElements() {
 function initializeTabSystem() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
+    const tabNavigation = document.querySelector('.tab-navigation') || document.querySelector('nav[aria-label="Tabs"]');
 
     tabButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -863,6 +894,11 @@ function initializeTabSystem() {
                 targetContent.classList.add('active');
             }
 
+            // Scroll active tab into view on mobile
+            if (window.innerWidth <= 768 && tabNavigation) {
+                scrollTabIntoView(this, tabNavigation);
+            }
+
             // Load analytics if analytics tab is clicked
             if (targetTab === 'analytics') {
                 loadAnalytics();
@@ -870,45 +906,179 @@ function initializeTabSystem() {
         });
     });
 
+    // Initialize mobile tab enhancements
+    if (window.innerWidth <= 768) {
+        initializeMobileTabEnhancements();
+    }
+
+    // Re-initialize on window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+            initializeMobileTabEnhancements();
+        }
+    });
+
     console.log('🗂️ Tab system initialized');
+}
+
+function initializeMobileTabEnhancements() {
+    const tabNavigation = document.querySelector('.tab-navigation') || document.querySelector('nav[aria-label="Tabs"]');
+    if (!tabNavigation) return;
+
+    // Add scroll event listener for scroll indicators
+    tabNavigation.addEventListener('scroll', function() {
+        updateScrollIndicators(this);
+    });
+
+    // Initial scroll indicator update
+    updateScrollIndicators(tabNavigation);
+
+    // Add touch event handlers for better mobile experience
+    let isScrolling = false;
+
+    tabNavigation.addEventListener('touchstart', function() {
+        isScrolling = false;
+    });
+
+    tabNavigation.addEventListener('touchmove', function() {
+        isScrolling = true;
+    });
+
+    // Prevent tab clicks during scrolling
+    const tabButtons = tabNavigation.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+        button.addEventListener('touchend', function(e) {
+            if (isScrolling) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    });
+
+    console.log('📱 Mobile tab enhancements initialized');
+}
+
+function scrollTabIntoView(activeTab, container) {
+    if (!activeTab || !container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const tabRect = activeTab.getBoundingClientRect();
+
+    // Calculate if tab is outside visible area
+    const isTabOutsideLeft = tabRect.left < containerRect.left;
+    const isTabOutsideRight = tabRect.right > containerRect.right;
+
+    if (isTabOutsideLeft || isTabOutsideRight) {
+        // Calculate scroll position to center the tab
+        const tabCenter = activeTab.offsetLeft + (activeTab.offsetWidth / 2);
+        const containerCenter = container.offsetWidth / 2;
+        const scrollPosition = tabCenter - containerCenter;
+
+        container.scrollTo({
+            left: Math.max(0, scrollPosition),
+            behavior: 'smooth'
+        });
+    }
+}
+
+function updateScrollIndicators(container) {
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
+    const maxScrollLeft = scrollWidth - clientWidth;
+
+    // Update scroll indicators via CSS custom properties
+    const showLeftIndicator = scrollLeft > 10;
+    const showRightIndicator = scrollLeft < maxScrollLeft - 10;
+
+    container.style.setProperty('--scroll-indicator-left-opacity', showLeftIndicator ? '1' : '0');
+    container.style.setProperty('--scroll-indicator-right-opacity', showRightIndicator ? '1' : '0');
 }
 
 function initializePreviewSystem() {
     previewIframe = document.getElementById('preview-iframe');
 
-    // Wait for iframe to load
-    previewIframe.addEventListener('load', function() {
+    if (!previewIframe) {
+        console.error('❌ Preview iframe not found');
+        return;
+    }
+
+    // Enhanced iframe loading with error handling
+    let iframeLoadAttempts = 0;
+    const maxLoadAttempts = 3;
+
+    function handleIframeLoad() {
+        iframeLoadAttempts++;
+        console.log(`🖼️ Preview iframe load attempt ${iframeLoadAttempts}`);
+
         try {
+            // Try to access iframe content
             previewDocument = previewIframe.contentDocument || previewIframe.contentWindow.document;
 
-            // Get preview elements
-            previewTitle = previewDocument.querySelector('.drop-title');
-            previewDescription = previewDocument.querySelector('.drop-description p');
-            previewSubHeader = previewDocument.querySelector('.drop-sub-header-content');
-            previewSubHeaderTitle = previewDocument.querySelector('.drop-sub-header-title');
-            previewButtonText = previewDocument.querySelector('.signup-button .button-text');
-            previewUrlSlug = previewDocument.querySelector('.drop-url-slug');
-            previewCoverImage = previewDocument.querySelector('.drop-cover-image img');
-            previewCover = previewDocument.querySelector('.drop-cover-image');
+            if (previewDocument) {
+                // Get preview elements
+                previewTitle = previewDocument.querySelector('.drop-title');
+                previewDescription = previewDocument.querySelector('.drop-description p');
+                previewSubHeader = previewDocument.querySelector('.drop-sub-header-content');
+                previewSubHeaderTitle = previewDocument.querySelector('.drop-sub-header-title');
+                previewButtonText = previewDocument.querySelector('.signup-button .button-text');
+                previewUrlSlug = previewDocument.querySelector('.drop-url-slug');
+                previewCoverImage = previewDocument.querySelector('.drop-cover-image img');
+                previewCover = previewDocument.querySelector('.drop-cover-image');
 
-            console.log('🖼️ Preview elements found:', {
-                title: !!previewTitle,
-                description: !!previewDescription,
-                subHeader: !!previewSubHeader,
-                subHeaderTitle: !!previewSubHeaderTitle,
-                buttonText: !!previewButtonText,
-                urlSlug: !!previewUrlSlug,
-                coverImage: !!previewCoverImage
-            });
+                console.log('🖼️ Preview elements found:', {
+                    title: !!previewTitle,
+                    description: !!previewDescription,
+                    subHeader: !!previewSubHeader,
+                    subHeaderTitle: !!previewSubHeaderTitle,
+                    buttonText: !!previewButtonText,
+                    urlSlug: !!previewUrlSlug,
+                    coverImage: !!previewCoverImage
+                });
 
-            // Initialize preview content
-            updatePreviewContent();
-            updatePreviewColors();
+                // Initialize preview content
+                updatePreviewContent();
+                updatePreviewColors();
+
+                console.log('✅ Preview system successfully connected to iframe content');
+            } else {
+                throw new Error('Cannot access iframe document');
+            }
 
         } catch (error) {
-            console.warn('⚠️ Preview iframe access restricted (cross-origin), using refresh method');
+            console.warn(`⚠️ Preview iframe access restricted (attempt ${iframeLoadAttempts}):`, error.message);
+
+            // Use refresh-based preview updates instead
+            console.log('🔄 Switching to refresh-based preview updates');
+            initializeRefreshBasedPreview();
         }
-    });
+    }
+
+    function handleIframeError() {
+        console.error('❌ Preview iframe failed to load');
+
+        if (iframeLoadAttempts < maxLoadAttempts) {
+            console.log(`🔄 Retrying iframe load (attempt ${iframeLoadAttempts + 1}/${maxLoadAttempts})`);
+            setTimeout(() => {
+                refreshPreview();
+            }, 1000);
+        } else {
+            console.error('❌ Max iframe load attempts reached, using fallback');
+            showPreviewError();
+        }
+    }
+
+    // Add event listeners
+    previewIframe.addEventListener('load', handleIframeLoad);
+    previewIframe.addEventListener('error', handleIframeError);
+
+    // Initial load check
+    if (previewIframe.src) {
+        // If iframe already has a src, trigger load check
+        setTimeout(handleIframeLoad, 500);
+    }
 
     // Preview mode switching
     const previewButtons = document.querySelectorAll('.preview-mode-btn');
@@ -934,6 +1104,44 @@ function initializePreviewSystem() {
     });
 
     console.log('🖥️ Preview system initialized');
+}
+
+function initializeRefreshBasedPreview() {
+    console.log('🔄 Initializing refresh-based preview system');
+
+    // Use debounced refresh for real-time updates
+    let refreshTimeout;
+
+    window.updatePreviewViaRefresh = function() {
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(() => {
+            refreshPreview();
+        }, 1000); // Debounce to 1 second
+    };
+
+    console.log('✅ Refresh-based preview system ready');
+}
+
+function showPreviewError() {
+    const container = document.getElementById('preview-container');
+    if (container) {
+        container.innerHTML = `
+            <div class="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
+                <div class="text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Preview Unavailable</h3>
+                    <p class="mt-1 text-sm text-gray-500">Unable to load live preview. Use "View Live" to see your drop.</p>
+                    <div class="mt-4">
+                        <button type="button" onclick="refreshPreview()" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 }
 
 function initializeRealTimeUpdates() {
@@ -967,13 +1175,14 @@ function initializeRealTimeUpdates() {
 
 function updatePreviewContent() {
     try {
-        if (previewTitle && titleInput) {
+        // Try direct iframe manipulation first
+        if (previewDocument && previewTitle && titleInput) {
             previewTitle.textContent = titleInput.value || 'Drop Title';
         }
-        if (previewDescription && descriptionInput) {
+        if (previewDocument && previewDescription && descriptionInput) {
             previewDescription.textContent = descriptionInput.value || 'Drop description';
         }
-        if (previewSubHeader && subHeaderInput) {
+        if (previewDocument && previewSubHeader && subHeaderInput) {
             previewSubHeader.textContent = subHeaderInput.value || '';
             // Show/hide sub-header section based on content
             const subHeaderSection = previewSubHeader.closest('.drop-sub-header');
@@ -981,18 +1190,18 @@ function updatePreviewContent() {
                 subHeaderSection.style.display = subHeaderInput.value ? 'block' : 'none';
             }
         }
-        if (previewSubHeaderTitle && subHeaderTitleInput) {
+        if (previewDocument && previewSubHeaderTitle && subHeaderTitleInput) {
             previewSubHeaderTitle.textContent = subHeaderTitleInput.value || 'About';
         }
-        if (previewButtonText && buttonTextInput) {
+        if (previewDocument && previewButtonText && buttonTextInput) {
             previewButtonText.textContent = buttonTextInput.value || 'Get Notified';
         }
-        if (previewUrlSlug && slugInput) {
+        if (previewDocument && previewUrlSlug && slugInput) {
             previewUrlSlug.textContent = slugInput.value || 'drop-slug';
         }
 
         // Handle cover image
-        if (previewCoverImage && previewCover && coverImageInput) {
+        if (previewDocument && previewCoverImage && previewCover && coverImageInput) {
             const coverImageUrl = coverImageInput.value;
             if (coverImageUrl && isValidUrl(coverImageUrl)) {
                 previewCoverImage.src = coverImageUrl;
@@ -1002,10 +1211,17 @@ function updatePreviewContent() {
             }
         }
 
-        console.log('📝 Preview content updated');
+        console.log('📝 Preview content updated via direct manipulation');
     } catch (error) {
-        console.warn('⚠️ Preview content update failed, refreshing iframe');
-        refreshPreview();
+        console.warn('⚠️ Direct preview update failed, using refresh method');
+
+        // Fallback to refresh-based updates
+        if (window.updatePreviewViaRefresh) {
+            window.updatePreviewViaRefresh();
+        } else {
+            // Immediate refresh if no debounced function available
+            setTimeout(refreshPreview, 500);
+        }
     }
 }
 
@@ -1075,35 +1291,106 @@ function refreshPreview() {
         return;
     }
 
-    const currentSrc = iframe.src;
-    console.log('🌐 Current preview URL:', currentSrc);
+    // Get the drop slug from the current page URL or data
+    const dropSlug = '{{drop.slug}}';
+    if (!dropSlug) {
+        console.error('❌ Drop slug not found');
+        return;
+    }
 
-    // Add a timestamp to force refresh and bypass cache
-    const url = new URL(currentSrc);
-    url.searchParams.set('_refresh', Date.now());
-    url.searchParams.set('preview', 'true');
+    // Construct the preview URL with proper parameters
+    const baseUrl = window.location.origin;
+    const previewUrl = new URL(`${baseUrl}/drop/${dropSlug}`);
 
-    console.log('🔄 Refreshing with URL:', url.toString());
+    // Add preview parameter to ensure we get the actual landing page
+    previewUrl.searchParams.set('preview', 'true');
+    previewUrl.searchParams.set('edit_mode', 'true');
+    previewUrl.searchParams.set('_refresh', Date.now());
 
-    // Show loading state
-    iframe.style.opacity = '0.5';
+    // Add cache busting to ensure fresh content
+    previewUrl.searchParams.set('t', Date.now());
 
+    console.log('🌐 Refreshing with preview URL:', previewUrl.toString());
+
+    // Show loading state with better UX
+    iframe.style.opacity = '0.6';
+    iframe.style.filter = 'blur(1px)';
+
+    // Add loading indicator
+    const container = iframe.parentElement;
+    let loadingIndicator = container.querySelector('.preview-loading');
+    if (!loadingIndicator) {
+        loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'preview-loading absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10';
+        loadingIndicator.innerHTML = `
+            <div class="flex items-center space-x-2 text-gray-600">
+                <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-sm">Updating preview...</span>
+            </div>
+        `;
+        container.style.position = 'relative';
+        container.appendChild(loadingIndicator);
+    }
+    loadingIndicator.style.display = 'flex';
+
+    // Clear the iframe source first to force a complete reload
     iframe.src = '';
+
     setTimeout(() => {
-        iframe.src = url.toString();
+        iframe.src = previewUrl.toString();
 
-        // Reset opacity when loaded
-        iframe.onload = () => {
+        // Enhanced load handling
+        const handleLoad = () => {
             iframe.style.opacity = '1';
+            iframe.style.filter = 'none';
+            loadingIndicator.style.display = 'none';
             console.log('✅ Preview refreshed successfully');
+
+            // Try to re-establish iframe communication
+            setTimeout(() => {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (iframeDoc) {
+                        console.log('🔗 Re-established iframe document access');
+                        // Re-initialize preview elements
+                        initializePreviewSystem();
+                    }
+                } catch (error) {
+                    console.log('ℹ️ Iframe access still restricted, using refresh-based updates');
+                }
+            }, 500);
         };
 
-        // Handle load errors
-        iframe.onerror = () => {
+        const handleError = () => {
             iframe.style.opacity = '1';
+            iframe.style.filter = 'none';
+            loadingIndicator.style.display = 'none';
             console.error('❌ Preview failed to load');
+
+            // Show error state
+            showPreviewError();
         };
-    }, 200);
+
+        // Remove any existing event listeners
+        iframe.onload = null;
+        iframe.onerror = null;
+
+        // Add new event listeners
+        iframe.addEventListener('load', handleLoad, { once: true });
+        iframe.addEventListener('error', handleError, { once: true });
+
+        // Timeout fallback
+        setTimeout(() => {
+            if (iframe.style.opacity !== '1') {
+                console.warn('⚠️ Preview load timeout, assuming success');
+                handleLoad();
+            }
+        }, 5000);
+
+    }, 300);
 }
 
 // Advanced Gradient Editor System
