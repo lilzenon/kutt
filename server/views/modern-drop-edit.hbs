@@ -1035,8 +1035,16 @@ function loadExistingGradientData() {
                 };
                 console.log('🎨 Loaded existing gradient data:', gradientData);
 
+                // Set flag to indicate data was loaded
+                window.gradientDataLoaded = true;
+
                 // Set the UI elements to match the loaded data
-                setGradientUIFromData();
+                // Use setTimeout to ensure DOM elements are ready
+                setTimeout(() => {
+                    setGradientUIFromData();
+                }, 100);
+
+                return true; // Indicate successful loading
             }
         } catch (error) {
             console.warn('🎨 Failed to parse existing gradient data:', error);
@@ -1044,10 +1052,14 @@ function loadExistingGradientData() {
     } else {
         console.log('🎨 No existing gradient data found, using defaults');
     }
+
+    window.gradientDataLoaded = false;
+    return false; // Indicate no data was loaded
 }
 
 function setGradientUIFromData() {
     console.log('🎨 Setting gradient UI from loaded data...');
+    console.log('🎨 Gradient data to apply:', JSON.stringify(gradientData, null, 2));
 
     // Set gradient type buttons
     const gradientTypeButtons = document.querySelectorAll('.gradient-type-btn');
@@ -1055,25 +1067,40 @@ function setGradientUIFromData() {
         btn.classList.remove('active');
         if (btn.id === `gradient-${gradientData.type}`) {
             btn.classList.add('active');
+            console.log('🎨 Set active gradient type:', btn.id);
         }
     });
 
-    // Set direction buttons for linear gradients
+    // Set direction buttons and visibility for linear gradients
+    const directionSection = document.getElementById('gradient-direction-section');
     if (gradientData.type === 'linear') {
         const directionButtons = document.querySelectorAll('.gradient-direction-btn');
         directionButtons.forEach(btn => {
             btn.classList.remove('active');
             if (parseInt(btn.dataset.angle) === gradientData.angle) {
                 btn.classList.add('active');
+                console.log('🎨 Set active gradient angle:', btn.dataset.angle);
             }
         });
 
-        // Show direction section
-        const directionSection = document.getElementById('gradient-direction-section');
+        // Show direction section for linear gradients
         if (directionSection) {
             directionSection.style.display = 'block';
         }
+    } else {
+        // Hide direction section for radial gradients
+        if (directionSection) {
+            directionSection.style.display = 'none';
+        }
     }
+
+    // Initialize color stops with loaded data
+    console.log('🎨 Initializing color stops with loaded data...');
+    initializeColorStops();
+
+    // Update the gradient preview immediately
+    console.log('🎨 Updating gradient preview with loaded data...');
+    updateGradientPreview();
 }
 
 function initializeGradientEditor() {
@@ -1090,6 +1117,16 @@ function initializeGradientEditor() {
         // Show gradient editor if background type is already gradient
         if (backgroundTypeSelect.value === 'gradient') {
             gradientEditor.style.display = 'block';
+            console.log('🎨 Background type is gradient, showing gradient editor');
+
+            // Ensure gradient preview is updated for the current gradient
+            setTimeout(() => {
+                if (window.gradientDataLoaded) {
+                    console.log('🎨 Updating live preview with loaded gradient data');
+                    const currentGradientCSS = generateGradientCSS();
+                    updateLivePreviewGradient(currentGradientCSS);
+                }
+            }, 200);
         }
 
         backgroundTypeSelect.addEventListener('change', function() {
@@ -1197,22 +1234,35 @@ function initializeGradientEditor() {
     }
 
     // Initialize color stops and preview with loaded data
-    initializeColorStops();
-    updateGradientPreview();
+    // Note: setGradientUIFromData() already calls initializeColorStops() and updateGradientPreview()
+    // So we only need to call them if we haven't loaded existing data
+    if (!window.gradientDataLoaded) {
+        console.log('🎨 No existing gradient data loaded, using defaults');
+        initializeColorStops();
+        updateGradientPreview();
+    } else {
+        console.log('🎨 Existing gradient data already loaded and applied');
+    }
 
     console.log('🎨 Gradient editor initialized successfully');
 }
 
 function initializeColorStops() {
     const container = document.getElementById('color-stops-container');
-    if (!container) return;
+    if (!container) {
+        console.warn('🎨 Color stops container not found');
+        return;
+    }
 
+    console.log('🎨 Initializing color stops with data:', gradientData.stops);
     container.innerHTML = '';
 
     gradientData.stops.forEach((stop, index) => {
         const stopElement = createColorStopElement(stop, index);
         container.appendChild(stopElement);
     });
+
+    console.log('🎨 Color stops initialized:', gradientData.stops.length, 'stops');
 }
 
 function createColorStopElement(stop, index) {
@@ -1281,10 +1331,16 @@ function updateGradientPreview() {
     console.log('🎨 Generated gradient CSS:', gradientCSS);
     console.log('🎨 Current gradient data:', JSON.stringify(gradientData, null, 2));
 
+    // Update the preview box
     preview.style.background = gradientCSS;
+    console.log('🎨 Updated gradient preview box with CSS:', gradientCSS);
 
+    // Update CSS output display
     if (cssOutput) {
         cssOutput.value = gradientCSS;
+        console.log('🎨 Updated CSS output display');
+    } else {
+        console.warn('🎨 CSS output element not found');
     }
 
     // Update hidden input for form submission - CRITICAL FIX
