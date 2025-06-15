@@ -858,7 +858,15 @@
             text-decoration: none;
         }
 
-        /* B2B Branding - Subtle Integrated Design */
+        /* B2B Branding - Dynamic Color Adaptation System */
+        /*
+         * IMPLEMENTATION: Logo color automatically adapts based on card background type
+         * - White/Light cards (solid_white): Dark logo (#666666) for contrast
+         * - Dark/Colored cards (all others): Light logo (var(--laylo-text-secondary))
+         * - Colors exactly match .laylo-form-footer disclaimer text
+         * - Supports dark theme with enhanced contrast ratios
+         * - Maintains accessibility and visual consistency
+         */
         .b2b-branding {
             display: flex;
             align-items: center;
@@ -887,24 +895,28 @@
             width: 160px;
             height: auto;
             max-width: 100%;
-            transition: opacity 0.2s ease;
-            /* DYNAMIC COLOR: Match disclaimer text color based on card background */
+            transition: opacity 0.2s ease, color 0.2s ease;
+            /* DYNAMIC COLOR: Exactly match disclaimer text color for perfect visual consistency */
             {{#if (eq drop.card_background_type "solid_white")}}
-            color: #666666;
+            color: #666666 !important; /* Dark logo on white/light backgrounds */
             opacity: 1;
             {{else}}
-            color: var(--laylo-text-secondary);
+            color: var(--laylo-text-secondary) !important; /* Light logo on dark/colored backgrounds */
             opacity: 0.8;
             {{/if}}
+            /* Ensure SVG inherits the color properly */
+            fill: currentColor;
         }
 
         .b2b-branding-link:hover .b2b-logo {
             {{#if (eq drop.card_background_type "solid_white")}}
-            opacity: 0.8;
+            opacity: 0.8; /* Subtle fade on white backgrounds */
+            color: #666666 !important; /* Maintain dark color */
             {{else}}
-            opacity: 1;
+            opacity: 1; /* Full visibility on dark backgrounds */
+            color: var(--laylo-text-secondary) !important; /* Maintain light color */
             {{/if}}
-            /* Subtle opacity change matching card background type */
+            /* Smooth transitions for optimal user experience */
         }
 
         /* Logo path styling for better readability */
@@ -912,7 +924,7 @@
             filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
         }
 
-        /* Dark theme adjustments - logo color matching */
+        /* Dark theme adjustments - enhanced logo color adaptation */
         @media (prefers-color-scheme: dark) {
             .b2b-branding-link {
                 color: rgba(255, 255, 255, 0.5);
@@ -922,12 +934,23 @@
                 color: rgba(255, 255, 255, 0.7);
             }
 
+            /* Override dynamic colors for dark theme preference */
             .b2b-logo {
-                color: rgba(255, 255, 255, 0.8);
+                {{#if (eq drop.card_background_type "solid_white")}}
+                color: #333333 !important; /* Darker on white cards in dark theme */
+                {{else}}
+                color: rgba(255, 255, 255, 0.8) !important; /* Light on dark cards */
+                {{/if}}
             }
 
             .b2b-branding-link:hover .b2b-logo {
-                color: rgba(255, 255, 255, 1);
+                {{#if (eq drop.card_background_type "solid_white")}}
+                color: #333333 !important; /* Maintain dark color on hover */
+                opacity: 0.7;
+                {{else}}
+                color: rgba(255, 255, 255, 1) !important; /* Full white on hover */
+                opacity: 1;
+                {{/if}}
             }
         }
 
