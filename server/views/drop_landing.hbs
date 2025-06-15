@@ -546,23 +546,7 @@
             border-radius: 2px;
         }
 
-        .country-select {
-            background-color: transparent;
-            border: none;
-            outline: none;
-            color: transparent; /* Hide text, show only flag */
-            font-family: "Inter", sans-serif;
-            font-weight: 500;
-            font-size: 0.875rem;
-            padding: 4px 16px 4px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            width: 52px; /* Compact width */
-            height: 24px;
-        }
+        /* Remove duplicate styling - handled below */
 
         .country-select:hover {
             background-color: rgba(255, 255, 255, 0.1);
@@ -573,19 +557,30 @@
             outline: none;
         }
 
-        /* Custom dropdown arrow */
+        /* PRIORITY 1 FIX: Remove duplicate dropdown arrow - only show flag icon */
         .country-select-wrapper::after {
-            content: '';
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-top: 4px solid rgba(255, 255, 255, 0.7);
-            pointer-events: none;
+            display: none !important; /* Remove custom dropdown arrow to prevent duplication */
+        }
+
+        /* Enhanced country selector styling for better UX */
+        .country-select {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: transparent; /* Hide text, show only flag */
+            font-family: "Inter", sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 4px 8px 4px 24px; /* Reduced right padding since no custom arrow */
+            border-radius: 6px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 52px; /* Compact width */
+            height: 24px;
+            position: relative;
+            z-index: 3;
         }
 
         /* Mobile font-size fix for country select */
@@ -1297,6 +1292,18 @@
             .phone-input-field {
                 padding: 12px 75px 12px 60px; /* Reduced left padding for smaller country selector */
                 font-size: 16px; /* Keep 16px for zoom prevention */
+                min-height: 44px; /* PRIORITY 4: iOS minimum touch target */
+            }
+
+            /* PRIORITY 4: Enhanced mobile country selector UX */
+            .country-select {
+                font-size: 16px; /* Prevent zoom on iOS */
+                min-height: 44px; /* iOS minimum touch target */
+            }
+
+            .country-flag-display {
+                min-width: 24px; /* Ensure flag visibility on mobile */
+                min-height: 18px;
             }
         }
 
@@ -1371,6 +1378,13 @@
             .phone-input-field {
                 padding: 10px 65px 10px 55px; /* Reduced left padding for smaller country selector */
                 font-size: 16px; /* Keep 16px for zoom prevention */
+                min-height: 44px; /* PRIORITY 4: iOS minimum touch target */
+            }
+
+            /* PRIORITY 4: Enhanced small mobile country selector */
+            .country-select {
+                font-size: 16px; /* Prevent zoom on iOS */
+                min-height: 44px; /* iOS minimum touch target */
             }
 
             /* Smaller country selector for small screens */
@@ -1527,24 +1541,36 @@
                                         <div class="country-flag-display" id="country-flag-display">
                                             <img alt="United States" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQjIyMjM0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIxVjFIMFYwWk0wIDJIMjFWM0gwVjJaTTAgNEgyMVY1SDBWNFpNMCA2SDIxVjdIMFY2Wk0wIDhIMjFWOUgwVjhaTTAgMTBIMjFWMTFIMFYxMFpNMCAxMkgyMVYxM0gwVjEyWiIgZmlsbD0id2hpdGUiLz4KPHJlY3Qgd2lkdGg9IjkiIGhlaWdodD0iOCIgZmlsbD0iIzNDM0I2RSIvPgo8L3N2Zz4K" />
                                         </div>
-                                        <select class="country-select" id="country-select" name="country_code">
-                                            <option value="+1" data-country="US">+1</option>
-                                            <option value="+44" data-country="GB">+44</option>
-                                            <option value="+1" data-country="CA">+1</option>
-                                            <option value="+61" data-country="AU">+61</option>
+                                        <select class="country-select" id="country-select" name="country_code" aria-label="Select country code">
+                                            <!-- PRIORITY 2: Comprehensive Country Support -->
+                                            <option value="+1" data-country="US" data-name="United States">+1</option>
+                                            <option value="+44" data-country="GB" data-name="United Kingdom">+44</option>
+                                            <option value="+1" data-country="CA" data-name="Canada">+1</option>
+                                            <option value="+61" data-country="AU" data-name="Australia">+61</option>
+                                            <option value="+49" data-country="DE" data-name="Germany">+49</option>
+                                            <option value="+33" data-country="FR" data-name="France">+33</option>
+                                            <option value="+34" data-country="ES" data-name="Spain">+34</option>
+                                            <option value="+39" data-country="IT" data-name="Italy">+39</option>
+                                            <option value="+81" data-country="JP" data-name="Japan">+81</option>
+                                            <option value="+82" data-country="KR" data-name="South Korea">+82</option>
+                                            <option value="+55" data-country="BR" data-name="Brazil">+55</option>
+                                            <option value="+52" data-country="MX" data-name="Mexico">+52</option>
+                                            <option value="+91" data-country="IN" data-name="India">+91</option>
+                                            <option value="+86" data-country="CN" data-name="China">+86</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- Industry-Standard Phone Input Field -->
+                                <!-- PRIORITY 3: International Phone Input Field -->
                                 <input
                                     type="tel"
                                     name="phone"
                                     placeholder="(555) 123-4567"
                                     class="phone-input-field"
                                     value=""
-                                    maxlength="14"
+                                    maxlength="20"
                                     autocomplete="tel"
+                                    aria-label="Phone number"
                                     {{#if drop.collect_phone}}required{{/if}}
                                 />
 
@@ -1683,10 +1709,17 @@
                 hideError();
                 successMessage.classList.add('hidden');
 
-                // Validate phone number if provided
+                // PRIORITY 3: Enhanced international phone validation
                 if (phone && phone.trim()) {
                     const cleanPhone = phone.replace(/[^\d]/g, '');
-                    console.log('📱 Client validating phone:', phone, '->', cleanPhone, 'length:', cleanPhone.length);
+                    const selectedCountryCode = document.getElementById('country-select')?.value || '+1';
+
+                    console.log('📱 Client validating international phone:', {
+                        original: phone,
+                        cleaned: cleanPhone,
+                        country: selectedCountryCode,
+                        length: cleanPhone.length
+                    });
 
                     if (cleanPhone.length === 0) {
                         showError(
@@ -1697,19 +1730,17 @@
                         submitButton.disabled = false;
                         submitButton.textContent = originalText;
                         return;
-                    } else if (cleanPhone.length < 10) {
+                    }
+
+                    // Use international validation
+                    if (!isValidPhoneNumber(phone, selectedCountryCode)) {
+                        const pattern = phonePatterns[selectedCountryCode];
+                        const countryName = document.querySelector(`option[value="${selectedCountryCode}"]`)?.dataset.name || selectedCountryCode;
+                        const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+
                         showError(
                             'Invalid Phone Number',
-                            `Phone number too short: ${cleanPhone.length} digits. Please enter a 10-digit US phone number.`,
-                            'validation'
-                        );
-                        submitButton.disabled = false;
-                        submitButton.textContent = originalText;
-                        return;
-                    } else if (cleanPhone.length > 10) {
-                        showError(
-                            'Invalid Phone Number',
-                            `Phone number too long: ${cleanPhone.length} digits. Please enter a 10-digit US phone number.`,
+                            `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat}).`,
                             'validation'
                         );
                         submitButton.disabled = false;
@@ -1737,16 +1768,20 @@
                 submitButton.disabled = true;
                 submitButton.textContent = 'RSVP...';
 
-                // Prepare data to send based on what fields are collected
+                // PRIORITY 3: Prepare international phone data for server
                 const dataToSend = {};
                 if (phone && phone.trim()) {
-                    // Clean phone number - remove all non-numeric characters for server
+                    const selectedCountryCode = document.getElementById('country-select')?.value || '+1';
                     const cleanPhone = phone.replace(/[^\d]/g, '');
-                    // Format as standard US phone number for server: +1XXXXXXXXXX
-                    dataToSend.phone = `+1${cleanPhone}`;
-                    console.log('📱 Phone number processing:', {
+
+                    // Format as international phone number for server: +CCXXXXXXXXXX
+                    dataToSend.phone = `${selectedCountryCode}${cleanPhone}`;
+                    dataToSend.country_code = selectedCountryCode;
+
+                    console.log('📱 International phone processing:', {
                         original: phone,
                         cleaned: cleanPhone,
+                        countryCode: selectedCountryCode,
                         final: dataToSend.phone,
                         length: cleanPhone.length
                     });
@@ -1844,30 +1879,46 @@
                 }
             });
 
-            // Industry-Standard Phone Input with Real-time Formatting
+            // PRIORITY 3: Enhanced International Phone Input with Real-time Formatting
             if (phoneInput) {
-                // Phone number formatting function
-                function formatPhoneNumber(value) {
+                let currentCountryCode = '+1'; // Default to US
+
+                // International phone number formatting function
+                function formatPhoneNumber(value, countryCode = currentCountryCode) {
                     // Remove all non-numeric characters
                     const phoneNumber = value.replace(/[^\d]/g, '');
 
                     // Don't format if empty
                     if (phoneNumber.length === 0) return '';
 
-                    // Format based on length
-                    if (phoneNumber.length <= 3) {
-                        return `(${phoneNumber}`;
-                    } else if (phoneNumber.length <= 6) {
-                        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-                    } else {
-                        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+                    // Get pattern for current country
+                    const pattern = phonePatterns[countryCode];
+                    if (!pattern) {
+                        // Fallback to basic formatting for unknown countries
+                        return phoneNumber;
+                    }
+
+                    // Apply country-specific formatting
+                    try {
+                        return pattern.format(phoneNumber);
+                    } catch (error) {
+                        console.warn('Phone formatting error:', error);
+                        return phoneNumber; // Return unformatted if error
                     }
                 }
 
-                // Validate phone number
-                function isValidPhoneNumber(value) {
+                // International phone number validation
+                function isValidPhoneNumber(value, countryCode = currentCountryCode) {
                     const phoneNumber = value.replace(/[^\d]/g, '');
-                    return phoneNumber.length === 10;
+
+                    // Get pattern for current country
+                    const pattern = phonePatterns[countryCode];
+                    if (!pattern) {
+                        // Fallback validation for unknown countries (10-15 digits)
+                        return phoneNumber.length >= 10 && phoneNumber.length <= 15;
+                    }
+
+                    return pattern.pattern.test(phoneNumber);
                 }
 
                 // Add visual feedback for validation
@@ -1885,23 +1936,26 @@
                     }
                 }
 
-                // Real-time formatting on input
+                // Real-time international formatting on input
                 phoneInput.addEventListener('input', function(e) {
                     const cursorPosition = e.target.selectionStart;
                     const oldValue = e.target.value;
-                    const newValue = formatPhoneNumber(e.target.value);
+                    const newValue = formatPhoneNumber(e.target.value, currentCountryCode);
 
                     e.target.value = newValue;
 
-                    // Maintain cursor position
-                    const newCursorPosition = cursorPosition + (newValue.length - oldValue.length);
+                    // Maintain cursor position (improved for international formats)
+                    const newCursorPosition = Math.min(
+                        cursorPosition + (newValue.length - oldValue.length),
+                        newValue.length
+                    );
                     e.target.setSelectionRange(newCursorPosition, newCursorPosition);
 
-                    // Update validation state
-                    updateValidationState(isValidPhoneNumber(newValue));
+                    // Update validation state with current country
+                    updateValidationState(isValidPhoneNumber(newValue, currentCountryCode));
 
                     // Hide error message when user starts typing valid input
-                    if (newValue.length > 0 && isValidPhoneNumber(newValue)) {
+                    if (newValue.length > 0 && isValidPhoneNumber(newValue, currentCountryCode)) {
                         hideError();
                     }
                 });
@@ -1911,10 +1965,10 @@
                     e.target.closest('.phone-input-container').style.backgroundColor = 'var(--laylo-input-focus)';
                 });
 
-                // Blur styling and validation
+                // Blur styling and validation with international support
                 phoneInput.addEventListener('blur', function(e) {
                     e.target.closest('.phone-input-container').style.backgroundColor = 'var(--laylo-input-bg)';
-                    updateValidationState(isValidPhoneNumber(e.target.value));
+                    updateValidationState(isValidPhoneNumber(e.target.value, currentCountryCode));
                 });
 
                 // Prevent invalid characters
@@ -1934,19 +1988,23 @@
                     }
                 });
 
-                // Form validation enhancement
+                // Enhanced form validation for international numbers
                 const form = phoneInput.closest('form');
                 if (form) {
                     form.addEventListener('submit', function(e) {
-                        if (!isValidPhoneNumber(phoneInput.value)) {
+                        if (phoneInput.value && !isValidPhoneNumber(phoneInput.value, currentCountryCode)) {
                             e.preventDefault();
                             updateValidationState(false);
                             phoneInput.focus();
 
-                            // Show enhanced error message
+                            // Show country-specific error message
+                            const pattern = phonePatterns[currentCountryCode];
+                            const countryName = document.querySelector(`option[value="${currentCountryCode}"]`)?.dataset.name || currentCountryCode;
+                            const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+
                             showError(
                                 'Invalid Phone Number',
-                                'Please enter a valid 10-digit phone number (e.g., (555) 123-4567).',
+                                `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat}).`,
                                 'validation'
                             );
                             return false;
@@ -2026,32 +2084,191 @@
             const countrySelect = document.getElementById('country-select');
             const countryFlagDisplay = document.getElementById('country-flag-display');
 
-            // Country flag data
+            // PRIORITY 2: Comprehensive Country Flag Support
             const countryFlags = {
-                '+1': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQjIyMjM0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIxVjFIMFYwWk0wIDJIMjFWM0gwVjJaTTAgNEgyMVY1SDBWNFpNMCA2SDIxVjdIMFY2Wk0wIDhIMjFWOUgwVjhaTTAgMTBIMjFWMTFIMFYxMFpNMCAxMkgyMVYxM0gwVjEyWiIgZmlsbD0id2hpdGUiLz4KPHJlY3Qgd2lkdGg9IjkiIGhlaWdodD0iOCIgZmlsbD0iIzNDM0I2RSIvPgo8L3N2Zz4K',
-                '+44': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+CjxwYXRoIGQ9Ik0wIDBoMjF2MTVIMHoiIGZpbGw9IiMwMTIxNjkiLz4KPHBhdGggZD0iTTAgMGgyMXYxNUgweiIgZmlsbD0iIzAxMjE2OSIvPgo8L3N2Zz4K',
-                '+61': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+Cjwvc3ZnPgo='
+                // North America
+                '+1': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQjIyMjM0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIxVjFIMFYwWk0wIDJIMjFWM0gwVjJaTTAgNEgyMVY1SDBWNFpNMCA2SDIxVjdIMFY2Wk0wIDhIMjFWOUgwVjhaTTAgMTBIMjFWMTFIMFYxMFpNMCAxMkgyMVYxM0gwVjEyWiIgZmlsbD0id2hpdGUiLz4KPHJlY3Qgd2lkdGg9IjkiIGhlaWdodD0iOCIgZmlsbD0iIzNDM0I2RSIvPgo8L3N2Zz4K', // US/Canada
+
+                // Europe
+                '+44': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+CjxwYXRoIGQ9Ik0wIDBoMjF2MTVIMHoiIGZpbGw9IiMwMTIxNjkiLz4KPHBhdGggZD0iTTAgMGgyMXYxNUgweiIgZmlsbD0iIzAxMjE2OSIvPgo8L3N2Zz4K', // UK
+                '+49': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDAwMDAwIi8+CjxyZWN0IHk9IjUiIHdpZHRoPSIyMSIgaGVpZ2h0PSI1IiBmaWxsPSIjREQwMDAwIi8+CjxyZWN0IHk9IjEwIiB3aWR0aD0iMjEiIGhlaWdodD0iNSIgZmlsbD0iI0ZGQ0UwMCIvPgo8L3N2Zz4K', // Germany
+                '+33': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDIzOTUiLz4KPHJlY3QgeD0iNyIgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMTQiIHdpZHRoPSI3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjRUQyOTM5Ii8+Cjwvc3ZnPgo=', // France
+                '+34': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQUEwMDAwIi8+CjxyZWN0IHk9IjMiIHdpZHRoPSIyMSIgaGVpZ2h0PSI5IiBmaWxsPSIjRkZBQTAwIi8+Cjwvc3ZnPgo=', // Spain
+                '+39': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDk5NDYiLz4KPHJlY3QgeD0iNyIgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMTQiIHdpZHRoPSI3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjQ0UyQjM3Ii8+Cjwvc3ZnPgo=', // Italy
+
+                // Asia-Pacific
+                '+61': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDEyMTY5Ii8+Cjwvc3ZnPgo=', // Australia
+                '+81': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxjaXJjbGUgY3g9IjEwLjUiIGN5PSI3LjUiIHI9IjMiIGZpbGw9IiNCQzAwMkQiLz4KPC9zdmc+Cg==', // Japan
+                '+82': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjRkZGRkZGIi8+CjxjaXJjbGUgY3g9IjEwLjUiIGN5PSI3LjUiIHI9IjMiIGZpbGw9IiNDNjBDMzAiLz4KPC9zdmc+Cg==', // South Korea
+                '+91': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRjk5MzMiLz4KPHJlY3QgeT0iNSIgd2lkdGg9IjIxIiBoZWlnaHQ9IjUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeT0iMTAiIHdpZHRoPSIyMSIgaGVpZ2h0PSI1IiBmaWxsPSIjMTM4ODA4Ii8+Cjwvc3ZnPgo=', // India
+                '+86': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjREUyOTEwIi8+CjxjaXJjbGUgY3g9IjYiIGN5PSI0IiByPSIxIiBmaWxsPSIjRkZERTAwIi8+Cjwvc3ZnPgo=', // China
+
+                // Americas
+                '+55': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjMDA5NzM5Ii8+CjxjaXJjbGUgY3g9IjEwLjUiIGN5PSI3LjUiIHI9IjMiIGZpbGw9IiNGRkRGMDAiLz4KPC9zdmc+Cg==', // Brazil
+                '+52': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiMwMDY4NDciLz4KPHJlY3QgeD0iNyIgd2lkdGg9IjciIGhlaWdodD0iMTUiIGZpbGw9IiNGRkZGRkYiLz4KPHJlY3QgeD0iMTQiIHdpZHRoPSI3IiBoZWlnaHQ9IjE1IiBmaWxsPSIjQ0UxMTI2Ii8+Cjwvc3ZnPgo=' // Mexico
             };
 
-            if (countrySelect && countryFlagDisplay) {
-                let currentCountryCode = '+1';
+            // PRIORITY 3: International Phone Number Patterns and Validation
+            const phonePatterns = {
+                '+1': { // US/Canada
+                    pattern: /^\d{10}$/,
+                    format: (num) => `(${num.slice(0,3)}) ${num.slice(3,6)}-${num.slice(6)}`,
+                    placeholder: '(555) 123-4567',
+                    maxLength: 14
+                },
+                '+44': { // UK
+                    pattern: /^\d{10,11}$/,
+                    format: (num) => num.length === 10 ? `${num.slice(0,2)} ${num.slice(2,6)} ${num.slice(6)}` : `${num.slice(0,3)} ${num.slice(3,7)} ${num.slice(7)}`,
+                    placeholder: '20 1234 5678',
+                    maxLength: 13
+                },
+                '+49': { // Germany
+                    pattern: /^\d{10,12}$/,
+                    format: (num) => `${num.slice(0,2)} ${num.slice(2,5)} ${num.slice(5)}`,
+                    placeholder: '30 123 45678',
+                    maxLength: 15
+                },
+                '+33': { // France
+                    pattern: /^\d{9,10}$/,
+                    format: (num) => `${num.slice(0,1)} ${num.slice(1,3)} ${num.slice(3,5)} ${num.slice(5,7)} ${num.slice(7)}`,
+                    placeholder: '1 23 45 67 89',
+                    maxLength: 14
+                },
+                '+34': { // Spain
+                    pattern: /^\d{9}$/,
+                    format: (num) => `${num.slice(0,3)} ${num.slice(3,6)} ${num.slice(6)}`,
+                    placeholder: '612 345 678',
+                    maxLength: 11
+                },
+                '+39': { // Italy
+                    pattern: /^\d{9,11}$/,
+                    format: (num) => `${num.slice(0,3)} ${num.slice(3,6)} ${num.slice(6)}`,
+                    placeholder: '312 345 6789',
+                    maxLength: 13
+                },
+                '+61': { // Australia
+                    pattern: /^\d{9}$/,
+                    format: (num) => `${num.slice(0,1)} ${num.slice(1,5)} ${num.slice(5)}`,
+                    placeholder: '4 1234 5678',
+                    maxLength: 12
+                },
+                '+81': { // Japan
+                    pattern: /^\d{10,11}$/,
+                    format: (num) => num.length === 10 ? `${num.slice(0,2)}-${num.slice(2,6)}-${num.slice(6)}` : `${num.slice(0,3)}-${num.slice(3,7)}-${num.slice(7)}`,
+                    placeholder: '90-1234-5678',
+                    maxLength: 13
+                },
+                '+82': { // South Korea
+                    pattern: /^\d{9,11}$/,
+                    format: (num) => `${num.slice(0,2)}-${num.slice(2,6)}-${num.slice(6)}`,
+                    placeholder: '10-1234-5678',
+                    maxLength: 13
+                },
+                '+55': { // Brazil
+                    pattern: /^\d{10,11}$/,
+                    format: (num) => num.length === 10 ? `(${num.slice(0,2)}) ${num.slice(2,6)}-${num.slice(6)}` : `(${num.slice(0,2)}) ${num.slice(2,7)}-${num.slice(7)}`,
+                    placeholder: '(11) 91234-5678',
+                    maxLength: 15
+                },
+                '+52': { // Mexico
+                    pattern: /^\d{10}$/,
+                    format: (num) => `${num.slice(0,3)} ${num.slice(3,6)} ${num.slice(6)}`,
+                    placeholder: '555 123 4567',
+                    maxLength: 12
+                },
+                '+91': { // India
+                    pattern: /^\d{10}$/,
+                    format: (num) => `${num.slice(0,5)} ${num.slice(5)}`,
+                    placeholder: '98765 43210',
+                    maxLength: 11
+                },
+                '+86': { // China
+                    pattern: /^\d{11}$/,
+                    format: (num) => `${num.slice(0,3)} ${num.slice(3,7)} ${num.slice(7)}`,
+                    placeholder: '138 0013 8000',
+                    maxLength: 13
+                }
+            };
 
+            // PRIORITY 4: Enhanced Country Selector with Search and UX Improvements
+            if (countrySelect && countryFlagDisplay) {
                 // Update flag when country changes
                 countrySelect.addEventListener('change', function(e) {
                     const selectedCode = e.target.value;
                     const flagImg = countryFlagDisplay.querySelector('img');
+                    const selectedOption = e.target.selectedOptions[0];
 
+                    // Update flag image
                     if (countryFlags[selectedCode]) {
                         flagImg.src = countryFlags[selectedCode];
+                        flagImg.alt = selectedOption.dataset.name || selectedCode;
+                    } else {
+                        // Fallback for countries without flags
+                        flagImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQ0NDQ0NDIi8+Cjwvc3ZnPgo=';
+                        flagImg.alt = selectedCode;
                     }
 
+                    // Update current country code
                     currentCountryCode = selectedCode;
 
-                    // Focus phone input after country selection
+                    // Update phone input placeholder and maxlength based on country
+                    if (phoneInput && phonePatterns[selectedCode]) {
+                        const pattern = phonePatterns[selectedCode];
+                        phoneInput.placeholder = pattern.placeholder;
+                        phoneInput.maxLength = pattern.maxLength;
+
+                        // Clear and reformat existing phone number for new country
+                        if (phoneInput.value) {
+                            const cleanNumber = phoneInput.value.replace(/[^\d]/g, '');
+                            phoneInput.value = formatPhoneNumber(cleanNumber, selectedCode);
+                            updateValidationState(isValidPhoneNumber(phoneInput.value, selectedCode));
+                        }
+                    }
+
+                    // Focus phone input after country selection for better UX
                     if (phoneInput) {
                         phoneInput.focus();
                     }
+
+                    console.log(`🌍 Country changed to: ${selectedCode} (${selectedOption.dataset.name})`);
                 });
+
+                // PRIORITY 4: Add keyboard navigation support for accessibility
+                countrySelect.addEventListener('keydown', function(e) {
+                    // Allow typing to search countries (basic implementation)
+                    if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
+                        const searchChar = e.key.toLowerCase();
+                        const options = Array.from(this.options);
+                        const currentIndex = this.selectedIndex;
+
+                        // Find next option starting with the typed character
+                        for (let i = currentIndex + 1; i < options.length; i++) {
+                            const countryName = options[i].dataset.name || '';
+                            if (countryName.toLowerCase().startsWith(searchChar)) {
+                                this.selectedIndex = i;
+                                this.dispatchEvent(new Event('change'));
+                                e.preventDefault();
+                                break;
+                            }
+                        }
+
+                        // If not found after current, search from beginning
+                        if (this.selectedIndex === currentIndex) {
+                            for (let i = 0; i < currentIndex; i++) {
+                                const countryName = options[i].dataset.name || '';
+                                if (countryName.toLowerCase().startsWith(searchChar)) {
+                                    this.selectedIndex = i;
+                                    this.dispatchEvent(new Event('change'));
+                                    e.preventDefault();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Initialize with default country
+                countrySelect.dispatchEvent(new Event('change'));
             }
 
             // B2B branding link

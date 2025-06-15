@@ -104,7 +104,7 @@ async function createSignupValidation(req, res, next) {
             console.log('📧 Email validation disabled for this drop');
         }
 
-        // Add phone validation only if phone collection is enabled
+        // PRIORITY 3: Enhanced international phone validation
         if (foundDrop.collect_phone) {
             validationRules.push(
                 body("phone")
@@ -113,21 +113,45 @@ async function createSignupValidation(req, res, next) {
                         throw new Error('Phone number is required for this drop');
                     }
 
-                    console.log('📱 Server validating phone number:', value);
+                    console.log('📱 Server validating international phone number:', value);
 
-                    // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
+                    // International phone number patterns
+                    const internationalPatterns = {
+                        '+1': /^\+1\d{10}$/, // US/Canada: +1XXXXXXXXXX
+                        '+44': /^\+44\d{10,11}$/, // UK: +44XXXXXXXXXX or +44XXXXXXXXXXX
+                        '+49': /^\+49\d{10,12}$/, // Germany: +49XXXXXXXXXX to +49XXXXXXXXXXXX
+                        '+33': /^\+33\d{9,10}$/, // France: +33XXXXXXXXX or +33XXXXXXXXXX
+                        '+34': /^\+34\d{9}$/, // Spain: +34XXXXXXXXX
+                        '+39': /^\+39\d{9,11}$/, // Italy: +39XXXXXXXXX to +39XXXXXXXXXXX
+                        '+61': /^\+61\d{9}$/, // Australia: +61XXXXXXXXX
+                        '+81': /^\+81\d{10,11}$/, // Japan: +81XXXXXXXXXX or +81XXXXXXXXXXX
+                        '+82': /^\+82\d{9,11}$/, // South Korea: +82XXXXXXXXX to +82XXXXXXXXXXX
+                        '+55': /^\+55\d{10,11}$/, // Brazil: +55XXXXXXXXXX or +55XXXXXXXXXXX
+                        '+52': /^\+52\d{10}$/, // Mexico: +52XXXXXXXXXX
+                        '+91': /^\+91\d{10}$/, // India: +91XXXXXXXXXX
+                        '+86': /^\+86\d{11}$/ // China: +86XXXXXXXXXXX
+                    };
+
                     const cleanPhone = value.replace(/[^\d+]/g, '');
-                    console.log('📱 Cleaned phone number:', cleanPhone);
+                    console.log('📱 Cleaned international phone:', cleanPhone);
 
-                    // Check for +1 followed by 10 digits (US format)
-                    if (/^\+1\d{10}$/.test(cleanPhone)) {
-                        console.log('📱 Phone validation passed: +1 format');
+                    // Check if it matches any international pattern
+                    for (const [countryCode, pattern] of Object.entries(internationalPatterns)) {
+                        if (pattern.test(cleanPhone)) {
+                            console.log(`📱 Phone validation passed: ${countryCode} format`);
+                            return true;
+                        }
+                    }
+
+                    // Fallback: Check for basic international format (+CC followed by 7-15 digits)
+                    if (/^\+\d{1,4}\d{7,15}$/.test(cleanPhone)) {
+                        console.log('📱 Phone validation passed: generic international format');
                         return true;
                     }
 
-                    // Check for exactly 10 digits (US format without country code)
+                    // Legacy support: Check for exactly 10 digits (US format without country code)
                     if (/^\d{10}$/.test(cleanPhone)) {
-                        console.log('📱 Phone validation passed: 10-digit format');
+                        console.log('📱 Phone validation passed: legacy 10-digit format');
                         return true;
                     }
 
@@ -138,71 +162,80 @@ async function createSignupValidation(req, res, next) {
                         hasPlus: cleanPhone.includes('+')
                     });
 
-                    // Provide specific error messages based on the issue
+                    // Provide specific error messages
                     if (cleanPhone.length === 0) {
                         throw new Error('Phone number cannot be empty');
-                    } else if (cleanPhone.length < 10) {
-                        throw new Error(`Phone number too short: ${cleanPhone.length} digits (need 10)`);
-                    } else if (cleanPhone.length > 11) {
-                        throw new Error(`Phone number too long: ${cleanPhone.length} digits (need 10)`);
-                    } else if (cleanPhone.length === 11 && !cleanPhone.startsWith('+1')) {
-                        throw new Error('11-digit number must start with +1 for US format');
+                    } else if (!cleanPhone.startsWith('+')) {
+                        throw new Error('International phone number must include country code (e.g., +1 for US)');
                     } else {
-                        throw new Error(`Invalid phone format: ${value} (need 10 digits like 5551234567)`);
+                        const countryCode = cleanPhone.match(/^\+\d{1,4}/) ? .[0] || 'unknown';
+                        throw new Error(`Invalid phone format for ${countryCode}. Please check the number and try again.`);
                     }
                 })
-                .withMessage("Please enter a valid 10-digit US phone number")
+                .withMessage("Please enter a valid international phone number with country code")
             );
             console.log('📱 Phone validation enabled for this drop');
         } else {
-            // Phone is optional if not required by drop
+            // Phone is optional if not required by drop - use same international validation
             validationRules.push(
                 body("phone")
                 .optional()
                 .custom((value) => {
                     if (!value) return true; // Optional field
 
-                    console.log('📱 Server validating optional phone number:', value);
+                    console.log('📱 Server validating optional international phone:', value);
 
-                    // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
+                    // Use same international patterns as required validation
+                    const internationalPatterns = {
+                        '+1': /^\+1\d{10}$/, // US/Canada
+                        '+44': /^\+44\d{10,11}$/, // UK
+                        '+49': /^\+49\d{10,12}$/, // Germany
+                        '+33': /^\+33\d{9,10}$/, // France
+                        '+34': /^\+34\d{9}$/, // Spain
+                        '+39': /^\+39\d{9,11}$/, // Italy
+                        '+61': /^\+61\d{9}$/, // Australia
+                        '+81': /^\+81\d{10,11}$/, // Japan
+                        '+82': /^\+82\d{9,11}$/, // South Korea
+                        '+55': /^\+55\d{10,11}$/, // Brazil
+                        '+52': /^\+52\d{10}$/, // Mexico
+                        '+91': /^\+91\d{10}$/, // India
+                        '+86': /^\+86\d{11}$/ // China
+                    };
+
                     const cleanPhone = value.replace(/[^\d+]/g, '');
-                    console.log('📱 Cleaned phone number:', cleanPhone);
+                    console.log('📱 Cleaned optional international phone:', cleanPhone);
 
-                    // Check for +1 followed by 10 digits (US format)
-                    if (/^\+1\d{10}$/.test(cleanPhone)) {
-                        console.log('📱 Phone validation passed: +1 format');
+                    // Check international patterns
+                    for (const [countryCode, pattern] of Object.entries(internationalPatterns)) {
+                        if (pattern.test(cleanPhone)) {
+                            console.log(`📱 Optional phone validation passed: ${countryCode} format`);
+                            return true;
+                        }
+                    }
+
+                    // Fallback for generic international format
+                    if (/^\+\d{1,4}\d{7,15}$/.test(cleanPhone)) {
+                        console.log('📱 Optional phone validation passed: generic international format');
                         return true;
                     }
 
-                    // Check for exactly 10 digits (US format without country code)
+                    // Legacy support for 10-digit US numbers
                     if (/^\d{10}$/.test(cleanPhone)) {
-                        console.log('📱 Phone validation passed: 10-digit format');
+                        console.log('📱 Optional phone validation passed: legacy 10-digit format');
                         return true;
                     }
 
-                    console.log('📱 Phone validation failed:', {
-                        original: value,
-                        cleaned: cleanPhone,
-                        length: cleanPhone.length,
-                        hasPlus: cleanPhone.includes('+')
-                    });
-
-                    // Provide specific error messages based on the issue
-                    if (cleanPhone.length === 0) {
-                        throw new Error('Phone number cannot be empty');
-                    } else if (cleanPhone.length < 10) {
-                        throw new Error(`Phone number too short: ${cleanPhone.length} digits (need 10)`);
-                    } else if (cleanPhone.length > 11) {
-                        throw new Error(`Phone number too long: ${cleanPhone.length} digits (need 10)`);
-                    } else if (cleanPhone.length === 11 && !cleanPhone.startsWith('+1')) {
-                        throw new Error('11-digit number must start with +1 for US format');
+                    // Same error handling as required validation
+                    if (!cleanPhone.startsWith('+')) {
+                        throw new Error('International phone number must include country code (e.g., +1 for US)');
                     } else {
-                        throw new Error(`Invalid phone format: ${value} (need 10 digits like 5551234567)`);
+                        const countryCode = cleanPhone.match(/^\+\d{1,4}/) ? .[0] || 'unknown';
+                        throw new Error(`Invalid phone format for ${countryCode}. Please check the number and try again.`);
                     }
                 })
-                .withMessage("Please enter a valid 10-digit US phone number")
+                .withMessage("Please enter a valid international phone number with country code")
             );
-            console.log('📱 Phone validation optional for this drop');
+            console.log('📱 Optional phone validation enabled for this drop');
         }
 
         // Always allow name (optional)
