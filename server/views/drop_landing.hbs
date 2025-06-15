@@ -224,9 +224,10 @@
             line-height: 1.08 !important;
             /* RESEARCH: Figma/Linear letter-spacing for visual density and readability */
             letter-spacing: -0.6px !important;
-            text-align: left !important;
+            /* LAYLO-INSPIRED: Center-aligned title like the inspiration */
+            text-align: center !important;
             /* RESEARCH: Stripe (12px) + Notion (8px) + Figma (12px) = 10.7px, rounded to 12px */
-            margin: 0 0 12px 0 !important;
+            margin: 0 0 16px 0 !important;
             /* RESEARCH: Material Design 3 Display Medium weight for prominence without overwhelming */
             font-weight: 700 !important;
             text-size-adjust: 100%;
@@ -251,10 +252,11 @@
             /* RESEARCH: Apple HIG 16pt base unit for optimal visual rhythm */
             gap: 16px !important;
             cursor: pointer;
-            /* RESEARCH: 24px = 0.46x title size (52px) - optimal subtitle-to-content spacing */
-            margin-bottom: 24px !important;
-            text-align: left;
-            justify-content: flex-start;
+            /* RESEARCH: 32px = 0.62x title size (52px) - optimal subtitle-to-content spacing */
+            margin-bottom: 32px !important;
+            /* LAYLO-INSPIRED: Center-aligned subtitle like the inspiration */
+            text-align: center;
+            justify-content: center;
             width: 100%;
             max-width: 400px;
             box-sizing: border-box;
@@ -285,6 +287,8 @@
             line-height: 1.5 !important;
             /* RESEARCH: Material Design 3 Body Large letter-spacing for text clarity */
             letter-spacing: 0.25px !important;
+            /* LAYLO-INSPIRED: Center-aligned text to match the design */
+            text-align: center;
             color: {{#if drop.description_color}}{{drop.description_color}}{{else}}var(--laylo-text-primary){{/if}};
             /* MODERN: Enhanced text rendering for subtitle clarity */
             text-rendering: optimizeLegibility;
