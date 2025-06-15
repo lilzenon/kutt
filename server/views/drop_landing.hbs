@@ -841,27 +841,26 @@
             text-decoration: none;
         }
 
-        /* B2B Branding - Optimized for Form Card Context */
+        /* B2B Branding - Modern Card-Integrated Design */
         .b2b-branding {
             display: flex;
-            flex-direction: row;
             align-items: center;
-            gap: 4px;
             justify-content: center;
-            margin-top: 16px;
-            padding: 8px 12px;
-            overflow: visible;
-            min-height: 70px;
+            margin-top: 20px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .b2b-branding-text {
-            font-family: "Inter", sans-serif;
-            font-weight: 400;
-            font-size: 1rem;
-            line-height: 1.5;
-            letter-spacing: 0.00938em;
-            color: var(--laylo-text-secondary);
-            margin: 0;
+        .b2b-branding:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .b2b-branding-link {
@@ -869,44 +868,66 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            color: var(--laylo-text-secondary);
-            transition: color 0.2s ease;
-            overflow: visible;
-            padding: 4px;
-            min-width: 200px;
-            min-height: 61px;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            width: 100%;
         }
 
         .b2b-branding-link:hover {
-            color: #1795B0;
+            color: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Responsive Logo Sizing - Form Card Optimized */
-        .b2b-branding-link img,
-        .b2b-branding-link svg {
-            max-width: 100%;
+        .b2b-logo {
+            width: 160px;
             height: auto;
-            display: block;
+            max-width: 100%;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.9;
         }
 
-        /* Mobile Logo Adjustments - 140-160px width */
+        .b2b-branding-link:hover .b2b-logo {
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+            transform: scale(1.02);
+            opacity: 1;
+        }
+
+        /* Logo text styling for better readability */
+        .b2b-logo .logo-text,
+        .b2b-logo .logo-number {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark theme adjustments */
+        @media (prefers-color-scheme: dark) {
+            .b2b-branding {
+                background: rgba(0, 0, 0, 0.2);
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+
+            .b2b-branding:hover {
+                background: rgba(0, 0, 0, 0.3);
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Mobile Responsive Design */
         @media (max-width: 767px) {
             .b2b-branding {
-                padding: 6px 8px;
-                min-height: 55px;
-                overflow: visible;
+                margin-top: 16px;
+                padding: 10px 12px;
+                border-radius: 10px;
             }
 
             .b2b-branding-link {
-                min-width: 150px;
-                min-height: 46px;
-                padding: 4px;
+                padding: 6px 8px;
             }
 
-            .b2b-branding-link img,
-            .b2b-branding-link svg {
-                width: 150px;
-                height: 46px;
+            .b2b-logo {
+                width: 120px;
             }
 
             /* Mobile background optimization */
@@ -916,39 +937,42 @@
             }
         }
 
-        /* Tablet Logo Adjustments - 160-180px width */
+        /* Tablet Responsive Design */
         @media (min-width: 768px) and (max-width: 1023px) {
             .b2b-branding {
-                min-height: 60px;
+                margin-top: 18px;
+                padding: 11px 14px;
             }
 
             .b2b-branding-link {
-                min-width: 170px;
-                min-height: 52px;
+                padding: 7px 10px;
             }
 
-            .b2b-branding-link img,
-            .b2b-branding-link svg {
-                width: 170px;
-                height: 52px;
+            .b2b-logo {
+                width: 140px;
             }
         }
 
-        /* Desktop Logo Adjustments - 180-220px width */
+        /* Desktop Responsive Design */
         @media (min-width: 1024px) {
             .b2b-branding {
-                min-height: 70px;
+                margin-top: 20px;
+                padding: 12px 16px;
             }
 
             .b2b-branding-link {
-                min-width: 200px;
-                min-height: 61px;
+                padding: 8px 12px;
             }
 
-            .b2b-branding-link img,
-            .b2b-branding-link svg {
-                width: 200px;
-                height: 61px;
+            .b2b-logo {
+                width: 160px;
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1440px) {
+            .b2b-logo {
+                width: 180px;
             }
         }
 
@@ -1483,8 +1507,30 @@
                         <!-- B2B Branding -->
                         <div class="b2b-branding">
                             <a href="https://bounce2bounce.com" target="_blank" class="b2b-branding-link">
-                                <img src="/images/b2b_logo.bmp" alt="Bounce2Bounce" width="200" height="61" style="object-fit: contain; max-width: 100%; height: auto;">
-
+                                <svg class="b2b-logo" viewBox="0 0 320 60" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <style>
+                                            .logo-text {
+                                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                                                font-weight: 700;
+                                                font-size: 24px;
+                                                letter-spacing: -0.5px;
+                                            }
+                                            .logo-number {
+                                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                                                font-weight: 800;
+                                                font-size: 28px;
+                                                letter-spacing: -0.5px;
+                                            }
+                                        </style>
+                                    </defs>
+                                    <text x="10" y="35" class="logo-text" fill="currentColor">bounce</text>
+                                    <text x="110" y="38" class="logo-number" fill="currentColor">2</text>
+                                    <text x="135" y="35" class="logo-text" fill="currentColor">bounce</text>
+                                    <!-- Decorative underline -->
+                                    <path d="M10 45 Q160 45 235 45" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+                                    <path d="M245 45 Q280 45 310 45" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+                                </svg>
                             </a>
                         </div>
                     </div>
