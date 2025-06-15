@@ -1595,6 +1595,36 @@
                 hideError();
                 successMessage.classList.add('hidden');
 
+                // Validate phone number if provided
+                if (phone && phone.trim()) {
+                    const cleanPhone = phone.replace(/[^\d]/g, '');
+                    if (cleanPhone.length !== 10) {
+                        showError(
+                            'Invalid Phone Number',
+                            'Please enter a valid 10-digit phone number (e.g., (555) 123-4567).',
+                            'validation'
+                        );
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                        return;
+                    }
+                }
+
+                // Validate email if provided
+                if (email && email.trim()) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        showError(
+                            'Invalid Email Address',
+                            'Please enter a valid email address (e.g., you@example.com).',
+                            'validation'
+                        );
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                        return;
+                    }
+                }
+
                 // Disable button and show loading state
                 submitButton.disabled = true;
                 const originalText = submitButton.textContent;
@@ -1602,7 +1632,13 @@
 
                 // Prepare data to send based on what fields are collected
                 const dataToSend = {};
-                if (phone && phone.trim()) dataToSend.phone = phone;
+                if (phone && phone.trim()) {
+                    // Clean phone number - remove all non-numeric characters for server
+                    const cleanPhone = phone.replace(/[^\d]/g, '');
+                    // Format as standard US phone number for server: +1XXXXXXXXXX
+                    dataToSend.phone = `+1${cleanPhone}`;
+                    console.log('📱 Cleaned phone number:', phone, '->', dataToSend.phone);
+                }
                 if (email && email.trim()) dataToSend.email = email;
 
                 console.log('📤 Submitting form data:', dataToSend);
@@ -1635,7 +1671,17 @@
 
                         if (response.status === 400) {
                             errorTitle = 'Invalid Information';
-                            errorMessage = result.message || 'Please check your information and try again.';
+
+                            // Check if it's a phone validation error
+                            if (result.message && result.message.includes('phone')) {
+                                errorTitle = 'Invalid Phone Number';
+                                errorMessage = 'Please enter a valid 10-digit US phone number.';
+                            } else if (result.message && result.message.includes('email')) {
+                                errorTitle = 'Invalid Email Address';
+                                errorMessage = 'Please enter a valid email address.';
+                            } else {
+                                errorMessage = result.message || 'Please check your information and try again.';
+                            }
                         } else if (response.status === 409) {
                             errorTitle = 'Already Registered';
                             errorMessage = 'You\'re already on the list! Check your email for confirmation.';

@@ -77,8 +77,25 @@ const signupValidation = [
     .withMessage("Valid email is required"),
     body("phone")
     .optional()
-    .isMobilePhone()
-    .withMessage("Valid phone number required"),
+    .custom((value) => {
+        if (!value) return true; // Optional field
+
+        // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
+        const cleanPhone = value.replace(/[^\d+]/g, '');
+
+        // Check for +1 followed by 10 digits (US format)
+        if (/^\+1\d{10}$/.test(cleanPhone)) {
+            return true;
+        }
+
+        // Check for exactly 10 digits (US format without country code)
+        if (/^\d{10}$/.test(cleanPhone)) {
+            return true;
+        }
+
+        throw new Error('Valid US phone number required (10 digits)');
+    })
+    .withMessage("Valid US phone number required"),
     body("name")
     .optional()
     .isLength({ max: 100 })
