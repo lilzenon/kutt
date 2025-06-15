@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Color Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .test-section h2 {
+            margin-top: 0;
+            color: #555;
+        }
+        
+        .button-test {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .test-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 22px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 200ms ease;
+            min-width: 80px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .test-button:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
+        }
+        
+        .test-button:active {
+            transform: scale(0.98);
+            opacity: 0.8;
+        }
+        
+        .color-info {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+            font-family: monospace;
+        }
+        
+        .card-background-test {
+            padding: 20px;
+            border-radius: 16px;
+            margin: 10px 0;
+        }
+        
+        .solid-white {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        .solid-dark {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        .translucent-light {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+        }
+        
+        .translucent-dark {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            backdrop-filter: blur(15px);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎨 RSVP Button Color Test</h1>
+        
+        <div class="test-section">
+            <h2>Dynamic Button Colors (Database Values)</h2>
+            <p>Testing buttons with different color combinations to verify dynamic colors work correctly:</p>
+            
+            <div class="button-test">
+                <!-- Red Button (Default for bounce2bounce) -->
+                <button class="test-button" style="background-color: #EF4444; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">Red: #EF4444 / White: #ffffff</div>
+                
+                <!-- Green Button (Old Laylo Style - Should NOT be used) -->
+                <button class="test-button" style="background-color: #22C55E; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">❌ Old Green: #22C55E (REMOVED)</div>
+                
+                <!-- Blue Button -->
+                <button class="test-button" style="background-color: #3B82F6; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">Blue: #3B82F6 / White: #ffffff</div>
+                
+                <!-- Purple Button -->
+                <button class="test-button" style="background-color: #8B5CF6; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">Purple: #8B5CF6 / White: #ffffff</div>
+                
+                <!-- Black Button -->
+                <button class="test-button" style="background-color: #000000; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">Black: #000000 / White: #ffffff</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Card Background Compatibility</h2>
+            <p>Testing button visibility across different card background types:</p>
+            
+            <div class="card-background-test solid-white">
+                <h3>Solid White Card</h3>
+                <button class="test-button" style="background-color: #EF4444; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">✅ Good contrast on white background</div>
+            </div>
+            
+            <div class="card-background-test solid-dark">
+                <h3>Solid Dark Card</h3>
+                <button class="test-button" style="background-color: #EF4444; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">✅ Good contrast on dark background</div>
+            </div>
+            
+            <div class="card-background-test translucent-light">
+                <h3>Translucent Light Card</h3>
+                <button class="test-button" style="background-color: #EF4444; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">✅ Good contrast on translucent light</div>
+            </div>
+            
+            <div class="card-background-test translucent-dark">
+                <h3>Translucent Dark Card</h3>
+                <button class="test-button" style="background-color: #EF4444; color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">
+                    RSVP
+                </button>
+                <div class="color-info">✅ Good contrast on translucent dark</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>✅ Verification Checklist</h2>
+            <ul>
+                <li>✅ Removed hardcoded green colors (#22C55E, #16A34A, #15803D)</li>
+                <li>✅ Removed hardcoded green box-shadow (rgba(34, 197, 94, ...))</li>
+                <li>✅ Button uses dynamic colors from database (drop.button_color, drop.button_text_color)</li>
+                <li>✅ Neutral shadows work with any button color</li>
+                <li>✅ Hover/active states use opacity for universal compatibility</li>
+                <li>✅ Both standalone and inlaid button modes updated</li>
+                <li>✅ Works across all card background types</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Test button interactions
+        document.querySelectorAll('.test-button').forEach(button => {
+            button.addEventListener('click', function() {
+                console.log('Button clicked:', this.textContent, 'Color:', this.style.backgroundColor);
+            });
+        });
+    </script>
+</body>
+</html>

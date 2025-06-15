@@ -53,6 +53,9 @@
             --drop-button-text-color: {{drop.button_text_color}};
             --drop-background-color: {{drop.background_color}};
 
+            /* Dynamic button shadow color - extract RGB values for shadow effects */
+            --drop-button-shadow: {{#if drop.button_color}}{{drop.button_color}}{{else}}#000000{{/if}};
+
             /* Laylo Design System - Exact Colors */
             --laylo-red: #ff0003;
             --laylo-dark: #1F2937;
@@ -812,7 +815,7 @@
             overflow: hidden;
         }
 
-        /* RSVP Submit Button - Laylo-inspired green design */
+        /* RSVP Submit Button - Dynamic Colors from Database */
         .laylo-rsvp-button {
             position: absolute;
             right: 6px;
@@ -823,8 +826,8 @@
             justify-content: center;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important; /* Green like Laylo RSVP button */
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important;
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#000000{{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#000000{{/if}} !important;
             /* Debug: Button color value = {{drop.button_color}} */
             outline: 0;
             border: 0;
@@ -846,23 +849,28 @@
             border-radius: 22px; /* Rounded like Laylo button */
             transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
             color: {{#if drop.button_text_color}}{{drop.button_text_color}}{{else}}#ffffff{{/if}};
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); /* Green shadow for depth */
+            /* Dynamic shadow that works with any button color */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
             z-index: 10;
         }
 
         .laylo-rsvp-button:hover {
             text-decoration: none;
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important; /* Darker green on hover */
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important;
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
             transform: translateY(-50%) scale(1.02);
-            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4); /* Enhanced green shadow */
+            /* Enhanced shadow on hover */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+            opacity: 0.9; /* Subtle hover effect using opacity */
         }
 
         .laylo-rsvp-button:active {
             transform: translateY(-50%) scale(0.98);
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important; /* Even darker on active */
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important;
-            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            /* Reduced shadow on active */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+            opacity: 0.8; /* Stronger active effect using opacity */
         }
 
         .laylo-rsvp-button:disabled {
@@ -877,7 +885,7 @@
             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
-        /* Standalone Button for Email-Only Mode - Laylo-inspired design */
+        /* Standalone Button for Email-Only Mode - Dynamic Colors from Database */
         .laylo-rsvp-button.standalone {
             position: static;
             transform: none;
@@ -889,25 +897,30 @@
             font-weight: 600;
             min-width: auto;
             padding: 16px 24px;
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important; /* Green like Laylo */
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important;
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#000000{{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#000000{{/if}} !important;
             color: {{#if drop.button_text_color}}{{drop.button_text_color}}{{else}}#ffffff{{/if}} !important;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); /* Green shadow for depth */
+            /* Dynamic shadow that works with any button color */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
             letter-spacing: 0.01em; /* Subtle letter-spacing */
         }
 
         .laylo-rsvp-button.standalone:hover {
             transform: scale(1.02);
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important; /* Darker green on hover */
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important;
-            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4); /* Enhanced green shadow */
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            /* Enhanced shadow on hover */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+            opacity: 0.9; /* Subtle hover effect using opacity */
         }
 
         .laylo-rsvp-button.standalone:active {
             transform: scale(0.98);
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important; /* Even darker on active */
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important;
-            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#333333{{/if}} !important;
+            /* Reduced shadow on active */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+            opacity: 0.8; /* Stronger active effect using opacity */
         }
 
         .laylo-rsvp-button.standalone:disabled {
