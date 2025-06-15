@@ -114,10 +114,10 @@ router.get(
     })
 );
 
-// POST /signup/:slug - Public signup endpoint
+// POST /signup/:slug - Public signup endpoint with dynamic validation
 router.post(
     "/signup/:slug",
-    drops.signupValidation,
+    asyncHandler(drops.createSignupValidation),
     validateRequest,
     asyncHandler(drops.createSignup)
 );

@@ -67,63 +67,164 @@ const updateDropValidation = [
     ...createDropValidation
 ];
 
-const signupValidation = [
-    param("slug")
-    .isLength({ min: 1, max: 100 })
-    .withMessage("Invalid drop slug"),
-    body("email")
-    .isEmail()
-    .normalizeEmail()
-    .withMessage("Valid email is required"),
-    body("phone")
-    .optional()
-    .custom((value) => {
-        if (!value) return true; // Optional field
+// Dynamic validation based on drop settings
+async function createSignupValidation(req, res, next) {
+    const { slug } = req.params;
 
-        console.log('📱 Server validating phone number:', value);
+    try {
+        // Get the drop to check its collection settings
+        const foundDrop = await drop.findBySlug(slug);
 
-        // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
-        const cleanPhone = value.replace(/[^\d+]/g, '');
-        console.log('📱 Cleaned phone number:', cleanPhone);
-
-        // Check for +1 followed by 10 digits (US format)
-        if (/^\+1\d{10}$/.test(cleanPhone)) {
-            console.log('📱 Phone validation passed: +1 format');
-            return true;
+        if (!foundDrop) {
+            throw new CustomError("Drop not found", 404);
         }
 
-        // Check for exactly 10 digits (US format without country code)
-        if (/^\d{10}$/.test(cleanPhone)) {
-            console.log('📱 Phone validation passed: 10-digit format');
-            return true;
-        }
-
-        console.log('📱 Phone validation failed:', {
-            original: value,
-            cleaned: cleanPhone,
-            length: cleanPhone.length,
-            hasPlus: cleanPhone.includes('+')
+        console.log('📋 Drop collection settings:', {
+            collect_email: foundDrop.collect_email,
+            collect_phone: foundDrop.collect_phone
         });
 
-        // Provide specific error messages based on the issue
-        if (cleanPhone.length === 0) {
-            throw new Error('Phone number cannot be empty');
-        } else if (cleanPhone.length < 10) {
-            throw new Error(`Phone number too short: ${cleanPhone.length} digits (need 10)`);
-        } else if (cleanPhone.length > 11) {
-            throw new Error(`Phone number too long: ${cleanPhone.length} digits (need 10)`);
-        } else if (cleanPhone.length === 11 && !cleanPhone.startsWith('+1')) {
-            throw new Error('11-digit number must start with +1 for US format');
+        // Create dynamic validation rules based on drop settings
+        const validationRules = [
+            param("slug")
+            .isLength({ min: 1, max: 100 })
+            .withMessage("Invalid drop slug")
+        ];
+
+        // Add email validation only if email collection is enabled
+        if (foundDrop.collect_email) {
+            validationRules.push(
+                body("email")
+                .isEmail()
+                .normalizeEmail()
+                .withMessage("Valid email is required")
+            );
+            console.log('📧 Email validation enabled for this drop');
         } else {
-            throw new Error(`Invalid phone format: ${value} (need 10 digits like 5551234567)`);
+            console.log('📧 Email validation disabled for this drop');
         }
-    })
-    .withMessage("Please enter a valid 10-digit US phone number"),
-    body("name")
-    .optional()
-    .isLength({ max: 100 })
-    .withMessage("Name must be less than 100 characters"),
-];
+
+        // Add phone validation only if phone collection is enabled
+        if (foundDrop.collect_phone) {
+            validationRules.push(
+                body("phone")
+                .custom((value) => {
+                    if (!value) {
+                        throw new Error('Phone number is required for this drop');
+                    }
+
+                    console.log('📱 Server validating phone number:', value);
+
+                    // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
+                    const cleanPhone = value.replace(/[^\d+]/g, '');
+                    console.log('📱 Cleaned phone number:', cleanPhone);
+
+                    // Check for +1 followed by 10 digits (US format)
+                    if (/^\+1\d{10}$/.test(cleanPhone)) {
+                        console.log('📱 Phone validation passed: +1 format');
+                        return true;
+                    }
+
+                    // Check for exactly 10 digits (US format without country code)
+                    if (/^\d{10}$/.test(cleanPhone)) {
+                        console.log('📱 Phone validation passed: 10-digit format');
+                        return true;
+                    }
+
+                    console.log('📱 Phone validation failed:', {
+                        original: value,
+                        cleaned: cleanPhone,
+                        length: cleanPhone.length,
+                        hasPlus: cleanPhone.includes('+')
+                    });
+
+                    // Provide specific error messages based on the issue
+                    if (cleanPhone.length === 0) {
+                        throw new Error('Phone number cannot be empty');
+                    } else if (cleanPhone.length < 10) {
+                        throw new Error(`Phone number too short: ${cleanPhone.length} digits (need 10)`);
+                    } else if (cleanPhone.length > 11) {
+                        throw new Error(`Phone number too long: ${cleanPhone.length} digits (need 10)`);
+                    } else if (cleanPhone.length === 11 && !cleanPhone.startsWith('+1')) {
+                        throw new Error('11-digit number must start with +1 for US format');
+                    } else {
+                        throw new Error(`Invalid phone format: ${value} (need 10 digits like 5551234567)`);
+                    }
+                })
+                .withMessage("Please enter a valid 10-digit US phone number")
+            );
+            console.log('📱 Phone validation enabled for this drop');
+        } else {
+            // Phone is optional if not required by drop
+            validationRules.push(
+                body("phone")
+                .optional()
+                .custom((value) => {
+                    if (!value) return true; // Optional field
+
+                    console.log('📱 Server validating optional phone number:', value);
+
+                    // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
+                    const cleanPhone = value.replace(/[^\d+]/g, '');
+                    console.log('📱 Cleaned phone number:', cleanPhone);
+
+                    // Check for +1 followed by 10 digits (US format)
+                    if (/^\+1\d{10}$/.test(cleanPhone)) {
+                        console.log('📱 Phone validation passed: +1 format');
+                        return true;
+                    }
+
+                    // Check for exactly 10 digits (US format without country code)
+                    if (/^\d{10}$/.test(cleanPhone)) {
+                        console.log('📱 Phone validation passed: 10-digit format');
+                        return true;
+                    }
+
+                    console.log('📱 Phone validation failed:', {
+                        original: value,
+                        cleaned: cleanPhone,
+                        length: cleanPhone.length,
+                        hasPlus: cleanPhone.includes('+')
+                    });
+
+                    // Provide specific error messages based on the issue
+                    if (cleanPhone.length === 0) {
+                        throw new Error('Phone number cannot be empty');
+                    } else if (cleanPhone.length < 10) {
+                        throw new Error(`Phone number too short: ${cleanPhone.length} digits (need 10)`);
+                    } else if (cleanPhone.length > 11) {
+                        throw new Error(`Phone number too long: ${cleanPhone.length} digits (need 10)`);
+                    } else if (cleanPhone.length === 11 && !cleanPhone.startsWith('+1')) {
+                        throw new Error('11-digit number must start with +1 for US format');
+                    } else {
+                        throw new Error(`Invalid phone format: ${value} (need 10 digits like 5551234567)`);
+                    }
+                })
+                .withMessage("Please enter a valid 10-digit US phone number")
+            );
+            console.log('📱 Phone validation optional for this drop');
+        }
+
+        // Always allow name (optional)
+        validationRules.push(
+            body("name")
+            .optional()
+            .isLength({ max: 100 })
+            .withMessage("Name must be less than 100 characters")
+        );
+
+        // Store the drop in request for later use
+        req.foundDrop = foundDrop;
+
+        // Apply the dynamic validation rules
+        await Promise.all(validationRules.map(rule => rule.run(req)));
+
+        next();
+    } catch (error) {
+        console.error('🚨 Error in dynamic signup validation:', error);
+        next(error);
+    }
+}
 
 // Create a new drop
 async function createDrop(req, res) {
@@ -357,13 +458,12 @@ async function createSignup(req, res) {
         const { email, phone, name } = req.body;
 
         console.log(`🚀 Drop signup attempt for slug: ${slug}`);
-        console.log(`📧 Email: ${email}`);
+        console.log(`📧 Email: ${email || 'none'}`);
         console.log(`📱 Phone: ${phone || 'none'}`);
         console.log(`👤 Name: ${name || 'none'}`);
 
-        // Find the drop by slug
-        console.log(`🔍 Looking for drop with slug: ${slug}`);
-        const foundDrop = await drop.findBySlug(slug);
+        // Use the drop that was already fetched in validation middleware
+        const foundDrop = req.foundDrop;
 
         if (!foundDrop) {
             console.error(`❌ Drop not found for slug: ${slug}`);
@@ -375,7 +475,17 @@ async function createSignup(req, res) {
             throw new CustomError("Drop is currently inactive", 404);
         }
 
-        console.log(`✅ Found active drop: ${foundDrop.title} (ID: ${foundDrop.id})`);
+        console.log(`✅ Using pre-fetched drop: ${foundDrop.title} (ID: ${foundDrop.id})`);
+        console.log(`📋 Drop settings: collect_email=${foundDrop.collect_email}, collect_phone=${foundDrop.collect_phone}`);
+
+        // Additional validation based on drop settings
+        if (foundDrop.collect_email && !email) {
+            throw new CustomError("Email is required for this drop", 400);
+        }
+
+        if (foundDrop.collect_phone && !phone) {
+            throw new CustomError("Phone number is required for this drop", 400);
+        }
 
         // Check if email already signed up
         console.log(`🔍 Checking if email already signed up: ${email}`);
@@ -595,7 +705,7 @@ async function getDropAnalytics(req, res) {
 module.exports = {
     createDropValidation,
     updateDropValidation,
-    signupValidation,
+    createSignupValidation,
     createDrop,
     getUserDrops,
     getDrop,
