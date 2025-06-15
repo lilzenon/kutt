@@ -9,13 +9,29 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    /* AWARD-WINNING: Generous padding for premium feel */
+    /* AWARD-WINNING: Responsive padding */
     padding: 24px 32px 0 32px;
     margin-bottom: 0;
     /* STUNNING: Layered shadows for depth */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
-    overflow: hidden;
+    /* CRITICAL: Enable horizontal scrolling on mobile */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    /* Hide scrollbars but keep functionality */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+
+/* Hide scrollbar for webkit browsers */
+
+.tab-navigation::-webkit-scrollbar {
+    display: none;
 }
 
 .tab-navigation::before {
@@ -32,9 +48,12 @@
 .tab-nav-container {
     display: flex;
     gap: 8px;
-    max-width: 1200px;
-    margin: 0 auto;
+    /* CRITICAL: Enable horizontal scrolling */
+    min-width: max-content;
+    flex-wrap: nowrap;
     position: relative;
+    /* MOBILE: Ensure tabs can scroll horizontally */
+    width: 100%;
 }
 
 .tab-btn {
@@ -147,6 +166,16 @@
 /* DESKTOP: Large icons with proper sizing */
 
 @media (min-width: 769px) {
+    .tab-navigation {
+        /* DESKTOP: Ensure proper scrolling behavior */
+        overflow-x: auto;
+    }
+    .tab-nav-container {
+        /* DESKTOP: Allow natural width but enable scrolling if needed */
+        min-width: max-content;
+        width: auto;
+        max-width: none;
+    }
     .tab-btn svg {
         width: 28px !important;
         height: 28px !important;
@@ -1413,212 +1442,232 @@
 
 /* Mobile Responsive */
 
-@media (max-width: 768px) {
-    /* MODERN: Mobile tab navigation */
-    .tab-navigation {
-        padding: 0 16px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    .tab-nav-container {
-        min-width: max-content;
-        gap: 0;
-    }
-    .tab-btn {
-        padding: 12px 16px;
-        min-width: 80px;
-        justify-content: center;
-        font-size: 13px;
-        white-space: nowrap;
-    }
-    .tab-btn span {
-        display: none;
-    }
-    .tab-btn svg {
-        width: 18px;
-        height: 18px;
-    }
-    /* Show text on active tab */
-    .tab-btn.active span {
-        display: inline;
-        margin-left: 4px;
-    }
-    .platform-links-container {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-    .section-header h2 {
-        font-size: 18px;
-    }
-    .drop-edit-container {
-        padding: 16px;
-    }
-    .drop-edit-content {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    .drop-preview-panel {
-        order: 2;
-        position: static;
-        margin-top: 20px;
-    }
-    .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-    .drop-edit-header h1 {
-        font-size: 24px;
-    }
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    /* 🚀 FIXED MOBILE BUTTON SYSTEM */
-    .form-actions {
-        /* FIXED: Normal flow instead of fixed positioning */
-        position: static;
-        /* ENTERPRISE: Modern gradient background */
-        background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
-        /* ACCESSIBILITY: Proper spacing and layout */
-        padding: 20px;
-        margin: 24px 0 0 0;
-        display: flex;
-        flex-direction: row;
-        gap: 12px;
-        /* ENTERPRISE: Premium shadow system */
-        border-top: 1px solid #e5e7eb;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        /* FUTURE-PROOF: Smooth transitions */
-        transition: all 0.3s ease;
-    }
-    /* RESEARCH-BASED: Optimal button sizing for mobile */
-    .button {
-        /* ACCESSIBILITY: Full-width touch targets */
-        flex: 1;
-        /* ENTERPRISE: Optimal mobile sizing */
-        padding: 16px 20px;
-        font-size: 16px;
-        font-weight: 700;
-        min-height: 52px;
-        /* MODERN: Better border radius for mobile */
-        border-radius: 14px;
-        /* ACCESSIBILITY: Better touch feedback */
-        -webkit-tap-highlight-color: transparent;
-    }
-    /* ENTERPRISE: Secondary button gets less visual weight */
-    .button.secondary {
-        flex: 0.8;
-        order: 1;
-    }
-    /* ENTERPRISE: Primary button gets more visual weight */
-    .button.primary {
-        flex: 1.2;
-        order: 2;
-    }
-    .slug-prefix {
-        font-size: 12px;
-        padding: 10px;
-    }
-    .error-message,
-    .success-message {
-        position: static;
-        margin: 16px 0;
-    }
-    /* Mobile Preview Optimizations */
-    .preview-header {
-        padding: 16px;
-        position: relative;
-    }
-    .preview-header h3 {
-        font-size: 14px;
-    }
-    .preview-controls {
-        gap: 4px;
-    }
-    .preview-device-btn {
-        width: 28px;
-        height: 28px;
-    }
-    .preview-container {
-        padding: 16px;
-        max-height: 400px;
-        overflow-y: auto;
-    }
-    .preview-viewport {
-        transform: scale(0.8);
-        transform-origin: top center;
-        margin-bottom: -100px;
-    }
-    .preview-viewport.mobile {
-        max-width: 300px;
-        transform: scale(0.9);
-        margin-bottom: -50px;
-    }
-    .preview-drop {
-        min-height: 400px;
-    }
-    .preview-content {
-        padding: 20px 16px;
-    }
-    .preview-info h4 {
-        font-size: 20px;
-    }
-    .preview-info p {
-        font-size: 14px;
-    }
-    .preview-input,
-    .preview-form button {
-        padding: 12px;
-        font-size: 14px;
-    }
-    .preview-info-panel {
-        padding: 12px 16px;
-    }
-    /* Collapsible Preview */
-    .preview-toggle {
-        display: block;
-        width: 100%;
-        background: #f9fafb;
-        border: none;
-        padding: 12px 16px;
-        text-align: left;
-        font-weight: 500;
-        color: #374151;
-        border-bottom: 1px solid #e5e7eb;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .preview-toggle:hover {
-        background: #f3f4f6;
-    }
-    .preview-toggle-icon {
-        transition: transform 0.2s ease;
-    }
-    .preview-toggle.collapsed .preview-toggle-icon {
-        transform: rotate(-90deg);
-    }
-    .preview-collapsible {
-        display: block;
-    }
-    .preview-collapsible.collapsed {
-        display: none;
-    }
+
+/* REMOVE THIS CONFLICTING MOBILE TAB CSS - WILL BE REPLACED BELOW */
+
+.platform-links-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
 }
 
+.section-header h2 {
+    font-size: 18px;
+}
+
+.drop-edit-container {
+    padding: 16px;
+}
+
+.drop-edit-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.drop-preview-panel {
+    order: 2;
+    position: static;
+    margin-top: 20px;
+}
+
+.header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.drop-edit-header h1 {
+    font-size: 24px;
+}
+
+.form-row {
+    grid-template-columns: 1fr;
+}
+
+
+/* 🚀 FIXED MOBILE BUTTON SYSTEM */
+
+.form-actions {
+    /* FIXED: Normal flow instead of fixed positioning */
+    position: static;
+    /* ENTERPRISE: Modern gradient background */
+    background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
+    /* ACCESSIBILITY: Proper spacing and layout */
+    padding: 20px;
+    margin: 24px 0 0 0;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    /* ENTERPRISE: Premium shadow system */
+    border-top: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* FUTURE-PROOF: Smooth transitions */
+    transition: all 0.3s ease;
+}
+
+
+/* RESEARCH-BASED: Optimal button sizing for mobile */
+
+.button {
+    /* ACCESSIBILITY: Full-width touch targets */
+    flex: 1;
+    /* ENTERPRISE: Optimal mobile sizing */
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    min-height: 52px;
+    /* MODERN: Better border radius for mobile */
+    border-radius: 14px;
+    /* ACCESSIBILITY: Better touch feedback */
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ENTERPRISE: Secondary button gets less visual weight */
+
+.button.secondary {
+    flex: 0.8;
+    order: 1;
+}
+
+
+/* ENTERPRISE: Primary button gets more visual weight */
+
+.button.primary {
+    flex: 1.2;
+    order: 2;
+}
+
+.slug-prefix {
+    font-size: 12px;
+    padding: 10px;
+}
+
+.error-message,
+.success-message {
+    position: static;
+    margin: 16px 0;
+}
+
+
+/* Mobile Preview Optimizations */
+
+.preview-header {
+    padding: 16px;
+    position: relative;
+}
+
+.preview-header h3 {
+    font-size: 14px;
+}
+
+.preview-controls {
+    gap: 4px;
+}
+
+.preview-device-btn {
+    width: 28px;
+    height: 28px;
+}
+
+.preview-container {
+    padding: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.preview-viewport {
+    transform: scale(0.8);
+    transform-origin: top center;
+    margin-bottom: -100px;
+}
+
+.preview-viewport.mobile {
+    max-width: 300px;
+    transform: scale(0.9);
+    margin-bottom: -50px;
+}
+
+.preview-drop {
+    min-height: 400px;
+}
+
+.preview-content {
+    padding: 20px 16px;
+}
+
+.preview-info h4 {
+    font-size: 20px;
+}
+
+.preview-info p {
+    font-size: 14px;
+}
+
+.preview-input,
+.preview-form button {
+    padding: 12px;
+    font-size: 14px;
+}
+
+.preview-info-panel {
+    padding: 12px 16px;
+}
+
+
+/* Collapsible Preview */
+
+.preview-toggle {
+    display: block;
+    width: 100%;
+    background: #f9fafb;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.preview-toggle:hover {
+    background: #f3f4f6;
+}
+
+.preview-toggle-icon {
+    transition: transform 0.2s ease;
+}
+
+.preview-toggle.collapsed .preview-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.preview-collapsible {
+    display: block;
+}
+
+.preview-collapsible.collapsed {
+    display: none;
+}
+
+
+}
 @media (max-width: 480px) {
     .drop-edit-container {
         padding: 12px;
         padding-bottom: 80px;
         /* Space for sticky actions */
     }
+    
     .form-section {
         padding: 16px;
         margin-bottom: 16px;
     }
     /* 🚀 SMALL MOBILE: Enhanced button system */
+    
     .form-actions {
         /* ENTERPRISE: Optimized for small screens */
         padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
@@ -1626,6 +1675,7 @@
         /* ACCESSIBILITY: Slightly smaller but still compliant */
         box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.1), 0 -3px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
+    
     .button {
         /* SMALL MOBILE: Optimized sizing */
         padding: 14px 16px;
@@ -1633,79 +1683,95 @@
         min-height: 48px;
         border-radius: 12px;
     }
+    
     .drop-preview-panel {
         padding: 0;
         margin-top: 16px;
         border-radius: 8px;
     }
+    
     .preview-header {
         padding: 12px;
     }
+    
     .preview-header h3 {
         font-size: 13px;
     }
+    
     .preview-container {
         padding: 12px;
         max-height: 300px;
     }
+    
     .preview-viewport {
         transform: scale(0.7);
         margin-bottom: -120px;
     }
+    
     .preview-viewport.mobile {
         max-width: 280px;
         transform: scale(0.8);
         margin-bottom: -80px;
     }
+    
     .preview-content {
         padding: 16px 12px;
     }
+    
     .preview-info h4 {
         font-size: 18px;
     }
+    
     .preview-info p {
         font-size: 13px;
     }
+    
     .preview-input,
     .preview-form button {
         padding: 10px;
         font-size: 13px;
     }
+    
     .preview-info-panel {
         padding: 10px 12px;
     }
+    
     .url-display {
         font-size: 11px;
         padding: 6px 8px;
     }
     /* Hide desktop preview controls on very small screens */
+    
     .preview-device-btn[data-device="desktop"] {
         display: none;
     }
     /* Compact form styling */
+    
     .form-group {
         margin-bottom: 16px;
     }
+    
     .form-group label {
         font-size: 13px;
         margin-bottom: 6px;
     }
+    
     .form-input,
     .form-textarea {
         padding: 12px;
         font-size: 14px;
     }
+    
     .checkbox-label {
         font-size: 13px;
     }
+    
     .form-help {
         font-size: 11px;
     }
 }
 
-
 /* Enhanced Preview Panel Styles */
-
 .drop-preview-panel {
     background: white;
     border-radius: 12px;
@@ -1716,7 +1782,6 @@
     height: fit-content;
     overflow: hidden;
 }
-
 .preview-header {
     display: flex;
     justify-content: space-between;
@@ -1725,20 +1790,17 @@
     border-bottom: 1px solid #f3f4f6;
     background: #f9fafb;
 }
-
 .preview-title-section {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
-
 .preview-header h3 {
     margin: 0;
     font-size: 16px;
     font-weight: 600;
     color: #111827;
 }
-
 .preview-device-indicator {
     font-size: 12px;
     color: #6b7280;
@@ -1746,12 +1808,10 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .preview-controls {
     display: flex;
     gap: 8px;
 }
-
 .preview-device-btn {
     display: flex;
     align-items: center;
@@ -1765,23 +1825,19 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
-
 .preview-device-btn:hover {
     background: #f9fafb;
     border-color: #9ca3af;
 }
-
 .preview-device-btn.active {
     background: #3b82f6;
     border-color: #3b82f6;
     color: white;
 }
-
 .preview-container {
     padding: 24px;
     background: #f8fafc;
 }
-
 .preview-viewport {
     border: 1px solid #e5e7eb;
     border-radius: 12px;
@@ -1790,23 +1846,25 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
-
 .preview-viewport.desktop {
+    width: 100%;
     max-width: 100%;
     margin: 0 auto;
     min-height: 600px;
+    height: 600px;
 }
-
 .preview-viewport.mobile {
+    width: 375px;
     max-width: 375px;
     margin: 0 auto;
-    min-height: 500px;
+    min-height: 667px;
+    height: 667px;
     /* Simulate mobile device frame */
+    
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
-
 .preview-drop {
     min-height: 500px;
     background: #ffffff;
@@ -1817,24 +1875,21 @@
     transition: all 0.3s ease;
 }
 
-
 /* Device-specific preview styling - JavaScript handles exact values */
-
 .preview-viewport.mobile {
     /* Mobile device frame styling */
+    
     border-radius: 20px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
-
 .preview-viewport.desktop {
     /* Desktop frame styling */
+    
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-
 /* Base preview styling with transitions for smooth device switching */
-
 .preview-drop,
 .preview-info h4,
 .preview-info p,
@@ -1847,58 +1902,59 @@
     transition: all 0.3s ease;
 }
 
-
 /* GLASSMORPHISM PREVIEW INTEGRATION */
-
 
 /* Preview now uses the same glassmorphism CSS as the actual drop landing page */
 
-
 /* Ensure glassmorphism effects work in preview iframe */
-
 .preview-viewport iframe {
+    /* CRITICAL: Proper iframe sizing */
+    
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    border: none;
     /* Enable backdrop-filter support in iframe */
+    
     isolation: isolate;
+    /* Ensure iframe fills container properly */
+    
+    display: block;
 }
 
-
 /* Preview-specific overrides to ensure proper display within viewport */
-
 .preview-viewport .drop-container {
     min-height: 500px;
     height: auto;
     border-radius: inherit;
     overflow: hidden;
 }
-
 .preview-viewport .brand-link {
     pointer-events: none;
     /* Disable clicks in preview */
 }
-
 .preview-viewport .signup-button {
     pointer-events: none;
     /* Disable clicks in preview */
+    
     cursor: default;
 }
-
 .preview-viewport .form-input {
     pointer-events: none;
     /* Disable interaction in preview */
 }
 
-
 /* Ensure preview matches live page structure exactly */
-
 .preview-container,
 .preview-viewport {
     /* Page background (behind the card) */
+    
     background-color: inherit !important;
 }
-
 .preview-viewport .drop-container {
     /* Card background and structure to match live page */
     /* Remove background override - let CSS variables work */
+    
     max-width: 600px;
     margin: 0 auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -1906,32 +1962,31 @@
     overflow: hidden;
 }
 
-
 /* RESEARCH-BASED PREVIEW SYSTEM - MOBILE-FIRST RESPONSIVE */
 
-
 /* Mobile preview - force mobile layout */
-
 .preview-viewport.mobile {
     /* Force mobile breakpoint behavior */
+    
     width: 375px;
     max-width: 375px;
     /* Simulate mobile width */
 }
-
 .preview-viewport.mobile .drop-page-wrapper {
     /* RESEARCH-BASED: Match new mobile system with reduced padding */
+    
     padding: 10px !important;
     min-height: 100% !important;
     /* BEAUTIFUL: Modern gradient background */
+    
     background: linear-gradient(135deg, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 0%, color-mix(in srgb, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 85%, #ffffff) 100%) !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     box-sizing: border-box !important;
 }
-
 .preview-viewport.mobile .drop-container {
     /* RESEARCH-BASED: Match new mobile container */
+    
     width: 100% !important;
     margin: 0 !important;
     min-height: 500px !important;
@@ -1941,18 +1996,17 @@
     box-sizing: border-box !important;
 }
 
-
 /* Desktop preview - force desktop layout */
-
 .preview-viewport.desktop {
     /* Force desktop breakpoint behavior */
+    
     width: 100%;
     min-width: 1024px;
     /* Ensure desktop breakpoint matches new system */
 }
-
 .preview-viewport.desktop .drop-page-wrapper {
     /* RESEARCH-BASED: Match new desktop system with reduced padding */
+    
     padding: 40px 20px !important;
     min-height: 100vh !important;
     display: flex !important;
@@ -1961,148 +2015,128 @@
     max-width: 1400px !important;
     margin: 0 auto !important;
     /* BEAUTIFUL: Modern gradient background */
+    
     background: linear-gradient(135deg, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 0%, color-mix(in srgb, var(--preview-drop-background-color, var(--drop-background-color, #f8fafc)) 85%, #ffffff) 100%) !important;
 }
-
 .preview-viewport.desktop .drop-container {
     /* RESEARCH-BASED: Match new desktop container */
+    
     max-width: 700px !important;
     width: 100% !important;
     margin: 0 !important;
     border-radius: 24px !important;
     /* BEAUTIFUL: Modern layered shadows */
+    
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
     /* Modern: Subtle border */
+    
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     min-height: auto !important;
 }
 
-
 /* Mobile responsive overrides for preview to match shared CSS exactly */
-
 .preview-viewport.mobile .drop-header {
     padding: 12px 16px !important;
 }
-
 .preview-viewport.mobile .brand-text {
     font-size: 16px !important;
 }
-
 .preview-viewport.mobile .drop-main {
     padding: 24px 16px !important;
 }
-
 .preview-viewport.mobile .drop-title {
     /* MODERN: Match new mobile typography */
+    
     font-size: 32px !important;
     margin-bottom: 24px !important;
 }
-
 .preview-viewport.mobile .drop-description p {
     /* ENHANCED: Match new mobile typography */
+    
     font-size: 18px !important;
     margin-bottom: 32px !important;
 }
-
 .preview-viewport.mobile .drop-cover-image {
     /* LARGER: Match new mobile image sizing */
+    
     width: 280px !important;
     height: 280px !important;
 }
-
 .preview-viewport.mobile .form-input {
     padding: 14px !important;
     font-size: 16px !important;
     /* Prevent zoom on iOS */
 }
-
 .preview-viewport.mobile .signup-button {
     padding: 14px !important;
     font-size: 16px !important;
 }
-
 .preview-viewport.mobile .drop-cover-image {
     width: 150px !important;
     height: 150px !important;
 }
-
 .preview-viewport.mobile .drop-footer {
     padding: 16px !important;
 }
 
-
 /* Desktop responsive overrides for preview */
-
 .preview-viewport.desktop .drop-header {
     padding: 16px 24px !important;
 }
-
 .preview-viewport.desktop .brand-text {
     font-size: 18px !important;
 }
-
 .preview-viewport.desktop .drop-main {
     padding: 40px 24px !important;
 }
-
 .preview-viewport.desktop .drop-title {
     /* STUNNING: Match new desktop typography */
+    
     font-size: 48px !important;
     margin-bottom: 40px !important;
 }
-
 .preview-viewport.desktop .drop-description p {
     /* PREMIUM: Match new desktop typography */
+    
     font-size: 22px !important;
     margin-bottom: 48px !important;
 }
-
 .preview-viewport.desktop .drop-cover-image {
     /* IMPRESSIVE: Match new desktop image sizing */
+    
     width: 360px !important;
     height: 360px !important;
 }
-
 .preview-viewport.desktop .form-input {
     padding: 16px !important;
     font-size: 16px !important;
 }
-
 .preview-viewport.desktop .signup-button {
     padding: 16px 32px !important;
     font-size: 16px !important;
 }
-
 .preview-viewport.desktop .drop-cover-image {
     width: 200px !important;
     height: 200px !important;
 }
-
 .preview-viewport.desktop .drop-footer {
     padding: 24px !important;
 }
 
-
 /* Ensure header and footer don't override background */
-
 .preview-viewport .drop-header,
 .preview-viewport .drop-footer {
     background: transparent !important;
 }
 
-
 /* Remove button overrides - let CSS variables work */
-
 .preview-viewport .signup-button {
     border: none !important;
 }
 
-
 /* CSS variables will handle background colors automatically */
 
-
 /* Ensure all text elements inherit the text color but allow JS override */
-
 .preview-viewport .drop-title,
 .preview-viewport .drop-description p,
 .preview-viewport .brand-text,
@@ -2111,9 +2145,7 @@
     color: inherit;
 }
 
-
 /* Ensure cover image cropping matches between preview and actual page - Perfect square */
-
 .preview-viewport .drop-cover-image {
     margin-bottom: 32px;
     border-radius: 12px;
@@ -2124,24 +2156,20 @@
     margin-right: auto;
     position: relative;
 }
-
 .preview-viewport .drop-cover-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
 }
-
 .preview-info-panel {
     padding: 20px 24px;
     border-top: 1px solid #f3f4f6;
     background: #f9fafb;
 }
-
 .preview-url {
     margin-bottom: 0;
 }
-
 .preview-url label {
     display: block;
     margin-bottom: 8px;
@@ -2151,7 +2179,6 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .url-display {
     display: flex;
     align-items: center;
@@ -2164,60 +2191,52 @@
     text-decoration: none;
     transition: all 0.2s ease;
 }
-
 .url-display.clickable-url {
     cursor: pointer;
     gap: 8px;
 }
-
 .url-display.clickable-url:hover {
     background: #f8fafc;
     border-color: #3b82f6;
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 }
-
 .url-prefix {
     color: #6b7280;
 }
-
 .url-slug {
     color: #3b82f6;
     font-weight: 600;
 }
-
 .external-link-icon {
     color: #6b7280;
     opacity: 0.7;
     transition: all 0.2s ease;
     flex-shrink: 0;
 }
-
 .url-display.clickable-url:hover .external-link-icon {
     color: #3b82f6;
     opacity: 1;
     transform: scale(1.1);
 }
 
-
 /* Hide preview toggle on desktop */
-
 .preview-toggle {
     display: none;
 }
 
-
 /* Show preview toggle only on mobile */
-
 @media (max-width: 768px) {
     .preview-toggle {
         display: flex;
     }
+    
     .preview-toggle-actions {
         display: flex;
         align-items: center;
         gap: 8px;
     }
+    
     .preview-quick-link {
         display: flex;
         align-items: center;
@@ -2230,21 +2249,22 @@
         text-decoration: none;
         transition: all 0.2s ease;
     }
+    
     .preview-quick-link:hover {
         background: #2563eb;
         transform: scale(1.05);
     }
+    
     .preview-header {
         display: none;
     }
+    
     .preview-collapsible:not(.collapsed) .preview-header {
         display: flex;
     }
 }
 
-
 /* Notification Banner Styles */
-
 .notification-banner {
     position: fixed;
     top: -100px;
@@ -2259,43 +2279,36 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
 }
-
 .notification-banner.show {
     top: 20px;
     opacity: 1;
 }
-
 .notification-banner.success {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.95) 0%, rgba(21, 128, 61, 0.95) 100%);
     border: 1px solid rgba(34, 197, 94, 0.3);
     color: white;
 }
-
 .notification-banner.error {
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(185, 28, 28, 0.95) 100%);
     border: 1px solid rgba(239, 68, 68, 0.3);
     color: white;
 }
-
 .banner-content {
     display: flex;
     align-items: center;
     padding: 16px 20px;
     gap: 12px;
 }
-
 .banner-icon {
     font-size: 18px;
     flex-shrink: 0;
 }
-
 .banner-message {
     flex: 1;
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
 }
-
 .banner-close {
     background: none;
     border: none;
@@ -2307,21 +2320,20 @@
     opacity: 0.8;
     flex-shrink: 0;
 }
-
 .banner-close:hover {
     opacity: 1;
     background: rgba(255, 255, 255, 0.2);
     transform: scale(1.1);
 }
 
-
 /* Mobile responsive banners */
-
 @media (max-width: 768px) {
     /* AWARD-WINNING: Mobile tab navigation with enhanced scrolling */
+    
     .tab-navigation {
         padding: 16px 20px 0 20px;
-        overflow-x: auto;
+        /* CRITICAL: Force horizontal scrolling */
+        overflow-x: scroll !important;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
@@ -2335,10 +2347,12 @@
         position: relative;
     }
     /* Hide scrollbar for webkit browsers */
+    
     .tab-navigation::-webkit-scrollbar {
         display: none;
     }
     /* Add scroll indicators */
+    
     .tab-navigation::before,
     .tab-navigation::after {
         content: '';
@@ -2351,148 +2365,185 @@
         transition: opacity 0.3s ease;
     }
     /* Left scroll indicator */
+    
     .tab-navigation::before {
         left: 0;
         background: linear-gradient(to right, rgba(255, 255, 255, 0.9), transparent);
         opacity: var(--scroll-indicator-left-opacity, 0);
     }
     /* Right scroll indicator */
+    
     .tab-navigation::after {
         right: 0;
         background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
         opacity: var(--scroll-indicator-right-opacity, 1);
     }
+    
     .tab-nav-container {
-        min-width: max-content;
+        /* CRITICAL: Force container to be wider than viewport */
+        min-width: max-content !important;
+        width: max-content !important;
         gap: 8px;
         display: flex;
+        flex-wrap: nowrap !important;
         padding: 0 4px;
     }
+    
     .tab-btn {
         /* MOBILE: Enhanced touch targets and premium styling */
-        padding: 16px 20px 18px 20px;
-        min-width: 88px;
+        padding: 14px 16px 16px 16px;
+        min-width: 80px;
         justify-content: center;
         font-size: 13px;
         white-space: nowrap;
-        min-height: 56px;
-        border-radius: 12px 12px 0 0;
-        gap: 8px;
-        flex-shrink: 0;
+        min-height: 52px;
+        border-radius: 10px 10px 0 0;
+        gap: 6px;
+        /* CRITICAL: Prevent shrinking */
+        flex-shrink: 0 !important;
+        flex-grow: 0 !important;
         /* Enhanced touch feedback */
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
     }
     /* Better touch feedback */
+    
     .tab-btn:active {
         transform: scale(0.98);
         background-color: rgba(59, 130, 246, 0.1);
     }
+    
     .tab-btn span {
         display: none;
     }
+    
     .tab-btn svg {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
     }
     /* Show text on active tab */
+    
     .tab-btn.active span {
         display: inline;
         margin-left: 6px;
         font-size: 12px;
         font-weight: 600;
     }
+    
     .tab-btn.active {
-        min-width: 110px;
+        min-width: 105px;
     }
+    
     .form-section {
         /* MOBILE: Optimized spacing using 8px grid */
         padding: 24px 20px;
     }
+    
     .form-section::before {
         left: 20px;
         right: 20px;
     }
+    
     .platform-links-container {
         grid-template-columns: 1fr;
         gap: 16px;
     }
+    
     .section-header h2 {
         font-size: 18px;
     }
     /* MOBILE: Modern toggle adjustments */
+    
     .modern-setting-group {
         padding: 20px;
         border-radius: 12px;
     }
     /* MOBILE: Color picker grid adjustments */
+    
     .color-picker-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
+    
     .color-picker-group {
         gap: 6px;
     }
+    
     .color-picker-label {
         padding: 6px 0;
         font-size: 13px;
     }
+    
     .modern-color-input {
         height: 44px;
     }
+    
     .setting-header {
         flex-direction: column;
         align-items: stretch;
         gap: 16px;
     }
+    
     .setting-control {
         justify-content: space-between;
         align-items: center;
     }
     /* PREMIUM MOBILE: Optimized proportions */
+    
     .toggle-slider {
         width: 50px;
         height: 30px;
     }
+    
     .toggle-thumb {
         width: 22px;
         height: 22px;
         top: 3px;
         left: 3px;
     }
+    
     .modern-toggle input[type="checkbox"]:checked+.toggle-slider .toggle-thumb {
         /* OPTIMIZED MOBILE: Perfect movement (50px - 22px - 6px = 22px) */
         transform: translateX(22px);
     }
+    
     .setting-title {
         font-size: 15px;
     }
+    
     .setting-description {
         font-size: 13px;
     }
     /* MOBILE: World-class status indicator adjustments */
+    
     .setting-control-column {
         gap: 8px;
     }
+    
     .world-class-status-indicator {
         font-size: 11px;
         padding: 5px 10px;
         gap: 6px;
     }
+    
     .status-pulse-dot {
         width: 6px;
         height: 6px;
     }
+    
     .drop-edit-container {
         padding: 16px;
         /* FIXED: Normal padding since buttons are no longer fixed */
     }
+    
     .drop-edit-content {
         grid-template-columns: 1fr;
         gap: 16px;
     }
     /* 🚀 MOBILE UX: Preview at top for easy access when collapsed */
+    
     .drop-preview-panel {
         order: 1;
         position: sticky;
@@ -2503,9 +2554,11 @@
         border-radius: 0 0 16px 16px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+    
     .drop-edit-main {
         order: 2;
     }
+    
     .notification-banner {
         left: 16px;
         right: 16px;
@@ -2513,12 +2566,15 @@
         min-width: auto;
         max-width: none;
     }
+    
     .notification-banner.show {
         top: 16px;
     }
+    
     .banner-content {
         padding: 14px 16px;
     }
+    
     .banner-message {
         font-size: 13px;
     }

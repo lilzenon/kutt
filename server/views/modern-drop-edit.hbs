@@ -1090,15 +1090,22 @@ function initializePreviewSystem() {
 
             const mode = this.id.replace('preview-', '');
             const container = document.getElementById('preview-container');
+            const viewport = container.querySelector('.preview-viewport');
 
             if (mode === 'mobile') {
-                container.style.maxWidth = '375px';
-                container.style.margin = '0 auto';
+                // Mobile preview mode
+                viewport.classList.remove('desktop');
+                viewport.classList.add('mobile');
+                previewIframe.style.width = '375px';
                 previewIframe.style.height = '667px';
+                console.log('📱 Switched to mobile preview mode');
             } else {
-                container.style.maxWidth = '100%';
-                container.style.margin = '0';
-                previewIframe.style.height = '400px';
+                // Desktop preview mode
+                viewport.classList.remove('mobile');
+                viewport.classList.add('desktop');
+                previewIframe.style.width = '100%';
+                previewIframe.style.height = '600px';
+                console.log('🖥️ Switched to desktop preview mode');
             }
         });
     });
