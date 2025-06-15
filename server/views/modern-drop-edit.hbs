@@ -895,8 +895,11 @@ function initializeTabSystem() {
             }
 
             // Scroll active tab into view on mobile
-            if (window.innerWidth <= 768 && tabNavigation) {
-                scrollTabIntoView(this, tabNavigation);
+            if (window.innerWidth <= 768) {
+                const nav = document.querySelector('nav[aria-label="Tabs"]');
+                if (nav) {
+                    scrollTabIntoView(this, nav);
+                }
             }
 
             // Load analytics if analytics tab is clicked
@@ -922,60 +925,88 @@ function initializeTabSystem() {
 }
 
 function initializeMobileTabEnhancements() {
-    const tabNavigation = document.querySelector('.tab-navigation') || document.querySelector('nav[aria-label="Tabs"]');
-    if (!tabNavigation) return;
+    const tabNavigation = document.querySelector('nav[aria-label="Tabs"]');
+    if (!tabNavigation) {
+        console.log('📱 No tab navigation found for mobile enhancements');
+        return;
+    }
 
-    // Add scroll event listener for scroll indicators
-    tabNavigation.addEventListener('scroll', function() {
-        updateScrollIndicators(this);
-    });
+    console.log('📱 Initializing mobile tab enhancements...');
 
-    // Initial scroll indicator update
-    updateScrollIndicators(tabNavigation);
+    // Force horizontal scrolling
+    tabNavigation.style.overflowX = 'auto';
+    tabNavigation.style.webkitOverflowScrolling = 'touch';
+    tabNavigation.style.scrollBehavior = 'smooth';
 
     // Add touch event handlers for better mobile experience
     let isScrolling = false;
+    let touchStartX = 0;
 
-    tabNavigation.addEventListener('touchstart', function() {
+    tabNavigation.addEventListener('touchstart', function(e) {
         isScrolling = false;
-    });
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
 
-    tabNavigation.addEventListener('touchmove', function() {
-        isScrolling = true;
-    });
+    tabNavigation.addEventListener('touchmove', function(e) {
+        const touchX = e.touches[0].clientX;
+        const deltaX = Math.abs(touchX - touchStartX);
+        if (deltaX > 10) {
+            isScrolling = true;
+        }
+    }, { passive: true });
 
     // Prevent tab clicks during scrolling
-    const tabButtons = tabNavigation.querySelectorAll('.tab-btn');
+    const tabButtons = tabNavigation.querySelectorAll('button');
     tabButtons.forEach(button => {
         button.addEventListener('touchend', function(e) {
             if (isScrolling) {
                 e.preventDefault();
                 e.stopPropagation();
+                console.log('🚫 Tab click prevented during scroll');
             }
-        });
+        }, { passive: false });
+
+        // Add visual feedback
+        button.addEventListener('touchstart', function() {
+            if (!isScrolling) {
+                this.style.opacity = '0.7';
+            }
+        }, { passive: true });
+
+        button.addEventListener('touchend', function() {
+            this.style.opacity = '';
+        }, { passive: true });
     });
 
-    console.log('📱 Mobile tab enhancements initialized');
+    console.log('✅ Mobile tab enhancements initialized');
 }
 
 function scrollTabIntoView(activeTab, container) {
-    if (!activeTab || !container) return;
+    if (!activeTab || !container) {
+        console.log('⚠️ scrollTabIntoView: Missing parameters');
+        return;
+    }
+
+    console.log('📍 Scrolling tab into view:', activeTab.textContent?.trim());
 
     const containerRect = container.getBoundingClientRect();
     const tabRect = activeTab.getBoundingClientRect();
 
-    // Calculate if tab is outside visible area
-    const isTabOutsideLeft = tabRect.left < containerRect.left;
-    const isTabOutsideRight = tabRect.right > containerRect.right;
+    // Calculate if tab is outside visible area with buffer
+    const buffer = 20;
+    const isTabOutsideLeft = tabRect.left < containerRect.left + buffer;
+    const isTabOutsideRight = tabRect.right > containerRect.right - buffer;
 
     if (isTabOutsideLeft || isTabOutsideRight) {
         // Calculate scroll position to center the tab
         const tabCenter = activeTab.offsetLeft + (activeTab.offsetWidth / 2);
         const containerCenter = container.offsetWidth / 2;
-        const scrollPosition = tabCenter - containerCenter;
+        const scrollPosition = Math.max(0, tabCenter - containerCenter);
+
+        console.log('🎯 Scrolling to position:', scrollPosition);
 
         container.scrollTo({
-            left: Math.max(0, scrollPosition),
+            left: scrollPosition,
             behavior: 'smooth'
         });
     }
