@@ -1712,7 +1712,8 @@
                 // PRIORITY 3: Enhanced international phone validation
                 if (phone && phone.trim()) {
                     const cleanPhone = phone.replace(/[^\d]/g, '');
-                    const selectedCountryCode = document.getElementById('country-select')?.value || '+1';
+                    const countrySelect = document.getElementById('country-select');
+                    const selectedCountryCode = countrySelect ? countrySelect.value : '+1';
 
                     console.log('📱 Client validating international phone:', {
                         original: phone,
@@ -1735,7 +1736,8 @@
                     // Use international validation
                     if (!isValidPhoneNumber(phone, selectedCountryCode)) {
                         const pattern = phonePatterns[selectedCountryCode];
-                        const countryName = document.querySelector(`option[value="${selectedCountryCode}"]`)?.dataset.name || selectedCountryCode;
+                        const countryOption = document.querySelector(`option[value="${selectedCountryCode}"]`);
+                        const countryName = countryOption && countryOption.dataset.name ? countryOption.dataset.name : selectedCountryCode;
                         const exampleFormat = pattern ? pattern.placeholder : 'valid format';
 
                         showError(
@@ -1771,7 +1773,8 @@
                 // PRIORITY 3: Prepare international phone data for server
                 const dataToSend = {};
                 if (phone && phone.trim()) {
-                    const selectedCountryCode = document.getElementById('country-select')?.value || '+1';
+                    const countrySelectElement = document.getElementById('country-select');
+                    const selectedCountryCode = countrySelectElement ? countrySelectElement.value : '+1';
                     const cleanPhone = phone.replace(/[^\d]/g, '');
 
                     // Format as international phone number for server: +CCXXXXXXXXXX

@@ -168,7 +168,8 @@ async function createSignupValidation(req, res, next) {
                     } else if (!cleanPhone.startsWith('+')) {
                         throw new Error('International phone number must include country code (e.g., +1 for US)');
                     } else {
-                        const countryCode = cleanPhone.match(/^\+\d{1,4}/) ? .[0] || 'unknown';
+                        const countryCodeMatch = cleanPhone.match(/^\+\d{1,4}/);
+                        const countryCode = countryCodeMatch ? countryCodeMatch[0] : 'unknown';
                         throw new Error(`Invalid phone format for ${countryCode}. Please check the number and try again.`);
                     }
                 })
@@ -229,7 +230,8 @@ async function createSignupValidation(req, res, next) {
                     if (!cleanPhone.startsWith('+')) {
                         throw new Error('International phone number must include country code (e.g., +1 for US)');
                     } else {
-                        const countryCode = cleanPhone.match(/^\+\d{1,4}/) ? .[0] || 'unknown';
+                        const countryCodeMatch = cleanPhone.match(/^\+\d{1,4}/);
+                        const countryCode = countryCodeMatch ? countryCodeMatch[0] : 'unknown';
                         throw new Error(`Invalid phone format for ${countryCode}. Please check the number and try again.`);
                     }
                 })
