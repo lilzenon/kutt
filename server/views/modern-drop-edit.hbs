@@ -235,7 +235,10 @@
                                                 </div>
 
                                                 <!-- Hidden inputs for form submission -->
-                                                <input type="hidden" id="gradient-data" name="gradient_data" value="">
+                                                <input type="hidden" id="gradient-data" name="gradient_data" value="{{drop.gradient_data}}">
+
+                                                <!-- Safe JSON data for gradient loading -->
+                                                <script type="application/json" id="gradient-data-json">{{#if drop.gradient_data}}{{{drop.gradient_data}}}{{else}}null{{/if}}</script>
                                             </div>
                                         </div>
                                     </div>
@@ -1018,8 +1021,29 @@ let gradientData = {
 function loadExistingGradientData() {
     console.log('🎨 Loading existing gradient data from drop...');
 
-    // Get gradient data from the drop object passed from server
-    const existingGradientData = `{{drop.gradient_data}}`;
+    // CRITICAL FIX: Get gradient data safely from a hidden input or script tag
+    let existingGradientData = null;
+
+    // Try to get from hidden input first
+    const gradientDataInput = document.getElementById('gradient-data');
+    if (gradientDataInput && gradientDataInput.value) {
+        existingGradientData = gradientDataInput.value;
+        console.log('🎨 Found gradient data in hidden input:', existingGradientData);
+    } else {
+        // Fallback: try to get from script tag with JSON data
+        const gradientDataScript = document.getElementById('gradient-data-json');
+        if (gradientDataScript) {
+            existingGradientData = gradientDataScript.textContent;
+            console.log('🎨 Found gradient data in script tag:', existingGradientData);
+        } else {
+            // Last resort: try direct template (unsafe but fallback)
+            const templateData = `{{drop.gradient_data}}`;
+            if (templateData && templateData !== 'null' && templateData !== '' && templateData !== '{{drop.gradient_data}}') {
+                existingGradientData = templateData;
+                console.log('🎨 Found gradient data from template:', existingGradientData);
+            }
+        }
+    }
 
     if (existingGradientData && existingGradientData !== 'null' && existingGradientData !== '') {
         try {
@@ -1033,7 +1057,7 @@ function loadExistingGradientData() {
                         { color: '#764ba2', position: 100 }
                     ]
                 };
-                console.log('🎨 Loaded existing gradient data:', gradientData);
+                console.log('🎨 Successfully loaded existing gradient data:', gradientData);
 
                 // Set flag to indicate data was loaded
                 window.gradientDataLoaded = true;
@@ -1041,13 +1065,15 @@ function loadExistingGradientData() {
                 // Set the UI elements to match the loaded data
                 // Use setTimeout to ensure DOM elements are ready
                 setTimeout(() => {
-                    setGradientUIFromData();
-                }, 100);
+                    console.log('🎨 Setting gradient UI from loaded data (delayed)...');
+                    setGradientUIFromData(0);
+                }, 500);
 
                 return true; // Indicate successful loading
             }
         } catch (error) {
-            console.warn('🎨 Failed to parse existing gradient data:', error);
+            console.error('🎨 Failed to parse existing gradient data:', error);
+            console.error('🎨 Raw gradient data:', existingGradientData);
         }
     } else {
         console.log('🎨 No existing gradient data found, using defaults');
@@ -1057,12 +1083,30 @@ function loadExistingGradientData() {
     return false; // Indicate no data was loaded
 }
 
-function setGradientUIFromData() {
-    console.log('🎨 Setting gradient UI from loaded data...');
+function setGradientUIFromData(retryCount = 0) {
+    console.log('🎨 Setting gradient UI from loaded data... (attempt', retryCount + 1, ')');
     console.log('🎨 Gradient data to apply:', JSON.stringify(gradientData, null, 2));
 
     // Set gradient type buttons
     const gradientTypeButtons = document.querySelectorAll('.gradient-type-btn');
+    console.log('🎨 Found gradient type buttons:', gradientTypeButtons.length);
+
+    if (gradientTypeButtons.length === 0) {
+        console.error('🎨 ERROR: No gradient type buttons found! UI elements may not be ready.');
+
+        // Retry up to 3 times with increasing delays
+        if (retryCount < 3) {
+            const delay = (retryCount + 1) * 1000; // 1s, 2s, 3s
+            console.log(`🎨 Retrying in ${delay}ms...`);
+            setTimeout(() => {
+                setGradientUIFromData(retryCount + 1);
+            }, delay);
+        } else {
+            console.error('🎨 CRITICAL ERROR: Failed to find gradient UI elements after 3 retries!');
+        }
+        return;
+    }
+
     gradientTypeButtons.forEach(btn => {
         btn.classList.remove('active');
         if (btn.id === `gradient-${gradientData.type}`) {
@@ -1073,11 +1117,18 @@ function setGradientUIFromData() {
 
     // Set direction buttons and visibility for linear gradients
     const directionSection = document.getElementById('gradient-direction-section');
+    console.log('🎨 Direction section found:', !!directionSection);
+
     if (gradientData.type === 'linear') {
         const directionButtons = document.querySelectorAll('.gradient-direction-btn');
+        console.log('🎨 Found direction buttons:', directionButtons.length);
+        console.log('🎨 Looking for angle:', gradientData.angle);
+
         directionButtons.forEach(btn => {
             btn.classList.remove('active');
-            if (parseInt(btn.dataset.angle) === gradientData.angle) {
+            const btnAngle = parseInt(btn.dataset.angle);
+            console.log('🎨 Checking button angle:', btnAngle, 'vs target:', gradientData.angle);
+            if (btnAngle === gradientData.angle) {
                 btn.classList.add('active');
                 console.log('🎨 Set active gradient angle:', btn.dataset.angle);
             }
@@ -1086,11 +1137,13 @@ function setGradientUIFromData() {
         // Show direction section for linear gradients
         if (directionSection) {
             directionSection.style.display = 'block';
+            console.log('🎨 Showed direction section for linear gradient');
         }
     } else {
         // Hide direction section for radial gradients
         if (directionSection) {
             directionSection.style.display = 'none';
+            console.log('🎨 Hid direction section for radial gradient');
         }
     }
 
@@ -1245,6 +1298,14 @@ function initializeGradientEditor() {
     }
 
     console.log('🎨 Gradient editor initialized successfully');
+
+    // CRITICAL FIX: Force UI update after initialization if data was loaded
+    if (window.gradientDataLoaded) {
+        setTimeout(() => {
+            console.log('🎨 Forcing UI update after gradient editor initialization...');
+            setGradientUIFromData(0);
+        }, 1000);
+    }
 }
 
 function initializeColorStops() {
