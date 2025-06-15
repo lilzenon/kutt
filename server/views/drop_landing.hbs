@@ -1580,6 +1580,9 @@
                 const phone = formData.get('phone');
                 const email = formData.get('email');
 
+                // Store original button text before any changes
+                const originalText = submitButton.textContent;
+
                 // Hide previous messages
                 hideError();
                 successMessage.classList.add('hidden');
@@ -1636,7 +1639,6 @@
 
                 // Disable button and show loading state
                 submitButton.disabled = true;
-                const originalText = submitButton.textContent;
                 submitButton.textContent = 'RSVP...';
 
                 // Prepare data to send based on what fields are collected

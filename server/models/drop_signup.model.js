@@ -10,7 +10,7 @@ async function createDropSignupTable(knex) {
                 .references("id")
                 .inTable("drops")
                 .onDelete("CASCADE");
-            table.string("email", 255).notNullable();
+            table.string("email", 255);
             table.string("phone", 20);
             table.string("name", 100);
             table.string("ip_address", 45);
