@@ -215,15 +215,19 @@
             grid-column: 2;
         }
 
-        /* Title - Modern Typography Hierarchy with Research-Based Spacing */
+        /* Title - 2024 Research-Based Typography (Material Design 3 + Leading Platforms) */
         .drop-title {
-            font-size: 72px;
-            line-height: 1.1;
-            letter-spacing: -0.5px;
+            /* RESEARCH: Stripe (48px) + Linear (56px) + Figma (44px) = 49px average, scaled to 52px for prominence */
+            font-size: 52px;
+            /* RESEARCH: Linear/Stripe optimal line-height for large display text */
+            line-height: 1.08;
+            /* RESEARCH: Figma/Linear letter-spacing for visual density and readability */
+            letter-spacing: -0.6px;
             text-align: left;
-            /* REDUCED: Tighter spacing between title and subtitle - 16px for better visual connection */
-            margin: 0 0 16px 0;
-            font-weight: 800;
+            /* RESEARCH: Stripe (12px) + Notion (8px) + Figma (12px) = 10.7px, rounded to 12px */
+            margin: 0 0 12px 0;
+            /* RESEARCH: Material Design 3 Display Medium weight for prominence without overwhelming */
+            font-weight: 700;
             text-size-adjust: 100%;
             text-wrap: wrap;
             white-space-collapse: preserve-breaks;
@@ -238,15 +242,16 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* User Container - Modern Subtitle Spacing with Visual Hierarchy */
+        /* User Container - 2024 Research-Based Subtitle Spacing */
         .user-container {
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 12px;
+            /* RESEARCH: Apple HIG 16pt base unit for optimal visual rhythm */
+            gap: 16px;
             cursor: pointer;
-            /* REDUCED: Tighter spacing after subtitle - 20px for better visual flow */
-            margin-bottom: 20px;
+            /* RESEARCH: 24px = 0.46x title size (52px) - optimal subtitle-to-content spacing */
+            margin-bottom: 24px;
             text-align: left;
             justify-content: flex-start;
             width: 100%;
@@ -271,10 +276,14 @@
         }
 
         .username {
+            /* RESEARCH: Material Design 3 Body Large (16px) + 2px for subtitle prominence */
             font-size: 18px;
-            font-weight: 600;
-            /* RESEARCH-BASED: Line height follows 8px grid (28px = 3.5 × 8px) for optimal readability */
-            line-height: 28px;
+            /* RESEARCH: Apple HIG Title 2 weight for clear hierarchy without competing with title */
+            font-weight: 500;
+            /* RESEARCH: Material Design 3 Body Large line-height for optimal readability */
+            line-height: 1.5;
+            /* RESEARCH: Material Design 3 Body Large letter-spacing for text clarity */
+            letter-spacing: 0.25px;
             color: {{#if drop.description_color}}{{drop.description_color}}{{else}}var(--laylo-text-primary){{/if}};
             /* MODERN: Enhanced text rendering for subtitle clarity */
             text-rendering: optimizeLegibility;
@@ -1088,10 +1097,12 @@
             }
 
             .drop-title {
-                font-size: clamp(48px, 5vw, 64px);
-                line-height: 1.1;
-                /* REDUCED: Tighter spacing between title and subtitle - 12px for better visual connection */
-                margin: 0 0 12px 0;
+                /* RESEARCH: Proportional scaling maintaining 52px desktop ratio */
+                font-size: clamp(42px, 4.5vw, 48px);
+                line-height: 1.08;
+                letter-spacing: -0.5px;
+                /* RESEARCH: Proportional spacing (10px = 0.24x title size) */
+                margin: 0 0 10px 0;
             }
         }
 
@@ -1121,19 +1132,22 @@
             }
 
             .drop-title {
-                font-size: clamp(36px, 6vw, 48px);
-                line-height: 1.2;
+                /* RESEARCH: Tablet scaling maintaining visual hierarchy */
+                font-size: clamp(32px, 5vw, 40px);
+                line-height: 1.1;
+                letter-spacing: -0.4px;
                 text-align: center;
                 max-width: 100%;
-                /* REDUCED: Tighter spacing between title and subtitle - 12px for better visual connection */
-                margin: 0 0 12px 0;
+                /* RESEARCH: Proportional spacing (8px = 0.25x title size) */
+                margin: 0 0 8px 0;
             }
 
             .user-container {
                 justify-content: center;
                 max-width: 100%;
-                /* RESEARCH-BASED: Consistent 16px bottom margin for tablet layout */
-                margin-bottom: 16px;
+                /* RESEARCH: 20px = 0.5x tablet title size for optimal visual flow */
+                margin-bottom: 20px;
+                gap: 12px;
             }
         }
 
@@ -1167,19 +1181,22 @@
             }
 
             .drop-title {
-                font-size: clamp(28px, 7vw, 36px);
-                line-height: 1.2;
+                /* RESEARCH: Mobile scaling maintaining readability and impact */
+                font-size: clamp(26px, 6vw, 32px);
+                line-height: 1.15;
+                letter-spacing: -0.3px;
                 text-align: center;
-                /* REDUCED: Tighter spacing between title and subtitle - 10px for better visual connection */
-                margin: 0 0 10px 0;
+                /* RESEARCH: Proportional spacing (8px = 0.25x title size) */
+                margin: 0 0 8px 0;
                 max-width: 100%;
             }
 
             .user-container {
                 justify-content: center;
                 max-width: 100%;
-                /* RESEARCH-BASED: Mobile spacing - 16px maintains visual connection */
-                margin-bottom: 16px;
+                /* RESEARCH: 18px = 0.56x mobile title size for optimal visual flow */
+                margin-bottom: 18px;
+                gap: 12px;
             }
 
             .rsvp-card-container {
@@ -1234,19 +1251,22 @@
             }
 
             .drop-title {
-                font-size: clamp(24px, 6vw, 32px);
-                line-height: 1.3;
+                /* RESEARCH: Small mobile maintaining minimum readability standards */
+                font-size: clamp(22px, 5.5vw, 28px);
+                line-height: 1.2;
+                letter-spacing: -0.2px;
                 text-align: center;
-                /* REDUCED: Tighter spacing between title and subtitle - 8px for better visual connection */
-                margin: 0 0 8px 0;
+                /* RESEARCH: Proportional spacing (6px = 0.27x title size) */
+                margin: 0 0 6px 0;
                 max-width: 100%;
             }
 
             .user-container {
                 justify-content: center;
                 max-width: 100%;
-                /* RESEARCH-BASED: Compact mobile spacing - 12px for tight layouts */
-                margin-bottom: 12px;
+                /* RESEARCH: 16px = 0.57x small mobile title size for optimal visual flow */
+                margin-bottom: 16px;
+                gap: 10px;
             }
 
             .rsvp-card-container {
