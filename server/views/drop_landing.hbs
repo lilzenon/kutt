@@ -952,24 +952,117 @@
             }
         }
 
-        /* Success/Error Messages - Exact Laylo Style */
+        /* Enhanced Success/Error Messages - Modern UX Design */
         .laylo-message {
-            padding: 16px;
+            padding: 16px 20px;
             border-radius: 12px;
             margin-bottom: 16px;
-            text-align: center;
+            text-align: left;
             font-weight: 500;
             font-family: "Inter", sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .laylo-message.hidden {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+        .laylo-message:not(.hidden) {
+            animation: slideInFade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideInFade {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .laylo-success {
-            background: #10B981;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
             color: white;
+            border-color: #059669;
         }
 
         .laylo-error {
-            background: #EF4444;
-            color: white;
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            color: #DC2626;
+            border-color: #FECACA;
+            {{#if (eq drop.card_background_type "solid_white")}}
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            {{else}}
+            background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(254, 226, 226, 0.95) 100%);
+            backdrop-filter: blur(8px);
+            {{/if}}
+        }
+
+        .laylo-message-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .laylo-message-content {
+            flex: 1;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .laylo-message-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .laylo-message-text {
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        /* Mobile Error Message Optimizations */
+        @media screen and (max-width: 767px) {
+            .laylo-message {
+                padding: 14px 16px;
+                font-size: 16px; /* Prevent zoom on mobile */
+                margin-bottom: 12px;
+                border-radius: 10px;
+            }
+
+            .laylo-message-content {
+                font-size: 16px; /* Prevent zoom on mobile */
+            }
+
+            .laylo-message-icon {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        @media screen and (max-width: 374px) {
+            .laylo-message {
+                padding: 12px 14px;
+                gap: 10px;
+            }
+
+            .laylo-message-icon {
+                width: 16px;
+                height: 16px;
+            }
         }
 
         /* Industry-Leading Responsive Design System */
@@ -1288,10 +1381,26 @@
                     <div class="laylo-rsvp-card">
                         <!-- Success/Error Messages -->
                         <div id="success-message" class="laylo-message laylo-success hidden">
-                            <p id="success-text">Thank you! You're on the list.</p>
+                            <div class="laylo-message-icon">
+                                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="laylo-message-content">
+                                <div class="laylo-message-title">Success!</div>
+                                <div class="laylo-message-text" id="success-text">Thank you! You're on the list.</div>
+                            </div>
                         </div>
                         <div id="error-message" class="laylo-message laylo-error hidden">
-                            <p id="error-text">Something went wrong. Please try again.</p>
+                            <div class="laylo-message-icon">
+                                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="laylo-message-content">
+                                <div class="laylo-message-title" id="error-title">Oops!</div>
+                                <div class="laylo-message-text" id="error-text">Something went wrong. Please try again.</div>
+                            </div>
                         </div>
 
                         <!-- Card Title -->
@@ -1429,6 +1538,51 @@
             const successMessage = document.getElementById('success-message');
             const errorMessage = document.getElementById('error-message');
 
+            // Enhanced error display function
+            function showError(title, message, type = 'validation') {
+                const errorTitle = document.getElementById('error-title');
+                const errorText = document.getElementById('error-text');
+
+                if (errorTitle && errorText) {
+                    errorTitle.textContent = title;
+                    errorText.textContent = message;
+                }
+
+                // Hide success message if showing
+                successMessage.classList.add('hidden');
+
+                // Show error with animation
+                errorMessage.classList.remove('hidden');
+
+                // Auto-hide validation errors after 5 seconds
+                if (type === 'validation') {
+                    setTimeout(() => {
+                        hideError();
+                    }, 5000);
+                }
+
+                console.log(`❌ Error displayed: ${title} - ${message}`);
+            }
+
+            function hideError() {
+                errorMessage.classList.add('hidden');
+            }
+
+            function showSuccess(message) {
+                const successText = document.getElementById('success-text');
+                if (successText) {
+                    successText.textContent = message;
+                }
+
+                // Hide error message if showing
+                errorMessage.classList.add('hidden');
+
+                // Show success with animation
+                successMessage.classList.remove('hidden');
+
+                console.log(`✅ Success displayed: ${message}`);
+            }
+
             // Enhanced Form submission handler for dynamic fields
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -1438,8 +1592,8 @@
                 const email = formData.get('email');
 
                 // Hide previous messages
+                hideError();
                 successMessage.classList.add('hidden');
-                errorMessage.classList.add('hidden');
 
                 // Disable button and show loading state
                 submitButton.disabled = true;
@@ -1470,18 +1624,50 @@
                     console.log('📥 Response data:', result);
 
                     if (response.ok) {
-                        successMessage.classList.remove('hidden');
-                        document.getElementById('success-text').textContent = 'Thank you! You\'re on the list.';
+                        showSuccess('Thank you! You\'re on the list.');
                         // Don't reset form to keep the data visible
                     } else {
                         console.error('❌ Server error:', result);
-                        errorMessage.classList.remove('hidden');
-                        document.getElementById('error-text').textContent = result.message || `Server error: ${response.status}`;
+
+                        // Provide specific error messages based on response
+                        let errorTitle = 'Submission Failed';
+                        let errorMessage = 'Please try again.';
+
+                        if (response.status === 400) {
+                            errorTitle = 'Invalid Information';
+                            errorMessage = result.message || 'Please check your information and try again.';
+                        } else if (response.status === 409) {
+                            errorTitle = 'Already Registered';
+                            errorMessage = 'You\'re already on the list! Check your email for confirmation.';
+                        } else if (response.status === 429) {
+                            errorTitle = 'Too Many Attempts';
+                            errorMessage = 'Please wait a moment before trying again.';
+                        } else if (response.status >= 500) {
+                            errorTitle = 'Server Error';
+                            errorMessage = 'Our servers are having issues. Please try again in a few minutes.';
+                        } else {
+                            errorMessage = result.message || `Error ${response.status}: Please try again.`;
+                        }
+
+                        showError(errorTitle, errorMessage, 'server');
                     }
                 } catch (error) {
                     console.error('❌ Form submission error:', error);
-                    errorMessage.classList.remove('hidden');
-                    document.getElementById('error-text').textContent = `Network error: ${error.message}`;
+
+                    let errorTitle = 'Connection Error';
+                    let errorMessage = 'Please check your internet connection and try again.';
+
+                    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                        errorTitle = 'Network Error';
+                        errorMessage = 'Unable to connect. Please check your internet connection.';
+                    } else if (error.message.includes('timeout')) {
+                        errorTitle = 'Request Timeout';
+                        errorMessage = 'The request took too long. Please try again.';
+                    } else if (error.message) {
+                        errorMessage = error.message;
+                    }
+
+                    showError(errorTitle, errorMessage, 'network');
                 } finally {
                     submitButton.disabled = false;
                     submitButton.textContent = originalText;
@@ -1543,6 +1729,11 @@
 
                     // Update validation state
                     updateValidationState(isValidPhoneNumber(newValue));
+
+                    // Hide error message when user starts typing valid input
+                    if (newValue.length > 0 && isValidPhoneNumber(newValue)) {
+                        hideError();
+                    }
                 });
 
                 // Focus styling
@@ -1582,13 +1773,12 @@
                             updateValidationState(false);
                             phoneInput.focus();
 
-                            // Show error message
-                            const errorMessage = document.getElementById('error-message');
-                            const errorText = document.getElementById('error-text');
-                            if (errorMessage && errorText) {
-                                errorText.textContent = 'Please enter a valid 10-digit phone number.';
-                                errorMessage.classList.remove('hidden');
-                            }
+                            // Show enhanced error message
+                            showError(
+                                'Invalid Phone Number',
+                                'Please enter a valid 10-digit phone number (e.g., (555) 123-4567).',
+                                'validation'
+                            );
                             return false;
                         }
                     });
@@ -1626,6 +1816,11 @@
                 // Real-time email validation
                 emailInput.addEventListener('input', function(e) {
                     updateEmailValidationState(isValidEmail(e.target.value));
+
+                    // Hide error message when user starts typing valid input
+                    if (e.target.value.length > 0 && isValidEmail(e.target.value)) {
+                        hideError();
+                    }
                 });
 
                 // Focus styling
@@ -1646,13 +1841,12 @@
                         updateEmailValidationState(false);
                         emailInput.focus();
 
-                        // Show error message
-                        const errorMessage = document.getElementById('error-message');
-                        const errorText = document.getElementById('error-text');
-                        if (errorMessage && errorText) {
-                            errorText.textContent = 'Please enter a valid email address.';
-                            errorMessage.classList.remove('hidden');
-                        }
+                        // Show enhanced error message
+                        showError(
+                            'Invalid Email Address',
+                            'Please enter a valid email address (e.g., you@example.com).',
+                            'validation'
+                        );
                         return false;
                     }
                 });
