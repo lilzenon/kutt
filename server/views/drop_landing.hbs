@@ -139,7 +139,7 @@
         @media (max-width: 767px) {
             .drop-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto;
+                grid-template-rows: auto auto auto; /* Three rows: image, title, card */
                 gap: 24px;
                 padding: 0 16px;
             }
@@ -151,9 +151,17 @@
                 margin-bottom: 16px;
             }
 
-            .rsvp-container {
+            .drop-title-section {
                 grid-column: 1;
                 grid-row: 2;
+                max-width: 100%;
+                margin: 0 auto 24px auto;
+                padding: 0 8px;
+            }
+
+            .rsvp-container {
+                grid-column: 1;
+                grid-row: 3;
                 max-width: 100%;
             }
 
@@ -221,7 +229,17 @@
             box-sizing: border-box;
         }
 
-        /* Title - REBUILT: Perfect Card Alignment System */
+        /* Title Section - Laylo-Inspired Positioning */
+        .drop-title-section {
+            width: 100%;
+            max-width: min(690px, 58.3333vw);
+            margin: 0 auto 32px auto; /* Proper spacing below image, above card */
+            text-align: center;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+
+        /* Title - REBUILT: Laylo-Style Center Alignment */
         .drop-title {
             /* TYPOGRAPHY: Research-based sizing for maximum impact */
             font-size: 48px !important;
@@ -229,10 +247,10 @@
             letter-spacing: -0.5px !important;
             font-weight: 700 !important;
 
-            /* ALIGNMENT: Perfect card alignment system */
-            width: 400px !important;
-            max-width: 400px !important;
-            text-align: left !important;
+            /* ALIGNMENT: Center-aligned like Laylo reference */
+            width: 100% !important;
+            max-width: 100% !important;
+            text-align: center !important;
             margin: 0 0 16px 0 !important;
             padding: 0 !important;
             box-sizing: border-box !important;
@@ -246,7 +264,7 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* User Container - REBUILT: Perfect Card Alignment System */
+        /* User Container - Laylo-Style Center Alignment */
         .user-container {
             display: flex;
             flex-direction: row;
@@ -254,16 +272,16 @@
             gap: 12px !important;
             cursor: pointer;
 
-            /* ALIGNMENT: Perfect card alignment system */
-            width: 400px !important;
-            max-width: 400px !important;
-            margin-bottom: 32px !important;
+            /* ALIGNMENT: Center-aligned like Laylo reference */
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 0 !important; /* No bottom margin since it's in title section */
             padding: 0 !important;
             box-sizing: border-box !important;
 
-            /* LAYOUT: Left-aligned to match card content */
-            justify-content: flex-start !important;
-            text-align: left !important;
+            /* LAYOUT: Center-aligned to match Laylo */
+            justify-content: center !important;
+            text-align: center !important;
         }
 
         .avatar {
@@ -288,8 +306,8 @@
             line-height: 1.4 !important;
             letter-spacing: 0.1px !important;
 
-            /* ALIGNMENT: Left-aligned to match card content */
-            text-align: left !important;
+            /* ALIGNMENT: Center-aligned to match Laylo reference */
+            text-align: center !important;
 
             /* VISUAL: Enhanced rendering */
             color: {{#if drop.description_color}}{{drop.description_color}}{{else}}var(--laylo-text-primary){{/if}};
@@ -301,59 +319,63 @@
             color: var(--laylo-text-secondary) !important;
         }
 
-        /* RSVP Card Container - REBUILT: Perfect Alignment System */
+        /* RSVP Card Container - Laylo-Style Center Alignment */
         .rsvp-card-container {
-            margin-top: 0px !important;
+            margin: 0 auto !important; /* Center the card like Laylo */
             width: 400px !important;
             min-width: 400px !important;
             max-width: 400px !important;
-            position: sticky;
-            bottom: -184px;
             box-sizing: border-box;
+            /* Remove sticky positioning for cleaner layout like Laylo */
         }
 
-        /* Enhanced RSVP Card System */
+        /* Enhanced RSVP Card System - Laylo-inspired design */
         .laylo-rsvp-card {
             {{#if (eq drop.card_background_type "solid_white")}}
             background-color: #ffffff;
             color: #000000;
             {{else if (eq drop.card_background_type "solid_dark")}}
-            background-color: #1a1a1a;
+            background-color: #000000; /* Pure black like Laylo reference */
             color: #ffffff;
             {{else if (eq drop.card_background_type "translucent_light")}}
             background-color: rgba(255, 255, 255, 0.1);
             color: #ffffff;
             backdrop-filter: blur(10px);
             {{else if (eq drop.card_background_type "translucent_dark")}}
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.9); /* Darker for better contrast */
             color: #ffffff;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             {{else}}
-            background-color: var(--laylo-card-bg);
+            background-color: #000000; /* Default to pure black like Laylo */
             color: #ffffff;
             {{/if}}
-            transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
+            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+            border-radius: 20px; /* Rounded corners matching Laylo */
+            box-shadow:
+                0 24px 48px rgba(0, 0, 0, 0.3),
+                0 12px 24px rgba(0, 0, 0, 0.2),
+                0 6px 12px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth like Laylo */
+            border: none; /* Clean design without borders like Laylo */
+            padding: 40px 32px; /* Enhanced padding following Laylo pattern */
             height: 100%;
         }
 
-        /* Card Title - Adaptive Color */
+        /* Card Title - Laylo-inspired bold design */
         .laylo-card-title {
             font-family: "Inter", sans-serif;
-            font-weight: 400;
-            font-size: 1rem;
-            line-height: 1.5;
-            letter-spacing: 0.00938em;
+            font-weight: 600; /* Bolder weight following Laylo pattern */
+            font-size: 1.125rem; /* Larger size for better hierarchy */
+            line-height: 1.3; /* Tighter line-height for modern look */
+            letter-spacing: 0.005em; /* Subtle letter-spacing */
             {{#if (eq drop.card_background_type "solid_white")}}
-            color: #000000;
+            color: #1a1a1a; /* Stronger contrast */
             {{else}}
-            color: #ffffff;
+            color: #ffffff; /* Pure white like Laylo */
             {{/if}}
-            margin: 0 0 12.5px 0;
+            margin: 0 0 20px 0; /* Enhanced spacing following Laylo pattern */
             text-align: center;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Phone Input Container - Standardized Dimensions */
@@ -526,6 +548,7 @@
             padding: 2px 4px;
             height: 28px;
             width: 56px; /* Compact width for flag + dropdown arrow only */
+            overflow: hidden; /* Ensure long option text doesn't break layout */
         }
 
         .country-flag-display {
@@ -581,6 +604,19 @@
             height: 24px;
             position: relative;
             z-index: 3;
+            /* Enhanced mobile support */
+            min-height: 44px; /* iOS minimum touch target */
+            touch-action: manipulation;
+        }
+
+        /* Style the dropdown options when opened */
+        .country-select option {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-family: "Inter", sans-serif;
+            font-weight: 400;
         }
 
         /* Mobile font-size fix for country select */
@@ -607,54 +643,85 @@
             }
         }
 
-        /* Sub-header Section */
+        /* Sub-header Section - Laylo-inspired design with enhanced spacing */
         .drop-sub-header {
-            margin-top: 24px;
+            margin-top: 40px; /* Increased spacing following Laylo pattern */
             max-width: 400px;
-            text-align: center;
+            text-align: left; /* Left-aligned like Laylo reference */
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 20px; /* Enhanced padding for better visual breathing room */
         }
 
         .drop-sub-header-title {
             font-family: "Inter", sans-serif;
-            font-weight: 600;
-            font-size: 1.125rem;
-            line-height: 1.4;
-            letter-spacing: 0.00938em;
+            font-weight: 800; /* Bolder weight following Laylo's strong typography */
+            font-size: 2rem; /* Larger size inspired by Laylo's prominent headers */
+            line-height: 1.2; /* Tighter line-height for impact */
+            letter-spacing: -0.02em; /* Enhanced letter-spacing for modern look */
             {{#if (eq drop.card_background_type "solid_white")}}
-            color: #374151;
+            color: #1a1a1a; /* Stronger contrast for white backgrounds */
             {{else}}
-            color: rgba(255, 255, 255, 0.9);
+            color: #ffffff; /* Pure white for maximum contrast like Laylo */
             {{/if}}
-            margin: 0 0 8px 0;
-            padding: 0 16px;
+            margin: 0 0 20px 0; /* Enhanced spacing following Laylo pattern */
+            padding: 0; /* Remove padding for cleaner alignment */
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            text-transform: uppercase; /* Following Laylo's uppercase pattern */
         }
 
         .drop-sub-header-content {
             font-family: "Inter", sans-serif;
-            font-weight: 400;
-            font-size: 1rem;
-            line-height: 1.6;
-            letter-spacing: 0.00938em;
+            font-weight: 500; /* Slightly bolder for better hierarchy */
+            font-size: 1.125rem; /* Increased size following Laylo pattern */
+            line-height: 1.4; /* Tighter line-height for modern look */
+            letter-spacing: 0.005em; /* Subtle letter-spacing */
             {{#if (eq drop.card_background_type "solid_white")}}
-            color: #666666;
+            color: #4a5568; /* Stronger contrast for readability */
             {{else}}
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9); /* Higher opacity like Laylo */
             {{/if}}
             text-align: left;
-            margin: 0;
-            padding: 0 16px;
+            margin: 0 0 24px 0; /* Added bottom margin for spacing */
+            padding: 0; /* Remove padding for cleaner alignment */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space for potential icons like Laylo */
         }
 
-        /* Responsive sub-header */
+        /* Responsive sub-header - Laylo-inspired mobile design */
         @media screen and (max-width: 767px) {
             .drop-sub-header {
-                margin-top: 16px;
+                margin-top: 32px; /* Enhanced spacing following Laylo pattern */
                 max-width: 100%;
+                padding: 0 24px; /* Increased padding for better mobile experience */
             }
 
             .drop-sub-header-title {
-                font-size: 1rem;
+                font-size: 1.75rem; /* Larger on mobile following Laylo pattern */
+                padding: 0; /* Clean alignment */
+                margin-bottom: 16px; /* Enhanced spacing */
+                text-align: center; /* Center on mobile for better hierarchy */
+            }
+
+            .drop-sub-header-content {
+                font-size: 1.125rem; /* Improved readability following Laylo */
+                padding: 0; /* Clean alignment */
+                text-align: center; /* Center on mobile for consistency */
+                margin-bottom: 32px; /* Enhanced bottom spacing */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .drop-sub-header {
+                margin-top: 16px; /* 8px grid system */
+            }
+
+            .drop-sub-header-title {
+                font-size: 1.375rem; /* Still prominent on small screens */
                 padding: 0 12px;
+                margin-bottom: 8px; /* 8px grid system */
             }
 
             .drop-sub-header-content {
@@ -664,20 +731,27 @@
             }
         }
 
-        @media screen and (max-width: 480px) {
-            .drop-sub-header {
-                margin-top: 12px;
-            }
-
+        /* Tablet responsive improvements */
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
             .drop-sub-header-title {
-                font-size: 0.95rem;
-                padding: 0 8px;
+                font-size: 2rem; /* Larger on tablet */
+                margin-bottom: 20px; /* Enhanced spacing */
             }
 
             .drop-sub-header-content {
-                font-size: 0.85rem;
-                padding: 0 8px;
-                text-align: left;
+                font-size: 1.125rem; /* Better tablet readability */
+            }
+        }
+
+        /* Desktop responsive improvements */
+        @media screen and (min-width: 1024px) {
+            .drop-sub-header-title {
+                font-size: 2.25rem; /* Maximum impact on desktop */
+                margin-bottom: 24px; /* 8px grid system */
+            }
+
+            .drop-sub-header-content {
+                font-size: 1.25rem; /* Premium desktop readability */
             }
         }
 
@@ -738,7 +812,7 @@
             overflow: hidden;
         }
 
-        /* RSVP Submit Button - Properly Inlaid */
+        /* RSVP Submit Button - Laylo-inspired green design */
         .laylo-rsvp-button {
             position: absolute;
             right: 6px;
@@ -749,43 +823,46 @@
             justify-content: center;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important; /* Green like Laylo RSVP button */
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important;
             /* Debug: Button color value = {{drop.button_color}} */
             outline: 0;
             border: 0;
             margin: 0;
-            padding: 10px 20px;
+            padding: 12px 24px; /* Enhanced padding following Laylo pattern */
             cursor: pointer;
             user-select: none;
             vertical-align: middle;
             appearance: none;
             text-decoration: none;
             font-family: "Inter", sans-serif;
-            font-weight: 500;
+            font-weight: 600; /* Bolder weight like Laylo */
             font-size: 0.875rem;
             line-height: 1.2;
-            letter-spacing: 0.02857em;
+            letter-spacing: 0.01em; /* Subtle letter-spacing */
             text-transform: uppercase;
-            min-width: 70px;
+            min-width: 80px; /* Slightly wider for better presence */
             height: 44px;
-            border-radius: 50px;
-            transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+            border-radius: 22px; /* Rounded like Laylo button */
+            transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
             color: {{#if drop.button_text_color}}{{drop.button_text_color}}{{else}}#ffffff{{/if}};
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); /* Green shadow for depth */
             z-index: 10;
         }
 
         .laylo-rsvp-button:hover {
             text-decoration: none;
-            filter: brightness(0.9);
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important; /* Darker green on hover */
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important;
             transform: translateY(-50%) scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4); /* Enhanced green shadow */
         }
 
         .laylo-rsvp-button:active {
             transform: translateY(-50%) scale(0.98);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important; /* Even darker on active */
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
         }
 
         .laylo-rsvp-button:disabled {
@@ -800,29 +877,37 @@
             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
-        /* Standalone Button for Email-Only Mode */
+        /* Standalone Button for Email-Only Mode - Laylo-inspired design */
         .laylo-rsvp-button.standalone {
             position: static;
             transform: none;
             width: 100%;
-            margin-top: 16px;
+            margin-top: 24px; /* Enhanced spacing following Laylo pattern */
             height: 56px;
-            border-radius: 50px;
+            border-radius: 28px; /* Rounded like Laylo button */
             font-size: 1rem;
             font-weight: 600;
             min-width: auto;
             padding: 16px 24px;
-            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
-            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}var(--laylo-button-red){{/if}} !important;
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important; /* Green like Laylo */
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#22C55E{{/if}} !important;
             color: {{#if drop.button_text_color}}{{drop.button_text_color}}{{else}}#ffffff{{/if}} !important;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); /* Green shadow for depth */
+            letter-spacing: 0.01em; /* Subtle letter-spacing */
         }
 
         .laylo-rsvp-button.standalone:hover {
             transform: scale(1.02);
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important; /* Darker green on hover */
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#16A34A{{/if}} !important;
+            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4); /* Enhanced green shadow */
         }
 
         .laylo-rsvp-button.standalone:active {
             transform: scale(0.98);
+            background-color: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important; /* Even darker on active */
+            background: {{#if drop.button_color}}{{drop.button_color}}{{else}}#15803D{{/if}} !important;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
         }
 
         .laylo-rsvp-button.standalone:disabled {
@@ -1360,7 +1445,8 @@
             }
 
             .laylo-rsvp-card {
-                padding: 20px;
+                padding: 32px 24px; /* Enhanced mobile padding following Laylo pattern */
+                border-radius: 16px; /* Slightly smaller radius on mobile */
             }
 
             .phone-input-container {
@@ -1465,25 +1551,29 @@
 <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <div class="drop-page-container">
         <div class="drop-container">
-            <!-- Image Container - Exact Laylo Style -->
+            <!-- Image Container - Laylo Style Large Image -->
             <div class="drop-image-container">
                 {{#if drop.cover_image}}
                 <img src="{{drop.cover_image}}" alt="{{drop.title}}" />
                 {{/if}}
             </div>
 
-            <!-- RSVP Container - Exact Laylo Style -->
-            <div class="rsvp-container">
-                <!-- Title - Now shows the actual drop title -->
+            <!-- Title Section - Positioned OUTSIDE RSVP Container like Laylo -->
+            <div class="drop-title-section">
+                <!-- Main Title - Matches Laylo positioning -->
                 <h1 class="drop-title">{{drop.title}}</h1>
 
-                <!-- User Container - Now shows description/subtitle -->
+                <!-- Artist/Brand Container - Matches Laylo's user container -->
                 <div class="user-container">
                     <div class="avatar">
                         <div style="background-image: url('{{drop.cover_image}}'); background-size: cover; background-position: center center; width: 100%; height: 100%; border-radius: 50%;"></div>
                     </div>
-                    <div class="username">{{#if drop.description}}{{drop.description}}{{else}}Get notified when this drops{{/if}}</div>
+                    <div class="username">{{#if drop.description}}{{drop.description}}{{else}}BOUNCE2BOUNCE{{/if}}</div>
                 </div>
+            </div>
+
+            <!-- RSVP Container - Now positioned lower like Laylo -->
+            <div class="rsvp-container">
 
                 <!-- RSVP Card Container -->
                 <div class="rsvp-card-container">
@@ -1542,21 +1632,21 @@
                                             <img alt="United States" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAyMSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjIxIiBoZWlnaHQ9IjE1IiBmaWxsPSIjQjIyMjM0Ii8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMCAwSDIxVjFIMFYwWk0wIDJIMjFWM0gwVjJaTTAgNEgyMVY1SDBWNFpNMCA2SDIxVjdIMFY2Wk0wIDhIMjFWOUgwVjhaTTAgMTBIMjFWMTFIMFYxMFpNMCAxMkgyMVYxM0gwVjEyWiIgZmlsbD0id2hpdGUiLz4KPHJlY3Qgd2lkdGg9IjkiIGhlaWdodD0iOCIgZmlsbD0iIzNDM0I2RSIvPgo8L3N2Zz4K" />
                                         </div>
                                         <select class="country-select" id="country-select" name="country_code" aria-label="Select country code">
-                                            <!-- PRIORITY 2: Comprehensive Country Support -->
-                                            <option value="+1" data-country="US" data-name="United States">+1</option>
-                                            <option value="+44" data-country="GB" data-name="United Kingdom">+44</option>
-                                            <option value="+1" data-country="CA" data-name="Canada">+1</option>
-                                            <option value="+61" data-country="AU" data-name="Australia">+61</option>
-                                            <option value="+49" data-country="DE" data-name="Germany">+49</option>
-                                            <option value="+33" data-country="FR" data-name="France">+33</option>
-                                            <option value="+34" data-country="ES" data-name="Spain">+34</option>
-                                            <option value="+39" data-country="IT" data-name="Italy">+39</option>
-                                            <option value="+81" data-country="JP" data-name="Japan">+81</option>
-                                            <option value="+82" data-country="KR" data-name="South Korea">+82</option>
-                                            <option value="+55" data-country="BR" data-name="Brazil">+55</option>
-                                            <option value="+52" data-country="MX" data-name="Mexico">+52</option>
-                                            <option value="+91" data-country="IN" data-name="India">+91</option>
-                                            <option value="+86" data-country="CN" data-name="China">+86</option>
+                                            <!-- PRIORITY 2: Enhanced Country Support with Full Names -->
+                                            <option value="+1" data-country="US" data-name="United States">US +1 United States</option>
+                                            <option value="+44" data-country="GB" data-name="United Kingdom">GB +44 United Kingdom</option>
+                                            <option value="+1" data-country="CA" data-name="Canada">CA +1 Canada</option>
+                                            <option value="+61" data-country="AU" data-name="Australia">AU +61 Australia</option>
+                                            <option value="+49" data-country="DE" data-name="Germany">DE +49 Germany</option>
+                                            <option value="+33" data-country="FR" data-name="France">FR +33 France</option>
+                                            <option value="+34" data-country="ES" data-name="Spain">ES +34 Spain</option>
+                                            <option value="+39" data-country="IT" data-name="Italy">IT +39 Italy</option>
+                                            <option value="+81" data-country="JP" data-name="Japan">JP +81 Japan</option>
+                                            <option value="+82" data-country="KR" data-name="South Korea">KR +82 South Korea</option>
+                                            <option value="+55" data-country="BR" data-name="Brazil">BR +55 Brazil</option>
+                                            <option value="+52" data-country="MX" data-name="Mexico">MX +52 Mexico</option>
+                                            <option value="+91" data-country="IN" data-name="India">IN +91 India</option>
+                                            <option value="+86" data-country="CN" data-name="China">CN +86 China</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1882,9 +1972,112 @@
                 }
             });
 
-            // PRIORITY 3: Enhanced International Phone Input with Real-time Formatting
+            // PRIORITY 3: Enhanced International Phone Input with Real-time Formatting and Auto-Detection
             if (phoneInput) {
                 let currentCountryCode = '+1'; // Default to US
+
+                // PRIORITY 3: Automatic Country Detection Function
+                function detectCountryFromPhoneNumber(phoneNumber) {
+                    // Remove all non-numeric characters
+                    const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
+
+                    // Don't detect if number is too short
+                    if (cleanNumber.length < 2) return null;
+
+                    // Check for partial matches first (when user is still typing)
+                    // This provides immediate feedback as user types
+                    if (cleanNumber.length >= 2) {
+                        const prefix2 = cleanNumber.substring(0, 2);
+                        const prefix3 = cleanNumber.length >= 3 ? cleanNumber.substring(0, 3) : null;
+
+                        // Check 3-digit prefixes first (more specific)
+                        if (prefix3) {
+                            const prefix3Map = {
+                                '441': '+44', // UK mobile
+                                '442': '+44', // UK landline
+                                '443': '+44', // UK
+                                '447': '+44', // UK mobile
+                                '448': '+44', // UK
+                                '449': '+44', // UK
+                            };
+
+                            if (prefix3Map[prefix3]) {
+                                return prefix3Map[prefix3];
+                            }
+                        }
+
+                        // Check 2-digit prefixes
+                        const prefix2Map = {
+                            '44': '+44', // UK
+                            '49': '+49', // Germany
+                            '33': '+33', // France
+                            '34': '+34', // Spain
+                            '39': '+39', // Italy
+                            '61': '+61', // Australia
+                            '81': '+81', // Japan
+                            '82': '+82', // South Korea
+                            '55': '+55', // Brazil
+                            '52': '+52', // Mexico
+                            '91': '+91', // India
+                            '86': '+86'  // China
+                        };
+
+                        if (prefix2Map[prefix2]) {
+                            return prefix2Map[prefix2];
+                        }
+
+                        // Check single digit for US/Canada
+                        if (cleanNumber.charAt(0) === '1' && cleanNumber.length >= 4) {
+                            return '+1';
+                        }
+                    }
+
+                    // For complete numbers, validate against full patterns
+                    if (cleanNumber.length >= 10) {
+                        const countryCodePatterns = {
+                            '+1': /^1\d{10}$/, // US/Canada: 1 + 10 digits
+                            '+44': /^44\d{10,11}$/, // UK: 44 + 10-11 digits
+                            '+49': /^49\d{10,12}$/, // Germany: 49 + 10-12 digits
+                            '+33': /^33\d{9,10}$/, // France: 33 + 9-10 digits
+                            '+34': /^34\d{9}$/, // Spain: 34 + 9 digits
+                            '+39': /^39\d{9,11}$/, // Italy: 39 + 9-11 digits
+                            '+61': /^61\d{9}$/, // Australia: 61 + 9 digits
+                            '+81': /^81\d{10,11}$/, // Japan: 81 + 10-11 digits
+                            '+82': /^82\d{9,11}$/, // South Korea: 82 + 9-11 digits
+                            '+55': /^55\d{10,11}$/, // Brazil: 55 + 10-11 digits
+                            '+52': /^52\d{10}$/, // Mexico: 52 + 10 digits
+                            '+91': /^91\d{10}$/, // India: 91 + 10 digits
+                            '+86': /^86\d{11}$/ // China: 86 + 11 digits
+                        };
+
+                        // Check each pattern for complete validation
+                        for (const [countryCode, pattern] of Object.entries(countryCodePatterns)) {
+                            if (pattern.test(cleanNumber)) {
+                                return countryCode;
+                            }
+                        }
+                    }
+
+                    return null;
+                }
+
+                // Function to update country selection
+                function updateCountrySelection(newCountryCode) {
+                    const countrySelect = document.getElementById('country-select');
+                    if (countrySelect && newCountryCode && newCountryCode !== currentCountryCode) {
+                        // Find the option with the matching country code
+                        const option = countrySelect.querySelector(`option[value="${newCountryCode}"]`);
+                        if (option) {
+                            console.log(`🌍 Auto-detecting country: ${currentCountryCode} → ${newCountryCode} (${option.dataset.name})`);
+                            countrySelect.value = newCountryCode;
+                            countrySelect.dispatchEvent(new Event('change'));
+                            return true;
+                        } else {
+                            console.log(`⚠️ Country code ${newCountryCode} not found in dropdown options`);
+                        }
+                    }
+                    return false;
+                }
 
                 // International phone number formatting function
                 function formatPhoneNumber(value, countryCode = currentCountryCode) {
@@ -1939,12 +2132,29 @@
                     }
                 }
 
-                // Real-time international formatting on input
+                // Real-time international formatting on input with auto-detection
                 phoneInput.addEventListener('input', function(e) {
                     const cursorPosition = e.target.selectionStart;
                     const oldValue = e.target.value;
-                    const newValue = formatPhoneNumber(e.target.value, currentCountryCode);
 
+                    // PRIORITY 3: Auto-detect country from phone number
+                    const detectedCountry = detectCountryFromPhoneNumber(e.target.value);
+                    console.log(`📱 Phone input: "${e.target.value}" → detected: ${detectedCountry}, current: ${currentCountryCode}`);
+
+                    if (detectedCountry && detectedCountry !== currentCountryCode) {
+                        // Only auto-update if the user hasn't manually selected a different country recently
+                        const timeSinceLastManualChange = Date.now() - (window.lastManualCountryChange || 0);
+                        console.log(`⏱️ Time since last manual change: ${timeSinceLastManualChange}ms`);
+
+                        if (timeSinceLastManualChange > 2000) { // 2 second delay to avoid conflicts
+                            console.log(`🔄 Auto-updating country selection...`);
+                            updateCountrySelection(detectedCountry);
+                        } else {
+                            console.log(`⏸️ Skipping auto-detection (recent manual change)`);
+                        }
+                    }
+
+                    const newValue = formatPhoneNumber(e.target.value, currentCountryCode);
                     e.target.value = newValue;
 
                     // Maintain cursor position (improved for international formats)
@@ -2195,6 +2405,9 @@
 
             // PRIORITY 4: Enhanced Country Selector with Search and UX Improvements
             if (countrySelect && countryFlagDisplay) {
+                // Track manual country changes to prevent auto-detection conflicts
+                window.lastManualCountryChange = 0;
+
                 // Update flag when country changes
                 countrySelect.addEventListener('change', function(e) {
                     const selectedCode = e.target.value;
@@ -2236,32 +2449,54 @@
                     console.log(`🌍 Country changed to: ${selectedCode} (${selectedOption.dataset.name})`);
                 });
 
-                // PRIORITY 4: Add keyboard navigation support for accessibility
+                // Track manual changes to prevent auto-detection conflicts
+                countrySelect.addEventListener('mousedown', function() {
+                    window.lastManualCountryChange = Date.now();
+                    console.log(`🖱️ Manual mouse selection`);
+                });
+
+                // PRIORITY 4: Enhanced keyboard navigation support for accessibility
                 countrySelect.addEventListener('keydown', function(e) {
-                    // Allow typing to search countries (basic implementation)
+                    // Track manual keyboard navigation
+                    if (['ArrowUp', 'ArrowDown', 'Enter', 'Space'].includes(e.key)) {
+                        window.lastManualCountryChange = Date.now();
+                        console.log(`⌨️ Manual keyboard navigation: ${e.key}`);
+                    }
+
+                    // Allow typing to search countries (enhanced implementation)
                     if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
                         const searchChar = e.key.toLowerCase();
                         const options = Array.from(this.options);
                         const currentIndex = this.selectedIndex;
 
+                        console.log(`🔍 Searching countries starting with: ${searchChar}`);
+
                         // Find next option starting with the typed character
+                        let found = false;
                         for (let i = currentIndex + 1; i < options.length; i++) {
                             const countryName = options[i].dataset.name || '';
-                            if (countryName.toLowerCase().startsWith(searchChar)) {
+                            const optionText = options[i].textContent || '';
+                            if (countryName.toLowerCase().startsWith(searchChar) ||
+                                optionText.toLowerCase().includes(searchChar)) {
                                 this.selectedIndex = i;
                                 this.dispatchEvent(new Event('change'));
+                                console.log(`✅ Found country: ${countryName}`);
                                 e.preventDefault();
+                                found = true;
                                 break;
                             }
                         }
 
                         // If not found after current, search from beginning
-                        if (this.selectedIndex === currentIndex) {
+                        if (!found) {
                             for (let i = 0; i < currentIndex; i++) {
                                 const countryName = options[i].dataset.name || '';
-                                if (countryName.toLowerCase().startsWith(searchChar)) {
+                                const optionText = options[i].textContent || '';
+                                if (countryName.toLowerCase().startsWith(searchChar) ||
+                                    optionText.toLowerCase().includes(searchChar)) {
                                     this.selectedIndex = i;
                                     this.dispatchEvent(new Event('change'));
+                                    console.log(`✅ Found country: ${countryName}`);
                                     e.preventDefault();
                                     break;
                                 }
