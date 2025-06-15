@@ -43,8 +43,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Laylo-Inspired Design CSS -->
+    <!-- Laylo-Inspired Design CSS - Updated Typography v2.1 -->
     <style>
+        /* CACHE BUSTER: Typography fixes applied - v2.1.0 */
         :root {
             --drop-title-color: {{drop.title_color}};
             --drop-description-color: {{drop.description_color}};
@@ -218,16 +219,16 @@
         /* Title - 2024 Research-Based Typography (Material Design 3 + Leading Platforms) */
         .drop-title {
             /* RESEARCH: Stripe (48px) + Linear (56px) + Figma (44px) = 49px average, scaled to 52px for prominence */
-            font-size: 52px;
+            font-size: 52px !important;
             /* RESEARCH: Linear/Stripe optimal line-height for large display text */
-            line-height: 1.08;
+            line-height: 1.08 !important;
             /* RESEARCH: Figma/Linear letter-spacing for visual density and readability */
-            letter-spacing: -0.6px;
-            text-align: left;
+            letter-spacing: -0.6px !important;
+            text-align: left !important;
             /* RESEARCH: Stripe (12px) + Notion (8px) + Figma (12px) = 10.7px, rounded to 12px */
-            margin: 0 0 12px 0;
+            margin: 0 0 12px 0 !important;
             /* RESEARCH: Material Design 3 Display Medium weight for prominence without overwhelming */
-            font-weight: 700;
+            font-weight: 700 !important;
             text-size-adjust: 100%;
             text-wrap: wrap;
             white-space-collapse: preserve-breaks;
@@ -248,10 +249,10 @@
             flex-direction: row;
             align-items: center;
             /* RESEARCH: Apple HIG 16pt base unit for optimal visual rhythm */
-            gap: 16px;
+            gap: 16px !important;
             cursor: pointer;
             /* RESEARCH: 24px = 0.46x title size (52px) - optimal subtitle-to-content spacing */
-            margin-bottom: 24px;
+            margin-bottom: 24px !important;
             text-align: left;
             justify-content: flex-start;
             width: 100%;
@@ -277,13 +278,13 @@
 
         .username {
             /* RESEARCH: Material Design 3 Body Large (16px) + 2px for subtitle prominence */
-            font-size: 18px;
+            font-size: 18px !important;
             /* RESEARCH: Apple HIG Title 2 weight for clear hierarchy without competing with title */
-            font-weight: 500;
+            font-weight: 500 !important;
             /* RESEARCH: Material Design 3 Body Large line-height for optimal readability */
-            line-height: 1.5;
+            line-height: 1.5 !important;
             /* RESEARCH: Material Design 3 Body Large letter-spacing for text clarity */
-            letter-spacing: 0.25px;
+            letter-spacing: 0.25px !important;
             color: {{#if drop.description_color}}{{drop.description_color}}{{else}}var(--laylo-text-primary){{/if}};
             /* MODERN: Enhanced text rendering for subtitle clarity */
             text-rendering: optimizeLegibility;
@@ -882,14 +883,24 @@
             width: 160px;
             height: auto;
             max-width: 100%;
-            opacity: 0.6;
             transition: opacity 0.2s ease;
-            /* Removed drop-shadow and transform effects for subtle appearance */
+            /* DYNAMIC COLOR: Match disclaimer text color based on card background */
+            {{#if (eq drop.card_background_type "solid_white")}}
+            color: #666666;
+            opacity: 1;
+            {{else}}
+            color: var(--laylo-text-secondary);
+            opacity: 0.8;
+            {{/if}}
         }
 
         .b2b-branding-link:hover .b2b-logo {
+            {{#if (eq drop.card_background_type "solid_white")}}
             opacity: 0.8;
-            /* Only subtle opacity change on hover, no scale or shadow effects */
+            {{else}}
+            opacity: 1;
+            {{/if}}
+            /* Subtle opacity change matching card background type */
         }
 
         /* Logo path styling for better readability */
@@ -897,7 +908,7 @@
             filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
         }
 
-        /* Dark theme adjustments - minimal styling */
+        /* Dark theme adjustments - logo color matching */
         @media (prefers-color-scheme: dark) {
             .b2b-branding-link {
                 color: rgba(255, 255, 255, 0.5);
@@ -905,6 +916,14 @@
 
             .b2b-branding-link:hover {
                 color: rgba(255, 255, 255, 0.7);
+            }
+
+            .b2b-logo {
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            .b2b-branding-link:hover .b2b-logo {
+                color: rgba(255, 255, 255, 1);
             }
         }
 
@@ -1098,11 +1117,11 @@
 
             .drop-title {
                 /* RESEARCH: Proportional scaling maintaining 52px desktop ratio */
-                font-size: clamp(42px, 4.5vw, 48px);
-                line-height: 1.08;
-                letter-spacing: -0.5px;
+                font-size: clamp(42px, 4.5vw, 48px) !important;
+                line-height: 1.08 !important;
+                letter-spacing: -0.5px !important;
                 /* RESEARCH: Proportional spacing (10px = 0.24x title size) */
-                margin: 0 0 10px 0;
+                margin: 0 0 10px 0 !important;
             }
         }
 
@@ -1133,13 +1152,13 @@
 
             .drop-title {
                 /* RESEARCH: Tablet scaling maintaining visual hierarchy */
-                font-size: clamp(32px, 5vw, 40px);
-                line-height: 1.1;
-                letter-spacing: -0.4px;
-                text-align: center;
+                font-size: clamp(32px, 5vw, 40px) !important;
+                line-height: 1.1 !important;
+                letter-spacing: -0.4px !important;
+                text-align: center !important;
                 max-width: 100%;
                 /* RESEARCH: Proportional spacing (8px = 0.25x title size) */
-                margin: 0 0 8px 0;
+                margin: 0 0 8px 0 !important;
             }
 
             .user-container {
@@ -1182,12 +1201,12 @@
 
             .drop-title {
                 /* RESEARCH: Mobile scaling maintaining readability and impact */
-                font-size: clamp(26px, 6vw, 32px);
-                line-height: 1.15;
-                letter-spacing: -0.3px;
-                text-align: center;
+                font-size: clamp(26px, 6vw, 32px) !important;
+                line-height: 1.15 !important;
+                letter-spacing: -0.3px !important;
+                text-align: center !important;
                 /* RESEARCH: Proportional spacing (8px = 0.25x title size) */
-                margin: 0 0 8px 0;
+                margin: 0 0 8px 0 !important;
                 max-width: 100%;
             }
 
@@ -1252,12 +1271,12 @@
 
             .drop-title {
                 /* RESEARCH: Small mobile maintaining minimum readability standards */
-                font-size: clamp(22px, 5.5vw, 28px);
-                line-height: 1.2;
-                letter-spacing: -0.2px;
-                text-align: center;
+                font-size: clamp(22px, 5.5vw, 28px) !important;
+                line-height: 1.2 !important;
+                letter-spacing: -0.2px !important;
+                text-align: center !important;
                 /* RESEARCH: Proportional spacing (6px = 0.27x title size) */
-                margin: 0 0 6px 0;
+                margin: 0 0 6px 0 !important;
                 max-width: 100%;
             }
 
