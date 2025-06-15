@@ -1598,10 +1598,30 @@
                 // Validate phone number if provided
                 if (phone && phone.trim()) {
                     const cleanPhone = phone.replace(/[^\d]/g, '');
-                    if (cleanPhone.length !== 10) {
+                    console.log('📱 Client validating phone:', phone, '->', cleanPhone, 'length:', cleanPhone.length);
+
+                    if (cleanPhone.length === 0) {
                         showError(
                             'Invalid Phone Number',
-                            'Please enter a valid 10-digit phone number (e.g., (555) 123-4567).',
+                            'Phone number cannot be empty.',
+                            'validation'
+                        );
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                        return;
+                    } else if (cleanPhone.length < 10) {
+                        showError(
+                            'Invalid Phone Number',
+                            `Phone number too short: ${cleanPhone.length} digits. Please enter a 10-digit US phone number.`,
+                            'validation'
+                        );
+                        submitButton.disabled = false;
+                        submitButton.textContent = originalText;
+                        return;
+                    } else if (cleanPhone.length > 10) {
+                        showError(
+                            'Invalid Phone Number',
+                            `Phone number too long: ${cleanPhone.length} digits. Please enter a 10-digit US phone number.`,
                             'validation'
                         );
                         submitButton.disabled = false;
@@ -1637,7 +1657,12 @@
                     const cleanPhone = phone.replace(/[^\d]/g, '');
                     // Format as standard US phone number for server: +1XXXXXXXXXX
                     dataToSend.phone = `+1${cleanPhone}`;
-                    console.log('📱 Cleaned phone number:', phone, '->', dataToSend.phone);
+                    console.log('📱 Phone number processing:', {
+                        original: phone,
+                        cleaned: cleanPhone,
+                        final: dataToSend.phone,
+                        length: cleanPhone.length
+                    });
                 }
                 if (email && email.trim()) dataToSend.email = email;
 
@@ -1670,17 +1695,29 @@
                         let errorMessage = 'Please try again.';
 
                         if (response.status === 400) {
-                            errorTitle = 'Invalid Information';
+                            // Parse the specific error message from server
+                            const serverMessage = result.message || '';
+                            console.log('📱 Server error message:', serverMessage);
 
-                            // Check if it's a phone validation error
-                            if (result.message && result.message.includes('phone')) {
+                            // Check for specific error types
+                            if (serverMessage.includes('Phone Number Error:')) {
                                 errorTitle = 'Invalid Phone Number';
-                                errorMessage = 'Please enter a valid 10-digit US phone number.';
-                            } else if (result.message && result.message.includes('email')) {
+                                errorMessage = serverMessage.replace('Phone Number Error: ', '');
+                            } else if (serverMessage.includes('Email Error:')) {
                                 errorTitle = 'Invalid Email Address';
-                                errorMessage = 'Please enter a valid email address.';
+                                errorMessage = serverMessage.replace('Email Error: ', '');
+                            } else if (serverMessage.includes('Name Error:')) {
+                                errorTitle = 'Invalid Name';
+                                errorMessage = serverMessage.replace('Name Error: ', '');
+                            } else if (serverMessage.toLowerCase().includes('phone')) {
+                                errorTitle = 'Invalid Phone Number';
+                                errorMessage = serverMessage;
+                            } else if (serverMessage.toLowerCase().includes('email')) {
+                                errorTitle = 'Invalid Email Address';
+                                errorMessage = serverMessage;
                             } else {
-                                errorMessage = result.message || 'Please check your information and try again.';
+                                errorTitle = 'Invalid Information';
+                                errorMessage = serverMessage || 'Please check your information and try again.';
                             }
                         } else if (response.status === 409) {
                             errorTitle = 'Already Registered';

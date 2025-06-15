@@ -80,22 +80,45 @@ const signupValidation = [
     .custom((value) => {
         if (!value) return true; // Optional field
 
+        console.log('📱 Server validating phone number:', value);
+
         // Accept international format (+1XXXXXXXXXX) or clean 10-digit US numbers
         const cleanPhone = value.replace(/[^\d+]/g, '');
+        console.log('📱 Cleaned phone number:', cleanPhone);
 
         // Check for +1 followed by 10 digits (US format)
         if (/^\+1\d{10}$/.test(cleanPhone)) {
+            console.log('📱 Phone validation passed: +1 format');
             return true;
         }
 
         // Check for exactly 10 digits (US format without country code)
         if (/^\d{10}$/.test(cleanPhone)) {
+            console.log('📱 Phone validation passed: 10-digit format');
             return true;
         }
 
-        throw new Error('Valid US phone number required (10 digits)');
+        console.log('📱 Phone validation failed:', {
+            original: value,
+            cleaned: cleanPhone,
+            length: cleanPhone.length,
+            hasPlus: cleanPhone.includes('+')
+        });
+
+        // Provide specific error messages based on the issue
+        if (cleanPhone.length === 0) {
+            throw new Error('Phone number cannot be empty');
+        } else if (cleanPhone.length < 10) {
+            throw new Error(`Phone number too short: ${cleanPhone.length} digits (need 10)`);
+        } else if (cleanPhone.length > 11) {
+            throw new Error(`Phone number too long: ${cleanPhone.length} digits (need 10)`);
+        } else if (cleanPhone.length === 11 && !cleanPhone.startsWith('+1')) {
+            throw new Error('11-digit number must start with +1 for US format');
+        } else {
+            throw new Error(`Invalid phone format: ${value} (need 10 digits like 5551234567)`);
+        }
     })
-    .withMessage("Valid US phone number required"),
+    .withMessage("Please enter a valid 10-digit US phone number"),
     body("name")
     .optional()
     .isLength({ max: 100 })

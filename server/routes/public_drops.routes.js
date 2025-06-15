@@ -8,12 +8,36 @@ const { drop } = require("../queries");
 
 const router = Router();
 
-// Validation middleware
+// Enhanced validation middleware with specific error handling
 function validateRequest(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        const errorMessages = errors.array().map(error => error.msg);
-        throw new CustomError(errorMessages.join(', '), 400);
+        console.log('🚨 Validation errors:', errors.array());
+
+        // Group errors by field for better error messages
+        const errorsByField = {};
+        errors.array().forEach(error => {
+            if (!errorsByField[error.path]) {
+                errorsByField[error.path] = [];
+            }
+            errorsByField[error.path].push(error.msg);
+        });
+
+        // Create specific error messages
+        let errorMessage = '';
+        if (errorsByField.phone) {
+            errorMessage = `Phone Number Error: ${errorsByField.phone[0]}`;
+        } else if (errorsByField.email) {
+            errorMessage = `Email Error: ${errorsByField.email[0]}`;
+        } else if (errorsByField.name) {
+            errorMessage = `Name Error: ${errorsByField.name[0]}`;
+        } else {
+            // Fallback to generic message
+            const allErrors = errors.array().map(error => error.msg);
+            errorMessage = allErrors.join(', ');
+        }
+
+        throw new CustomError(errorMessage, 400);
     }
     next();
 }
