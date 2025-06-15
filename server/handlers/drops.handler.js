@@ -487,12 +487,30 @@ async function createSignup(req, res) {
             throw new CustomError("Phone number is required for this drop", 400);
         }
 
-        // Check if email already signed up
-        console.log(`🔍 Checking if email already signed up: ${email}`);
-        const alreadySignedUp = await drop.isEmailSignedUp(foundDrop.id, email);
-        if (alreadySignedUp) {
-            console.error(`❌ Email already signed up: ${email}`);
-            throw new CustomError("Email already signed up for this drop", 400);
+        // Check for duplicates based on what fields are collected
+        if (email) {
+            console.log(`🔍 Checking if email already signed up: ${email}`);
+            const emailAlreadySignedUp = await drop.isEmailSignedUp(foundDrop.id, email);
+            if (emailAlreadySignedUp) {
+                console.error(`❌ Email already signed up: ${email}`);
+                throw new CustomError("Email already signed up for this drop", 400);
+            }
+        } else {
+            console.log(`🔍 Skipping email duplicate check - no email provided`);
+        }
+
+        // Check phone duplicates if phone is provided and email is not (phone-only signup)
+        if (phone && !email) {
+            console.log(`🔍 Checking if phone already signed up: ${phone}`);
+            const phoneAlreadySignedUp = await drop.isPhoneSignedUp(foundDrop.id, phone);
+            if (phoneAlreadySignedUp) {
+                console.error(`❌ Phone already signed up: ${phone}`);
+                throw new CustomError("Phone number already signed up for this drop", 400);
+            }
+        } else if (phone && email) {
+            console.log(`🔍 Skipping phone duplicate check - email provided (email takes precedence)`);
+        } else if (!phone) {
+            console.log(`🔍 Skipping phone duplicate check - no phone provided`);
         }
 
         const signupData = {

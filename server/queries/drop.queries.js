@@ -206,9 +206,30 @@ async function getSignupCount(dropId) {
 
 // Check if email is already signed up
 async function isEmailSignedUp(dropId, email) {
+    // Return false if no email provided (can't be a duplicate)
+    if (!email) {
+        console.log('🔍 No email provided for duplicate check');
+        return false;
+    }
+
     const signup = await knex("drop_signups")
         .where("drop_id", dropId)
         .where("email", email)
+        .first();
+    return !!signup;
+}
+
+// Check if phone number is already signed up
+async function isPhoneSignedUp(dropId, phone) {
+    // Return false if no phone provided (can't be a duplicate)
+    if (!phone) {
+        console.log('🔍 No phone provided for duplicate check');
+        return false;
+    }
+
+    const signup = await knex("drop_signups")
+        .where("drop_id", dropId)
+        .where("phone", phone)
         .first();
     return !!signup;
 }
@@ -514,6 +535,7 @@ module.exports = {
     findSignups,
     getSignupCount,
     isEmailSignedUp,
+    isPhoneSignedUp,
     countByUser,
     getTotalFansByUser,
     // 🚀 Advanced Analytics
