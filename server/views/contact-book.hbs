@@ -784,37 +784,63 @@ function renderGroups(groups) {
     console.log('📁 Rendering groups:', groups);
     const container = document.getElementById('groupsContainer');
 
+    if (!container) {
+        console.error('❌ Groups container not found');
+        return;
+    }
+
     if (!groups || groups.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-center py-4">No groups created yet</p>';
+        container.innerHTML = `
+            <div class="col-span-full text-center py-8">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                    </svg>
+                </div>
+                <p class="text-gray-500 font-medium">No groups created yet</p>
+                <p class="text-gray-400 text-sm mt-1">Create your first group to organize contacts</p>
+                <button onclick="openCreateGroupModal()" class="mt-4 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
+                    Create Group
+                </button>
+            </div>
+        `;
         return;
     }
 
     let groupsHTML = '';
     groups.forEach(group => {
+        // Safe property access with fallbacks
+        const groupName = group.name || 'Unnamed Group';
+        const groupColor = group.color || '#6b7280';
+        const groupDescription = group.description || '';
+        const contactCount = group.contact_count || 0;
+        const createdAt = group.created_at || null;
+        const groupId = group.id || '';
+
         groupsHTML += `
             <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center space-x-2">
-                        <div class="w-4 h-4 rounded-full" style="background-color: ${group.color}"></div>
-                        <h3 class="text-sm font-medium text-gray-900">${group.name}</h3>
+                        <div class="w-4 h-4 rounded-full" style="background-color: ${groupColor}"></div>
+                        <h3 class="text-sm font-medium text-gray-900">${groupName}</h3>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <span class="text-xs text-gray-500">${group.contact_count || 0} contacts</span>
-                        <button onclick="editGroup(${group.id})" class="text-gray-400 hover:text-primary-600">
+                        <span class="text-xs text-gray-500">${contactCount} contact${contactCount !== 1 ? 's' : ''}</span>
+                        <button onclick="editGroup('${groupId}')" class="text-gray-400 hover:text-primary-600 p-1 rounded hover:bg-gray-100" title="Edit group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                             </svg>
                         </button>
-                        <button onclick="deleteGroup(${group.id})" class="text-gray-400 hover:text-red-600">
+                        <button onclick="deleteGroup('${groupId}')" class="text-gray-400 hover:text-red-600 p-1 rounded hover:bg-red-50" title="Delete group">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
                             </svg>
                         </button>
                     </div>
                 </div>
-                ${group.description ? `<p class="text-sm text-gray-600">${group.description}</p>` : ''}
-                <div class="mt-2 text-xs text-gray-500">
-                    Created ${formatDate(group.created_at)}
+                ${groupDescription ? `<p class="text-sm text-gray-600 mb-2">${groupDescription}</p>` : ''}
+                <div class="text-xs text-gray-500">
+                    Created ${createdAt ? formatDate(createdAt) : 'Unknown date'}
                 </div>
             </div>
         `;
@@ -1037,6 +1063,57 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Contact Book initialized');
 });
 
+// Missing Modal Functions
+function openCreateGroupModal() {
+    const modal = document.getElementById('createGroupModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    } else {
+        console.error('❌ Create group modal not found');
+        showNotification('Group creation modal not available', 'error');
+    }
+}
+
+function closeCreateGroupModal() {
+    const modal = document.getElementById('createGroupModal');
+    if (modal) {
+        modal.classList.add('hidden');
+
+        // Reset form
+        const form = document.getElementById('createGroupForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+function showAddToGroupModal() {
+    // TODO: Implement add to group modal
+    showNotification('Add to group functionality coming soon!', 'info');
+}
+
+function addContactNote() {
+    // TODO: Implement add contact note functionality
+    showNotification('Add note functionality coming soon!', 'info');
+}
+
+function deleteContactNote(noteId) {
+    // TODO: Implement delete contact note functionality
+    console.log('Delete note:', noteId);
+    showNotification('Delete note functionality coming soon!', 'info');
+}
+
+function removeFromGroup(groupId) {
+    if (!window.currentContactData) {
+        showNotification('No contact selected', 'error');
+        return;
+    }
+
+    // TODO: Implement remove from group functionality
+    console.log('Remove contact from group:', groupId);
+    showNotification('Remove from group functionality coming soon!', 'info');
+}
+
 function hideGroupsLoading() {
     const loading = document.getElementById('groupsLoading');
     if (loading) loading.classList.add('hidden');
@@ -1147,18 +1224,44 @@ function normalizePhoneNumber(phone) {
 function populateContactModal(contactData) {
     console.log('📋 Populating contact modal with data:', contactData);
 
-    // Update header
+    // Update header with proper null checks
     const avatar = document.getElementById('contactAvatar');
     const title = document.getElementById('contactModalTitle');
     const subtitle = document.getElementById('contactModalSubtitle');
 
-    const displayName = contactData.display_name || contactData.name || contactData.email || contactData.phone;
-    avatar.textContent = displayName.charAt(0).toUpperCase();
-    title.textContent = displayName;
-    subtitle.textContent = `${contactData.contact_type === 'phone' ? 'Phone' : 'Email'} Contact • Joined ${formatDate(contactData.join_date)}`;
+    // Safe display name extraction with fallbacks
+    let displayName = 'Unknown Contact';
+    if (contactData.display_name && contactData.display_name.trim()) {
+        displayName = contactData.display_name.trim();
+    } else if (contactData.name && contactData.name.trim()) {
+        displayName = contactData.name.trim();
+    } else if (contactData.email && contactData.email.trim()) {
+        displayName = contactData.email.trim();
+    } else if (contactData.phone && contactData.phone.trim()) {
+        displayName = formatPhoneNumber(contactData.phone) || contactData.phone.trim();
+    } else if (contactData.contact && contactData.contact.display_name) {
+        displayName = contactData.contact.display_name.trim();
+    } else if (contactData.contact && contactData.contact.name) {
+        displayName = contactData.contact.name.trim();
+    } else if (contactData.contact && contactData.contact.email) {
+        displayName = contactData.contact.email.trim();
+    } else if (contactData.contact && contactData.contact.phone) {
+        displayName = formatPhoneNumber(contactData.contact.phone) || contactData.contact.phone.trim();
+    }
 
-    // Populate contact information
-    populateContactInfo(contactData);
+    // Safe avatar generation
+    const avatarLetter = displayName && displayName.length > 0 ? displayName.charAt(0).toUpperCase() : '?';
+    avatar.textContent = avatarLetter;
+    title.textContent = displayName;
+
+    // Safe contact type and join date
+    const contactType = (contactData.contact_type === 'phone' || contactData.contact?.contact_type === 'phone') ? 'Phone' : 'Email';
+    const joinDate = contactData.join_date || contactData.contact?.join_date || null;
+    subtitle.textContent = `${contactType} Contact${joinDate ? ' • Joined ' + formatDate(joinDate) : ''}`;
+
+    // Populate contact information (handle nested contact object)
+    const contactInfo = contactData.contact || contactData;
+    populateContactInfo(contactInfo);
 
     // Populate contact groups
     populateContactGroups(contactData.groups || []);
@@ -1176,10 +1279,15 @@ function populateContactModal(contactData) {
 function populateContactInfo(contact) {
     const container = document.getElementById('contactInfo');
 
+    if (!contact) {
+        container.innerHTML = '<p class="text-sm text-gray-500">No contact information available</p>';
+        return;
+    }
+
     let infoHTML = '';
 
     // Email
-    if (contact.email) {
+    if (contact.email && contact.email.trim()) {
         infoHTML += `
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -1190,14 +1298,14 @@ function populateContactInfo(contact) {
                 </div>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-gray-900">Email</p>
-                    <p class="text-sm text-gray-600">${contact.email}</p>
+                    <p class="text-sm text-gray-600">${contact.email.trim()}</p>
                 </div>
             </div>
         `;
     }
 
     // Phone
-    if (contact.phone) {
+    if (contact.phone && contact.phone.trim()) {
         const formattedPhone = formatPhoneNumber(contact.phone);
         infoHTML += `
             <div class="flex items-center space-x-3">
@@ -1208,7 +1316,7 @@ function populateContactInfo(contact) {
                 </div>
                 <div class="flex-1">
                     <p class="text-sm font-medium text-gray-900">Phone</p>
-                    <p class="text-sm text-gray-600">${formattedPhone || contact.phone}</p>
+                    <p class="text-sm text-gray-600">${formattedPhone || contact.phone.trim()}</p>
                 </div>
             </div>
         `;
@@ -1248,6 +1356,27 @@ function populateContactInfo(contact) {
         `;
     }
 
+    // Contact Type (if available)
+    if (contact.contact_type) {
+        infoHTML += `
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Contact Type</p>
+                    <p class="text-sm text-gray-600">${contact.contact_type === 'phone' ? 'Phone Contact' : 'Email Contact'}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    if (infoHTML === '') {
+        infoHTML = '<p class="text-sm text-gray-500">No contact information available</p>';
+    }
+
     container.innerHTML = infoHTML;
 }
 
@@ -1279,13 +1408,23 @@ function populateContactGroups(groups) {
     container.innerHTML = groupsHTML;
 }
 
-function populateContactStats(contact) {
+function populateContactStats(contactData) {
     const container = document.getElementById('contactStats');
+
+    if (!container) {
+        console.error('❌ Contact stats container not found');
+        return;
+    }
+
+    // Handle nested contact data structure
+    const contact = contactData.contact || contactData;
+    const groups = contactData.groups || contact.groups || [];
+    const dropHistory = contactData.dropHistory || contact.dropHistory || [];
 
     const stats = [
         {
             label: 'Drop Signups',
-            value: contact.total_drop_signups || 0,
+            value: contact.total_drop_signups || dropHistory.length || 0,
             color: 'blue'
         },
         {
@@ -1300,7 +1439,7 @@ function populateContactStats(contact) {
         },
         {
             label: 'Groups',
-            value: (contact.groups && contact.groups.length) || 0,
+            value: groups.length || 0,
             color: 'orange'
         }
     ];
@@ -1308,7 +1447,7 @@ function populateContactStats(contact) {
     let statsHTML = '';
     stats.forEach(stat => {
         statsHTML += `
-            <div class="bg-white p-3 rounded-lg border border-gray-200 text-center">
+            <div class="bg-white p-3 rounded-lg border border-gray-200 text-center hover:border-gray-300 transition-colors">
                 <div class="text-lg font-semibold text-${stat.color}-600">${stat.value}</div>
                 <div class="text-xs text-gray-500 mt-1">${stat.label}</div>
             </div>
@@ -1318,45 +1457,85 @@ function populateContactStats(contact) {
     container.innerHTML = statsHTML;
 }
 
-function populateActivityTimeline(contact) {
+function populateActivityTimeline(contactData) {
     const container = document.getElementById('activityTimeline');
+
+    if (!container) {
+        console.error('❌ Activity timeline container not found');
+        return;
+    }
 
     // Create timeline from drop history and interactions
     let activities = [];
 
+    // Handle nested contact data structure
+    const contact = contactData.contact || contactData;
+    const dropHistory = contactData.dropHistory || contact.dropHistory || [];
+    const interactions = contactData.interactions || contact.interactions || [];
+
     // Add drop signups
-    if (contact.dropHistory && contact.dropHistory.length > 0) {
-        contact.dropHistory.forEach(drop => {
-            activities.push({
-                type: 'signup',
-                date: drop.signup_date,
-                title: `Signed up for "${drop.drop_title}"`,
-                description: `Joined drop via ${drop.referrer || 'direct link'}`,
-                icon: 'user-add',
-                color: 'blue'
-            });
+    if (dropHistory && dropHistory.length > 0) {
+        dropHistory.forEach(drop => {
+            if (drop && drop.signup_date) {
+                activities.push({
+                    type: 'signup',
+                    date: drop.signup_date,
+                    title: `Signed up for "${drop.drop_title || 'Unknown Drop'}"`,
+                    description: `Joined drop via ${drop.referrer || 'direct link'}`,
+                    icon: 'user-add',
+                    color: 'blue'
+                });
+            }
         });
     }
 
     // Add interactions
-    if (contact.interactions && contact.interactions.length > 0) {
-        contact.interactions.forEach(interaction => {
-            activities.push({
-                type: 'interaction',
-                date: interaction.interaction_date,
-                title: interaction.interaction_type,
-                description: interaction.notes || 'No additional details',
-                icon: 'chat',
-                color: 'green'
-            });
+    if (interactions && interactions.length > 0) {
+        interactions.forEach(interaction => {
+            if (interaction && interaction.interaction_date) {
+                activities.push({
+                    type: 'interaction',
+                    date: interaction.interaction_date,
+                    title: interaction.interaction_type || 'Interaction',
+                    description: interaction.description || interaction.notes || 'No additional details',
+                    icon: 'chat',
+                    color: 'green'
+                });
+            }
+        });
+    }
+
+    // Add join activity if available
+    if (contact.join_date) {
+        activities.push({
+            type: 'join',
+            date: contact.join_date,
+            title: 'Joined your network',
+            description: 'First contact established',
+            icon: 'user-add',
+            color: 'purple'
         });
     }
 
     // Sort by date (newest first)
-    activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+    activities.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+    });
 
     if (activities.length === 0) {
-        container.innerHTML = '<p class="text-sm text-gray-500 text-center py-8">No activity recorded</p>';
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <p class="text-sm text-gray-500 font-medium">No activity recorded</p>
+                <p class="text-sm text-gray-400 mt-1">Activity will appear here as the contact interacts with your drops</p>
+            </div>
+        `;
         return;
     }
 
@@ -1589,6 +1768,79 @@ function formatPhoneNumber(phone) {
     }
 
     return phone; // Return original if no formatting rules match
+}
+
+// Date Formatting Utility
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+
+    try {
+        const date = new Date(dateString);
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+        }
+
+        // Format as relative time for recent dates
+        const now = new Date();
+        const diffInMs = now - date;
+        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+        if (diffInDays === 0) {
+            // Today - show time
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        } else if (diffInDays === 1) {
+            return 'Yesterday';
+        } else if (diffInDays < 7) {
+            return `${diffInDays} days ago`;
+        } else if (diffInDays < 30) {
+            const weeks = Math.floor(diffInDays / 7);
+            return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+        } else if (diffInDays < 365) {
+            const months = Math.floor(diffInDays / 30);
+            return months === 1 ? '1 month ago' : `${months} months ago`;
+        } else {
+            // More than a year - show full date
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return 'Invalid Date';
+    }
+}
+
+// Date Formatting for Display (absolute dates)
+function formatDateAbsolute(dateString) {
+    if (!dateString) return 'N/A';
+
+    try {
+        const date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+        }
+
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    } catch (error) {
+        console.error('Error formatting absolute date:', error);
+        return 'Invalid Date';
+    }
 }
 
 // Notification System
