@@ -131,7 +131,7 @@
             display: grid;
             grid-template-columns: 1fr;
             grid-template-rows: auto auto auto; /* Default: mobile-first three-section layout */
-            gap: 24px;
+            gap: 12px; /* Reduced from 24px to 12px for tighter mobile spacing */
             width: 100%;
             max-width: 1400px;
             align-items: center;
@@ -1427,6 +1427,10 @@
                 padding: clamp(16px, 4vh, 40px) clamp(12px, 3vw, 20px) 24px; /* Reduced bottom padding from 60px to 24px */
             }
 
+            .drop-container {
+                gap: 8px; /* Even tighter spacing for mobile large */
+            }
+
             .drop-image-container {
                 margin: 0 auto !important;
                 max-width: 100% !important;
@@ -1496,7 +1500,7 @@
             }
 
             .drop-container {
-                gap: 16px;
+                gap: 6px; /* Very tight spacing for small mobile */
             }
 
             .drop-image-container {
