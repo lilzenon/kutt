@@ -27,6 +27,9 @@
 #contactsTable {
     border-collapse: separate;
     border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
+    max-width: 100%;
 }
 
 #contactsTable thead th {
@@ -40,22 +43,71 @@
 
 #contactsTable tbody tr {
     border-bottom: 1px solid #f3f4f6;
+    position: relative;
 }
 
 #contactsTable tbody tr:last-child {
     border-bottom: none;
 }
 
-/* Enhanced Hover Effects */
+/* Table container optimization */
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent horizontal scrolling on mobile */
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: hidden;
+    }
+
+    #contactsTable {
+        table-layout: auto;
+        min-width: 100%;
+    }
+}
+
+/* Enhanced Hover Effects for Clickable Rows */
 .contact-row:hover {
     background-color: #f9fafb;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+}
+
+.contact-row:hover td {
+    border-color: #e5e7eb;
 }
 
 /* Smooth Transitions */
 .contact-row {
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+/* Click feedback */
+.contact-row:active {
+    transform: translateY(0);
+    background-color: #f3f4f6;
+}
+
+/* Visual indicator that row is clickable */
+.contact-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.contact-row:hover::before {
+    background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
 }
 
 /* Bulk Selection Styles */
@@ -113,20 +165,32 @@
         padding: 1.25rem 1rem !important;
     }
 
-    /* Ensure minimum touch targets for iOS Safari */
-    .contact-row button {
-        min-width: 44px;
-        min-height: 44px;
-    }
-
-    /* Optimize contact column for mobile */
+    /* Optimize contact column for mobile - allow it to expand */
     .contact-row td:nth-child(2) {
-        min-width: 200px;
+        width: auto;
+        max-width: none;
     }
 
-    /* Optimize actions column for mobile */
-    .contact-row td:last-child {
+    /* Ensure table fits within viewport */
+    #contactsTable {
+        table-layout: auto;
+        width: 100%;
+    }
+
+    /* Optimize column distribution for mobile */
+    .contact-row td:nth-child(1) { /* Checkbox */
+        width: 48px;
+        flex-shrink: 0;
+    }
+
+    .contact-row td:nth-child(4) { /* Joined */
         width: 80px;
+        flex-shrink: 0;
+    }
+
+    .contact-row td:nth-child(6) { /* RSVPs */
+        width: 60px;
+        flex-shrink: 0;
     }
 }
 
@@ -136,6 +200,23 @@
     .contact-row td:nth-child(5) { /* Channel */
         display: none !important;
     }
+
+    /* Optimize column distribution for tablet */
+    .contact-row td:nth-child(1) { /* Checkbox */
+        width: 48px;
+    }
+
+    .contact-row td:nth-child(3) { /* Location */
+        width: 120px;
+    }
+
+    .contact-row td:nth-child(4) { /* Joined */
+        width: 100px;
+    }
+
+    .contact-row td:nth-child(6) { /* RSVPs */
+        width: 80px;
+    }
 }
 
 /* Desktop optimizations */
@@ -143,6 +224,27 @@
     /* Show all columns on desktop */
     .contact-row td {
         display: table-cell !important;
+    }
+
+    /* Optimize column distribution for desktop */
+    .contact-row td:nth-child(1) { /* Checkbox */
+        width: 48px;
+    }
+
+    .contact-row td:nth-child(3) { /* Location */
+        width: 140px;
+    }
+
+    .contact-row td:nth-child(4) { /* Joined */
+        width: 120px;
+    }
+
+    .contact-row td:nth-child(5) { /* Channel */
+        width: 120px;
+    }
+
+    .contact-row td:nth-child(6) { /* RSVPs */
+        width: 80px;
     }
 }
 
@@ -1233,7 +1335,7 @@ function renderContacts(data) {
                         <th class="relative px-4 py-3 w-12">
                             <input type="checkbox" id="selectAllContacts" onchange="toggleSelectAll()" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-0 w-auto">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-1">
                                 <span>Contact</span>
                                 <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -1241,7 +1343,7 @@ function renderContacts(data) {
                                 </svg>
                             </div>
                         </th>
-                        <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                        <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-1">
                                 <span>Location</span>
                                 <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -1249,7 +1351,7 @@ function renderContacts(data) {
                                 </svg>
                             </div>
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 sm:w-32">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-1">
                                 <span class="hidden sm:inline">Joined</span>
                                 <span class="sm:hidden">Join</span>
@@ -1258,7 +1360,7 @@ function renderContacts(data) {
                                 </svg>
                             </div>
                         </th>
-                        <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-28">
+                        <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-1">
                                 <span>Channel</span>
                                 <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -1266,7 +1368,7 @@ function renderContacts(data) {
                                 </svg>
                             </div>
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20 sm:w-24">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <div class="flex items-center space-x-1">
                                 <span class="hidden sm:inline">RSVPs</span>
                                 <span class="sm:hidden">RSVP</span>
@@ -1275,9 +1377,7 @@ function renderContacts(data) {
                                 </svg>
                             </div>
                         </th>
-                        <th class="relative px-4 py-3 w-16">
-                            <span class="sr-only">Actions</span>
-                        </th>
+
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -1296,15 +1396,17 @@ function renderContacts(data) {
         const formattedPhone = contact.phone ? formatPhoneNumber(contact.phone) : null;
 
         contactsHTML += `
-            <tr class="hover:bg-gray-50 transition-all duration-200 contact-row group" data-contact-id="${encodeURIComponent(contactId)}">
+            <tr class="hover:bg-gray-50 hover:shadow-sm transition-all duration-200 contact-row group cursor-pointer"
+                data-contact-id="${encodeURIComponent(contactId)}"
+                onclick="handleContactRowClick(event, '${encodeURIComponent(contactId)}')">
                 <!-- Checkbox Column -->
-                <td class="px-4 py-4 whitespace-nowrap">
+                <td class="px-4 py-4 whitespace-nowrap" onclick="event.stopPropagation()">
                     <input type="checkbox" class="contact-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded transition-colors"
                            value="${encodeURIComponent(contactId)}" onchange="updateBulkSelection()">
                 </td>
 
                 <!-- Contact Column -->
-                <td class="px-6 py-4 whitespace-nowrap cursor-pointer min-w-0" onclick="showContactDetails('${encodeURIComponent(contactId)}')">
+                <td class="px-6 py-4 whitespace-nowrap min-w-0">
                     <div class="flex items-center space-x-3">
                         <div class="flex-shrink-0">
                             <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center ring-2 ring-white shadow-sm">
@@ -1394,26 +1496,7 @@ function renderContacts(data) {
                     </div>
                 </td>
 
-                <!-- Actions Column -->
-                <td class="px-4 py-4 whitespace-nowrap text-right">
-                    <div class="flex items-center justify-end space-x-1">
-                        <button onclick="event.stopPropagation(); showContactDetails('${encodeURIComponent(contactId)}')"
-                                class="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1"
-                                title="View contact details">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
-                        <button onclick="event.stopPropagation(); addContactToGroup('${encodeURIComponent(contactId)}')"
-                                class="inline-flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-green-600 hover:bg-green-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
-                                title="Add to group">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                        </button>
-                    </div>
-                </td>
+
             </tr>
         `;
     });
@@ -2421,6 +2504,26 @@ async function bulkExport() {
         console.error('❌ Error exporting contacts:', error);
         showNotification(error.message || 'Failed to export contacts', 'error');
     }
+}
+
+// Enhanced Contact Row Click Handler
+function handleContactRowClick(event, contactId) {
+    // Prevent row click when clicking on checkboxes or other interactive elements
+    if (event.target.type === 'checkbox' || event.target.closest('input[type="checkbox"]')) {
+        return;
+    }
+
+    // Add visual feedback for the click
+    const row = event.currentTarget;
+    row.classList.add('bg-primary-50');
+
+    // Remove the feedback after a short delay
+    setTimeout(() => {
+        row.classList.remove('bg-primary-50');
+    }, 150);
+
+    // Open the contact details modal
+    showContactDetails(contactId);
 }
 
 // Mobile Menu Functions
