@@ -140,12 +140,12 @@
             padding: 0 16px;
         }
 
-        /* Desktop grid layout - Proper side-by-side layout with minimal spacing */
+        /* Desktop grid layout - Proper side-by-side layout with optimal spacing */
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr auto; /* Side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(16px, 2vw, 24px); /* Reasonable gap for proper layout */
+                gap: clamp(20px, 3vw, 32px); /* Optimal gap for proper layout and spacing */
                 align-items: flex-start;
                 padding: 0 32px;
             }
@@ -1315,7 +1315,7 @@
             }
         }
 
-        /* Medium Desktop: 1024px - 1439px */
+        /* Medium Desktop: 1024px - 1439px - Fixed spacing */
         @media only screen and (max-width: 1439px) and (min-width: 1024px) {
             .drop-page-container {
                 padding: clamp(32px, 8vh, 80px) clamp(80px, 10vw, 150px) 24px;
@@ -1328,17 +1328,17 @@
             }
 
             .drop-title {
-                font-size: 50px !important; /* Increased from 42px for better impact */
+                font-size: 50px !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 8px 0 4px 0 !important; /* Minimal spacing for tight connection */
+                margin: 0 0 0 0 !important; /* Zero margin for tight connection */
             }
 
             .drop-title-section {
                 max-width: 380px !important;
-                padding: 0 !important; /* Remove padding for tight connection */
-                margin-bottom: 0 !important; /* Remove margin for tight connection */
-                overflow: visible !important; /* Prevent overflow issues */
+                margin: 0 0 8px 0 !important; /* Minimal bottom margin */
+                padding: 0 !important;
+                overflow: visible !important;
             }
 
             .user-container {
@@ -1354,7 +1354,7 @@
             }
         }
 
-        /* Large Tablet: 900px - 1023px - Maintain desktop side-by-side layout */
+        /* Large Tablet: 900px - 1023px - Proper side-by-side layout */
         @media only screen and (max-width: 1023px) and (min-width: 900px) {
             .drop-page-container {
                 padding: clamp(24px, 6vh, 60px) clamp(32px, 6vw, 64px) 24px;
@@ -1363,8 +1363,9 @@
             .drop-container {
                 grid-template-columns: 1fr auto; /* Keep side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(8px, 1.5vw, 12px); /* Minimal gap for tight connection */
+                gap: clamp(16px, 2vw, 20px); /* Reasonable gap for proper layout */
                 align-items: flex-start;
+                padding: 0 16px;
             }
 
             .drop-image-container {
@@ -1378,10 +1379,11 @@
             .drop-title-section {
                 grid-column: 2;
                 grid-row: 1;
-                margin: 0 !important; /* Remove margin for tight connection */
-                padding: 0 !important; /* Remove padding for tight connection */
+                margin: 0 0 8px 0; /* Minimal bottom margin */
+                padding: 0;
                 max-width: 350px;
-                overflow: visible !important; /* Prevent overflow issues */
+                text-align: left;
+                overflow: visible !important;
             }
 
             .rsvp-container {
@@ -1390,13 +1392,14 @@
                 width: 350px !important;
                 max-width: 350px !important;
                 min-width: 350px !important;
+                align-items: flex-start;
             }
 
             .drop-title {
-                font-size: clamp(36px, 5vw, 44px) !important; /* Increased from 28px-36px to 36px-44px */
+                font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
-                margin: 4px 0 4px 0 !important; /* Minimal spacing for tight connection */
+                margin: 0 0 0 0 !important; /* Zero margin for tight connection */
             }
         }
 
