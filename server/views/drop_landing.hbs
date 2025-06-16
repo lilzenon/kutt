@@ -154,7 +154,7 @@
             }
         }
 
-        /* Desktop Layout: Side-by-side with ZERO row gap for tight connection */
+        /* Desktop Layout: Side-by-side with minimal row gap for tight connection */
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr 400px; /* Side-by-side: image left, content right */
@@ -162,7 +162,7 @@
                 grid-template-areas:
                     "image title"
                     "image form";
-                gap: 0px 40px; /* ZERO row gap for tight title-to-card connection */
+                gap: 8px 40px; /* Small row gap for controlled spacing */
                 align-items: start;
                 max-width: 1200px;
                 padding: 40px 24px;
@@ -284,7 +284,7 @@
             }
         }
 
-        /* Desktop RSVP container - AGGRESSIVE spacing elimination */
+        /* Desktop RSVP container - Targeted spacing adjustment */
         @media (min-width: 1024px) {
             .rsvp-container {
                 width: 400px !important;
@@ -292,8 +292,8 @@
                 min-width: 400px !important;
                 align-items: flex-start;
                 align-self: start;
-                padding: 0 !important; /* Force zero padding */
-                margin: -16px 0 0 0 !important; /* Negative top margin to pull closer to title */
+                padding-bottom: 0; /* Remove bottom padding only */
+                margin-top: 0; /* Reset to neutral positioning */
             }
         }
 
@@ -325,15 +325,13 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing - AGGRESSIVE spacing elimination */
+        /* Desktop title sizing - Targeted spacing reduction */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Larger on desktop */
-                margin: 0 0 -24px 0 !important; /* AGGRESSIVE negative margin to eliminate all spacing */
-                line-height: 0.9 !important; /* ULTRA-tight line-height */
-                padding: 0 !important; /* Force zero padding */
-                /* Override any conflicting rules from drop-shared.css */
-                margin-bottom: -24px !important;
+                margin: 0 0 -12px 0 !important; /* Moderate negative margin for tight connection */
+                line-height: 1.0 !important; /* Tight but readable line-height */
+                padding: 0 !important; /* Clean padding */
             }
         }
 
@@ -391,11 +389,11 @@
             height: 100%;
         }
 
-        /* Desktop card padding - ZERO top padding for maximum tight connection */
+        /* Desktop card padding - Restore internal spacing while reducing external gap */
         @media (min-width: 1024px) {
             .laylo-rsvp-card {
-                padding: 0px 32px 40px 32px !important; /* ZERO top padding */
-                margin-top: -8px !important; /* Negative top margin to overlap with title */
+                padding: 32px 32px 40px 32px !important; /* Restore proper internal padding */
+                margin-top: -16px !important; /* Use margin to pull card closer to title */
             }
         }
 
@@ -1302,7 +1300,7 @@
             }
         }
 
-        /* Medium Desktop: 1024px - 1439px - ZERO spacing for tight connection */
+        /* Medium Desktop: 1024px - 1439px - Refined spacing for tight connection */
         @media only screen and (max-width: 1439px) and (min-width: 1024px) {
             .drop-page-container {
                 padding: clamp(32px, 8vh, 80px) clamp(80px, 10vw, 150px) 24px;
@@ -1310,7 +1308,7 @@
 
             .drop-container {
                 grid-template-columns: 1fr 380px; /* Slightly smaller right column */
-                gap: 0px 32px; /* ZERO row gap for maximum tight connection */
+                gap: 6px 32px; /* Small row gap for controlled spacing */
             }
 
             .drop-title-section {
@@ -1331,14 +1329,14 @@
 
             .drop-title {
                 font-size: 50px !important;
-                line-height: 0.9 !important; /* ULTRA-tight line-height */
+                line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.4px !important;
-                margin: 0 0 -20px 0 !important; /* AGGRESSIVE negative margin */
+                margin: 0 0 -10px 0 !important; /* Moderate negative margin */
             }
 
             .laylo-rsvp-card {
-                padding: 0px 32px 40px 32px !important; /* ZERO top padding */
-                margin-top: -6px !important; /* Negative top margin */
+                padding: 28px 32px 40px 32px !important; /* Restore internal padding */
+                margin-top: -12px !important; /* Moderate negative top margin */
             }
         }
 
@@ -1354,7 +1352,7 @@
                 grid-template-areas:
                     "image title"
                     "image form";
-                gap: 0px 24px; /* ZERO row gap for maximum tight connection */
+                gap: 4px 24px; /* Small row gap for controlled spacing */
                 align-items: start;
                 padding: 0 16px;
             }
@@ -1382,14 +1380,14 @@
 
             .drop-title {
                 font-size: clamp(36px, 5vw, 44px) !important;
-                line-height: 0.9 !important; /* ULTRA-tight line-height */
+                line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.3px !important;
-                margin: 0 0 -16px 0 !important; /* AGGRESSIVE negative margin */
+                margin: 0 0 -8px 0 !important; /* Moderate negative margin */
             }
 
             .laylo-rsvp-card {
-                padding: 0px 32px 40px 32px !important; /* ZERO top padding */
-                margin-top: -4px !important; /* Negative top margin */
+                padding: 24px 32px 40px 32px !important; /* Restore internal padding */
+                margin-top: -8px !important; /* Moderate negative top margin */
             }
         }
 
