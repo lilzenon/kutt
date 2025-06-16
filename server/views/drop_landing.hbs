@@ -140,6 +140,16 @@
             padding: 0 16px;
         }
 
+        /* Desktop grid layout - Reduced gap for better visual connection */
+        @media (min-width: 1024px) {
+            .drop-container {
+                grid-template-columns: 1fr auto; /* Side-by-side layout */
+                grid-template-rows: auto auto;
+                gap: clamp(16px, 3vw, 24px); /* Reduced from larger gaps for better connection */
+                align-items: flex-start;
+            }
+        }
+
         /* Mobile Layout: Default three-section vertical layout */
         .drop-image-container {
             grid-column: 1;
@@ -308,6 +318,14 @@
             overflow: visible; /* Prevent any overflow issues */
         }
 
+        /* Desktop title section - Reduced spacing for better connection */
+        @media (min-width: 1024px) {
+            .drop-title-section {
+                padding: 4px 0 6px 0; /* Reduced padding for tighter connection */
+                margin-bottom: 4px; /* Reduced margin for better visual connection */
+            }
+        }
+
         /* Mobile title section - keep left alignment but add mobile padding */
         @media (max-width: 767px) {
             .drop-title-section {
@@ -343,11 +361,11 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing enhancement */
+        /* Desktop title sizing enhancement - Reduced gap to card */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Increased from 42px for better desktop impact */
-                margin: 20px 0 28px 0 !important; /* Enhanced desktop spacing */
+                margin: 12px 0 16px 0 !important; /* Reduced spacing to connect better with card */
             }
         }
 
@@ -1324,13 +1342,13 @@
                 font-size: 50px !important; /* Increased from 42px for better impact */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 16px 0 24px 0 !important; /* Enhanced spacing */
+                margin: 12px 0 16px 0 !important; /* Reduced spacing for better connection */
             }
 
             .drop-title-section {
                 max-width: 380px !important;
-                padding: 8px 0 12px 0 !important; /* Consistent section padding */
-                margin-bottom: 8px !important;
+                padding: 4px 0 6px 0 !important; /* Reduced section padding for tighter connection */
+                margin-bottom: 4px !important; /* Reduced margin for better visual connection */
                 overflow: visible !important; /* Prevent overflow issues */
             }
 
@@ -1356,7 +1374,7 @@
             .drop-container {
                 grid-template-columns: 1fr auto; /* Keep side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(24px, 4vw, 32px);
+                gap: clamp(16px, 3vw, 24px); /* Reduced gap for better visual connection */
                 align-items: flex-start;
             }
 
@@ -1371,8 +1389,8 @@
             .drop-title-section {
                 grid-column: 2;
                 grid-row: 1;
-                margin: 0 0 20px 0;
-                padding: 8px 0 12px 0; /* Enhanced section padding */
+                margin: 0 0 12px 0; /* Reduced from 20px for better connection */
+                padding: 4px 0 6px 0; /* Reduced section padding for tighter connection */
                 max-width: 350px;
                 overflow: visible !important; /* Prevent overflow issues */
             }
@@ -1389,19 +1407,19 @@
                 font-size: clamp(36px, 5vw, 44px) !important; /* Increased from 28px-36px to 36px-44px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
-                margin: 12px 0 20px 0 !important; /* Enhanced spacing */
+                margin: 8px 0 12px 0 !important; /* Reduced spacing for better connection */
             }
         }
 
-        /* Small Tablet: 768px - 899px - Switch to stacked layout */
+        /* Small Tablet: 768px - 899px - Reduced spacing for smoother transition */
         @media only screen and (max-width: 899px) and (min-width: 768px) {
             .drop-page-container {
-                padding: clamp(24px, 6vh, 60px) clamp(40px, 8vw, 80px) 24px;
+                padding: clamp(20px, 4vh, 40px) clamp(24px, 5vw, 48px) 20px; /* Reduced from excessive padding */
             }
 
             .drop-container {
                 grid-template-columns: 1fr;
-                gap: clamp(16px, 4vw, 32px);
+                gap: clamp(8px, 2vw, 16px); /* Reduced from 16px-32px to 8px-16px for smoother transition */
                 text-align: center;
             }
 
@@ -1413,8 +1431,8 @@
 
             .drop-title-section {
                 grid-column: 1;
-                margin: 0 auto 16px auto;
-                padding: 8px 16px 12px 16px; /* Enhanced section padding */
+                margin: 0 auto 8px auto; /* Reduced from 16px to 8px */
+                padding: 4px 16px 6px 16px; /* Reduced section padding */
                 overflow: visible !important; /* Prevent overflow issues */
             }
 
@@ -1424,14 +1442,14 @@
                 max-width: 90vw !important;
                 min-width: auto !important;
                 margin: 0 auto;
-                padding-bottom: 24px;
+                padding-bottom: 16px; /* Reduced from 24px */
             }
 
             .drop-title {
                 font-size: clamp(40px, 6vw, 48px) !important; /* Increased from 32px-40px to 40px-48px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 12px 0 20px 0 !important; /* Enhanced spacing */
+                margin: 8px 0 12px 0 !important; /* Reduced spacing for smoother transition */
             }
 
             .user-container {
