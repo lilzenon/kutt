@@ -5,8 +5,15 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-    <!-- Theme Color for Mobile Pull-to-Refresh Background -->
-    <meta name="theme-color" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}"/>
+    <!-- Theme Color for Mobile Browser UI (UIKit-inspired approach) -->
+    <meta name="theme-color" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f2f2f7{{/if}}"/>
+
+    <!-- iOS Safari Viewport Configuration (following UIKit principles) -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+
+    <!-- Color Scheme Support (UIKit dynamic colors approach) -->
+    <meta name="color-scheme" content="light dark"/>
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="{{drop.description}}">
@@ -177,9 +184,34 @@
                 overflow-x: hidden; /* Prevent horizontal scroll */
             }
 
-            /* Enable native browser pull-to-refresh only */
-            html, body {
+            /* UIKit-inspired pull-to-refresh implementation */
+            :root {
+                /* Define custom property for overscroll color (UIKit semantic color approach) */
+                --overscroll-background: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f2f2f7{{/if}};
+
+                /* Support for dark mode (UIKit dynamic colors) */
+                color-scheme: light dark;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    /* Adjust overscroll color for dark mode if needed */
+                    --overscroll-background: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#1c1c1e{{/if}};
+                }
+            }
+
+            html {
+                /* Enable native browser pull-to-refresh (UIRefreshControl equivalent) */
                 overscroll-behavior-y: auto;
+                /* Set background for Safari's overscroll detection */
+                background-color: var(--overscroll-background);
+            }
+
+            body {
+                /* Enable native browser pull-to-refresh */
+                overscroll-behavior-y: auto;
+                /* Ensure body doesn't interfere with overscroll background */
+                background-color: transparent;
             }
         }
 
@@ -2914,6 +2946,86 @@
                 }
             });
         });
+    </script>
+
+    <!-- UIKit-Inspired Pull-to-Refresh Enhancement -->
+    <script>
+        // UIKit-inspired approach to pull-to-refresh color customization
+        (function() {
+            'use strict';
+
+            // Only enhance on iOS Safari (following UIKit patterns)
+            const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+                               /Safari/.test(navigator.userAgent) &&
+                               !/Chrome|CriOS|FxiOS/.test(navigator.userAgent);
+
+            if (!isIOSSafari) return;
+
+            console.log('🍎 Applying UIKit-inspired pull-to-refresh enhancements');
+
+            const customColor = '{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f2f2f7{{/if}}';
+            const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+            // UIKit-inspired color validation (semantic color approach)
+            function validateColor(color) {
+                // UIKit system colors that work well with Safari
+                const uikitCompatibleColors = {
+                    '#ffffff': '#f2f2f7', // systemGroupedBackground
+                    '#000000': '#1c1c1e', // systemBackground (dark)
+                    '#ff0000': '#ff3b30', // systemRed
+                    'white': '#f2f2f7',
+                    'black': '#1c1c1e',
+                    'red': '#ff3b30'
+                };
+
+                return uikitCompatibleColors[color.toLowerCase()] || color;
+            }
+
+            // Apply UIKit-inspired color enhancement
+            if (themeColorMeta) {
+                const validatedColor = validateColor(customColor);
+
+                if (validatedColor !== customColor) {
+                    console.log(`🎨 UIKit color enhancement: ${customColor} → ${validatedColor}`);
+                    themeColorMeta.setAttribute('content', validatedColor);
+                }
+
+                // Update CSS custom property for consistency (UIKit semantic approach)
+                document.documentElement.style.setProperty('--overscroll-background', validatedColor);
+
+                // Ensure HTML background matches for Safari's detection
+                document.documentElement.style.backgroundColor = validatedColor;
+            }
+
+            // UIKit-inspired accessibility support
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                console.log('🔧 Reduced motion preference detected - optimizing for accessibility');
+                // Respect user's motion preferences (UIKit accessibility pattern)
+                document.body.style.transition = 'none';
+            }
+
+            // UIKit-inspired dark mode support
+            const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            function handleDarkModeChange(e) {
+                if (e.matches) {
+                    // Dark mode - use UIKit dark system colors
+                    const darkColor = customColor === '#ffffff' || customColor === '#f2f2f7' ? '#1c1c1e' : customColor;
+                    document.documentElement.style.setProperty('--overscroll-background', darkColor);
+                    if (themeColorMeta) themeColorMeta.setAttribute('content', darkColor);
+                } else {
+                    // Light mode - use original or UIKit light system colors
+                    const lightColor = validateColor(customColor);
+                    document.documentElement.style.setProperty('--overscroll-background', lightColor);
+                    if (themeColorMeta) themeColorMeta.setAttribute('content', lightColor);
+                }
+            }
+
+            darkModeQuery.addListener(handleDarkModeChange);
+            handleDarkModeChange(darkModeQuery); // Apply initial state
+
+            console.log('✅ UIKit-inspired pull-to-refresh enhancement complete');
+
+        })();
     </script>
 
 

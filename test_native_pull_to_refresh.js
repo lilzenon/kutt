@@ -1,8 +1,8 @@
 // Simple test for native pull-to-refresh implementation
 // Run this in browser console on mobile device
 
-console.log('🔄 NATIVE PULL-TO-REFRESH TEST');
-console.log('='.repeat(40));
+console.log('🍎 UIKIT-INSPIRED PULL-TO-REFRESH TEST');
+console.log('='.repeat(50));
 
 // Device detection
 const userAgent = navigator.userAgent;
