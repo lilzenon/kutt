@@ -55,24 +55,24 @@ router.get(
 );
 
 /**
- * GET /api/contact-book/contacts/:contactEmail
- * Get detailed contact profile
+ * GET /api/contact-book/contacts/:contactIdentifier
+ * Get detailed contact profile (supports both phone and email)
  */
 router.get(
-    "/contacts/:contactEmail",
+    "/contacts/:contactIdentifier",
     asyncHandler(auth.jwt),
     asyncHandler(async(req, res) => {
         try {
-            const contactEmail = decodeURIComponent(req.params.contactEmail);
+            const contactIdentifier = decodeURIComponent(req.params.contactIdentifier);
 
-            if (!contactEmail || !contactEmail.includes('@')) {
+            if (!contactIdentifier || contactIdentifier.trim().length === 0) {
                 return res.status(400).json({
                     success: false,
-                    error: "Invalid contact email"
+                    error: "Contact identifier is required"
                 });
             }
 
-            const result = await contactBookService.getContactProfile(req.user.id, contactEmail);
+            const result = await contactBookService.getContactProfile(req.user.id, contactIdentifier);
 
             res.json({
                 success: true,
@@ -80,7 +80,8 @@ router.get(
             });
         } catch (error) {
             console.error('❌ Contact profile API error:', error);
-            const statusCode = error.message.includes('not found') ? 404 : 500;
+            const statusCode = error.message.includes('not found') ? 404 :
+                error.message.includes('Invalid') ? 400 : 500;
             res.status(statusCode).json({
                 success: false,
                 error: error.message

@@ -1,5 +1,6 @@
 const knex = require("../../knex");
 const cache = require("../analytics/cache.service");
+const phoneUtils = require("./phone-utils.service");
 const env = require("../../env");
 
 class ContactBookService {
@@ -27,59 +28,114 @@ class ContactBookService {
         const cacheKey = `contacts:${userId}:${Buffer.from(JSON.stringify(options)).toString('base64')}`;
 
         return await cache.getOrCompute(cacheKey, async() => {
-            console.log(`📇 Loading contacts for user ${userId} with options:`, options);
+            console.log(`📇 Loading contacts for user ${userId} with phone-first approach:`, options);
 
-            // Base query to get all contacts who have signed up for this user's drops
-            // Note: drop_signups doesn't have user_id, so we use email as the contact identifier
-            let query = knex("drop_signups as ds")
+            // Phone-first contact identification
+            // Step 1: Get all unique contacts using phone as primary, email as fallback
+            const contactsSubquery = knex("drop_signups as ds")
                 .select([
-                    knex.raw("ds.email as id"), // Use email as unique identifier
-                    "ds.email",
-                    knex.raw("COALESCE(ds.name, ds.email) as display_name"),
-                    "ds.phone",
+                    knex.raw(`
+                        CASE
+                            WHEN ds.phone IS NOT NULL AND ds.phone != ''
+                            THEN ds.phone
+                            ELSE ds.email
+                        END as contact_id
+                    `),
+                    knex.raw(`
+                        CASE
+                            WHEN ds.phone IS NOT NULL AND ds.phone != ''
+                            THEN 'phone'
+                            ELSE 'email'
+                        END as contact_type
+                    `),
+                    knex.raw("MAX(ds.phone) as phone"),
+                    knex.raw("MAX(ds.email) as email"),
+                    knex.raw("MAX(ds.name) as name"),
                     knex.raw("MIN(ds.created_at) as join_date"),
                     knex.raw("MAX(ds.created_at) as last_activity_at"),
                     knex.raw("COUNT(ds.id) as total_drop_signups"),
-                    knex.raw("0 as total_link_clicks"), // Placeholder for now
-                    knex.raw("CASE WHEN COUNT(ds.id) > 1 THEN 75 ELSE 50 END as engagement_score") // Basic scoring
+                    knex.raw("0 as total_link_clicks"),
+                    knex.raw("CASE WHEN COUNT(ds.id) > 1 THEN 75 ELSE 50 END as engagement_score")
                 ])
                 .join("drops as d", "ds.drop_id", "d.id")
                 .where("d.user_id", userId)
-                .whereNotNull("ds.email") // Only include contacts with email
-                .groupBy("ds.email", "ds.phone");
+                .where(function() {
+                    this.where(function() {
+                        this.whereNotNull("ds.phone").andWhere("ds.phone", "!=", "");
+                    }).orWhere(function() {
+                        this.whereNotNull("ds.email").andWhere("ds.email", "!=", "");
+                    });
+                })
+                .groupBy(knex.raw(`
+                    CASE
+                        WHEN ds.phone IS NOT NULL AND ds.phone != ''
+                        THEN ds.phone
+                        ELSE ds.email
+                    END
+                `));
+
+            let query = knex.from(contactsSubquery.as('contacts'))
+                .select([
+                    "contact_id as id",
+                    "contact_type",
+                    "phone",
+                    "email",
+                    knex.raw("COALESCE(name, CASE WHEN contact_type = 'phone' THEN phone ELSE email END) as display_name"),
+                    "join_date",
+                    "last_activity_at",
+                    "total_drop_signups",
+                    "total_link_clicks",
+                    "engagement_score"
+                ]);
 
             // Apply search filters
             if (search && search.trim()) {
                 const trimmedSearch = search.trim();
 
-                if (this.isPostgreSQL) {
-                    // Use PostgreSQL full-text search
-                    query = query.whereRaw(`
-                        to_tsvector('english',
-                            coalesce(ds.email, '') || ' ' ||
-                            coalesce(ds.name, '') || ' ' ||
-                            coalesce(ds.phone, '')
-                        ) @@ plainto_tsquery('english', ?)
-                    `, [trimmedSearch]);
-                } else {
-                    // Fallback to LIKE queries for MySQL/SQLite
-                    query = query.where(function() {
-                        this.where("ds.email", "like", `%${trimmedSearch}%`)
-                            .orWhere("ds.name", "like", `%${trimmedSearch}%`)
-                            .orWhere("ds.phone", "like", `%${trimmedSearch}%`);
-                    });
-                }
+                // Check if search looks like a phone number
+                const normalizedPhone = phoneUtils.normalizePhone(trimmedSearch);
+                const isPhoneSearch = normalizedPhone && phoneUtils.isValidPhone(normalizedPhone);
+
+                query = query.where(function() {
+                    // Search in display name
+                    this.where("display_name", "like", `%${trimmedSearch}%`);
+
+                    // Search in email
+                    if (trimmedSearch.includes('@') || !isPhoneSearch) {
+                        this.orWhere("email", "like", `%${trimmedSearch}%`);
+                    }
+
+                    // Search in phone (both original and normalized)
+                    if (isPhoneSearch) {
+                        this.orWhere("phone", "like", `%${trimmedSearch}%`)
+                            .orWhere("phone", "like", `%${normalizedPhone}%`);
+                    } else {
+                        this.orWhere("phone", "like", `%${trimmedSearch}%`);
+                    }
+                });
             }
 
             // Apply group filter
             if (groupId) {
-                query = query.join("contact_group_memberships as cgm", "ds.email", "cgm.contact_user_id")
-                    .where("cgm.group_id", groupId);
+                query = query.whereExists(function() {
+                    this.select('*')
+                        .from('contact_group_memberships as cgm')
+                        .where('cgm.group_id', groupId)
+                        .where(function() {
+                            this.where(function() {
+                                this.where('contacts.contact_type', 'phone')
+                                    .andWhere('cgm.contact_phone', knex.ref('contacts.contact_id'));
+                            }).orWhere(function() {
+                                this.where('contacts.contact_type', 'email')
+                                    .andWhere('cgm.contact_email', knex.ref('contacts.contact_id'));
+                            });
+                        });
+                });
             }
 
             // Apply date range filter
             if (dateRange && dateRange.start && dateRange.end) {
-                query = query.whereBetween("ds.created_at", [dateRange.start, dateRange.end]);
+                query = query.whereBetween("join_date", [dateRange.start, dateRange.end]);
             }
 
             // Apply sorting
@@ -91,7 +147,7 @@ class ContactBookService {
                     query = query.orderBy("display_name", "asc");
                     break;
                 case 'email':
-                    query = query.orderBy("ds.email", "asc");
+                    query = query.orderBy("email", "asc");
                     break;
                 case 'join_date':
                     query = query.orderBy("join_date", "desc");
@@ -104,7 +160,7 @@ class ContactBookService {
             }
 
             // Get total count for pagination
-            const countQuery = query.clone().clearSelect().clearOrder().countDistinct("ds.email as total");
+            const countQuery = query.clone().clearSelect().clearOrder().count("* as total");
             const [{ total }] = await countQuery;
 
             // Apply pagination
@@ -136,23 +192,36 @@ class ContactBookService {
      * Enhance contacts with additional statistics
      */
     async enhanceContactsWithStats(contacts, userId) {
-        const contactEmails = contacts.map(c => c.email);
+        if (!contacts || contacts.length === 0) return;
 
-        // Get group memberships
-        const groupMemberships = await knex("contact_group_memberships as cgm")
-            .select("cgm.contact_user_id", "cg.name as group_name", "cg.color as group_color")
+        // Separate contacts by type for group membership lookup
+        const phoneContacts = contacts.filter(c => c.contact_type === 'phone').map(c => c.id);
+        const emailContacts = contacts.filter(c => c.contact_type === 'email').map(c => c.id);
+
+        // Get group memberships for phone contacts
+        const phoneGroupMemberships = phoneContacts.length > 0 ? await knex("contact_group_memberships as cgm")
+            .select("cgm.contact_phone as contact_id", "cg.name as group_name", "cg.color as group_color")
             .join("contact_groups as cg", "cgm.group_id", "cg.id")
             .where("cg.user_id", userId)
-            .whereIn("cgm.contact_user_id", contactEmails);
+            .whereIn("cgm.contact_phone", phoneContacts) : [];
 
-        // Create lookup maps
+        // Get group memberships for email contacts
+        const emailGroupMemberships = emailContacts.length > 0 ? await knex("contact_group_memberships as cgm")
+            .select("cgm.contact_email as contact_id", "cg.name as group_name", "cg.color as group_color")
+            .join("contact_groups as cg", "cgm.group_id", "cg.id")
+            .where("cg.user_id", userId)
+            .whereIn("cgm.contact_email", emailContacts) : [];
+
+        // Combine group memberships
+        const allGroupMemberships = [...phoneGroupMemberships, ...emailGroupMemberships];
+
+        // Create lookup map
         const groupsMap = new Map();
-
-        groupMemberships.forEach(gm => {
-            if (!groupsMap.has(gm.contact_user_id)) {
-                groupsMap.set(gm.contact_user_id, []);
+        allGroupMemberships.forEach(gm => {
+            if (!groupsMap.has(gm.contact_id)) {
+                groupsMap.set(gm.contact_id, []);
             }
-            groupsMap.get(gm.contact_user_id).push({
+            groupsMap.get(gm.contact_id).push({
                 name: gm.group_name,
                 color: gm.group_color
             });
@@ -160,10 +229,19 @@ class ContactBookService {
 
         // Enhance each contact
         contacts.forEach(contact => {
+            // Normalize phone if it's a phone contact
+            if (contact.contact_type === 'phone' && contact.phone) {
+                const phoneId = phoneUtils.generateContactId(contact.phone, contact.email);
+                if (phoneId) {
+                    contact.normalized_phone = phoneId.value;
+                    contact.formatted_phone = phoneId.display;
+                }
+            }
+
             contact.stats = {
                 totalSignups: contact.total_drop_signups || 0,
                 lastSignup: contact.last_activity_at || null,
-                groups: groupsMap.get(contact.email) || []
+                groups: groupsMap.get(contact.id) || []
             };
 
             // Ensure display_name is set
@@ -176,34 +254,52 @@ class ContactBookService {
     /**
      * Get detailed contact profile
      */
-    async getContactProfile(userId, contactEmail) {
-        const cacheKey = `contact:profile:${userId}:${Buffer.from(contactEmail).toString('base64')}`;
+    async getContactProfile(userId, contactIdentifier) {
+        const cacheKey = `contact:profile:${userId}:${Buffer.from(contactIdentifier).toString('base64')}`;
 
         return await cache.getOrCompute(cacheKey, async() => {
-            console.log(`📇 Loading contact profile for user ${userId}, contact ${contactEmail}`);
+            console.log(`📇 Loading contact profile for user ${userId}, contact ${contactIdentifier}`);
 
-            // Get basic contact info from drop_signups
-            const contact = await knex("drop_signups as ds")
+            // Determine if identifier is phone or email
+            const normalizedPhone = phoneUtils.normalizePhone(contactIdentifier);
+            const isPhone = normalizedPhone && phoneUtils.isValidPhone(normalizedPhone);
+            const isEmail = !isPhone && phoneUtils.isValidEmail(contactIdentifier);
+
+            if (!isPhone && !isEmail) {
+                throw new Error("Invalid contact identifier");
+            }
+
+            // Build query based on identifier type
+            let contactQuery = knex("drop_signups as ds")
                 .select([
-                    "ds.email",
-                    knex.raw("COALESCE(ds.name, ds.email) as display_name"),
-                    "ds.phone",
+                    knex.raw("MAX(ds.email) as email"),
+                    knex.raw("MAX(ds.phone) as phone"),
+                    knex.raw("MAX(ds.name) as name"),
                     knex.raw("MIN(ds.created_at) as join_date"),
                     knex.raw("MAX(ds.created_at) as last_activity_at"),
                     knex.raw("COUNT(ds.id) as total_drop_signups")
                 ])
                 .join("drops as d", "ds.drop_id", "d.id")
-                .where("d.user_id", userId)
-                .where("ds.email", contactEmail)
-                .groupBy("ds.email", "ds.phone")
-                .first();
+                .where("d.user_id", userId);
+
+            if (isPhone) {
+                contactQuery = contactQuery.where("ds.phone", normalizedPhone);
+            } else {
+                contactQuery = contactQuery.where("ds.email", contactIdentifier);
+            }
+
+            const contact = await contactQuery.first();
 
             if (!contact) {
                 throw new Error("Contact not found in your network");
             }
 
+            // Set contact type and identifier
+            contact.contact_type = isPhone ? 'phone' : 'email';
+            contact.contact_id = isPhone ? normalizedPhone : contactIdentifier;
+
             // Get drop signup history
-            const dropHistory = await knex("drop_signups as ds")
+            let dropHistoryQuery = knex("drop_signups as ds")
                 .select([
                     "d.title as drop_title",
                     "d.slug as drop_slug",
@@ -214,12 +310,18 @@ class ContactBookService {
                     "ds.phone as signup_phone"
                 ])
                 .join("drops as d", "ds.drop_id", "d.id")
-                .where("d.user_id", userId)
-                .where("ds.email", contactEmail)
-                .orderBy("ds.created_at", "desc");
+                .where("d.user_id", userId);
+
+            if (isPhone) {
+                dropHistoryQuery = dropHistoryQuery.where("ds.phone", normalizedPhone);
+            } else {
+                dropHistoryQuery = dropHistoryQuery.where("ds.email", contactIdentifier);
+            }
+
+            const dropHistory = await dropHistoryQuery.orderBy("ds.created_at", "desc");
 
             // Get group memberships
-            const groups = await knex("contact_group_memberships as cgm")
+            let groupsQuery = knex("contact_group_memberships as cgm")
                 .select([
                     "cg.id",
                     "cg.name",
@@ -227,25 +329,41 @@ class ContactBookService {
                     "cgm.created_at as joined_group_at"
                 ])
                 .join("contact_groups as cg", "cgm.group_id", "cg.id")
-                .where("cg.user_id", userId)
-                .where("cgm.contact_user_id", contactEmail)
-                .orderBy("cgm.created_at", "desc");
+                .where("cg.user_id", userId);
+
+            if (isPhone) {
+                groupsQuery = groupsQuery.where("cgm.contact_phone", normalizedPhone);
+            } else {
+                groupsQuery = groupsQuery.where("cgm.contact_email", contactIdentifier);
+            }
+
+            const groups = await groupsQuery.orderBy("cgm.created_at", "desc");
 
             // Get notes
-            const notes = await knex("contact_notes")
+            let notesQuery = knex("contact_notes")
                 .select("*")
-                .where("contact_user_id", contactEmail)
-                .where("created_by_user_id", userId)
-                .orderBy("created_at", "desc")
-                .limit(10);
+                .where("created_by_user_id", userId);
+
+            if (isPhone) {
+                notesQuery = notesQuery.where("contact_phone", normalizedPhone);
+            } else {
+                notesQuery = notesQuery.where("contact_email", contactIdentifier);
+            }
+
+            const notes = await notesQuery.orderBy("created_at", "desc").limit(10);
 
             // Get recent interactions
-            const interactions = await knex("contact_interactions")
+            let interactionsQuery = knex("contact_interactions")
                 .select("*")
-                .where("contact_user_id", contactEmail)
-                .where("initiated_by_user_id", userId)
-                .orderBy("interaction_date", "desc")
-                .limit(20);
+                .where("initiated_by_user_id", userId);
+
+            if (isPhone) {
+                interactionsQuery = interactionsQuery.where("contact_phone", normalizedPhone);
+            } else {
+                interactionsQuery = interactionsQuery.where("contact_email", contactIdentifier);
+            }
+
+            const interactions = await interactionsQuery.orderBy("interaction_date", "desc").limit(20);
 
             // Set display name
             if (!contact.display_name) {
@@ -274,16 +392,69 @@ class ContactBookService {
      * Get display name for a contact
      */
     getDisplayName(contact) {
-        // For drop_signups based contacts, we have a 'name' field instead of first_name/last_name
+        // Check for existing display_name first
+        if (contact.display_name && contact.display_name.trim()) {
+            return contact.display_name.trim();
+        }
+
+        // Check for name field
         if (contact.name && contact.name.trim()) {
             return contact.name.trim();
-        } else if (contact.display_name && contact.display_name.trim()) {
-            return contact.display_name.trim();
-        } else if (contact.email) {
-            return contact.email.split('@')[0];
-        } else {
-            return 'Anonymous Contact';
         }
+
+        // Use phone number if it's a phone contact
+        if (contact.contact_type === 'phone' && contact.phone) {
+            return phoneUtils.formatPhone(contact.phone);
+        }
+
+        // Use email if available
+        if (contact.email) {
+            return contact.email.split('@')[0];
+        }
+
+        // Use contact ID as fallback
+        if (contact.id || contact.contact_id) {
+            const id = contact.id || contact.contact_id;
+            if (id.includes('@')) {
+                return id.split('@')[0];
+            }
+            return phoneUtils.formatPhone(id) || id;
+        }
+
+        return 'Anonymous Contact';
+    }
+
+    /**
+     * Generate contact identifier using phone-first approach
+     */
+    generateContactId(phone, email) {
+        return phoneUtils.generateContactId(phone, email);
+    }
+
+    /**
+     * Normalize contact identifier
+     */
+    normalizeContactId(identifier) {
+        // Try to normalize as phone first
+        const normalizedPhone = phoneUtils.normalizePhone(identifier);
+        if (normalizedPhone && phoneUtils.isValidPhone(normalizedPhone)) {
+            return {
+                type: 'phone',
+                value: normalizedPhone,
+                display: phoneUtils.formatPhone(normalizedPhone)
+            };
+        }
+
+        // Try as email
+        if (phoneUtils.isValidEmail(identifier)) {
+            return {
+                type: 'email',
+                value: identifier.toLowerCase().trim(),
+                display: identifier.toLowerCase().trim()
+            };
+        }
+
+        return null;
     }
 
     /**
