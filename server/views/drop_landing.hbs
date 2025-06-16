@@ -599,14 +599,14 @@
                 0 12px 24px rgba(0, 0, 0, 0.2),
                 0 6px 12px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth like Laylo */
             border: none; /* Clean design without borders like Laylo */
-            padding: 40px 32px; /* Enhanced padding following Laylo pattern */
+            padding: 24px 32px; /* Reduced top/bottom padding for tighter spacing */
             height: 100%;
         }
 
-        /* Desktop card padding - Proper internal spacing */
+        /* Desktop card padding - Reduced top/bottom spacing */
         @media (min-width: 1024px) {
             .laylo-rsvp-card {
-                padding: 32px 32px 40px 32px !important; /* Restore proper internal padding */
+                padding: 20px 32px 24px 32px !important; /* Reduced top/bottom padding for tighter spacing */
                 margin-top: 0 !important; /* Remove negative margin for natural spacing */
             }
         }
@@ -623,7 +623,7 @@
             {{else}}
             color: #ffffff; /* Pure white like Laylo */
             {{/if}}
-            margin: 0 0 20px 0; /* Enhanced spacing following Laylo pattern */
+            margin: 0 0 12px 0; /* Reduced bottom margin for tighter spacing */
             text-align: center;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
@@ -1571,7 +1571,7 @@
             }
 
             .laylo-rsvp-card {
-                padding: 28px 32px 40px 32px !important; /* Restore internal padding */
+                padding: 18px 32px 24px 32px !important; /* Reduced top/bottom padding for tighter spacing */
             }
         }
 
@@ -1630,7 +1630,7 @@
             }
 
             .laylo-rsvp-card {
-                padding: 24px 32px 40px 32px !important; /* Restore internal padding */
+                padding: 16px 32px 24px 32px !important; /* Reduced top/bottom padding for tighter spacing */
             }
         }
 
@@ -1826,7 +1826,7 @@
             }
 
             .laylo-rsvp-card {
-                padding: 32px 24px; /* Enhanced mobile padding following Laylo pattern */
+                padding: 20px 24px; /* Reduced top/bottom padding for tighter mobile spacing */
                 border-radius: 16px; /* Slightly smaller radius on mobile */
             }
 
