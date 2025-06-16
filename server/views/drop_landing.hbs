@@ -272,6 +272,26 @@
         @media (max-width: 767px) {
             .drop-title-section {
                 padding: 8px 16px 12px 16px;
+                text-align: left; /* Left-aligned to match RSVP card */
+            }
+
+            .drop-title {
+                font-size: clamp(36px, 9vw, 58px) !important; /* Increased from 8vw max 52px */
+                font-weight: 800 !important; /* Bolder weight for mobile */
+                margin: 0 0 8px 0 !important; /* Reduced bottom margin from 16px to 8px */
+                text-align: left !important; /* Left-aligned to match form */
+                line-height: 1.05 !important; /* Slightly tighter for larger text */
+                letter-spacing: -0.02em !important; /* Enhanced letter spacing */
+            }
+
+            .drop-subtitle {
+                font-size: clamp(22px, 5vw, 28px) !important; /* Increased from 4vw max 24px */
+                font-weight: 500 !important; /* Medium weight for hierarchy */
+                text-align: left !important; /* Left-aligned to match title and form */
+                margin: 4px 0 4px 0 !important; /* Reduced top margin from 8px to 4px */
+                line-height: 1.25 !important; /* Optimized for larger text */
+                letter-spacing: -0.01em !important; /* Subtle letter spacing */
+                opacity: 0.9 !important; /* Slightly more prominent */
             }
         }
 
@@ -310,6 +330,17 @@
             align-items: center; /* Center on mobile/tablet */
             background: transparent;
             margin: 2px auto 0 auto; /* Reduced spacing for optimal balance */
+        }
+
+        /* Mobile RSVP container alignment */
+        @media (max-width: 767px) {
+            .rsvp-container {
+                align-items: flex-start !important; /* Left-align to match title/subtitle */
+            }
+
+            .rsvp-card-container {
+                margin: 0 !important; /* Remove auto centering for left alignment */
+            }
             box-sizing: border-box;
         }
 
@@ -387,12 +418,7 @@
             letter-spacing: -0.01em;
         }
 
-        /* Mobile subtitle spacing */
-        @media (max-width: 767px) {
-            .drop-subtitle {
-                margin: 8px 0 4px 0; /* Reduced spacing for optimal balance */
-            }
-        }
+        /* Mobile subtitle spacing - handled in mobile title section above */
 
         /* Tablet subtitle spacing */
         @media (min-width: 768px) and (max-width: 1023px) {
