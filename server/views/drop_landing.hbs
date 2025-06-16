@@ -322,6 +322,13 @@
                 overflow-wrap: break-word !important;
                 hyphens: auto !important;
             }
+
+            /* Force left alignment for subtitle on mobile - override base styles */
+            .drop-title-section .drop-subtitle {
+                text-align: left !important;
+                display: block !important;
+                width: 100% !important;
+            }
         }
 
         /* Tablet title section */
@@ -446,11 +453,18 @@
             text-wrap: wrap;
             white-space-collapse: preserve-breaks;
 
-            /* Mobile/Tablet: Center-aligned */
+            /* Default: Center-aligned for tablet/desktop */
             text-align: center;
             font-size: clamp(18px, 4vw, 24px); /* Responsive mobile sizing */
             line-height: 1.3;
             letter-spacing: -0.01em;
+        }
+
+        /* Mobile subtitle - force left alignment */
+        @media (max-width: 767px) {
+            .drop-subtitle {
+                text-align: left !important;
+            }
         }
 
         /* Mobile subtitle spacing - handled in mobile title section above */
