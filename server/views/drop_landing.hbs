@@ -140,14 +140,17 @@
             padding: 0 16px;
         }
 
-        /* Desktop grid layout - Proper spacing for title-to-card connection */
+        /* Desktop grid layout - Fixed side-by-side layout with proper grid areas */
         @media (min-width: 1024px) {
             .drop-container {
                 display: grid;
-                grid-template-columns: 1fr 400px; /* Side-by-side layout with fixed right column */
-                grid-template-rows: 1fr;
-                gap: 40px; /* Proper gap between image and content */
-                align-items: center;
+                grid-template-columns: 1fr 400px; /* Side-by-side layout: image left, content right */
+                grid-template-rows: auto auto; /* Two rows: title, then form */
+                grid-template-areas:
+                    "image title"
+                    "image form";
+                gap: 40px 40px; /* 40px gap between columns, 24px gap between rows */
+                align-items: start; /* Align items to top */
                 max-width: 1200px;
                 margin: 0 auto;
                 padding: 40px 24px;
@@ -156,70 +159,89 @@
             }
 
             .drop-image-container {
-                grid-column: 1;
-                grid-row: 1;
+                grid-area: image;
                 margin-bottom: 0;
                 align-self: center;
                 max-width: min(690px, 58.3333vw);
             }
 
-            /* Right column container for title + form */
+            /* Title section in top-right */
             .drop-title-section {
-                grid-column: 2;
-                grid-row: 1;
-                margin: 0 0 24px 0 !important; /* 24px bottom margin for proper spacing */
+                grid-area: title;
+                margin: 0 !important;
                 padding: 0 !important;
                 text-align: left;
                 max-width: 400px;
-                align-self: start; /* Align to top of grid cell */
+                align-self: start;
             }
 
+            /* Form section in bottom-right */
             .rsvp-container {
-                grid-column: 2;
-                grid-row: 1;
-                margin-top: 104px; /* Space below title (80px title height + 24px margin) */
+                grid-area: form;
+                margin: 0 !important;
                 width: 400px !important;
                 max-width: 400px !important;
                 min-width: 400px !important;
-                align-self: start; /* Align to top of grid cell */
+                align-items: flex-start;
+                align-self: start;
             }
         }
 
         /* Mobile Layout: Default three-section vertical layout */
+        .drop-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
+            grid-template-areas:
+                "image"
+                "title"
+                "form";
+            gap: 8px;
+            width: 100%;
+            max-width: 1400px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
         .drop-image-container {
-            grid-column: 1;
-            grid-row: 1;
+            grid-area: image;
             max-width: 100%;
             margin-bottom: 16px;
         }
 
         .drop-title-section {
-            grid-column: 1;
-            grid-row: 2;
+            grid-area: title;
             max-width: 100%;
-            margin: 0 auto 4px auto; /* Minimal spacing for compact layout */
+            margin: 0 auto 4px auto;
             padding: 0 8px;
+            text-align: center; /* Center on mobile */
         }
 
         .rsvp-container {
-            grid-column: 1;
-            grid-row: 3;
+            grid-area: form;
             max-width: 100%;
         }
 
-        /* Tablet Layout: Stacked layout with minimal spacing */
-        @media (min-width: 768px) and (max-width: 899px) {
+        /* Tablet Layout: Stacked layout with better spacing */
+        @media (min-width: 768px) and (max-width: 1023px) {
             .drop-container {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto auto;
-                gap: 12px; /* Minimal gap for tight connection */
+                grid-template-areas:
+                    "image"
+                    "title"
+                    "form";
+                gap: 16px;
                 padding: 0 24px;
                 max-width: 600px;
             }
 
             .drop-title-section {
-                margin: 0 auto 0 auto; /* Zero bottom margin for tight connection */
-                padding: 0 16px 0 16px; /* Remove bottom padding */
+                margin: 0 auto;
+                padding: 0 16px;
+                text-align: center; /* Center on tablet */
             }
 
             .rsvp-container {
@@ -308,54 +330,56 @@
                 max-width: 400px;
                 min-width: 400px;
                 align-items: flex-start; /* Left-align on desktop */
+                padding-bottom: 0; /* Grid handles spacing */
             }
         }
 
-        /* Title Section - Left-aligned to match card consistently */
+        /* Title Section - Responsive alignment */
         .drop-title-section {
             width: 100%;
-            text-align: left; /* Left-align consistently to match card */
-            padding: 8px 0 12px 0; /* Clean padding without horizontal constraints */
+            padding: 8px 0 12px 0;
             box-sizing: border-box;
-            margin-bottom: 8px; /* Additional spacing below title section */
-            overflow: visible; /* Prevent any overflow issues */
+            margin-bottom: 8px;
+            overflow: visible;
+            /* Default: center-aligned on mobile/small tablet */
+            text-align: center;
         }
 
-        /* Desktop title section - Proper spacing for title-to-card connection */
-        @media (min-width: 1024px) {
-            .drop-title-section {
-                padding: 0 !important; /* Remove all padding */
-                margin-bottom: 24px !important; /* 24px margin for proper spacing to card */
-            }
-        }
-
-        /* Desktop title section - Handled by grid layout above */
-
-        /* Mobile title section - keep left alignment but add mobile padding */
+        /* Mobile title section - center-aligned with padding */
         @media (max-width: 767px) {
             .drop-title-section {
-                padding: 8px 16px 12px 16px; /* Add horizontal padding only on mobile */
+                padding: 8px 16px 12px 16px;
+                text-align: center;
             }
         }
 
-        /* Title - Left-aligned consistently to match card */
+        /* Large tablet/desktop title section - left-aligned to match form */
+        @media (min-width: 1024px) {
+            .drop-title-section {
+                padding: 0 !important;
+                margin-bottom: 0 !important; /* Grid gap handles spacing */
+                text-align: left; /* Left-align on desktop to match form */
+            }
+        }
+
+        /* Title - Responsive alignment and sizing */
         .drop-title {
-            /* TYPOGRAPHY: Increased font sizes for maximum impact */
-            font-size: 52px !important; /* Increased from 48px */
+            /* TYPOGRAPHY: Responsive font sizes */
+            font-size: clamp(32px, 8vw, 52px) !important; /* Responsive sizing */
             line-height: 1.1 !important;
             letter-spacing: -0.5px !important;
             font-weight: 700 !important;
 
-            /* SPACING: Minimal spacing for tight connection to card */
-            margin: 16px 0 0 0 !important; /* Zero bottom margin for tight connection */
+            /* SPACING: Clean margins */
+            margin: 16px 0 0 0 !important;
             padding: 0 !important;
 
-            /* ALIGNMENT: Left-aligned consistently to match card */
-            width: auto !important; /* Remove width constraints to prevent overflow */
-            max-width: none !important; /* Remove max-width constraints */
-            text-align: left !important; /* Left-align consistently */
+            /* LAYOUT: Responsive alignment */
+            width: auto !important;
+            max-width: none !important;
             box-sizing: border-box !important;
-            overflow: visible !important; /* Prevent any overflow issues */
+            overflow: visible !important;
+            /* Inherit text-align from parent (.drop-title-section) */
 
             /* VISUAL: Enhanced rendering */
             color: {{#if drop.title_color}}{{drop.title_color}}{{else}}var(--laylo-text-primary){{/if}};
@@ -366,11 +390,11 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing enhancement - Proper spacing to card */
+        /* Desktop title sizing - Larger and properly spaced */
         @media (min-width: 1024px) {
             .drop-title {
-                font-size: 56px !important; /* Increased from 42px for better desktop impact */
-                margin: 0 0 24px 0 !important; /* 24px bottom margin for proper spacing to card */
+                font-size: 56px !important; /* Larger on desktop */
+                margin: 0 !important; /* Grid gap handles spacing */
             }
         }
 
@@ -1331,10 +1355,15 @@
             }
         }
 
-        /* Medium Desktop: 1024px - 1439px - No spacing overrides */
+        /* Medium Desktop: 1024px - 1439px - Adjusted for new grid layout */
         @media only screen and (max-width: 1439px) and (min-width: 1024px) {
             .drop-page-container {
                 padding: clamp(32px, 8vh, 80px) clamp(80px, 10vw, 150px) 24px;
+            }
+
+            .drop-container {
+                grid-template-columns: 1fr 380px; /* Slightly smaller right column */
+                gap: 32px 32px; /* Smaller gaps for medium screens */
             }
 
             .rsvp-container {
@@ -1347,19 +1376,10 @@
                 font-size: 50px !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                /* Use main desktop margin rules - no override */
             }
 
             .drop-title-section {
                 max-width: 380px !important;
-                /* Use main desktop spacing rules - no override */
-                overflow: visible !important;
-            }
-
-            .user-container {
-                width: 380px !important;
-                max-width: 380px !important;
-                margin-bottom: 28px !important;
             }
 
             .rsvp-card-container {
@@ -1369,41 +1389,40 @@
             }
         }
 
-        /* Large Tablet: 900px - 1023px - Tight side-by-side layout */
+        /* Large Tablet: 900px - 1023px - Side-by-side layout with proper grid */
         @media only screen and (max-width: 1023px) and (min-width: 900px) {
             .drop-page-container {
                 padding: clamp(24px, 6vh, 60px) clamp(32px, 6vw, 64px) 24px;
             }
 
             .drop-container {
-                grid-template-columns: 1fr auto; /* Keep side-by-side layout */
+                grid-template-columns: 1fr 350px; /* Side-by-side with smaller right column */
                 grid-template-rows: auto auto;
-                gap: clamp(12px, 1.5vw, 16px); /* Minimal gap for tight connection */
-                align-items: flex-start;
+                grid-template-areas:
+                    "image title"
+                    "image form";
+                gap: 16px 24px; /* Smaller gaps for tablet */
+                align-items: start;
                 padding: 0 16px;
             }
 
             .drop-image-container {
-                grid-column: 1;
-                grid-row: 1 / 3; /* Span both rows */
+                grid-area: image;
                 margin-bottom: 0;
                 align-self: center;
                 max-width: min(450px, 55vw);
             }
 
             .drop-title-section {
-                grid-column: 2;
-                grid-row: 1;
-                margin: 0 !important; /* Zero margin for tight connection */
-                padding: 0 !important; /* Zero padding for tight connection */
+                grid-area: title;
+                margin: 0 !important;
+                padding: 0 !important;
                 max-width: 350px;
                 text-align: left;
-                overflow: visible !important;
             }
 
             .rsvp-container {
-                grid-column: 2;
-                grid-row: 2;
+                grid-area: form;
                 width: 350px !important;
                 max-width: 350px !important;
                 min-width: 350px !important;
@@ -1414,7 +1433,7 @@
                 font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
-                margin: 0 0 0 0 !important; /* Zero margin for tight connection */
+                margin: 0 !important;
             }
         }
 
