@@ -229,7 +229,7 @@
         .drop-image-container {
             position: relative;
             width: 100%;
-            max-width: min(690px, 58.3333vw);
+            max-width: 100%; /* Full width on mobile */
             height: auto;
             display: flex;
             justify-content: center;
@@ -237,6 +237,14 @@
             background: transparent;
             grid-column: 1;
             overflow: visible; /* Prevent image cutoff */
+            margin: 0 auto; /* Center the container */
+        }
+
+        /* Desktop image container sizing */
+        @media (min-width: 1024px) {
+            .drop-image-container {
+                max-width: min(690px, 58.3333vw); /* Restore desktop sizing */
+            }
         }
 
         .drop-image-container img {
@@ -345,7 +353,7 @@
             flex-direction: row;
             align-items: center;
             gap: 12px !important;
-            cursor: pointer;
+            cursor: default; /* Remove clickable cursor - subtitle should not be clickable */
 
             /* ALIGNMENT: Responsive alignment */
             width: 100% !important;
@@ -1419,15 +1427,35 @@
                 padding: clamp(16px, 4vh, 40px) clamp(12px, 3vw, 20px) 60px;
             }
 
+            .drop-image-container {
+                margin: 0 auto !important;
+                max-width: 100% !important;
+                justify-content: center !important;
+            }
+
+            .drop-title-section {
+                text-align: center !important;
+                margin: 0 auto 20px auto !important;
+                padding: 0 16px !important;
+            }
+
             .drop-title {
                 font-size: clamp(28px, 6vw, 36px) !important;
                 line-height: 1.15 !important;
                 letter-spacing: -0.3px !important;
+                text-align: center !important;
+                margin: 0 0 16px 0 !important;
             }
 
             .user-container {
+                justify-content: center !important;
+                text-align: center !important;
                 margin-bottom: 20px !important;
                 gap: 12px !important;
+            }
+
+            .username {
+                text-align: center !important;
             }
 
             /* Mobile form optimizations */
@@ -1471,16 +1499,35 @@
                 gap: 16px;
             }
 
+            .drop-image-container {
+                margin: 0 auto !important;
+                max-width: 100% !important;
+                justify-content: center !important;
+            }
+
+            .drop-title-section {
+                text-align: center !important;
+                margin: 0 auto 16px auto !important;
+                padding: 0 8px !important;
+            }
+
             .drop-title {
                 font-size: clamp(24px, 5.5vw, 30px) !important;
                 line-height: 1.2 !important;
                 letter-spacing: -0.2px !important;
+                text-align: center !important;
                 margin: 0 0 8px 0 !important;
             }
 
             .user-container {
+                justify-content: center !important;
+                text-align: center !important;
                 margin-bottom: 16px !important;
                 gap: 10px !important;
+            }
+
+            .username {
+                text-align: center !important;
             }
 
             .laylo-rsvp-card {
