@@ -13,18 +13,18 @@ const router = Router();
 router.get(
     "/contacts",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const {
                 limit = 50,
-                offset = 0,
-                search = '',
-                sortBy = 'recent_activity',
-                groupId = null,
-                acquisitionChannel = null,
-                dateStart = null,
-                dateEnd = null,
-                includeStats = true
+                    offset = 0,
+                    search = '',
+                    sortBy = 'recent_activity',
+                    groupId = null,
+                    acquisitionChannel = null,
+                    dateStart = null,
+                    dateEnd = null,
+                    includeStats = true
             } = req.query;
 
             const options = {
@@ -55,24 +55,24 @@ router.get(
 );
 
 /**
- * GET /api/contact-book/contacts/:contactId
+ * GET /api/contact-book/contacts/:contactEmail
  * Get detailed contact profile
  */
 router.get(
-    "/contacts/:contactId",
+    "/contacts/:contactEmail",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
-            const contactId = parseInt(req.params.contactId);
-            
-            if (!contactId) {
+            const contactEmail = decodeURIComponent(req.params.contactEmail);
+
+            if (!contactEmail || !contactEmail.includes('@')) {
                 return res.status(400).json({
                     success: false,
-                    error: "Invalid contact ID"
+                    error: "Invalid contact email"
                 });
             }
 
-            const result = await contactBookService.getContactProfile(req.user.id, contactId);
+            const result = await contactBookService.getContactProfile(req.user.id, contactEmail);
 
             res.json({
                 success: true,
@@ -96,7 +96,7 @@ router.get(
 router.get(
     "/groups",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groups = await contactGroupsService.getUserGroups(req.user.id);
 
@@ -121,7 +121,7 @@ router.get(
 router.post(
     "/groups",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const { name, description, color } = req.body;
 
@@ -160,7 +160,7 @@ router.post(
 router.put(
     "/groups/:groupId",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groupId = parseInt(req.params.groupId);
             const { name, description, color } = req.body;
@@ -184,8 +184,8 @@ router.put(
             });
         } catch (error) {
             console.error('❌ Update group API error:', error);
-            const statusCode = error.message.includes('not found') ? 404 : 
-                              error.message.includes('already exists') ? 409 : 500;
+            const statusCode = error.message.includes('not found') ? 404 :
+                error.message.includes('already exists') ? 409 : 500;
             res.status(statusCode).json({
                 success: false,
                 error: error.message
@@ -201,7 +201,7 @@ router.put(
 router.delete(
     "/groups/:groupId",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groupId = parseInt(req.params.groupId);
 
@@ -236,7 +236,7 @@ router.delete(
 router.post(
     "/groups/:groupId/contacts",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groupId = parseInt(req.params.groupId);
             const { contactIds } = req.body;
@@ -279,7 +279,7 @@ router.post(
 router.delete(
     "/groups/:groupId/contacts",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groupId = parseInt(req.params.groupId);
             const { contactIds } = req.body;
@@ -322,7 +322,7 @@ router.delete(
 router.get(
     "/groups/:groupId/contacts",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groupId = parseInt(req.params.groupId);
             const { limit = 50, offset = 0 } = req.query;
@@ -361,7 +361,7 @@ router.get(
 router.get(
     "/stats",
     asyncHandler(auth.jwt),
-    asyncHandler(async (req, res) => {
+    asyncHandler(async(req, res) => {
         try {
             const groupStats = await contactGroupsService.getGroupStats(req.user.id);
 

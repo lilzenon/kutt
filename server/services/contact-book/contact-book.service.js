@@ -15,113 +15,96 @@ class ContactBookService {
     async getContacts(userId, options = {}) {
         const {
             limit = 50,
-            offset = 0,
-            search = '',
-            sortBy = 'recent_activity',
-            groupId = null,
-            acquisitionChannel = null,
-            dateRange = null,
-            includeStats = true
+                offset = 0,
+                search = '',
+                sortBy = 'recent_activity',
+                groupId = null,
+                acquisitionChannel = null,
+                dateRange = null,
+                includeStats = true
         } = options;
 
         const cacheKey = `contacts:${userId}:${Buffer.from(JSON.stringify(options)).toString('base64')}`;
 
-        return await cache.getOrCompute(cacheKey, async () => {
+        return await cache.getOrCompute(cacheKey, async() => {
             console.log(`📇 Loading contacts for user ${userId} with options:`, options);
 
-            // Base query to get all users who have interacted with this user's drops
-            let query = knex("users as u")
+            // Base query to get all contacts who have signed up for this user's drops
+            // Note: drop_signups doesn't have user_id, so we use email as the contact identifier
+            let query = knex("drop_signups as ds")
                 .select([
-                    "u.id",
-                    "u.email",
-                    "u.first_name",
-                    "u.last_name",
-                    "u.phone",
-                    "u.company",
-                    "u.bio",
-                    "u.website",
-                    "u.location_data",
-                    "u.acquisition_channel",
-                    "u.last_activity_at",
-                    "u.total_drop_signups",
-                    "u.total_link_clicks",
-                    "u.engagement_score",
-                    "u.created_at as join_date"
+                    knex.raw("ds.email as id"), // Use email as unique identifier
+                    "ds.email",
+                    knex.raw("COALESCE(ds.name, ds.email) as display_name"),
+                    "ds.phone",
+                    knex.raw("MIN(ds.created_at) as join_date"),
+                    knex.raw("MAX(ds.created_at) as last_activity_at"),
+                    knex.raw("COUNT(ds.id) as total_drop_signups"),
+                    knex.raw("0 as total_link_clicks"), // Placeholder for now
+                    knex.raw("CASE WHEN COUNT(ds.id) > 1 THEN 75 ELSE 50 END as engagement_score") // Basic scoring
                 ])
-                .leftJoin("drop_signups as ds", "u.id", "ds.user_id")
-                .leftJoin("drops as d", "ds.drop_id", "d.id")
+                .join("drops as d", "ds.drop_id", "d.id")
                 .where("d.user_id", userId)
-                .groupBy("u.id")
-                .distinct();
+                .whereNotNull("ds.email") // Only include contacts with email
+                .groupBy("ds.email", "ds.phone");
 
             // Apply search filters
             if (search && search.trim()) {
                 const trimmedSearch = search.trim();
-                
+
                 if (this.isPostgreSQL) {
                     // Use PostgreSQL full-text search
                     query = query.whereRaw(`
-                        to_tsvector('english', 
-                            coalesce(u.email, '') || ' ' || 
-                            coalesce(u.first_name, '') || ' ' || 
-                            coalesce(u.last_name, '') || ' ' || 
-                            coalesce(u.phone, '') || ' ' || 
-                            coalesce(u.company, '') || ' ' || 
-                            coalesce(u.bio, '')
+                        to_tsvector('english',
+                            coalesce(ds.email, '') || ' ' ||
+                            coalesce(ds.name, '') || ' ' ||
+                            coalesce(ds.phone, '')
                         ) @@ plainto_tsquery('english', ?)
                     `, [trimmedSearch]);
                 } else {
                     // Fallback to LIKE queries for MySQL/SQLite
                     query = query.where(function() {
-                        this.where("u.email", "like", `%${trimmedSearch}%`)
-                            .orWhere("u.first_name", "like", `%${trimmedSearch}%`)
-                            .orWhere("u.last_name", "like", `%${trimmedSearch}%`)
-                            .orWhere("u.phone", "like", `%${trimmedSearch}%`)
-                            .orWhere("u.company", "like", `%${trimmedSearch}%`)
-                            .orWhere("u.bio", "like", `%${trimmedSearch}%`);
+                        this.where("ds.email", "like", `%${trimmedSearch}%`)
+                            .orWhere("ds.name", "like", `%${trimmedSearch}%`)
+                            .orWhere("ds.phone", "like", `%${trimmedSearch}%`);
                     });
                 }
             }
 
             // Apply group filter
             if (groupId) {
-                query = query.join("contact_group_memberships as cgm", "u.id", "cgm.contact_user_id")
+                query = query.join("contact_group_memberships as cgm", "ds.email", "cgm.contact_user_id")
                     .where("cgm.group_id", groupId);
-            }
-
-            // Apply acquisition channel filter
-            if (acquisitionChannel) {
-                query = query.where("u.acquisition_channel", acquisitionChannel);
             }
 
             // Apply date range filter
             if (dateRange && dateRange.start && dateRange.end) {
-                query = query.whereBetween("u.created_at", [dateRange.start, dateRange.end]);
+                query = query.whereBetween("ds.created_at", [dateRange.start, dateRange.end]);
             }
 
             // Apply sorting
             switch (sortBy) {
                 case 'recent_activity':
-                    query = query.orderBy("u.last_activity_at", "desc").orderBy("u.created_at", "desc");
+                    query = query.orderBy("last_activity_at", "desc").orderBy("join_date", "desc");
                     break;
                 case 'name':
-                    query = query.orderBy("u.first_name", "asc").orderBy("u.last_name", "asc");
+                    query = query.orderBy("display_name", "asc");
                     break;
                 case 'email':
-                    query = query.orderBy("u.email", "asc");
+                    query = query.orderBy("ds.email", "asc");
                     break;
                 case 'join_date':
-                    query = query.orderBy("u.created_at", "desc");
+                    query = query.orderBy("join_date", "desc");
                     break;
                 case 'engagement':
-                    query = query.orderBy("u.engagement_score", "desc").orderBy("u.total_drop_signups", "desc");
+                    query = query.orderBy("engagement_score", "desc").orderBy("total_drop_signups", "desc");
                     break;
                 default:
-                    query = query.orderBy("u.last_activity_at", "desc");
+                    query = query.orderBy("last_activity_at", "desc");
             }
 
             // Get total count for pagination
-            const countQuery = query.clone().clearSelect().clearOrder().count("u.id as total");
+            const countQuery = query.clone().clearSelect().clearOrder().countDistinct("ds.email as total");
             const [{ total }] = await countQuery;
 
             // Apply pagination
@@ -153,36 +136,18 @@ class ContactBookService {
      * Enhance contacts with additional statistics
      */
     async enhanceContactsWithStats(contacts, userId) {
-        const contactIds = contacts.map(c => c.id);
-
-        // Get drop signup counts per contact
-        const dropSignups = await knex("drop_signups as ds")
-            .select("ds.user_id", knex.raw("COUNT(*) as signup_count"))
-            .join("drops as d", "ds.drop_id", "d.id")
-            .where("d.user_id", userId)
-            .whereIn("ds.user_id", contactIds)
-            .groupBy("ds.user_id");
-
-        // Get recent activity per contact
-        const recentActivity = await knex("drop_signups as ds")
-            .select("ds.user_id", knex.raw("MAX(ds.created_at) as last_signup"))
-            .join("drops as d", "ds.drop_id", "d.id")
-            .where("d.user_id", userId)
-            .whereIn("ds.user_id", contactIds)
-            .groupBy("ds.user_id");
+        const contactEmails = contacts.map(c => c.email);
 
         // Get group memberships
         const groupMemberships = await knex("contact_group_memberships as cgm")
             .select("cgm.contact_user_id", "cg.name as group_name", "cg.color as group_color")
             .join("contact_groups as cg", "cgm.group_id", "cg.id")
             .where("cg.user_id", userId)
-            .whereIn("cgm.contact_user_id", contactIds);
+            .whereIn("cgm.contact_user_id", contactEmails);
 
         // Create lookup maps
-        const signupMap = new Map(dropSignups.map(s => [s.user_id, s.signup_count]));
-        const activityMap = new Map(recentActivity.map(a => [a.user_id, a.last_signup]));
         const groupsMap = new Map();
-        
+
         groupMemberships.forEach(gm => {
             if (!groupsMap.has(gm.contact_user_id)) {
                 groupsMap.set(gm.contact_user_id, []);
@@ -196,49 +161,44 @@ class ContactBookService {
         // Enhance each contact
         contacts.forEach(contact => {
             contact.stats = {
-                totalSignups: signupMap.get(contact.id) || 0,
-                lastSignup: activityMap.get(contact.id) || null,
-                groups: groupsMap.get(contact.id) || []
+                totalSignups: contact.total_drop_signups || 0,
+                lastSignup: contact.last_activity_at || null,
+                groups: groupsMap.get(contact.email) || []
             };
 
-            // Parse JSON fields
-            try {
-                contact.location_data = contact.location_data ? JSON.parse(contact.location_data) : null;
-            } catch (e) {
-                contact.location_data = null;
+            // Ensure display_name is set
+            if (!contact.display_name) {
+                contact.display_name = this.getDisplayName(contact);
             }
-
-            // Calculate display name
-            contact.display_name = this.getDisplayName(contact);
         });
     }
 
     /**
      * Get detailed contact profile
      */
-    async getContactProfile(userId, contactId) {
-        const cacheKey = `contact:profile:${userId}:${contactId}`;
+    async getContactProfile(userId, contactEmail) {
+        const cacheKey = `contact:profile:${userId}:${Buffer.from(contactEmail).toString('base64')}`;
 
-        return await cache.getOrCompute(cacheKey, async () => {
-            console.log(`📇 Loading contact profile for user ${userId}, contact ${contactId}`);
+        return await cache.getOrCompute(cacheKey, async() => {
+            console.log(`📇 Loading contact profile for user ${userId}, contact ${contactEmail}`);
 
-            // Get basic contact info
-            const [contact] = await knex("users")
-                .select("*")
-                .where("id", contactId);
-
-            if (!contact) {
-                throw new Error("Contact not found");
-            }
-
-            // Verify this contact has interacted with the user's drops
-            const hasInteraction = await knex("drop_signups as ds")
+            // Get basic contact info from drop_signups
+            const contact = await knex("drop_signups as ds")
+                .select([
+                    "ds.email",
+                    knex.raw("COALESCE(ds.name, ds.email) as display_name"),
+                    "ds.phone",
+                    knex.raw("MIN(ds.created_at) as join_date"),
+                    knex.raw("MAX(ds.created_at) as last_activity_at"),
+                    knex.raw("COUNT(ds.id) as total_drop_signups")
+                ])
                 .join("drops as d", "ds.drop_id", "d.id")
                 .where("d.user_id", userId)
-                .where("ds.user_id", contactId)
+                .where("ds.email", contactEmail)
+                .groupBy("ds.email", "ds.phone")
                 .first();
 
-            if (!hasInteraction) {
+            if (!contact) {
                 throw new Error("Contact not found in your network");
             }
 
@@ -255,7 +215,7 @@ class ContactBookService {
                 ])
                 .join("drops as d", "ds.drop_id", "d.id")
                 .where("d.user_id", userId)
-                .where("ds.user_id", contactId)
+                .where("ds.email", contactEmail)
                 .orderBy("ds.created_at", "desc");
 
             // Get group memberships
@@ -268,13 +228,13 @@ class ContactBookService {
                 ])
                 .join("contact_groups as cg", "cgm.group_id", "cg.id")
                 .where("cg.user_id", userId)
-                .where("cgm.contact_user_id", contactId)
+                .where("cgm.contact_user_id", contactEmail)
                 .orderBy("cgm.created_at", "desc");
 
             // Get notes
             const notes = await knex("contact_notes")
                 .select("*")
-                .where("contact_user_id", contactId)
+                .where("contact_user_id", contactEmail)
                 .where("created_by_user_id", userId)
                 .orderBy("created_at", "desc")
                 .limit(10);
@@ -282,23 +242,15 @@ class ContactBookService {
             // Get recent interactions
             const interactions = await knex("contact_interactions")
                 .select("*")
-                .where("contact_user_id", contactId)
+                .where("contact_user_id", contactEmail)
                 .where("initiated_by_user_id", userId)
                 .orderBy("interaction_date", "desc")
                 .limit(20);
 
-            // Parse JSON fields
-            try {
-                contact.location_data = contact.location_data ? JSON.parse(contact.location_data) : null;
-                contact.preferences = contact.preferences ? JSON.parse(contact.preferences) : null;
-                contact.social_links = contact.social_links ? JSON.parse(contact.social_links) : null;
-            } catch (e) {
-                contact.location_data = null;
-                contact.preferences = null;
-                contact.social_links = null;
+            // Set display name
+            if (!contact.display_name) {
+                contact.display_name = this.getDisplayName(contact);
             }
-
-            contact.display_name = this.getDisplayName(contact);
 
             return {
                 contact,
@@ -322,12 +274,11 @@ class ContactBookService {
      * Get display name for a contact
      */
     getDisplayName(contact) {
-        if (contact.first_name && contact.last_name) {
-            return `${contact.first_name} ${contact.last_name}`;
-        } else if (contact.first_name) {
-            return contact.first_name;
-        } else if (contact.last_name) {
-            return contact.last_name;
+        // For drop_signups based contacts, we have a 'name' field instead of first_name/last_name
+        if (contact.name && contact.name.trim()) {
+            return contact.name.trim();
+        } else if (contact.display_name && contact.display_name.trim()) {
+            return contact.display_name.trim();
         } else if (contact.email) {
             return contact.email.split('@')[0];
         } else {

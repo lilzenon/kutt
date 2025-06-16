@@ -480,7 +480,7 @@ function renderContacts(data) {
         const lastActivity = contact.last_activity_at ? new Date(contact.last_activity_at).toLocaleDateString() : 'Never';
 
         contactsHTML += `
-            <tr class="hover:bg-gray-50 cursor-pointer" onclick="showContactDetails(${contact.id})">
+            <tr class="hover:bg-gray-50 cursor-pointer" onclick="showContactDetails('${contact.email}')">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
@@ -513,7 +513,7 @@ function renderContacts(data) {
                     <div class="text-sm text-gray-500">Score: ${contact.engagement_score || 0}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button onclick="event.stopPropagation(); showContactDetails(${contact.id})" class="text-primary-600 hover:text-primary-900">
+                    <button onclick="event.stopPropagation(); showContactDetails('${contact.email}')" class="text-primary-600 hover:text-primary-900">
                         View
                     </button>
                 </td>
@@ -658,9 +658,11 @@ function showSearchSuggestions(query) {
     // TODO: Implement search suggestions
 }
 
-function showContactDetails(contactId) {
-    console.log('👤 Showing contact details for:', contactId);
+function showContactDetails(contactEmail) {
+    console.log('👤 Showing contact details for:', contactEmail);
     // TODO: Implement contact details modal
+    // For now, just show an alert
+    alert(`Contact details for: ${contactEmail}\n\nThis feature will show detailed contact information, drop history, and group memberships.`);
 }
 
 function showPagination(data) {
