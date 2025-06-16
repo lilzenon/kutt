@@ -48,6 +48,10 @@ const createDropValidation = [
     .optional()
     .matches(/^#[0-9A-Fa-f]{6}$/)
     .withMessage("Button color must be a valid hex color"),
+    body("overscroll_background_color")
+    .optional()
+    .matches(/^#[0-9A-Fa-f]{6}$/)
+    .withMessage("Overscroll background color must be a valid hex color"),
     body("button_text")
     .optional()
     .isLength({ max: 50 })
@@ -385,6 +389,7 @@ function validateAndSanitizeDropData(data) {
         'slug',
         'cover_image',
         'background_color',
+        'overscroll_background_color',
         'text_color',
         'title_color',
         'description_color',
