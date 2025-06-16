@@ -309,17 +309,72 @@
 
             <!-- Fan Signups Analytics Table -->
             <div id="fansAnalytics" class="hidden">
-                <div class="mb-4 flex items-center justify-between">
+                <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                     <div>
-                        <h4 class="text-sm font-medium text-gray-900">Recent Fan Signups</h4>
-                        <p class="text-sm text-gray-500">Click on any row to view detailed information</p>
+                        <h4 class="text-sm font-medium text-gray-900">Fan Signups</h4>
+                        <p class="text-sm text-gray-500">Search and explore your fan signups</p>
                     </div>
-                    <button onclick="refreshFanSignups()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                        <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Refresh
-                    </button>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="refreshFanSignups()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Interface -->
+                <div class="mb-6 bg-gray-50 rounded-lg p-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                        <!-- Search Input -->
+                        <div class="flex-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                id="fanSearchInput"
+                                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                placeholder="Search fans by email, name, phone, or drop title..."
+                                autocomplete="off"
+                            >
+                            <!-- Search Suggestions Dropdown -->
+                            <div id="searchSuggestions" class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm hidden">
+                                <!-- Suggestions will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Sort Options -->
+                        <div class="flex items-center space-x-2">
+                            <label for="sortBy" class="text-sm font-medium text-gray-700">Sort:</label>
+                            <select id="sortBy" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
+                                <option value="latest">Latest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="email">Email A-Z</option>
+                                <option value="name">Name A-Z</option>
+                            </select>
+                        </div>
+
+                        <!-- Clear Search -->
+                        <button
+                            id="clearSearchBtn"
+                            onclick="clearFanSearch()"
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 hidden"
+                        >
+                            <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+
+                    <!-- Search Status -->
+                    <div id="searchStatus" class="mt-3 text-sm text-gray-600 hidden">
+                        <!-- Search status will be shown here -->
+                    </div>
                 </div>
 
                 <div id="fanSignupsContainer">
@@ -685,6 +740,310 @@ function showToast(message, type) {
         }
     }, 3000);
 }
+
+// Fan Search functionality
+let searchTimeout;
+let currentSearchQuery = '';
+
+// Initialize search functionality
+function initializeFanSearch() {
+    const searchInput = document.getElementById('fanSearchInput');
+    const sortSelect = document.getElementById('sortBy');
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+
+    if (!searchInput) return;
+
+    // Debounced search
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+
+        if (searchTimeout) clearTimeout(searchTimeout);
+
+        const clearBtn = document.getElementById('clearSearchBtn');
+        if (query) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+
+        searchTimeout = setTimeout(() => {
+            if (query !== currentSearchQuery) {
+                currentSearchQuery = query;
+                performFanSearch(query);
+            }
+        }, 300);
+
+        if (query.length >= 2) {
+            showSearchSuggestions(query);
+        } else {
+            hideSuggestions();
+        }
+    });
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            performFanSearch(currentSearchQuery);
+        });
+    }
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            clearFanSearch();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            hideSuggestions();
+            performFanSearch(searchInput.value.trim());
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+            hideSuggestions();
+        }
+    });
+}
+
+// Perform fan search
+async function performFanSearch(query = '') {
+    try {
+        const sortBy = document.getElementById('sortBy')?.value || 'latest';
+        const statusElement = document.getElementById('searchStatus');
+        const container = document.getElementById('fanSignupsContainer');
+
+        showSearchLoading();
+
+        const params = new URLSearchParams({
+            q: query,
+            sortBy: sortBy,
+            limit: 50,
+            highlights: 'true'
+        });
+
+        const response = await fetch(`/api/analytics/search/fans?${params}`);
+        if (!response.ok) throw new Error('Search request failed');
+
+        const result = await response.json();
+        if (!result.success) throw new Error(result.error || 'Search failed');
+
+        const resultCount = result.data.total;
+        if (query && statusElement) {
+            statusElement.innerHTML = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''} for "${query}"`;
+            statusElement.classList.remove('hidden');
+        } else if (statusElement) {
+            statusElement.classList.add('hidden');
+        }
+
+        renderFanSearchResults(result.data);
+
+    } catch (error) {
+        console.error('❌ Error performing fan search:', error);
+        showSearchError(error.message);
+    }
+}
+
+// Show search suggestions
+async function showSearchSuggestions(query) {
+    try {
+        const response = await fetch(`/api/analytics/search/suggestions?q=${encodeURIComponent(query)}&type=fans`);
+        if (!response.ok) return;
+
+        const result = await response.json();
+        if (!result.success || !result.data.suggestions.length) {
+            hideSuggestions();
+            return;
+        }
+
+        const suggestionsContainer = document.getElementById('searchSuggestions');
+        if (!suggestionsContainer) return;
+
+        let suggestionsHTML = '';
+        result.data.suggestions.forEach(suggestion => {
+            const icon = suggestion.type === 'email' ? '📧' : suggestion.type === 'name' ? '👤' : '📱';
+            suggestionsHTML += `
+                <div class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-primary-50" onclick="selectSuggestion('${suggestion.value.replace(/'/g, "\\'")}')">
+                    <div class="flex items-center">
+                        <span class="mr-2">${icon}</span>
+                        <span class="font-normal block truncate">${suggestion.value}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        suggestionsContainer.innerHTML = suggestionsHTML;
+        suggestionsContainer.classList.remove('hidden');
+
+    } catch (error) {
+        console.error('❌ Error loading suggestions:', error);
+        hideSuggestions();
+    }
+}
+
+function selectSuggestion(value) {
+    const searchInput = document.getElementById('fanSearchInput');
+    if (searchInput) {
+        searchInput.value = value;
+        hideSuggestions();
+        performFanSearch(value);
+    }
+}
+
+function hideSuggestions() {
+    const suggestionsContainer = document.getElementById('searchSuggestions');
+    if (suggestionsContainer) {
+        suggestionsContainer.classList.add('hidden');
+    }
+}
+
+function clearFanSearch() {
+    const searchInput = document.getElementById('fanSearchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const statusElement = document.getElementById('searchStatus');
+
+    if (searchInput) searchInput.value = '';
+    if (clearBtn) clearBtn.classList.add('hidden');
+    if (statusElement) statusElement.classList.add('hidden');
+
+    currentSearchQuery = '';
+    hideSuggestions();
+    loadFanSignups();
+}
+
+function showSearchLoading() {
+    const container = document.getElementById('fanSignupsContainer');
+    if (container) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Searching...
+                </div>
+            </div>
+        `;
+    }
+}
+
+function showSearchError(message) {
+    const container = document.getElementById('fanSignupsContainer');
+    if (container) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">Search Error</h3>
+                <p class="mt-1 text-sm text-gray-500">${message}</p>
+                <button onclick="performFanSearch(currentSearchQuery)" class="mt-3 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
+                    Try Again
+                </button>
+            </div>
+        `;
+    }
+}
+
+function renderFanSearchResults(searchData) {
+    const container = document.getElementById('fanSignupsContainer');
+    if (!container) return;
+
+    if (!searchData.results || searchData.results.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No results found</h3>
+                <p class="mt-1 text-sm text-gray-500">Try adjusting your search terms.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let tableHTML = `
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Drop</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Signed Up</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+    `;
+
+    searchData.results.forEach(fan => {
+        const signupDate = new Date(fan.created_at).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+        });
+
+        const displayEmail = fan.highlights?.email || fan.email || 'No email';
+        const displayName = fan.highlights?.name || fan.name || 'Anonymous';
+        const displayDropTitle = fan.highlights?.drop_title || fan.drop_title;
+
+        tableHTML += `
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                <span class="text-sm font-medium text-primary-700">${(fan.name || fan.email || 'F').charAt(0).toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">${displayName}</div>
+                            <div class="text-sm text-gray-500">${displayEmail}</div>
+                            ${fan.phone ? `<div class="text-sm text-gray-500">${fan.phone}</div>` : ''}
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${displayDropTitle}</div>
+                    <div class="text-sm text-gray-500">${fan.drop_slug}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${signupDate}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        ${fan.referrer || 'Direct'}
+                    </span>
+                </td>
+            </tr>
+        `;
+    });
+
+    tableHTML += `</tbody></table></div>`;
+
+    if (searchData.total > searchData.results.length) {
+        tableHTML += `
+            <div class="bg-white px-4 py-3 border-t border-gray-200">
+                <p class="text-sm text-gray-700">
+                    Showing <span class="font-medium">1</span> to <span class="font-medium">${searchData.results.length}</span> of <span class="font-medium">${searchData.total}</span> results
+                </p>
+            </div>
+        `;
+    }
+
+    container.innerHTML = tableHTML;
+}
+
+// Enhanced loadFanSignups function
+const originalLoadFanSignups = loadFanSignups;
+loadFanSignups = function() {
+    const searchInput = document.getElementById('fanSearchInput');
+    if (searchInput && !searchInput.hasAttribute('data-initialized')) {
+        initializeFanSearch();
+        searchInput.setAttribute('data-initialized', 'true');
+    }
+
+    if (searchInput) {
+        performFanSearch('');
+    } else {
+        originalLoadFanSignups();
+    }
+};
+
 </script>
 
 <style>

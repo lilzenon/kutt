@@ -3,6 +3,7 @@ const asyncHandler = require("../../utils/asyncHandler");
 const auth = require("../../handlers/auth.handler");
 const analyticsService = require("../../services/analytics/analytics.service");
 const performanceMonitor = require("../../services/analytics/performance.service");
+const searchService = require("../../services/analytics/search.service");
 
 const router = Router();
 
@@ -230,6 +231,116 @@ router.get(
             });
         } catch (error) {
             console.error('❌ Performance report API error:', error);
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    })
+);
+
+/**
+ * GET /api/analytics/search/fans
+ * Search fan signups
+ */
+router.get(
+    "/search/fans",
+    asyncHandler(auth.jwt),
+    asyncHandler(async(req, res) => {
+        try {
+            const {
+                q: searchQuery = '',
+                limit = 50,
+                offset = 0,
+                sortBy = 'latest',
+                dropId = null,
+                highlights = true
+            } = req.query;
+
+            const searchResults = await searchService.searchFanSignups(req.user.id, searchQuery, {
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                sortBy,
+                dropId: dropId ? parseInt(dropId) : null,
+                includeHighlights: highlights === 'true'
+            });
+
+            res.json({
+                success: true,
+                data: searchResults
+            });
+        } catch (error) {
+            console.error('❌ Fan search API error:', error);
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    })
+);
+
+/**
+ * GET /api/analytics/search/drops
+ * Search drops
+ */
+router.get(
+    "/search/drops",
+    asyncHandler(auth.jwt),
+    asyncHandler(async(req, res) => {
+        try {
+            const {
+                q: searchQuery = '',
+                limit = 20,
+                offset = 0,
+                includeInactive = false
+            } = req.query;
+
+            const searchResults = await searchService.searchDrops(req.user.id, searchQuery, {
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                includeInactive: includeInactive === 'true'
+            });
+
+            res.json({
+                success: true,
+                data: searchResults
+            });
+        } catch (error) {
+            console.error('❌ Drop search API error:', error);
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    })
+);
+
+/**
+ * GET /api/analytics/search/suggestions
+ * Get search suggestions
+ */
+router.get(
+    "/search/suggestions",
+    asyncHandler(auth.jwt),
+    asyncHandler(async(req, res) => {
+        try {
+            const { q: partialQuery = '', type = 'fans' } = req.query;
+
+            if (partialQuery.length < 2) {
+                return res.json({
+                    success: true,
+                    data: { suggestions: [] }
+                });
+            }
+
+            const suggestions = await searchService.getSearchSuggestions(req.user.id, partialQuery, type);
+
+            res.json({
+                success: true,
+                data: suggestions
+            });
+        } catch (error) {
+            console.error('❌ Search suggestions API error:', error);
             res.status(500).json({
                 success: false,
                 error: error.message

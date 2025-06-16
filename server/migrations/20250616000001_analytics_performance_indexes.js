@@ -37,11 +37,35 @@ async function up(knex) {
 
     // Composite index for fan analytics
     await knex.raw(`
-        CREATE INDEX ${ifNotExists} drop_signups_user_analytics_idx 
+        CREATE INDEX ${ifNotExists} drop_signups_user_analytics_idx
         ON drop_signups (drop_id, email, created_at DESC, referrer);
     `);
 
-    console.log("✅ Created analytics performance indexes");
+    // Search optimization indexes
+    await knex.raw(`
+        CREATE INDEX ${ifNotExists} drop_signups_search_idx
+        ON drop_signups (email, name, phone);
+    `);
+
+    await knex.raw(`
+        CREATE INDEX ${ifNotExists} drops_title_search_idx
+        ON drops (title, description);
+    `);
+
+    // Full-text search indexes for PostgreSQL
+    if (!isMySQL) {
+        await knex.raw(`
+            CREATE INDEX ${ifNotExists} drop_signups_fulltext_idx
+            ON drop_signups USING gin(to_tsvector('english', coalesce(email, '') || ' ' || coalesce(name, '') || ' ' || coalesce(phone, '')));
+        `);
+
+        await knex.raw(`
+            CREATE INDEX ${ifNotExists} drops_fulltext_idx
+            ON drops USING gin(to_tsvector('english', coalesce(title, '') || ' ' || coalesce(description, '')));
+        `);
+    }
+
+    console.log("✅ Created analytics performance and search indexes");
 }
 
 /**
@@ -55,8 +79,12 @@ async function down(knex) {
     await knex.raw(`DROP INDEX IF EXISTS links_user_id_visit_count_idx;`);
     await knex.raw(`DROP INDEX IF EXISTS visits_link_id_created_idx;`);
     await knex.raw(`DROP INDEX IF EXISTS drop_signups_user_analytics_idx;`);
-    
-    console.log("✅ Dropped analytics performance indexes");
+    await knex.raw(`DROP INDEX IF EXISTS drop_signups_search_idx;`);
+    await knex.raw(`DROP INDEX IF EXISTS drops_title_search_idx;`);
+    await knex.raw(`DROP INDEX IF EXISTS drop_signups_fulltext_idx;`);
+    await knex.raw(`DROP INDEX IF EXISTS drops_fulltext_idx;`);
+
+    console.log("✅ Dropped analytics performance and search indexes");
 }
 
 module.exports = {
