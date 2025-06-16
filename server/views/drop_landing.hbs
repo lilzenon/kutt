@@ -154,15 +154,15 @@
             }
         }
 
-        /* Desktop Layout: Side-by-side with minimal row gap for tight connection */
+        /* Desktop Layout: Proper CSS Grid side-by-side layout */
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr 400px; /* Side-by-side: image left, content right */
-                grid-template-rows: auto auto; /* Two rows: title, then form */
+                grid-template-rows: auto 1fr; /* Title row, then flexible space for form */
                 grid-template-areas:
                     "image title"
-                    "image form";
-                gap: 8px 40px; /* Small row gap for controlled spacing */
+                    "image form"; /* Proper grid area for form */
+                gap: 0px 40px; /* No row gap for tight spacing, column gap for separation */
                 align-items: start;
                 max-width: 1200px;
                 padding: 40px 24px;
@@ -249,14 +249,18 @@
             }
         }
 
-        /* Desktop title section - left-aligned to match form */
+        /* Desktop title section - proper grid positioning */
         @media (min-width: 1024px) {
             .drop-title-section {
+                grid-area: title; /* Use proper grid area */
                 max-width: 400px;
-                margin: 0 !important; /* Remove all margins for tight connection */
-                padding: 0 !important; /* Remove all padding for tight connection */
-                text-align: left;
+                margin: 0 !important; /* Remove all margins */
+                padding: 0 !important; /* Remove all padding */
+                text-align: left !important; /* Left-aligned to match form */
                 align-self: start;
+                justify-self: start; /* Align to left side of grid area */
+                width: 400px;
+                min-width: 400px;
             }
         }
 
@@ -284,20 +288,18 @@
             }
         }
 
-        /* Desktop RSVP container - Use transform to pull closer to title */
+        /* Desktop RSVP container - Proper CSS Grid positioning */
         @media (min-width: 1024px) {
             .rsvp-container {
+                grid-area: form; /* Use proper grid area */
                 width: 400px !important;
                 max-width: 400px !important;
                 min-width: 400px !important;
                 align-items: flex-start;
                 align-self: start;
-                padding-bottom: 0; /* Remove bottom padding only */
-                margin-top: 0; /* Reset to neutral positioning */
-                /* Use transform to physically move the container up */
-                transform: translateY(-32px) !important;
-                position: relative !important;
-                z-index: 2 !important;
+                padding-bottom: 0;
+                margin: 0 !important; /* Reset all margins */
+                justify-self: start; /* Align to left side of grid area */
             }
         }
 
@@ -329,18 +331,14 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing - OVERRIDE conflicting drop-shared.css rules */
+        /* Desktop title sizing - Clean grid-based layout */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Larger on desktop */
                 margin: 0 !important; /* Override drop-shared.css margin-bottom: 40px */
-                margin-bottom: 0 !important; /* Force override conflicting rule */
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 padding: 0 !important; /* Clean padding */
-                /* Use transform to physically move the element up */
-                transform: translateY(-20px) !important;
-                position: relative !important;
-                z-index: 1 !important;
+                text-align: left !important; /* Left-aligned to match form */
             }
         }
 
