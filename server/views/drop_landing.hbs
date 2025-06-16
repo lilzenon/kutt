@@ -229,7 +229,7 @@
             max-width: 100%;
             padding: 8px 0 0 0; /* Remove bottom padding to reduce title-to-card spacing */
             box-sizing: border-box;
-            margin: 0 auto 4px auto;
+            margin: 0 auto 4px auto; /* Keep small margin for mobile */
             overflow: visible;
             text-align: center; /* Center on mobile/tablet */
         }
@@ -253,8 +253,8 @@
         @media (min-width: 1024px) {
             .drop-title-section {
                 max-width: 400px;
-                margin: 0 !important;
-                padding: 0 !important;
+                margin: 0 !important; /* Remove all margins for tight connection */
+                padding: 0 !important; /* Remove all padding for tight connection */
                 text-align: left;
                 align-self: start;
             }
@@ -385,6 +385,13 @@
             border: none; /* Clean design without borders like Laylo */
             padding: 40px 32px; /* Enhanced padding following Laylo pattern */
             height: 100%;
+        }
+
+        /* Desktop card padding - Reduced top padding for tighter title connection */
+        @media (min-width: 1024px) {
+            .laylo-rsvp-card {
+                padding: 16px 32px 40px 32px; /* Reduced top padding from 40px to 16px */
+            }
         }
 
         /* Card Title - Laylo-inspired bold design */
@@ -1322,6 +1329,10 @@
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
             }
+
+            .laylo-rsvp-card {
+                padding: 12px 32px 40px 32px; /* Reduced top padding for medium desktop */
+            }
         }
 
         /* Large Tablet: 900px - 1023px - Side-by-side layout */
@@ -1366,6 +1377,10 @@
                 font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
+            }
+
+            .laylo-rsvp-card {
+                padding: 8px 32px 40px 32px; /* Reduced top padding for large tablet */
             }
         }
 
