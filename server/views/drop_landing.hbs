@@ -129,48 +129,99 @@
 
         .drop-container {
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: clamp(24px, 5vw, 48px);
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto; /* Default: mobile-first three-section layout */
+            gap: 24px;
             width: 100%;
             max-width: 1400px;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
+            padding: 0 16px;
         }
 
-        /* Mobile Grid Layout Optimization */
-        @media (max-width: 767px) {
+        /* Mobile Layout: Default three-section vertical layout */
+        .drop-image-container {
+            grid-column: 1;
+            grid-row: 1;
+            max-width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .drop-title-section {
+            grid-column: 1;
+            grid-row: 2;
+            max-width: 100%;
+            margin: 0 auto 16px auto; /* Reduced spacing for better hierarchy */
+            padding: 0 8px;
+        }
+
+        .rsvp-container {
+            grid-column: 1;
+            grid-row: 3;
+            max-width: 100%;
+        }
+
+        /* Tablet Layout: Keep vertical layout but improve spacing */
+        @media (min-width: 768px) and (max-width: 1023px) {
             .drop-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto; /* Three rows: image, title, card */
-                gap: 24px;
+                grid-template-rows: auto auto auto;
+                gap: 32px;
+                padding: 0 24px;
+                max-width: 600px;
+            }
+
+            .drop-title-section {
+                margin: 0 auto 20px auto;
                 padding: 0 16px;
+            }
+
+            .rsvp-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: auto !important;
+            }
+
+            .rsvp-card-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: auto !important;
+            }
+        }
+
+        /* Desktop Layout: Side-by-side with image and content */
+        @media (min-width: 1024px) {
+            .drop-container {
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto;
+                gap: clamp(32px, 5vw, 48px);
+                padding: 0 32px;
+                align-items: flex-start;
             }
 
             .drop-image-container {
                 grid-column: 1;
-                grid-row: 1;
-                max-width: 100%;
-                margin-bottom: 16px;
+                grid-row: 1 / 3; /* Span both rows */
+                margin-bottom: 0;
+                align-self: center;
             }
 
             .drop-title-section {
-                grid-column: 1;
-                grid-row: 2;
-                max-width: 100%;
-                margin: 0 auto 24px auto;
-                padding: 0 8px;
+                grid-column: 2;
+                grid-row: 1;
+                margin: 0 0 24px 0;
+                padding: 0;
+                text-align: left; /* Left-align on desktop */
+                max-width: 400px;
             }
 
             .rsvp-container {
-                grid-column: 1;
-                grid-row: 3;
-                max-width: 100%;
-            }
-
-            .rsvp-card-container {
-                min-width: 100%;
-                max-width: 100%;
+                grid-column: 2;
+                grid-row: 2;
+                width: 400px !important;
+                max-width: 400px !important;
+                min-width: 400px !important;
             }
         }
 
@@ -215,34 +266,47 @@
             }
         }
 
-        /* RSVP Container - REBUILT: Perfect Card Alignment System */
+        /* RSVP Container - Responsive Layout */
         .rsvp-container {
-            /* CRITICAL FIX: Match card width exactly (400px) for perfect alignment */
-            width: 400px;
-            max-width: 400px;
-            min-width: 400px;
+            width: 100%;
+            max-width: 100%;
             padding-bottom: 32px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: center; /* Center on mobile/tablet */
             background: transparent;
-            grid-column: 2;
             margin: 0 auto;
             box-sizing: border-box;
         }
 
-        /* Title Section - Laylo-Inspired Positioning */
+        /* Desktop RSVP container */
+        @media (min-width: 1024px) {
+            .rsvp-container {
+                width: 400px;
+                max-width: 400px;
+                min-width: 400px;
+                align-items: flex-start; /* Left-align on desktop */
+            }
+        }
+
+        /* Title Section - Responsive Positioning */
         .drop-title-section {
             width: 100%;
-            max-width: min(690px, 58.3333vw);
-            margin: 0 auto 32px auto; /* Proper spacing below image, above card */
-            text-align: center;
+            text-align: center; /* Center on mobile/tablet */
             padding: 0 16px;
             box-sizing: border-box;
         }
 
-        /* Title - REBUILT: Laylo-Style Center Alignment */
+        /* Desktop title section alignment */
+        @media (min-width: 1024px) {
+            .drop-title-section {
+                text-align: left; /* Left-align on desktop to match card */
+                padding: 0;
+            }
+        }
+
+        /* Title - Responsive Alignment */
         .drop-title {
             /* TYPOGRAPHY: Research-based sizing for maximum impact */
             font-size: 48px !important;
@@ -250,10 +314,10 @@
             letter-spacing: -0.5px !important;
             font-weight: 700 !important;
 
-            /* ALIGNMENT: Center-aligned like Laylo reference */
+            /* ALIGNMENT: Responsive alignment */
             width: 100% !important;
             max-width: 100% !important;
-            text-align: center !important;
+            text-align: center !important; /* Center on mobile/tablet */
             margin: 0 0 16px 0 !important;
             padding: 0 !important;
             box-sizing: border-box !important;
@@ -267,7 +331,15 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* User Container - Laylo-Style Center Alignment */
+        /* Desktop title alignment */
+        @media (min-width: 1024px) {
+            .drop-title {
+                text-align: left !important; /* Left-align on desktop */
+                font-size: 42px !important; /* Slightly smaller on desktop for better fit */
+            }
+        }
+
+        /* User Container - Responsive Alignment */
         .user-container {
             display: flex;
             flex-direction: row;
@@ -275,16 +347,24 @@
             gap: 12px !important;
             cursor: pointer;
 
-            /* ALIGNMENT: Center-aligned like Laylo reference */
+            /* ALIGNMENT: Responsive alignment */
             width: 100% !important;
             max-width: 100% !important;
-            margin-bottom: 0 !important; /* No bottom margin since it's in title section */
+            margin-bottom: 0 !important;
             padding: 0 !important;
             box-sizing: border-box !important;
 
-            /* LAYOUT: Center-aligned to match Laylo */
+            /* LAYOUT: Center-aligned on mobile/tablet */
             justify-content: center !important;
             text-align: center !important;
+        }
+
+        /* Desktop user container alignment */
+        @media (min-width: 1024px) {
+            .user-container {
+                justify-content: flex-start !important; /* Left-align on desktop */
+                text-align: left !important;
+            }
         }
 
         .avatar {
@@ -309,8 +389,8 @@
             line-height: 1.4 !important;
             letter-spacing: 0.1px !important;
 
-            /* ALIGNMENT: Center-aligned to match Laylo reference */
-            text-align: center !important;
+            /* ALIGNMENT: Responsive alignment */
+            text-align: center !important; /* Center on mobile/tablet */
 
             /* VISUAL: Enhanced rendering */
             color: {{#if drop.description_color}}{{drop.description_color}}{{else}}var(--laylo-text-primary){{/if}};
@@ -318,18 +398,32 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Desktop username alignment */
+        @media (min-width: 1024px) {
+            .username {
+                text-align: left !important; /* Left-align on desktop */
+            }
+        }
+
         .username:hover {
             color: var(--laylo-text-secondary) !important;
         }
 
-        /* RSVP Card Container - Laylo-Style Center Alignment */
+        /* RSVP Card Container - Responsive Sizing */
         .rsvp-card-container {
-            margin: 0 auto !important; /* Center the card like Laylo */
-            width: 400px !important;
-            min-width: 400px !important;
-            max-width: 400px !important;
+            margin: 0 auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
             box-sizing: border-box;
-            /* Remove sticky positioning for cleaner layout like Laylo */
+        }
+
+        /* Desktop RSVP card container */
+        @media (min-width: 1024px) {
+            .rsvp-card-container {
+                width: 400px !important;
+                min-width: 400px !important;
+                max-width: 400px !important;
+            }
         }
 
         /* Enhanced RSVP Card System - Laylo-inspired design */
@@ -1319,59 +1413,21 @@
             }
         }
 
-        /* Mobile Large: 375px - 767px */
+        /* Mobile Large: 375px - 767px - Updated for new layout */
         @media only screen and (max-width: 767px) and (min-width: 375px) {
             .drop-page-container {
                 padding: clamp(16px, 4vh, 40px) clamp(12px, 3vw, 20px) 60px;
-            }
-
-            .drop-container {
-                grid-template-columns: 1fr;
-                gap: clamp(16px, 4vw, 24px);
-                text-align: center;
-                max-width: min(400px, 95vw);
-                margin: 0 auto;
-            }
-
-            .drop-image-container {
-                grid-column: 1;
-                width: 100%;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-
-            .rsvp-container {
-                grid-column: 1;
-                width: 100% !important;
-                max-width: 100% !important;
-                min-width: auto !important;
-                margin: 0 auto;
-                padding-bottom: 16px;
             }
 
             .drop-title {
                 font-size: clamp(28px, 6vw, 36px) !important;
                 line-height: 1.15 !important;
                 letter-spacing: -0.3px !important;
-                text-align: center !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 0 10px 0 !important;
             }
 
             .user-container {
-                justify-content: center !important;
-                width: 100% !important;
-                max-width: 100% !important;
                 margin-bottom: 20px !important;
                 gap: 12px !important;
-            }
-
-            .rsvp-card-container {
-                margin-top: 0px !important;
-                width: 100% !important;
-                min-width: auto !important;
-                max-width: 100% !important;
             }
 
             /* Mobile form optimizations */
@@ -1405,56 +1461,26 @@
             }
         }
 
-        /* Mobile Small: 320px - 374px */
+        /* Mobile Small: 320px - 374px - Updated for new layout */
         @media only screen and (max-width: 374px) {
             .drop-page-container {
                 padding: 16px 8px 50px;
             }
 
             .drop-container {
-                grid-template-columns: 1fr;
                 gap: 16px;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-
-            .drop-image-container {
-                width: 100%;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-
-            .rsvp-container {
-                width: 100% !important;
-                max-width: 100% !important;
-                min-width: auto !important;
-                margin: 0 auto;
-                padding-bottom: 12px;
             }
 
             .drop-title {
                 font-size: clamp(24px, 5.5vw, 30px) !important;
                 line-height: 1.2 !important;
                 letter-spacing: -0.2px !important;
-                text-align: center !important;
-                width: 100% !important;
-                max-width: 100% !important;
                 margin: 0 0 8px 0 !important;
             }
 
             .user-container {
-                justify-content: center !important;
-                width: 100% !important;
-                max-width: 100% !important;
                 margin-bottom: 16px !important;
                 gap: 10px !important;
-            }
-
-            .rsvp-card-container {
-                margin-top: 0px !important;
-                width: 100% !important;
-                min-width: auto !important;
-                max-width: 100% !important;
             }
 
             .laylo-rsvp-card {
