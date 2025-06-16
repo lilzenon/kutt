@@ -325,11 +325,12 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing - Larger and properly spaced */
+        /* Desktop title sizing - Larger and tightly spaced */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Larger on desktop */
-                margin: 0 !important; /* Grid gap handles spacing */
+                margin: 0 0 -8px 0 !important; /* Negative bottom margin to pull card closer */
+                line-height: 1.0 !important; /* Tighter line-height to reduce natural spacing */
             }
         }
 
@@ -1326,8 +1327,9 @@
 
             .drop-title {
                 font-size: 50px !important;
-                line-height: 1.1 !important;
+                line-height: 1.0 !important; /* Tighter line-height */
                 letter-spacing: -0.4px !important;
+                margin: 0 0 -6px 0 !important; /* Negative bottom margin for tight connection */
             }
 
             .laylo-rsvp-card {
@@ -1375,8 +1377,9 @@
 
             .drop-title {
                 font-size: clamp(36px, 5vw, 44px) !important;
-                line-height: 1.1 !important;
+                line-height: 1.0 !important; /* Tighter line-height */
                 letter-spacing: -0.3px !important;
+                margin: 0 0 -4px 0 !important; /* Negative bottom margin for tight connection */
             }
 
             .laylo-rsvp-card {
