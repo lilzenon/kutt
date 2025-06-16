@@ -3,7 +3,12 @@
 <head>
     <title>{{drop.title}} - BOUNCE2BOUNCE</title>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no"/>
+
+    <!-- Mobile Web App Capabilities for Enhanced Pull-to-Refresh -->
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 
     <!-- Theme Color for Mobile Overscroll Background -->
     <meta name="theme-color" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}"/>
@@ -181,11 +186,33 @@
                 overflow-x: hidden; /* Prevent horizontal scroll */
             }
 
-            /* Enable pull-to-refresh on mobile with custom background */
+            /* Enhanced pull-to-refresh on mobile with custom background */
             body {
                 overscroll-behavior-y: auto !important; /* Allow vertical overscroll for pull-to-refresh */
                 /* Use custom overscroll background color */
                 background: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}} !important;
+                /* Ensure proper touch handling for pull-to-refresh */
+                touch-action: pan-y !important;
+                /* Enable momentum scrolling for better pull-to-refresh detection */
+                -webkit-overflow-scrolling: touch !important;
+            }
+
+            /* Ensure consistent pull-to-refresh across all mobile browsers */
+            html {
+                /* Force overscroll behavior for consistent pull-to-refresh */
+                overscroll-behavior-y: auto !important;
+                /* Ensure touch events are properly handled */
+                touch-action: manipulation !important;
+            }
+
+            /* Mobile-specific enhancements for reliable pull-to-refresh */
+            @supports (-webkit-overflow-scrolling: touch) {
+                body {
+                    /* iOS Safari specific optimizations */
+                    -webkit-overflow-scrolling: touch !important;
+                    /* Ensure proper scroll boundaries */
+                    overflow-y: auto !important;
+                }
             }
         }
 
@@ -1907,6 +1934,114 @@
             display: none !important;
         }
     </style>
+
+    <!-- Enhanced Pull-to-Refresh JavaScript for Cross-Browser Compatibility -->
+    <script>
+        // Enhanced pull-to-refresh implementation for consistent mobile behavior
+        (function() {
+            'use strict';
+
+            // Mobile detection
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/i.test(navigator.userAgent);
+
+            if (!isMobile) return; // Only run on mobile devices
+
+            console.log('🔄 Initializing enhanced pull-to-refresh for mobile device');
+
+            let startY = 0;
+            let currentY = 0;
+            let isRefreshing = false;
+            let pullThreshold = 80; // Minimum pull distance to trigger refresh
+            let maxPull = 150; // Maximum pull distance
+
+            // Track touch events for pull-to-refresh
+            function handleTouchStart(e) {
+                if (window.pageYOffset > 0) return; // Only at top of page
+                startY = e.touches[0].clientY;
+                currentY = startY;
+            }
+
+            function handleTouchMove(e) {
+                if (window.pageYOffset > 0 || isRefreshing) return;
+
+                currentY = e.touches[0].clientY;
+                const pullDistance = currentY - startY;
+
+                // Only handle downward pulls
+                if (pullDistance > 0) {
+                    // Provide visual feedback during pull
+                    if (pullDistance > pullThreshold) {
+                        document.body.style.transform = `translateY(${Math.min(pullDistance * 0.5, maxPull * 0.5)}px)`;
+                        document.body.style.transition = 'transform 0.1s ease-out';
+                    }
+                }
+            }
+
+            function handleTouchEnd(e) {
+                if (window.pageYOffset > 0 || isRefreshing) return;
+
+                const pullDistance = currentY - startY;
+
+                // Reset visual state
+                document.body.style.transform = '';
+                document.body.style.transition = 'transform 0.3s ease-out';
+
+                // Trigger refresh if pulled far enough
+                if (pullDistance > pullThreshold) {
+                    triggerRefresh();
+                }
+
+                // Reset values
+                startY = 0;
+                currentY = 0;
+            }
+
+            function triggerRefresh() {
+                if (isRefreshing) return;
+
+                isRefreshing = true;
+                console.log('🔄 Pull-to-refresh triggered - reloading page');
+
+                // Add visual feedback
+                document.body.style.opacity = '0.8';
+                document.body.style.transition = 'opacity 0.2s ease-out';
+
+                // Reload the page after a brief delay for visual feedback
+                setTimeout(() => {
+                    window.location.reload();
+                }, 300);
+            }
+
+            // Add event listeners with passive: false to allow preventDefault
+            document.addEventListener('touchstart', handleTouchStart, { passive: true });
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+            // Fallback: Listen for native browser pull-to-refresh events
+            window.addEventListener('beforeunload', function() {
+                console.log('🔄 Page refresh detected');
+            });
+
+            // Enhanced support for different mobile browsers
+            if (isIOS) {
+                // iOS Safari specific enhancements
+                document.body.style.webkitOverflowScrolling = 'touch';
+                document.body.style.overscrollBehaviorY = 'auto';
+            }
+
+            if (isAndroid) {
+                // Android Chrome specific enhancements
+                document.body.style.overscrollBehaviorY = 'auto';
+                // Ensure native pull-to-refresh is enabled
+                document.documentElement.style.overscrollBehaviorY = 'auto';
+            }
+
+            console.log('✅ Enhanced pull-to-refresh initialized successfully');
+
+        })();
+    </script>
 </head>
 <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <div class="drop-page-container">
