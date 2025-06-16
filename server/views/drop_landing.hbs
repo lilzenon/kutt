@@ -140,12 +140,39 @@
             padding: 0 16px;
         }
 
-        /* Desktop grid layout - Minimal gap for tight connection */
+        /* Desktop grid layout - Proper side-by-side layout with minimal spacing */
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr auto; /* Side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(8px, 1.5vw, 12px); /* Minimal gap for tight title-to-card connection */
+                gap: clamp(16px, 2vw, 24px); /* Reasonable gap for proper layout */
+                align-items: flex-start;
+                padding: 0 32px;
+            }
+
+            .drop-image-container {
+                grid-column: 1;
+                grid-row: 1 / 3; /* Span both rows */
+                margin-bottom: 0;
+                align-self: center;
+                max-width: min(690px, 58.3333vw);
+            }
+
+            .drop-title-section {
+                grid-column: 2;
+                grid-row: 1;
+                margin: 0 0 8px 0; /* Minimal bottom margin */
+                padding: 0;
+                text-align: left;
+                max-width: 400px;
+            }
+
+            .rsvp-container {
+                grid-column: 2;
+                grid-row: 2;
+                width: 400px !important;
+                max-width: 400px !important;
+                min-width: 400px !important;
                 align-items: flex-start;
             }
         }
@@ -172,8 +199,33 @@
             max-width: 100%;
         }
 
-        /* Tablet Layout: REMOVED CONFLICTING RULES */
-        /* This section has been moved to the proper location later in the CSS to prevent conflicts */
+        /* Tablet Layout: Proper stacked layout with reasonable spacing */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .drop-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 16px; /* Reasonable gap for tablet */
+                padding: 0 24px;
+                max-width: 600px;
+            }
+
+            .drop-title-section {
+                margin: 0 auto 8px auto; /* Minimal bottom margin */
+                padding: 0 16px;
+            }
+
+            .rsvp-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: auto !important;
+            }
+
+            .rsvp-card-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: auto !important;
+            }
+        }
 
         /* Desktop Layout: Side-by-side with image and content - REMOVED CONFLICTING RULES */
         /* This section has been moved to the proper location later in the CSS to prevent conflicts */
@@ -261,13 +313,7 @@
             overflow: visible; /* Prevent any overflow issues */
         }
 
-        /* Desktop title section - Minimal spacing for tight connection */
-        @media (min-width: 1024px) {
-            .drop-title-section {
-                padding: 0 !important; /* Remove all padding for tight connection */
-                margin-bottom: 0 !important; /* Remove margin for tight connection */
-            }
-        }
+        /* Desktop title section - Handled by grid layout above */
 
         /* Mobile title section - keep left alignment but add mobile padding */
         @media (max-width: 767px) {
@@ -285,7 +331,7 @@
             font-weight: 700 !important;
 
             /* SPACING: Minimal spacing for tight connection to card */
-            margin: 16px 0 8px 0 !important; /* Drastically reduced bottom margin */
+            margin: 16px 0 0 0 !important; /* Zero bottom margin for tight connection */
             padding: 0 !important;
 
             /* ALIGNMENT: Left-aligned consistently to match card */
@@ -308,7 +354,7 @@
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Increased from 42px for better desktop impact */
-                margin: 8px 0 4px 0 !important; /* Minimal spacing for tight connection */
+                margin: 0 0 0 0 !important; /* Zero margin for tight connection */
             }
         }
 
