@@ -136,7 +136,7 @@
                 "image"
                 "title"
                 "form";
-            gap: 8px;
+            gap: 4px; /* Reduced from 8px (50% reduction) */
             width: 100%;
             max-width: 1400px;
             align-items: center;
@@ -148,7 +148,7 @@
         /* Tablet Layout: Stacked layout with better spacing */
         @media (min-width: 768px) and (max-width: 1023px) {
             .drop-container {
-                gap: 16px;
+                gap: 8px; /* Reduced from 16px (50% reduction) */
                 padding: 0 24px;
                 max-width: 800px; /* Increased from 600px to better utilize tablet screen space */
             }
@@ -162,7 +162,7 @@
                 grid-template-areas:
                     "image title"
                     "image form"; /* Proper grid area for form */
-                gap: 16px 48px; /* Reduced row gap for tighter title-form connection */
+                gap: 8px 48px; /* Reduced row gap from 16px to 8px (50% reduction) */
                 align-items: start;
                 max-width: 1240px; /* Slightly wider to accommodate new proportions */
                 padding: 40px 24px;
@@ -1375,7 +1375,7 @@
 
             .drop-container {
                 grid-template-columns: 1fr 380px; /* Slightly smaller right column */
-                gap: 6px 32px; /* Small row gap for controlled spacing */
+                gap: 3px 32px; /* Reduced row gap from 6px to 3px (50% reduction) */
             }
 
             .drop-title-section {
@@ -1430,7 +1430,7 @@
                 grid-template-areas:
                     "image title"
                     "image form";
-                gap: 4px 24px; /* Small row gap for controlled spacing */
+                gap: 2px 24px; /* Reduced row gap from 4px to 2px (50% reduction) */
                 align-items: start;
                 padding: 0 16px;
             }
@@ -1485,7 +1485,7 @@
 
             .drop-container {
                 grid-template-columns: 1fr;
-                gap: clamp(8px, 2vw, 16px); /* Reduced from 16px-32px to 8px-16px for smoother transition */
+                gap: clamp(4px, 1vw, 8px); /* Reduced from 8px-16px to 4px-8px (50% reduction) */
                 text-align: center;
             }
 
@@ -1548,7 +1548,7 @@
             }
 
             .drop-container {
-                gap: 4px; /* Very tight spacing without subtitle */
+                gap: 2px; /* Reduced from 4px to 2px (50% reduction) */
             }
 
             .drop-image-container {
@@ -1627,7 +1627,7 @@
             }
 
             .drop-container {
-                gap: 2px; /* Minimal spacing for compact layout */
+                gap: 1px; /* Reduced from 2px to 1px (50% reduction) */
             }
 
             .drop-image-container {
