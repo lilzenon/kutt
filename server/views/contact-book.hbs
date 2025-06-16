@@ -441,11 +441,31 @@
                     <p class="text-sm text-gray-600" id="contactModalSubtitle">Loading...</p>
                 </div>
             </div>
-            <button onclick="closeContactDetailModal()" class="w-8 h-8 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition-colors duration-200">
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
+
+            <!-- Quick Actions -->
+            <div class="flex items-center space-x-2">
+                <button onclick="showAddToGroupModal()" class="inline-flex items-center px-3 py-2 border border-primary-300 shadow-sm text-sm font-medium rounded-md text-primary-700 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                    <svg class="-ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="hidden sm:inline">Add to Group</span>
+                    <span class="sm:hidden">Group</span>
+                </button>
+
+                <button onclick="addContactNote()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                    <svg class="-ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span class="hidden sm:inline">Add Note</span>
+                    <span class="sm:hidden">Note</span>
+                </button>
+
+                <button onclick="closeContactDetailModal()" class="w-8 h-8 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition-colors duration-200">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- Modal Body -->
@@ -950,8 +970,14 @@ function renderGroupsInSidebar(groups) {
 
     if (!container) {
         console.error('❌ Groups list container not found');
+        console.log('Available elements with "group" in ID:');
+        document.querySelectorAll('[id*="group"]').forEach(el => {
+            console.log(`  - ${el.id}: ${el.tagName}`);
+        });
         return;
     }
+
+    console.log('📁 Rendering groups in sidebar:', groups);
 
     if (!groups || groups.length === 0) {
         container.innerHTML = `
@@ -962,6 +988,7 @@ function renderGroupsInSidebar(groups) {
                 </button>
             </div>
         `;
+        console.log('📁 Displayed empty groups state');
         return;
     }
 
@@ -1490,6 +1517,47 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     console.log('✅ Contact Book initialized');
+
+    // Add debug button for testing
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('render')) {
+        console.log('🔧 Debug mode enabled - adding test functions to window');
+        window.debugContactBook = {
+            testGroupsAPI: async function() {
+                console.log('🧪 Testing Groups API...');
+                try {
+                    const response = await fetch('/api/contact-book/groups', {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include'
+                    });
+                    console.log('Response status:', response.status);
+                    const result = await response.json();
+                    console.log('Response data:', result);
+                    return result;
+                } catch (error) {
+                    console.error('API test error:', error);
+                    return { error: error.message };
+                }
+            },
+            forceLoadGroups: function() {
+                console.log('🔧 Force loading groups...');
+                loadGroups();
+            },
+            checkDOMElements: function() {
+                console.log('🔧 Checking DOM elements...');
+                console.log('groupsList element:', document.getElementById('groupsList'));
+                console.log('groupsLoading element:', document.getElementById('groupsLoading'));
+                console.log('groupsContainer element:', document.getElementById('groupsContainer'));
+            }
+        };
+
+        // Auto-test after 2 seconds
+        setTimeout(() => {
+            console.log('🔧 Running automatic debug test...');
+            window.debugContactBook.checkDOMElements();
+            window.debugContactBook.testGroupsAPI();
+        }, 2000);
+    }
 });
 
 // Bulk Selection and Add to Group Functions
@@ -1747,13 +1815,59 @@ function closeCreateGroupModal() {
 }
 
 function showAddToGroupModal() {
-    // TODO: Implement add to group modal
-    showNotification('Add to group functionality coming soon!', 'info');
+    // Get current contact data from the modal
+    if (!window.currentContactData) {
+        showNotification('No contact selected', 'error');
+        return;
+    }
+
+    // Extract contact identifier from current contact data
+    const contactData = window.currentContactData;
+    let contactId = null;
+
+    // Try to get the contact identifier (phone or email)
+    if (contactData.contact && contactData.contact.phone) {
+        contactId = contactData.contact.phone;
+    } else if (contactData.contact && contactData.contact.email) {
+        contactId = contactData.contact.email;
+    } else if (contactData.phone) {
+        contactId = contactData.phone;
+    } else if (contactData.email) {
+        contactId = contactData.email;
+    }
+
+    if (!contactId) {
+        showNotification('Unable to identify contact for group assignment', 'error');
+        return;
+    }
+
+    console.log('📁 Adding contact to group from modal:', contactId);
+
+    // Clear any existing selections and add this contact
+    selectedContacts.clear();
+    selectedContacts.add(contactId);
+
+    // Open the add to group modal
+    openAddToGroupModal();
 }
 
 function addContactNote() {
-    // TODO: Implement add contact note functionality
-    showNotification('Add note functionality coming soon!', 'info');
+    if (!window.currentContactData) {
+        showNotification('No contact selected', 'error');
+        return;
+    }
+
+    // Simple prompt for now - can be enhanced with a proper modal later
+    const noteContent = prompt('Add a note for this contact:');
+
+    if (!noteContent || noteContent.trim().length === 0) {
+        return;
+    }
+
+    // For now, just show a success message
+    // TODO: Implement actual note saving to database
+    showNotification('Note functionality will be implemented in a future update', 'info');
+    console.log('📝 Note to be added:', noteContent);
 }
 
 function deleteContactNote(noteId) {
@@ -1762,15 +1876,80 @@ function deleteContactNote(noteId) {
     showNotification('Delete note functionality coming soon!', 'info');
 }
 
-function removeFromGroup(groupId) {
+async function removeFromGroup(groupId) {
     if (!window.currentContactData) {
         showNotification('No contact selected', 'error');
         return;
     }
 
-    // TODO: Implement remove from group functionality
-    console.log('Remove contact from group:', groupId);
-    showNotification('Remove from group functionality coming soon!', 'info');
+    if (!confirm('Are you sure you want to remove this contact from the group?')) {
+        return;
+    }
+
+    try {
+        // Extract contact identifier from current contact data
+        const contactData = window.currentContactData;
+        let contactId = null;
+
+        // Try to get the contact identifier (phone or email)
+        if (contactData.contact && contactData.contact.phone) {
+            contactId = contactData.contact.phone;
+        } else if (contactData.contact && contactData.contact.email) {
+            contactId = contactData.contact.email;
+        } else if (contactData.phone) {
+            contactId = contactData.phone;
+        } else if (contactData.email) {
+            contactId = contactData.email;
+        }
+
+        if (!contactId) {
+            showNotification('Unable to identify contact for group removal', 'error');
+            return;
+        }
+
+        console.log('📁 Removing contact from group:', { groupId, contactId });
+
+        const response = await fetch(`/api/contact-book/groups/${groupId}/contacts`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ contactIds: [contactId] })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('✅ Contact removed from group successfully');
+            showNotification('Contact removed from group', 'success');
+
+            // Refresh the contact details to update the groups display
+            const currentContactId = contactData.contact?.phone || contactData.contact?.email || contactData.phone || contactData.email;
+            if (currentContactId) {
+                // Reload the contact details
+                showContactDetails(currentContactId);
+            }
+
+            // Also refresh the main contacts list and groups
+            await Promise.all([
+                loadContacts(),
+                loadGroups()
+            ]);
+
+        } else {
+            throw new Error(result.error || 'Failed to remove contact from group');
+        }
+
+    } catch (error) {
+        console.error('❌ Error removing contact from group:', error);
+        showNotification(error.message || 'Failed to remove contact from group', 'error');
+    }
 }
 
 // Table Density Functions
@@ -2210,20 +2389,40 @@ function populateContactInfo(contact) {
 function populateContactGroups(groups) {
     const container = document.getElementById('contactGroups');
 
+    if (!container) {
+        console.error('❌ Contact groups container not found');
+        return;
+    }
+
     if (!groups || groups.length === 0) {
-        container.innerHTML = '<p class="text-sm text-gray-500">No groups assigned</p>';
+        container.innerHTML = `
+            <div class="text-center py-3">
+                <p class="text-sm text-gray-500 mb-2">No groups assigned</p>
+                <p class="text-xs text-gray-400">Click "Add to Group" below to organize this contact</p>
+            </div>
+        `;
         return;
     }
 
     let groupsHTML = '';
     groups.forEach(group => {
+        const groupName = group.name || 'Unnamed Group';
+        const groupColor = group.color || '#6b7280';
+        const groupId = group.id || '';
+        const joinedDate = group.joined_group_at || group.created_at;
+
         groupsHTML += `
-            <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 rounded-full" style="background-color: ${group.color}"></div>
-                    <span class="text-sm font-medium text-gray-900">${group.name}</span>
+            <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                <div class="flex items-center space-x-3">
+                    <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: ${groupColor}"></div>
+                    <div class="flex-1 min-w-0">
+                        <span class="text-sm font-medium text-gray-900 truncate block">${groupName}</span>
+                        ${joinedDate ? `<span class="text-xs text-gray-500">Added ${formatDate(joinedDate)}</span>` : ''}
+                    </div>
                 </div>
-                <button onclick="removeFromGroup('${group.id}')" class="text-gray-400 hover:text-red-500 transition-colors">
+                <button onclick="removeFromGroup('${groupId}')"
+                        class="text-gray-400 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-colors flex-shrink-0"
+                        title="Remove from group">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>

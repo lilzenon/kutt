@@ -28,7 +28,7 @@ async function testContactBookAPI() {
         });
 
         console.log('Login response status:', loginResponse.status);
-        
+
         if (!loginResponse.ok) {
             console.log('❌ Authentication failed - using anonymous request');
             console.log('Response:', await loginResponse.text());
@@ -38,7 +38,7 @@ async function testContactBookAPI() {
         const cookies = loginResponse.headers.get('set-cookie') || '';
         console.log('Cookies received:', cookies ? 'Yes' : 'No');
 
-        // Test 2: Get Contact Groups
+        // Test 2: Get Contact Groups (Enhanced)
         console.log('\n📋 Test 2: Get Contact Groups');
         const groupsResponse = await fetch(`${BASE_URL}/api/contact-book/groups`, {
             method: 'GET',
@@ -54,9 +54,26 @@ async function testContactBookAPI() {
         if (groupsResponse.ok) {
             const groupsResult = await groupsResponse.json();
             console.log('✅ Groups API working:', groupsResult);
+
+            if (groupsResult.success && groupsResult.data) {
+                console.log(`📁 Found ${groupsResult.data.length} groups:`);
+                groupsResult.data.forEach((group, index) => {
+                    console.log(`  ${index + 1}. ${group.name} (${group.contact_count || 0} contacts) - ${group.color}`);
+                });
+            } else {
+                console.log('⚠️ Groups API returned success=false:', groupsResult.error);
+            }
         } else {
             const errorText = await groupsResponse.text();
             console.log('❌ Groups API error:', errorText);
+
+            // Try to parse as JSON for better error info
+            try {
+                const errorJson = JSON.parse(errorText);
+                console.log('❌ Parsed error:', errorJson);
+            } catch (e) {
+                console.log('❌ Raw error text:', errorText);
+            }
         }
 
         // Test 3: Create a Test Group
@@ -100,7 +117,7 @@ async function testContactBookAPI() {
 
         if (contactsResponse.ok) {
             const contactsResult = await contactsResponse.json();
-            console.log('✅ Contacts API working. Total contacts:', contactsResult.data?.total || 0);
+            console.log('✅ Contacts API working. Total contacts:', contactsResult.data ? .total || 0);
         } else {
             const errorText = await contactsResponse.text();
             console.log('❌ Contacts API error:', errorText);
