@@ -1,5 +1,6 @@
 const knex = require("../../knex");
 const cache = require("../analytics/cache.service");
+const phoneUtils = require("./phone-utils.service");
 
 class ContactGroupsService {
     constructor() {
@@ -12,7 +13,7 @@ class ContactGroupsService {
     async getUserGroups(userId) {
         const cacheKey = `contact:groups:${userId}`;
 
-        return await cache.getOrCompute(cacheKey, async () => {
+        return await cache.getOrCompute(cacheKey, async() => {
             console.log(`📁 Loading contact groups for user ${userId}`);
 
             const groups = await knex("contact_groups")
@@ -152,7 +153,7 @@ class ContactGroupsService {
     }
 
     /**
-     * Add contacts to a group
+     * Add contacts to a group (phone-first approach)
      */
     async addContactsToGroup(userId, groupId, contactIds) {
         // Verify group ownership
@@ -165,56 +166,108 @@ class ContactGroupsService {
             throw new Error("Group not found");
         }
 
-        // Verify contacts exist and belong to user's network
-        const validContacts = await knex("users as u")
-            .select("u.id")
-            .join("drop_signups as ds", "u.id", "ds.user_id")
+        // Validate contact identifiers and separate by type
+        const phoneContacts = [];
+        const emailContacts = [];
+
+        for (const contactId of contactIds) {
+            // Try to normalize as phone first
+            const normalizedPhone = phoneUtils.normalizePhone(contactId);
+            if (normalizedPhone && phoneUtils.isValidPhone(normalizedPhone)) {
+                phoneContacts.push(normalizedPhone);
+            } else if (phoneUtils.isValidEmail(contactId)) {
+                emailContacts.push(contactId.toLowerCase().trim());
+            }
+        }
+
+        if (phoneContacts.length === 0 && emailContacts.length === 0) {
+            throw new Error("No valid contact identifiers provided");
+        }
+
+        // Verify contacts exist in user's drop signups
+        const validPhoneContacts = phoneContacts.length > 0 ? await knex("drop_signups as ds")
+            .select("ds.phone")
             .join("drops as d", "ds.drop_id", "d.id")
             .where("d.user_id", userId)
-            .whereIn("u.id", contactIds)
-            .groupBy("u.id");
+            .whereIn("ds.phone", phoneContacts)
+            .groupBy("ds.phone") : [];
 
-        const validContactIds = validContacts.map(c => c.id);
+        const validEmailContacts = emailContacts.length > 0 ? await knex("drop_signups as ds")
+            .select("ds.email")
+            .join("drops as d", "ds.drop_id", "d.id")
+            .where("d.user_id", userId)
+            .whereIn("ds.email", emailContacts)
+            .groupBy("ds.email") : [];
 
-        if (validContactIds.length === 0) {
-            throw new Error("No valid contacts found");
+        const validPhones = validPhoneContacts.map(c => c.phone);
+        const validEmails = validEmailContacts.map(c => c.email);
+
+        if (validPhones.length === 0 && validEmails.length === 0) {
+            throw new Error("No valid contacts found in your network");
         }
 
         // Get existing memberships to avoid duplicates
-        const existingMemberships = await knex("contact_group_memberships")
-            .select("contact_user_id")
+        const existingPhoneMemberships = validPhones.length > 0 ? await knex("contact_group_memberships")
+            .select("contact_phone")
             .where("group_id", groupId)
-            .whereIn("contact_user_id", validContactIds);
+            .whereIn("contact_phone", validPhones) : [];
 
-        const existingContactIds = existingMemberships.map(m => m.contact_user_id);
-        const newContactIds = validContactIds.filter(id => !existingContactIds.includes(id));
+        const existingEmailMemberships = validEmails.length > 0 ? await knex("contact_group_memberships")
+            .select("contact_email")
+            .where("group_id", groupId)
+            .whereIn("contact_email", validEmails) : [];
 
-        if (newContactIds.length === 0) {
-            return { added: 0, skipped: existingContactIds.length };
+        const existingPhones = existingPhoneMemberships.map(m => m.contact_phone);
+        const existingEmails = existingEmailMemberships.map(m => m.contact_email);
+
+        const newPhones = validPhones.filter(phone => !existingPhones.includes(phone));
+        const newEmails = validEmails.filter(email => !existingEmails.includes(email));
+
+        if (newPhones.length === 0 && newEmails.length === 0) {
+            return {
+                added: 0,
+                skipped: existingPhones.length + existingEmails.length
+            };
         }
 
         // Add new memberships
-        const memberships = newContactIds.map(contactId => ({
-            group_id: groupId,
-            contact_user_id: contactId,
-            added_by_user_id: userId
-        }));
+        const memberships = [];
 
-        await knex("contact_group_memberships").insert(memberships);
+        newPhones.forEach(phone => {
+            memberships.push({
+                group_id: groupId,
+                contact_phone: phone,
+                contact_email: null,
+                added_by_user_id: userId
+            });
+        });
 
-        // Update contact count
-        await knex("contact_groups")
-            .where("id", groupId)
-            .increment("contact_count", newContactIds.length);
+        newEmails.forEach(email => {
+            memberships.push({
+                group_id: groupId,
+                contact_phone: null,
+                contact_email: email,
+                added_by_user_id: userId
+            });
+        });
+
+        if (memberships.length > 0) {
+            await knex("contact_group_memberships").insert(memberships);
+
+            // Update contact count
+            await knex("contact_groups")
+                .where("id", groupId)
+                .increment("contact_count", memberships.length);
+        }
 
         // Clear cache
         await this.clearGroupCache(userId);
 
-        console.log(`📁 Added ${newContactIds.length} contacts to group ${groupId} for user ${userId}`);
-        return { 
-            added: newContactIds.length, 
-            skipped: existingContactIds.length,
-            total: validContactIds.length
+        console.log(`📁 Added ${memberships.length} contacts to group ${groupId} for user ${userId}`);
+        return {
+            added: memberships.length,
+            skipped: existingPhones.length + existingEmails.length,
+            total: validPhones.length + validEmails.length
         };
     }
 
@@ -270,7 +323,7 @@ class ContactGroupsService {
 
         const cacheKey = `contact:group:${groupId}:contacts:${limit}:${offset}`;
 
-        return await cache.getOrCompute(cacheKey, async () => {
+        return await cache.getOrCompute(cacheKey, async() => {
             const contacts = await knex("users as u")
                 .select([
                     "u.id",
@@ -310,7 +363,7 @@ class ContactGroupsService {
     async getGroupStats(userId) {
         const cacheKey = `contact:groups:stats:${userId}`;
 
-        return await cache.getOrCompute(cacheKey, async () => {
+        return await cache.getOrCompute(cacheKey, async() => {
             const stats = await knex("contact_groups")
                 .select([
                     knex.raw("COUNT(*) as total_groups"),

@@ -834,6 +834,8 @@ document.addEventListener('DOMContentLoaded', function() {
 async function handleCreateGroup(event) {
     event.preventDefault();
 
+    console.log('📁 Form submission started');
+
     const form = event.target;
     const formData = new FormData(form);
     const submitButton = form.querySelector('button[type="submit"]');
@@ -850,17 +852,29 @@ async function handleCreateGroup(event) {
             color: formData.get('color') || '#3b82f6'
         };
 
-        console.log('📁 Creating group:', groupData);
+        console.log('📁 Creating group with data:', groupData);
+        console.log('📁 Form data entries:', Array.from(formData.entries()));
 
         const response = await fetch('/api/contact-book/groups', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include', // Include cookies for authentication
             body: JSON.stringify(groupData)
         });
 
+        console.log('📁 Create group response status:', response.status);
+        console.log('📁 Create group response headers:', Object.fromEntries(response.headers.entries()));
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('📁 Create group error text:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
         const result = await response.json();
+        console.log('📁 Create group result:', result);
 
         if (result.success) {
             console.log('✅ Group created successfully:', result.data);
@@ -880,6 +894,7 @@ async function handleCreateGroup(event) {
 
     } catch (error) {
         console.error('❌ Error creating group:', error);
+        console.error('❌ Error stack:', error.stack);
         showNotification(error.message || 'Failed to create group', 'error');
     } finally {
         // Reset button state
@@ -891,17 +906,31 @@ async function handleCreateGroup(event) {
 async function loadGroups() {
     try {
         console.log('📁 Loading contact groups...');
+        console.log('📁 Current URL:', window.location.href);
+        console.log('📁 Making request to:', '/api/contact-book/groups');
 
         const response = await fetch('/api/contact-book/groups', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: 'include' // Include cookies for authentication
         });
 
+        console.log('📁 Response status:', response.status);
+        console.log('📁 Response headers:', Object.fromEntries(response.headers.entries()));
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('📁 Response error text:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
         const result = await response.json();
+        console.log('📁 Response data:', result);
 
         if (result.success) {
+            console.log('📁 Groups loaded successfully:', result.data);
             renderGroups(result.data);
         } else {
             throw new Error(result.error || 'Failed to load groups');
@@ -909,7 +938,28 @@ async function loadGroups() {
 
     } catch (error) {
         console.error('❌ Error loading groups:', error);
-        showNotification('Failed to load groups', 'error');
+        console.error('❌ Error stack:', error.stack);
+
+        // Show error in the groups container
+        const container = document.getElementById('groupsContainer');
+        if (container) {
+            container.innerHTML = `
+                <div class="col-span-full text-center py-8">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-red-600 font-medium">Error Loading Groups</p>
+                    <p class="text-sm text-gray-500 mt-1">${error.message}</p>
+                    <button onclick="loadGroups()" class="mt-4 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+
+        showNotification(`Failed to load groups: ${error.message}`, 'error');
     }
 }
 
