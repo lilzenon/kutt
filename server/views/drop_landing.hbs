@@ -162,7 +162,7 @@
                 grid-template-areas:
                     "image title"
                     "image form";
-                gap: 40px 40px; /* 40px gap between columns and rows */
+                gap: 16px 40px; /* 16px gap between rows (title-to-card), 40px gap between columns */
                 align-items: start;
                 max-width: 1200px;
                 padding: 40px 24px;
@@ -227,7 +227,7 @@
             grid-area: title;
             width: 100%;
             max-width: 100%;
-            padding: 8px 0 12px 0;
+            padding: 8px 0 0 0; /* Remove bottom padding to reduce title-to-card spacing */
             box-sizing: border-box;
             margin: 0 auto 4px auto;
             overflow: visible;
@@ -293,6 +293,7 @@
                 align-items: flex-start;
                 align-self: start;
                 padding-bottom: 0;
+                margin-top: 0; /* Ensure no top margin adds extra space */
             }
         }
 
@@ -1297,7 +1298,7 @@
 
             .drop-container {
                 grid-template-columns: 1fr 380px; /* Slightly smaller right column */
-                gap: 32px 32px; /* Smaller gaps for medium screens */
+                gap: 12px 32px; /* Tight title-to-card spacing, smaller column gap */
             }
 
             .drop-title-section {
@@ -1335,7 +1336,7 @@
                 grid-template-areas:
                     "image title"
                     "image form";
-                gap: 16px 24px; /* Smaller gaps for tablet */
+                gap: 8px 24px; /* Tight title-to-card spacing for tablet */
                 align-items: start;
                 padding: 0 16px;
             }
