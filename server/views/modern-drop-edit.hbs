@@ -781,6 +781,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: 'background_type', type: 'select', expected: '{{drop.background_type}}' },
             { name: 'card_background_type', type: 'select', expected: '{{drop.card_background_type}}' },
             { name: 'background_color', type: 'color', expected: '{{drop.background_color}}' },
+            { name: 'overscroll_background_color', type: 'color', expected: '{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}' },
             { name: 'button_color', type: 'color', expected: '{{drop.button_color}}' },
             { name: 'button_text_color', type: 'color', expected: '{{drop.button_text_color}}' },
             { name: 'title_color', type: 'color', expected: '{{drop.title_color}}' },
@@ -1310,7 +1311,15 @@ function updatePreviewColors() {
         documentRoot.style.setProperty('--drop-button-color', buttonColor);
         documentRoot.style.setProperty('--drop-form-field-color', formFieldColor);
 
-        console.log('🎨 Preview colors updated');
+        console.log('🎨 Preview colors updated:', {
+            backgroundColor,
+            overscrollBackgroundColor,
+            cardColor,
+            titleColor,
+            descriptionColor,
+            buttonColor,
+            formFieldColor
+        });
     } catch (error) {
         console.warn('⚠️ Preview color update failed, refreshing iframe');
         refreshPreview();
@@ -2153,6 +2162,7 @@ function initializeFormSubmission() {
                 background_type: data.background_type,
                 card_background_type: data.card_background_type,
                 background_color: data.background_color,
+                overscroll_background_color: data.overscroll_background_color,
                 button_color: data.button_color,
                 button_text_color: data.button_text_color,
                 title_color: data.title_color,
@@ -2392,7 +2402,7 @@ function initializeDebugTest() {
                 console.log('📋 Current form data:', currentData);
 
                 // Check specific styling fields
-                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'button_text_color', 'gradient_data'];
+                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'overscroll_background_color', 'button_text_color', 'gradient_data'];
                 stylingFields.forEach(field => {
                     const element = form.querySelector(`[name="${field}"]`);
                     if (element) {
