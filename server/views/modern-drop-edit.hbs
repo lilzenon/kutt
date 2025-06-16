@@ -106,6 +106,12 @@
                                     </div>
 
                                     <div>
+                                        <label for="edit-subtitle" class="block text-sm font-medium text-gray-700">Subtitle</label>
+                                        <input type="text" id="edit-subtitle" name="subtitle" maxlength="500" value="{{drop.subtitle}}" placeholder="Optional subtitle text (appears below main title)" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                        <p class="mt-1 text-sm text-gray-500">Appears directly underneath the main title with smaller, lighter styling</p>
+                                    </div>
+
+                                    <div>
                                         <label for="edit-description" class="block text-sm font-medium text-gray-700">Description</label>
                                         <textarea id="edit-description" name="description" rows="4" placeholder="Describe what this drop is about" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">{{drop.description}}</textarea>
                                     </div>
@@ -583,11 +589,11 @@
 // Global variables for preview elements
 let previewIframe;
 let previewDocument;
-let previewTitle, previewDescription, previewSubHeader, previewSubHeaderTitle, previewButtonText, previewUrlSlug;
+let previewTitle, previewSubtitle, previewDescription, previewSubHeader, previewSubHeaderTitle, previewButtonText, previewUrlSlug;
 let previewCoverImage, previewCover;
 
 // Form input elements
-let titleInput, descriptionInput, subHeaderInput, subHeaderTitleInput, slugInput, buttonTextInput, coverImageInput;
+let titleInput, subtitleInput, descriptionInput, subHeaderInput, subHeaderTitleInput, slugInput, buttonTextInput, coverImageInput;
 let backgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput, buttonColorInput, formFieldColorInput;
 let collectEmailToggle, collectPhoneToggle;
 
@@ -842,6 +848,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeFormElements() {
     // Get all form input elements
     titleInput = document.getElementById('edit-title');
+    subtitleInput = document.getElementById('edit-subtitle');
     descriptionInput = document.getElementById('edit-description');
     subHeaderInput = document.getElementById('edit-sub-header');
     subHeaderTitleInput = document.getElementById('edit-sub-header-title');
@@ -1051,6 +1058,7 @@ function initializePreviewSystem() {
             if (previewDocument) {
                 // Get preview elements
                 previewTitle = previewDocument.querySelector('.drop-title');
+                previewSubtitle = previewDocument.querySelector('.drop-subtitle');
                 previewDescription = previewDocument.querySelector('.drop-description p');
                 previewSubHeader = previewDocument.querySelector('.drop-sub-header-content');
                 previewSubHeaderTitle = previewDocument.querySelector('.drop-sub-header-title');
@@ -1061,6 +1069,7 @@ function initializePreviewSystem() {
 
                 console.log('🖼️ Preview elements found:', {
                     title: !!previewTitle,
+                    subtitle: !!previewSubtitle,
                     description: !!previewDescription,
                     subHeader: !!previewSubHeader,
                     subHeaderTitle: !!previewSubHeaderTitle,
@@ -1185,6 +1194,7 @@ function showPreviewError() {
 function initializeRealTimeUpdates() {
     // Content updates
     if (titleInput) titleInput.addEventListener('input', updatePreviewContent);
+    if (subtitleInput) subtitleInput.addEventListener('input', updatePreviewContent);
     if (descriptionInput) descriptionInput.addEventListener('input', updatePreviewContent);
     if (subHeaderInput) subHeaderInput.addEventListener('input', updatePreviewContent);
     if (subHeaderTitleInput) subHeaderTitleInput.addEventListener('input', updatePreviewContent);
@@ -1216,6 +1226,11 @@ function updatePreviewContent() {
         // Try direct iframe manipulation first
         if (previewDocument && previewTitle && titleInput) {
             previewTitle.textContent = titleInput.value || 'Drop Title';
+        }
+        if (previewDocument && previewSubtitle && subtitleInput) {
+            previewSubtitle.textContent = subtitleInput.value || '';
+            // Show/hide subtitle based on content
+            previewSubtitle.style.display = subtitleInput.value ? 'block' : 'none';
         }
         if (previewDocument && previewDescription && descriptionInput) {
             previewDescription.textContent = descriptionInput.value || 'Drop description';
