@@ -284,7 +284,7 @@
             }
         }
 
-        /* Desktop RSVP container - Targeted spacing adjustment */
+        /* Desktop RSVP container - Use transform to pull closer to title */
         @media (min-width: 1024px) {
             .rsvp-container {
                 width: 400px !important;
@@ -294,6 +294,10 @@
                 align-self: start;
                 padding-bottom: 0; /* Remove bottom padding only */
                 margin-top: 0; /* Reset to neutral positioning */
+                /* Use transform to physically move the container up */
+                transform: translateY(-32px) !important;
+                position: relative !important;
+                z-index: 2 !important;
             }
         }
 
@@ -325,13 +329,18 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing - Targeted spacing reduction */
+        /* Desktop title sizing - OVERRIDE conflicting drop-shared.css rules */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Larger on desktop */
-                margin: 0 0 -12px 0 !important; /* Moderate negative margin for tight connection */
+                margin: 0 !important; /* Override drop-shared.css margin-bottom: 40px */
+                margin-bottom: 0 !important; /* Force override conflicting rule */
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 padding: 0 !important; /* Clean padding */
+                /* Use transform to physically move the element up */
+                transform: translateY(-20px) !important;
+                position: relative !important;
+                z-index: 1 !important;
             }
         }
 
@@ -1331,12 +1340,21 @@
                 font-size: 50px !important;
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.4px !important;
-                margin: 0 0 -10px 0 !important; /* Moderate negative margin */
+                margin: 0 !important; /* Override any conflicting rules */
+                margin-bottom: 0 !important; /* Force override */
+                transform: translateY(-16px) !important; /* Physical movement */
+                position: relative !important;
+                z-index: 1 !important;
+            }
+
+            .rsvp-container {
+                transform: translateY(-28px) !important; /* Pull container closer */
+                position: relative !important;
+                z-index: 2 !important;
             }
 
             .laylo-rsvp-card {
                 padding: 28px 32px 40px 32px !important; /* Restore internal padding */
-                margin-top: -12px !important; /* Moderate negative top margin */
             }
         }
 
@@ -1382,12 +1400,21 @@
                 font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.3px !important;
-                margin: 0 0 -8px 0 !important; /* Moderate negative margin */
+                margin: 0 !important; /* Override any conflicting rules */
+                margin-bottom: 0 !important; /* Force override */
+                transform: translateY(-12px) !important; /* Physical movement */
+                position: relative !important;
+                z-index: 1 !important;
+            }
+
+            .rsvp-container {
+                transform: translateY(-20px) !important; /* Pull container closer */
+                position: relative !important;
+                z-index: 2 !important;
             }
 
             .laylo-rsvp-card {
                 padding: 24px 32px 40px 32px !important; /* Restore internal padding */
-                margin-top: -8px !important; /* Moderate negative top margin */
             }
         }
 
