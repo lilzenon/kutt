@@ -88,7 +88,8 @@
             min-height: 100vh;
             min-height: 100dvh; /* Dynamic viewport height for mobile */
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overscroll-behavior: none;
+            overscroll-behavior-x: none; /* Prevent horizontal overscroll */
+            overscroll-behavior-y: auto; /* Allow vertical overscroll for pull-to-refresh */
             background: transparent !important;
             overflow-x: hidden;
             /* Enhanced mobile scrolling optimization */
@@ -117,6 +118,8 @@
             -webkit-overflow-scrolling: touch;
             will-change: scroll-position;
             transform: translateZ(0); /* Force hardware acceleration */
+            overscroll-behavior-x: none; /* Prevent horizontal overscroll */
+            overscroll-behavior-y: auto; /* Allow vertical overscroll for pull-to-refresh */
             {{#if (eq drop.background_type "solid")}}
             background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}};
             {{else}}
@@ -167,6 +170,11 @@
                 gap: 2px; /* Tighter gap on mobile */
                 max-width: 100vw; /* Ensure it doesn't exceed viewport */
                 overflow-x: hidden; /* Prevent horizontal scroll */
+            }
+
+            /* Enable pull-to-refresh on mobile */
+            body {
+                overscroll-behavior-y: auto !important; /* Allow vertical overscroll for pull-to-refresh */
             }
         }
 
