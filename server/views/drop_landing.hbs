@@ -78,6 +78,24 @@
             scroll-behavior: smooth;
             -webkit-text-size-adjust: 100%; /* Prevent text scaling on iOS */
             overflow-x: hidden; /* Prevent horizontal scroll */
+            /* Set overscroll background for pull-to-refresh */
+            {{#if (eq drop.background_type "solid")}}
+            background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}};
+            {{else}}
+                {{#if drop.gradient_data}}
+                    {{! Use gradient data if available }}
+                    background: {{{parseGradientData drop.gradient_data}}};
+                {{else}}
+                    {{! Fallback gradient }}
+                    background: linear-gradient(
+                        179deg,
+                        {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
+                        {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
+                        {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
+                        rgba(0, 0, 0, 0.9) 100%
+                    );
+                {{/if}}
+            {{/if}}
         }
 
         body, html {
@@ -90,7 +108,24 @@
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overscroll-behavior-x: none; /* Prevent horizontal overscroll */
             overscroll-behavior-y: auto; /* Allow vertical overscroll for pull-to-refresh */
-            background: transparent !important;
+            /* Set overscroll background to match drop background */
+            {{#if (eq drop.background_type "solid")}}
+            background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} !important;
+            {{else}}
+                {{#if drop.gradient_data}}
+                    {{! Use gradient data if available }}
+                    background: {{{parseGradientData drop.gradient_data}}} !important;
+                {{else}}
+                    {{! Fallback gradient }}
+                    background: linear-gradient(
+                        179deg,
+                        {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
+                        {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
+                        {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
+                        rgba(0, 0, 0, 0.9) 100%
+                    ) !important;
+                {{/if}}
+            {{/if}}
             overflow-x: hidden;
             /* Enhanced mobile scrolling optimization */
             -webkit-overflow-scrolling: touch;
@@ -172,9 +207,27 @@
                 overflow-x: hidden; /* Prevent horizontal scroll */
             }
 
-            /* Enable pull-to-refresh on mobile */
+            /* Enable pull-to-refresh on mobile with matching background */
             body {
                 overscroll-behavior-y: auto !important; /* Allow vertical overscroll for pull-to-refresh */
+                /* Ensure overscroll background matches drop background */
+                {{#if (eq drop.background_type "solid")}}
+                background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} !important;
+                {{else}}
+                    {{#if drop.gradient_data}}
+                        {{! Use gradient data if available }}
+                        background: {{{parseGradientData drop.gradient_data}}} !important;
+                    {{else}}
+                        {{! Fallback gradient }}
+                        background: linear-gradient(
+                            179deg,
+                            {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
+                            {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
+                            {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
+                            rgba(0, 0, 0, 0.9) 100%
+                        ) !important;
+                    {{/if}}
+                {{/if}}
             }
         }
 
