@@ -162,7 +162,7 @@
                 grid-template-areas:
                     "image title"
                     "image form"; /* Proper grid area for form */
-                gap: 0px 40px; /* No row gap for tight spacing, column gap for separation */
+                gap: 24px 40px; /* Proper row gap for title-to-form spacing, column gap for separation */
                 align-items: start;
                 max-width: 1200px;
                 padding: 40px 24px;
@@ -335,7 +335,7 @@
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Larger on desktop */
-                margin: 0 !important; /* Override drop-shared.css margin-bottom: 40px */
+                margin: 0 0 16px 0 !important; /* Add bottom margin for proper spacing */
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 padding: 0 !important; /* Clean padding */
                 text-align: left !important; /* Left-aligned to match form */
@@ -396,11 +396,11 @@
             height: 100%;
         }
 
-        /* Desktop card padding - Restore internal spacing while reducing external gap */
+        /* Desktop card padding - Proper internal spacing */
         @media (min-width: 1024px) {
             .laylo-rsvp-card {
                 padding: 32px 32px 40px 32px !important; /* Restore proper internal padding */
-                margin-top: -16px !important; /* Use margin to pull card closer to title */
+                margin-top: 0 !important; /* Remove negative margin for natural spacing */
             }
         }
 
