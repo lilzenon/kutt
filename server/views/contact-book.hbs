@@ -2,12 +2,7 @@
 <style>
 /* Modern B2B Table Design - Research-backed patterns from Linear, Notion, Airtable */
 .table-compact td {
-    padding: 0.5rem 1rem !important;
-}
-
-.table-compact .h-10 {
-    height: 2rem !important;
-    width: 2rem !important;
+    padding: 0.75rem 1rem !important;
 }
 
 .table-comfortable td {
@@ -16,11 +11,6 @@
 
 .table-spacious td {
     padding: 1.5rem 1.5rem !important;
-}
-
-.table-spacious .h-10 {
-    height: 3rem !important;
-    width: 3rem !important;
 }
 
 /* Enhanced Table Styling */
@@ -70,44 +60,18 @@
     }
 }
 
-/* Enhanced Hover Effects for Clickable Rows */
+/* Clean Table Row Styling */
+.contact-row {
+    transition: background-color 0.15s ease-in-out;
+    cursor: pointer;
+}
+
 .contact-row:hover {
     background-color: #f9fafb;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    cursor: pointer;
 }
 
-.contact-row:hover td {
-    border-color: #e5e7eb;
-}
-
-/* Smooth Transitions */
-.contact-row {
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-}
-
-/* Click feedback */
 .contact-row:active {
-    transform: translateY(0);
     background-color: #f3f4f6;
-}
-
-/* Visual indicator that row is clickable */
-.contact-row::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: transparent;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.contact-row:hover::before {
-    background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
 }
 
 /* Bulk Selection Styles */
@@ -144,11 +108,17 @@
     animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Mobile-First Responsive Design - iOS Safari Optimized */
+/* Mobile-First Responsive Design */
 @media (max-width: 768px) {
     /* Hide Location and Channel columns on mobile */
     .contact-row td:nth-child(3), /* Location */
     .contact-row td:nth-child(5) { /* Channel */
+        display: none !important;
+    }
+
+    /* Hide Location and Channel headers on mobile */
+    #contactsTable thead th:nth-child(3), /* Location */
+    #contactsTable thead th:nth-child(5) { /* Channel */
         display: none !important;
     }
 
@@ -164,87 +134,22 @@
     .table-spacious td {
         padding: 1.25rem 1rem !important;
     }
-
-    /* Optimize contact column for mobile - allow it to expand */
-    .contact-row td:nth-child(2) {
-        width: auto;
-        max-width: none;
-    }
-
-    /* Ensure table fits within viewport */
-    #contactsTable {
-        table-layout: auto;
-        width: 100%;
-    }
-
-    /* Optimize column distribution for mobile */
-    .contact-row td:nth-child(1) { /* Checkbox */
-        width: 48px;
-        flex-shrink: 0;
-    }
-
-    .contact-row td:nth-child(4) { /* Joined */
-        width: 80px;
-        flex-shrink: 0;
-    }
-
-    .contact-row td:nth-child(6) { /* RSVPs */
-        width: 60px;
-        flex-shrink: 0;
-    }
 }
 
 /* Tablet optimizations */
 @media (min-width: 769px) and (max-width: 1023px) {
-    /* Show Location but hide Channel on tablet */
-    .contact-row td:nth-child(5) { /* Channel */
+    /* Hide Channel column on tablet */
+    .contact-row td:nth-child(5), /* Channel */
+    #contactsTable thead th:nth-child(5) { /* Channel header */
         display: none !important;
-    }
-
-    /* Optimize column distribution for tablet */
-    .contact-row td:nth-child(1) { /* Checkbox */
-        width: 48px;
-    }
-
-    .contact-row td:nth-child(3) { /* Location */
-        width: 120px;
-    }
-
-    .contact-row td:nth-child(4) { /* Joined */
-        width: 100px;
-    }
-
-    .contact-row td:nth-child(6) { /* RSVPs */
-        width: 80px;
     }
 }
 
-/* Desktop optimizations */
+/* Desktop - all columns visible */
 @media (min-width: 1024px) {
-    /* Show all columns on desktop */
-    .contact-row td {
+    .contact-row td,
+    #contactsTable thead th {
         display: table-cell !important;
-    }
-
-    /* Optimize column distribution for desktop */
-    .contact-row td:nth-child(1) { /* Checkbox */
-        width: 48px;
-    }
-
-    .contact-row td:nth-child(3) { /* Location */
-        width: 140px;
-    }
-
-    .contact-row td:nth-child(4) { /* Joined */
-        width: 120px;
-    }
-
-    .contact-row td:nth-child(5) { /* Channel */
-        width: 120px;
-    }
-
-    .contact-row td:nth-child(6) { /* RSVPs */
-        width: 80px;
     }
 }
 
@@ -278,81 +183,18 @@
     outline-offset: -2px;
 }
 
-/* iOS Safari Specific Optimizations */
+/* iOS Safari Optimizations */
 @supports (-webkit-touch-callout: none) {
-    /* iOS Safari smooth scrolling */
     #contactsTable {
         -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
     }
 
-    /* Prevent zoom on input focus */
     input[type="checkbox"] {
         font-size: 16px;
     }
 
-    /* Optimize touch interactions */
     .contact-row {
         -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        user-select: none;
-    }
-
-    /* Smooth momentum scrolling */
-    .overflow-x-auto {
-        -webkit-overflow-scrolling: touch;
-    }
-
-    /* Prevent layout shifts on scroll */
-    .contact-row td {
-        will-change: auto;
-    }
-}
-
-/* Enhanced Visual Feedback */
-.contact-row:active {
-    transform: scale(0.995);
-    background-color: #f3f4f6;
-}
-
-/* Channel and RSVP Badge Styles */
-.channel-badge {
-    transition: all 0.2s ease-in-out;
-}
-
-.channel-badge:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.rsvp-badge {
-    transition: all 0.2s ease-in-out;
-    font-variant-numeric: tabular-nums;
-}
-
-.rsvp-badge:hover {
-    transform: scale(1.1);
-}
-
-/* Loading States */
-.contact-row.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.contact-row.loading td {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    background-size: 200% 100%;
-    animation: loading-shimmer 1.5s infinite;
-}
-
-@keyframes loading-shimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
     }
 }
 </style>
@@ -1336,48 +1178,22 @@ function renderContacts(data) {
                             <input type="checkbox" id="selectAllContacts" onchange="toggleSelectAll()" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>Contact</span>
-                                <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
+                            <span>Contact</span>
                         </th>
                         <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>Location</span>
-                                <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
+                            <span>Location</span>
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span class="hidden sm:inline">Joined</span>
-                                <span class="sm:hidden">Join</span>
-                                <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <span class="hidden sm:inline">Joined</span>
+                            <span class="sm:hidden">Join</span>
                         </th>
                         <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>Channel</span>
-                                <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
+                            <span>Channel</span>
                         </th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span class="hidden sm:inline">RSVPs</span>
-                                <span class="sm:hidden">RSVP</span>
-                                <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <span class="hidden sm:inline">RSVPs</span>
+                            <span class="sm:hidden">RSVP</span>
                         </th>
-
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -1396,107 +1212,60 @@ function renderContacts(data) {
         const formattedPhone = contact.phone ? formatPhoneNumber(contact.phone) : null;
 
         contactsHTML += `
-            <tr class="hover:bg-gray-50 hover:shadow-sm transition-all duration-200 contact-row group cursor-pointer"
+            <tr class="hover:bg-gray-50 transition-colors duration-200 contact-row cursor-pointer"
                 data-contact-id="${encodeURIComponent(contactId)}"
                 onclick="handleContactRowClick(event, '${encodeURIComponent(contactId)}')">
+
                 <!-- Checkbox Column -->
                 <td class="px-4 py-4 whitespace-nowrap" onclick="event.stopPropagation()">
-                    <input type="checkbox" class="contact-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded transition-colors"
+                    <input type="checkbox" class="contact-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                            value="${encodeURIComponent(contactId)}" onchange="updateBulkSelection()">
                 </td>
 
                 <!-- Contact Column -->
-                <td class="px-6 py-4 whitespace-nowrap min-w-0">
-                    <div class="flex items-center space-x-3">
-                        <div class="flex-shrink-0">
-                            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center ring-2 ring-white shadow-sm">
-                                <span class="text-sm font-semibold text-primary-700">${displayName && displayName.length > 0 ? displayName.charAt(0).toUpperCase() : '?'}</span>
-                            </div>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex flex-col">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm font-medium text-gray-900">${displayName}</span>
+                            ${contactType === 'phone' ?
+                                '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Phone</span>' :
+                                '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Email</span>'
+                            }
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center space-x-2">
-                                <p class="text-sm font-medium text-gray-900 truncate">${displayName}</p>
-                                ${contactType === 'phone' ?
-                                    '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Phone</span>' :
-                                    '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Email</span>'
-                                }
-                            </div>
-                            <div class="flex items-center mt-1">
-                                ${contactType === 'phone' && formattedPhone ? `
-                                    <svg class="w-3 h-3 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
-                                    </svg>
-                                    <span class="text-sm text-gray-500 truncate">${formattedPhone}</span>
-                                ` : contact.email ? `
-                                    <svg class="w-3 h-3 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                    </svg>
-                                    <span class="text-sm text-gray-500 truncate">${contact.email}</span>
-                                ` : '<span class="text-sm text-gray-400">No contact info</span>'}
-                            </div>
+                        <div class="mt-1">
+                            ${contactType === 'phone' && formattedPhone ? `
+                                <span class="text-sm text-gray-500">${formattedPhone}</span>
+                            ` : contact.email ? `
+                                <span class="text-sm text-gray-500">${contact.email}</span>
+                            ` : '<span class="text-sm text-gray-400">No contact info</span>'}
                         </div>
                     </div>
                 </td>
 
                 <!-- Location Column (Hidden on mobile) -->
                 <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        ${contact.location || contact.city || contact.region ? `
-                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-sm text-gray-900">${contact.location || contact.city || contact.region}</span>
-                        ` : `
-                            <span class="text-sm text-gray-400 italic">Unknown</span>
-                        `}
-                    </div>
+                    <span class="text-sm text-gray-900">
+                        ${contact.location || contact.city || contact.region || 'Unknown'}
+                    </span>
                 </td>
                 <!-- Joined Column -->
-                <td class="px-4 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <div class="text-sm text-gray-900 font-medium">${joinDate}</div>
-                    </div>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm text-gray-900">${joinDate}</span>
                 </td>
 
                 <!-- Channel Column (Hidden on mobile) -->
                 <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        ${contact.acquisition_channel || contact.referrer || contact.source ? `
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getChannelStyle(contact.acquisition_channel || contact.referrer || contact.source)}">
-                                ${formatChannelName(contact.acquisition_channel || contact.referrer || contact.source)}
-                            </span>
-                        ` : `
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                                Direct
-                            </span>
-                        `}
-                    </div>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getChannelStyle(contact.acquisition_channel || contact.referrer || contact.source)}">
+                        ${formatChannelName(contact.acquisition_channel || contact.referrer || contact.source)}
+                    </span>
                 </td>
 
                 <!-- RSVPs Column -->
-                <td class="px-4 py-4 whitespace-nowrap">
-                    <div class="flex items-center justify-center">
-                        ${contact.total_drop_signups > 0 ? `
-                            <div class="flex items-center space-x-1">
-                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${getRSVPStyle(contact.total_drop_signups)}">
-                                    ${contact.total_drop_signups}
-                                </span>
-                                ${contact.total_drop_signups > 1 ? `
-                                    <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                ` : ''}
-                            </div>
-                        ` : `
-                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-medium bg-gray-100 text-gray-400">
-                                0
-                            </span>
-                        `}
-                    </div>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${getRSVPStyle(contact.total_drop_signups || 0)}">
+                        ${contact.total_drop_signups || 0}
+                    </span>
                 </td>
-
-
             </tr>
         `;
     });
