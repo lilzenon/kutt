@@ -850,20 +850,43 @@ async function loadContacts() {
     }
 }
 
-// Load groups
+// Load groups (Enhanced with proper error handling)
 async function loadGroups() {
     try {
-        const response = await fetch('/api/contact-book/groups');
+        console.log('📁 Loading contact groups...');
+
+        // Show loading state
+        showGroupsLoading();
+
+        const response = await fetch('/api/contact-book/groups', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include' // Include cookies for authentication
+        });
+
+        console.log('📁 Response status:', response.status);
+
         if (!response.ok) {
-            throw new Error('Failed to load groups');
+            const errorText = await response.text();
+            console.error('📁 Response error text:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
         const result = await response.json();
-        if (!result.success) {
+        console.log('📁 Response data:', result);
+
+        if (result.success) {
+            console.log('📁 Groups loaded successfully:', result.data);
+            renderGroups(result.data || []);
+
+            // Update groups count in header stats
+            updateGroupsCount(result.data ? result.data.length : 0);
+        } else {
             throw new Error(result.error || 'Failed to load groups');
         }
 
-        renderGroups(result.data);
         hideGroupsLoading();
 
     } catch (error) {
@@ -871,6 +894,128 @@ async function loadGroups() {
         hideGroupsLoading();
         showGroupsError(error.message);
     }
+}
+
+// Helper functions for groups loading
+function showGroupsLoading() {
+    const container = document.getElementById('groupsList');
+    const loadingElement = document.getElementById('groupsLoading');
+
+    if (container) {
+        container.innerHTML = '';
+    }
+
+    if (loadingElement) {
+        loadingElement.classList.remove('hidden');
+    }
+}
+
+function hideGroupsLoading() {
+    const loadingElement = document.getElementById('groupsLoading');
+    if (loadingElement) {
+        loadingElement.classList.add('hidden');
+    }
+}
+
+function showGroupsError(message) {
+    const container = document.getElementById('groupsList');
+    if (container) {
+        container.innerHTML = `
+            <div class="text-center py-4">
+                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <svg class="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <p class="text-xs text-red-600 font-medium">Error Loading Groups</p>
+                <p class="text-xs text-gray-500 mt-1">${message}</p>
+                <button onclick="loadGroups()" class="mt-2 px-3 py-1 bg-primary-500 text-white text-xs font-medium rounded hover:bg-primary-600">
+                    Retry
+                </button>
+            </div>
+        `;
+    }
+}
+
+function updateGroupsCount(count) {
+    const totalGroupsElement = document.getElementById('totalGroupsCount');
+    if (totalGroupsElement) {
+        totalGroupsElement.textContent = count;
+    }
+}
+
+// Enhanced renderGroups function for sidebar
+function renderGroupsInSidebar(groups) {
+    const container = document.getElementById('groupsList');
+
+    if (!container) {
+        console.error('❌ Groups list container not found');
+        return;
+    }
+
+    if (!groups || groups.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-4">
+                <p class="text-sm text-gray-500">No groups created yet</p>
+                <button onclick="openCreateGroupModal()" class="mt-2 text-sm text-primary-600 hover:text-primary-700 font-medium">
+                    Create your first group
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    let groupsHTML = '';
+    groups.forEach(group => {
+        const groupName = group.name || 'Unnamed Group';
+        const groupColor = group.color || '#6b7280';
+        const contactCount = group.contact_count || 0;
+        const groupId = group.id || '';
+
+        groupsHTML += `
+            <button onclick="selectGroup('${groupId}')" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 group-item hover:bg-gray-100" data-group-id="${groupId}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 rounded-full mr-3" style="background-color: ${groupColor}"></div>
+                        <span class="truncate">${groupName}</span>
+                    </div>
+                    <span class="text-gray-500 text-xs">${contactCount}</span>
+                </div>
+            </button>
+        `;
+    });
+
+    container.innerHTML = groupsHTML;
+}
+
+// Group selection function
+function selectGroup(groupId) {
+    console.log('📁 Selecting group:', groupId);
+
+    // Update active state
+    document.querySelectorAll('.group-item').forEach(item => {
+        item.classList.remove('active', 'bg-primary-100', 'text-primary-700');
+        item.classList.add('text-gray-700');
+    });
+
+    if (groupId) {
+        const selectedItem = document.querySelector(`[data-group-id="${groupId}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('active', 'bg-primary-100', 'text-primary-700');
+            selectedItem.classList.remove('text-gray-700');
+        }
+    } else {
+        // Select "All Contacts"
+        const allContactsItem = document.querySelector('[data-group-id="all"]');
+        if (allContactsItem) {
+            allContactsItem.classList.add('active', 'bg-primary-100', 'text-primary-700');
+            allContactsItem.classList.remove('text-gray-700');
+        }
+    }
+
+    // Filter contacts by group
+    currentGroupId = groupId;
+    loadContacts();
 }
 
 // Load stats
@@ -1124,71 +1269,71 @@ function closeContactDetailModal() {
 // Contact Group Management Functions
 function renderGroups(groups) {
     console.log('📁 Rendering groups:', groups);
-    const container = document.getElementById('groupsContainer');
 
-    if (!container) {
-        console.error('❌ Groups container not found');
-        return;
-    }
+    // Render in sidebar
+    renderGroupsInSidebar(groups);
 
-    if (!groups || groups.length === 0) {
-        container.innerHTML = `
-            <div class="col-span-full text-center py-8">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
-                    </svg>
-                </div>
-                <p class="text-gray-500 font-medium">No groups created yet</p>
-                <p class="text-gray-400 text-sm mt-1">Create your first group to organize contacts</p>
-                <button onclick="openCreateGroupModal()" class="mt-4 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
-                    Create Group
-                </button>
-            </div>
-        `;
-        return;
-    }
-
-    let groupsHTML = '';
-    groups.forEach(group => {
-        // Safe property access with fallbacks
-        const groupName = group.name || 'Unnamed Group';
-        const groupColor = group.color || '#6b7280';
-        const groupDescription = group.description || '';
-        const contactCount = group.contact_count || 0;
-        const createdAt = group.created_at || null;
-        const groupId = group.id || '';
-
-        groupsHTML += `
-            <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                <div class="flex items-center justify-between mb-2">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-4 h-4 rounded-full" style="background-color: ${groupColor}"></div>
-                        <h3 class="text-sm font-medium text-gray-900">${groupName}</h3>
+    // Also render in main groups container if it exists
+    const mainContainer = document.getElementById('groupsContainer');
+    if (mainContainer) {
+        if (!groups || groups.length === 0) {
+            mainContainer.innerHTML = `
+                <div class="col-span-full text-center py-8">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                        </svg>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs text-gray-500">${contactCount} contact${contactCount !== 1 ? 's' : ''}</span>
-                        <button onclick="editGroup('${groupId}')" class="text-gray-400 hover:text-primary-600 p-1 rounded hover:bg-gray-100" title="Edit group">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                            </svg>
-                        </button>
-                        <button onclick="deleteGroup('${groupId}')" class="text-gray-400 hover:text-red-600 p-1 rounded hover:bg-red-50" title="Delete group">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
+                    <p class="text-gray-500 font-medium">No groups created yet</p>
+                    <p class="text-gray-400 text-sm mt-1">Create your first group to organize contacts</p>
+                    <button onclick="openCreateGroupModal()" class="mt-4 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
+                        Create Group
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        let groupsHTML = '';
+        groups.forEach(group => {
+            const groupName = group.name || 'Unnamed Group';
+            const groupColor = group.color || '#6b7280';
+            const groupDescription = group.description || '';
+            const contactCount = group.contact_count || 0;
+            const createdAt = group.created_at || null;
+            const groupId = group.id || '';
+
+            groupsHTML += `
+                <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 rounded-full" style="background-color: ${groupColor}"></div>
+                            <h3 class="text-sm font-medium text-gray-900">${groupName}</h3>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-gray-500">${contactCount} contact${contactCount !== 1 ? 's' : ''}</span>
+                            <button onclick="editGroup('${groupId}')" class="text-gray-400 hover:text-primary-600 p-1 rounded hover:bg-gray-100" title="Edit group">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteGroup('${groupId}')" class="text-gray-400 hover:text-red-600 p-1 rounded hover:bg-red-50" title="Delete group">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    ${groupDescription ? `<p class="text-sm text-gray-600 mb-2">${groupDescription}</p>` : ''}
+                    <div class="text-xs text-gray-500">
+                        Created ${createdAt ? formatDate(createdAt) : 'Unknown date'}
                     </div>
                 </div>
-                ${groupDescription ? `<p class="text-sm text-gray-600 mb-2">${groupDescription}</p>` : ''}
-                <div class="text-xs text-gray-500">
-                    Created ${createdAt ? formatDate(createdAt) : 'Unknown date'}
-                </div>
-            </div>
-        `;
-    });
+            `;
+        });
 
-    container.innerHTML = groupsHTML;
+        mainContainer.innerHTML = groupsHTML;
+    }
 }
 
 // Initialize form submission handler
@@ -1271,65 +1416,7 @@ async function handleCreateGroup(event) {
     }
 }
 
-async function loadGroups() {
-    try {
-        console.log('📁 Loading contact groups...');
-        console.log('📁 Current URL:', window.location.href);
-        console.log('📁 Making request to:', '/api/contact-book/groups');
 
-        const response = await fetch('/api/contact-book/groups', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include' // Include cookies for authentication
-        });
-
-        console.log('📁 Response status:', response.status);
-        console.log('📁 Response headers:', Object.fromEntries(response.headers.entries()));
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('📁 Response error text:', errorText);
-            throw new Error(`HTTP ${response.status}: ${errorText}`);
-        }
-
-        const result = await response.json();
-        console.log('📁 Response data:', result);
-
-        if (result.success) {
-            console.log('📁 Groups loaded successfully:', result.data);
-            renderGroups(result.data);
-        } else {
-            throw new Error(result.error || 'Failed to load groups');
-        }
-
-    } catch (error) {
-        console.error('❌ Error loading groups:', error);
-        console.error('❌ Error stack:', error.stack);
-
-        // Show error in the groups container
-        const container = document.getElementById('groupsContainer');
-        if (container) {
-            container.innerHTML = `
-                <div class="col-span-full text-center py-8">
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-red-600 font-medium">Error Loading Groups</p>
-                    <p class="text-sm text-gray-500 mt-1">${error.message}</p>
-                    <button onclick="loadGroups()" class="mt-4 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
-                        Retry
-                    </button>
-                </div>
-            `;
-        }
-
-        showNotification(`Failed to load groups: ${error.message}`, 'error');
-    }
-}
 
 async function editGroup(groupId) {
     console.log('✏️ Editing group:', groupId);
