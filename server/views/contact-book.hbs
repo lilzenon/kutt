@@ -197,23 +197,172 @@
         -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
     }
 }
+
+/* Mobile Header Optimizations */
+@media (max-width: 640px) {
+    /* Mobile header spacing */
+    .mobile-header-container {
+        padding: 1rem 1rem 1.5rem 1rem;
+    }
+
+    /* Mobile header title */
+    .mobile-header-title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+    }
+
+    /* Mobile header subtitle */
+    .mobile-header-subtitle {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        color: #6b7280;
+    }
+
+    /* Mobile header actions */
+    .mobile-header-actions {
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    /* Improve mobile header layout */
+    .mobile-header-container .flex {
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    /* Mobile header responsive adjustments */
+    @media (max-width: 480px) {
+        .mobile-header-container {
+            padding: 0.75rem 1rem 1.25rem 1rem;
+        }
+
+        .mobile-header-title {
+            font-size: 1.375rem;
+            line-height: 1.75rem;
+        }
+
+        .mobile-header-subtitle {
+            font-size: 0.8125rem;
+            line-height: 1.125rem;
+        }
+    }
+
+    /* Mobile dropdown menu */
+    .mobile-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 50;
+        min-width: 12rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        padding: 0.5rem 0;
+        margin-top: 0.5rem;
+    }
+
+    .mobile-dropdown-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-size: 0.875rem;
+        color: #374151;
+        transition: background-color 0.15s ease-in-out;
+        min-height: 44px; /* iOS touch target */
+    }
+
+    .mobile-dropdown-item:hover {
+        background-color: #f9fafb;
+    }
+
+    .mobile-dropdown-item svg {
+        margin-right: 0.75rem;
+        width: 1rem;
+        height: 1rem;
+        color: #6b7280;
+    }
+
+    /* Mobile button optimizations */
+    .mobile-btn {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hide desktop-only elements on mobile */
+    .desktop-only {
+        display: none !important;
+    }
+
+    /* Mobile menu toggle active state */
+    .mobile-menu-active {
+        background-color: #f3f4f6 !important;
+        border-color: #d1d5db !important;
+    }
+
+    /* Smooth transitions for mobile interactions */
+    .mobile-dropdown-menu {
+        transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+        transform-origin: top right;
+    }
+
+    .mobile-dropdown-menu.hidden {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+    }
+
+    .mobile-dropdown-menu:not(.hidden) {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
+
+    /* Improve mobile header button spacing */
+    .mobile-header-actions button {
+        flex-shrink: 0;
+    }
+
+    /* Mobile-specific bulk actions styling */
+    #mobileBulkActions {
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 0.5rem;
+    }
+
+    #mobileBulkActions .mobile-dropdown-item.text-red-600 {
+        color: #dc2626;
+    }
+
+    #mobileBulkActions .mobile-dropdown-item.text-red-600:hover {
+        background-color: #fef2f2;
+    }
+}
 </style>
 
 <div class="min-h-screen bg-gray-50">
     <!-- Page Header -->
     <div class="bg-white shadow">
         <div class="px-4 sm:px-6 lg:px-8">
-            <div class="py-6">
+            <div class="mobile-header-container py-6">
                 <div class="flex items-center justify-between">
                     <div class="flex-1 min-w-0">
-                        <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                        <h1 class="mobile-header-title text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
                             Contact Book
                         </h1>
-                        <p class="mt-1 text-sm text-gray-500">
+                        <p class="mobile-header-subtitle mt-1 text-sm text-gray-500">
                             Manage and organize your fan contacts
                         </p>
                     </div>
-                    <div class="flex items-center space-x-3">
+
+                    <!-- Desktop Actions -->
+                    <div class="hidden sm:flex items-center space-x-3">
                         <!-- Bulk Actions Toolbar (hidden by default) -->
                         <div id="bulkActionsToolbar" class="hidden flex items-center space-x-2 mr-4 px-3 py-2 bg-primary-50 rounded-lg border border-primary-200">
                             <span class="text-sm font-medium text-primary-700" id="selectedContactsCount">0 selected</span>
@@ -223,7 +372,7 @@
                         </div>
 
                         <!-- View Options -->
-                        <div class="hidden sm:flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+                        <div class="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
                             <button onclick="setTableDensity('compact')" id="densityCompact" class="px-3 py-1 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md transition-colors" title="Compact view">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
@@ -246,7 +395,7 @@
                             <svg class="-ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                             </svg>
-                            <span class="hidden sm:inline">Import</span>
+                            Import
                         </button>
 
                         <!-- Create Group Button -->
@@ -254,16 +403,94 @@
                             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                            <span class="hidden sm:inline">Create Group</span>
-                            <span class="sm:hidden">Group</span>
+                            Create Group
+                        </button>
+                    </div>
+
+                    <!-- Mobile Actions -->
+                    <div class="sm:hidden mobile-header-actions flex items-center space-x-2 relative">
+                        <!-- Primary Mobile Button -->
+                        <button onclick="openCreateGroupModal()" class="mobile-btn inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
                         </button>
 
                         <!-- Mobile Menu Toggle -->
-                        <button onclick="toggleMobileMenu()" id="mobileMenuToggle" class="sm:hidden inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
+                        <div class="relative">
+                            <button onclick="toggleMobileMenu()" onkeydown="handleMobileMenuKeydown(event)" id="mobileMenuToggle" class="mobile-btn inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors" aria-haspopup="true" aria-expanded="false">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                <span class="sr-only">Open mobile menu</span>
+                            </button>
+
+                            <!-- Mobile Dropdown Menu -->
+                            <div id="mobileDropdownMenu" class="mobile-dropdown-menu hidden">
+                                <!-- Mobile Bulk Actions (shown when contacts selected) -->
+                                <div id="mobileBulkActions" class="hidden">
+                                    <div class="px-4 py-2 bg-primary-50 border-b border-primary-100">
+                                        <span class="text-sm font-medium text-primary-700" id="mobileSelectedContactsCount">0 selected</span>
+                                    </div>
+
+                                    <button onclick="bulkAddToGroup(); closeMobileMenu();" class="mobile-dropdown-item">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        Add to Group
+                                    </button>
+
+                                    <button onclick="bulkExport(); closeMobileMenu();" class="mobile-dropdown-item">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Export Selected
+                                    </button>
+
+                                    <button onclick="clearSelection(); closeMobileMenu();" class="mobile-dropdown-item text-red-600">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        Clear Selection
+                                    </button>
+
+                                    <div class="border-t border-gray-100 my-1"></div>
+                                </div>
+
+                                <!-- Regular Menu Items -->
+                                <div id="mobileRegularActions">
+                                    <button onclick="openImportModal(); closeMobileMenu();" class="mobile-dropdown-item">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                        </svg>
+                                        Import Contacts
+                                    </button>
+
+                                    <div class="border-t border-gray-100 my-1"></div>
+
+                                    <button onclick="setTableDensity('compact'); closeMobileMenu();" class="mobile-dropdown-item" id="mobileDensityCompact">
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
+                                        </svg>
+                                        Compact View
+                                    </button>
+
+                                    <button onclick="setTableDensity('comfortable'); closeMobileMenu();" class="mobile-dropdown-item" id="mobileDensityComfortable">
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Comfortable View
+                                    </button>
+
+                                    <button onclick="setTableDensity('spacious'); closeMobileMenu();" class="mobile-dropdown-item" id="mobileDensitySpacious">
+                                        <svg fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
+                                        </svg>
+                                        Spacious View
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1748,8 +1975,15 @@ function updateBulkSelection() {
     const contactCheckboxes = document.querySelectorAll('.contact-checkbox');
     const checkedCheckboxes = document.querySelectorAll('.contact-checkbox:checked');
     const selectAllCheckbox = document.getElementById('selectAllContacts');
+
+    // Desktop elements
     const bulkToolbar = document.getElementById('bulkActionsToolbar');
     const selectedCount = document.getElementById('selectedContactsCount');
+
+    // Mobile elements
+    const mobileBulkActions = document.getElementById('mobileBulkActions');
+    const mobileRegularActions = document.getElementById('mobileRegularActions');
+    const mobileSelectedCount = document.getElementById('mobileSelectedContactsCount');
 
     // Update selected contacts set
     selectedContacts.clear();
@@ -1769,12 +2003,39 @@ function updateBulkSelection() {
         selectAllCheckbox.checked = false;
     }
 
-    // Show/hide bulk actions toolbar
+    // Show/hide bulk actions toolbar and mobile actions
     if (selectedContacts.size > 0) {
-        bulkToolbar.classList.remove('hidden');
-        selectedCount.textContent = `${selectedContacts.size} selected`;
+        // Desktop
+        if (bulkToolbar) {
+            bulkToolbar.classList.remove('hidden');
+        }
+        if (selectedCount) {
+            selectedCount.textContent = `${selectedContacts.size} selected`;
+        }
+
+        // Mobile
+        if (mobileBulkActions) {
+            mobileBulkActions.classList.remove('hidden');
+        }
+        if (mobileRegularActions) {
+            mobileRegularActions.classList.add('hidden');
+        }
+        if (mobileSelectedCount) {
+            mobileSelectedCount.textContent = `${selectedContacts.size} selected`;
+        }
     } else {
-        bulkToolbar.classList.add('hidden');
+        // Desktop
+        if (bulkToolbar) {
+            bulkToolbar.classList.add('hidden');
+        }
+
+        // Mobile
+        if (mobileBulkActions) {
+            mobileBulkActions.classList.add('hidden');
+        }
+        if (mobileRegularActions) {
+            mobileRegularActions.classList.remove('hidden');
+        }
     }
 }
 
@@ -1785,7 +2046,22 @@ function clearSelection() {
     });
     document.getElementById('selectAllContacts').checked = false;
     document.getElementById('selectAllContacts').indeterminate = false;
-    document.getElementById('bulkActionsToolbar').classList.add('hidden');
+
+    // Hide desktop bulk actions
+    const bulkToolbar = document.getElementById('bulkActionsToolbar');
+    if (bulkToolbar) {
+        bulkToolbar.classList.add('hidden');
+    }
+
+    // Hide mobile bulk actions and show regular actions
+    const mobileBulkActions = document.getElementById('mobileBulkActions');
+    const mobileRegularActions = document.getElementById('mobileRegularActions');
+    if (mobileBulkActions) {
+        mobileBulkActions.classList.add('hidden');
+    }
+    if (mobileRegularActions) {
+        mobileRegularActions.classList.remove('hidden');
+    }
 }
 
 function addContactToGroup(contactId) {
@@ -2297,10 +2573,91 @@ function handleContactRowClick(event, contactId) {
 
 // Mobile Menu Functions
 function toggleMobileMenu() {
-    // TODO: Implement mobile menu toggle
-    console.log('📱 Mobile menu toggle');
-    showNotification('Mobile menu functionality coming soon!', 'info');
+    const dropdown = document.getElementById('mobileDropdownMenu');
+    const toggle = document.getElementById('mobileMenuToggle');
+
+    if (!dropdown || !toggle) return;
+
+    const isHidden = dropdown.classList.contains('hidden');
+
+    if (isHidden) {
+        // Show dropdown
+        dropdown.classList.remove('hidden');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.classList.add('mobile-menu-active');
+
+        // Add click outside listener
+        setTimeout(() => {
+            document.addEventListener('click', handleMobileMenuClickOutside);
+        }, 0);
+
+        console.log('📱 Mobile menu opened');
+    } else {
+        closeMobileMenu();
+    }
 }
+
+function closeMobileMenu() {
+    const dropdown = document.getElementById('mobileDropdownMenu');
+    const toggle = document.getElementById('mobileMenuToggle');
+
+    if (!dropdown || !toggle) return;
+
+    dropdown.classList.add('hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.classList.remove('mobile-menu-active');
+
+    // Remove click outside listener
+    document.removeEventListener('click', handleMobileMenuClickOutside);
+
+    console.log('📱 Mobile menu closed');
+}
+
+function handleMobileMenuClickOutside(event) {
+    const dropdown = document.getElementById('mobileDropdownMenu');
+    const toggle = document.getElementById('mobileMenuToggle');
+
+    if (!dropdown || !toggle) return;
+
+    // Check if click is outside the dropdown and toggle button
+    if (!dropdown.contains(event.target) && !toggle.contains(event.target)) {
+        closeMobileMenu();
+    }
+}
+
+// Handle keyboard navigation for mobile menu
+function handleMobileMenuKeydown(event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleMobileMenu();
+    } else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeMobileMenu();
+    }
+}
+
+// Initialize mobile menu on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure mobile menu is closed on page load
+    const dropdown = document.getElementById('mobileDropdownMenu');
+    const toggle = document.getElementById('mobileMenuToggle');
+
+    if (dropdown && toggle) {
+        dropdown.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.classList.remove('mobile-menu-active');
+    }
+
+    // Add escape key listener for mobile menu
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const dropdown = document.getElementById('mobileDropdownMenu');
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                closeMobileMenu();
+            }
+        }
+    });
+});
 
 function hideGroupsLoading() {
     const loading = document.getElementById('groupsLoading');
