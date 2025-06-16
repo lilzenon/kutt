@@ -158,7 +158,7 @@
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr 420px; /* Slightly wider content area for better balance */
-                grid-template-rows: auto auto; /* Both rows auto-sized for better content fitting */
+                grid-template-rows: auto 1fr; /* Title takes needed space, form takes remaining space */
                 grid-template-areas:
                     "image title"
                     "image form"; /* Proper grid area for form */
@@ -1395,7 +1395,7 @@
 
             .drop-container {
                 grid-template-columns: 1fr 350px; /* Side-by-side with smaller right column */
-                grid-template-rows: auto auto;
+                grid-template-rows: auto 1fr; /* Title takes needed space, form takes remaining space */
                 grid-template-areas:
                     "image title"
                     "image form";
