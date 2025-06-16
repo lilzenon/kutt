@@ -140,12 +140,12 @@
             padding: 0 16px;
         }
 
-        /* Desktop grid layout - Proper side-by-side layout with optimal spacing */
+        /* Desktop grid layout - Minimal spacing for tight title-to-card connection */
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr auto; /* Side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(20px, 3vw, 32px); /* Optimal gap for proper layout and spacing */
+                gap: clamp(12px, 1.5vw, 16px); /* Minimal gap for tight connection */
                 align-items: flex-start;
                 padding: 0 32px;
             }
@@ -161,8 +161,8 @@
             .drop-title-section {
                 grid-column: 2;
                 grid-row: 1;
-                margin: 0 0 8px 0; /* Minimal bottom margin */
-                padding: 0;
+                margin: 0 !important; /* Zero margin for tight connection */
+                padding: 0 !important; /* Zero padding for tight connection */
                 text-align: left;
                 max-width: 400px;
             }
@@ -199,19 +199,19 @@
             max-width: 100%;
         }
 
-        /* Tablet Layout: Proper stacked layout with reasonable spacing */
-        @media (min-width: 768px) and (max-width: 1023px) {
+        /* Tablet Layout: Stacked layout with minimal spacing */
+        @media (min-width: 768px) and (max-width: 899px) {
             .drop-container {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto auto;
-                gap: 16px; /* Reasonable gap for tablet */
+                gap: 12px; /* Minimal gap for tight connection */
                 padding: 0 24px;
                 max-width: 600px;
             }
 
             .drop-title-section {
-                margin: 0 auto 8px auto; /* Minimal bottom margin */
-                padding: 0 16px;
+                margin: 0 auto 0 auto; /* Zero bottom margin for tight connection */
+                padding: 0 16px 0 16px; /* Remove bottom padding */
             }
 
             .rsvp-container {
@@ -311,6 +311,14 @@
             box-sizing: border-box;
             margin-bottom: 8px; /* Additional spacing below title section */
             overflow: visible; /* Prevent any overflow issues */
+        }
+
+        /* Desktop title section - Zero spacing for tight connection */
+        @media (min-width: 1024px) {
+            .drop-title-section {
+                padding: 0 !important; /* Remove all padding */
+                margin-bottom: 0 !important; /* Remove margin for tight connection */
+            }
         }
 
         /* Desktop title section - Handled by grid layout above */
@@ -1315,7 +1323,7 @@
             }
         }
 
-        /* Medium Desktop: 1024px - 1439px - Fixed spacing */
+        /* Medium Desktop: 1024px - 1439px - No spacing overrides */
         @media only screen and (max-width: 1439px) and (min-width: 1024px) {
             .drop-page-container {
                 padding: clamp(32px, 8vh, 80px) clamp(80px, 10vw, 150px) 24px;
@@ -1331,13 +1339,12 @@
                 font-size: 50px !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 0 0 0 0 !important; /* Zero margin for tight connection */
+                /* Use main desktop margin rules - no override */
             }
 
             .drop-title-section {
                 max-width: 380px !important;
-                margin: 0 0 8px 0 !important; /* Minimal bottom margin */
-                padding: 0 !important;
+                /* Use main desktop spacing rules - no override */
                 overflow: visible !important;
             }
 
@@ -1354,7 +1361,7 @@
             }
         }
 
-        /* Large Tablet: 900px - 1023px - Proper side-by-side layout */
+        /* Large Tablet: 900px - 1023px - Tight side-by-side layout */
         @media only screen and (max-width: 1023px) and (min-width: 900px) {
             .drop-page-container {
                 padding: clamp(24px, 6vh, 60px) clamp(32px, 6vw, 64px) 24px;
@@ -1363,7 +1370,7 @@
             .drop-container {
                 grid-template-columns: 1fr auto; /* Keep side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(16px, 2vw, 20px); /* Reasonable gap for proper layout */
+                gap: clamp(12px, 1.5vw, 16px); /* Minimal gap for tight connection */
                 align-items: flex-start;
                 padding: 0 16px;
             }
@@ -1379,8 +1386,8 @@
             .drop-title-section {
                 grid-column: 2;
                 grid-row: 1;
-                margin: 0 0 8px 0; /* Minimal bottom margin */
-                padding: 0;
+                margin: 0 !important; /* Zero margin for tight connection */
+                padding: 0 !important; /* Zero padding for tight connection */
                 max-width: 350px;
                 text-align: left;
                 overflow: visible !important;
