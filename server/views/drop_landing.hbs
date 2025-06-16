@@ -162,7 +162,7 @@
                 grid-template-areas:
                     "image title"
                     "image form"; /* Proper grid area for form */
-                gap: 8px 48px; /* Reduced row gap from 16px to 8px (50% reduction) */
+                gap: 0px 48px; /* Eliminated row gap completely for tighter spacing */
                 align-items: start;
                 max-width: 1240px; /* Slightly wider to accommodate new proportions */
                 padding: 40px 24px;
@@ -320,7 +320,7 @@
                 align-items: flex-start;
                 align-self: start;
                 padding-bottom: 40px; /* Add bottom padding for proper spacing */
-                margin: 16px 0 0 0 !important; /* Reduced from 32px to 16px (50% reduction) */
+                margin: -24px 0 0 0 !important; /* Negative margin to pull form closer to subtitle */
                 justify-self: start; /* Align to left side of grid area */
             }
         }
@@ -387,7 +387,7 @@
             .drop-subtitle {
                 font-size: 34px; /* 60% of title size (56px * 0.6 ≈ 34px) */
                 text-align: left !important; /* Left-aligned to match title */
-                margin: 10px 0 12px 0; /* Spacing: 10px from title, 12px to form (50% reduction) */
+                margin: 10px 0 -16px 0; /* Negative bottom margin to pull form much closer */
                 line-height: 1.2;
                 letter-spacing: -0.02em;
             }
@@ -1375,7 +1375,7 @@
 
             .drop-container {
                 grid-template-columns: 1fr 380px; /* Slightly smaller right column */
-                gap: 3px 32px; /* Reduced row gap from 6px to 3px (50% reduction) */
+                gap: 0px 32px; /* Eliminated row gap completely for tighter spacing */
             }
 
             .drop-title-section {
@@ -1430,7 +1430,7 @@
                 grid-template-areas:
                     "image title"
                     "image form";
-                gap: 2px 24px; /* Reduced row gap from 4px to 2px (50% reduction) */
+                gap: 0px 24px; /* Eliminated row gap completely for tighter spacing */
                 align-items: start;
                 padding: 0 16px;
             }
