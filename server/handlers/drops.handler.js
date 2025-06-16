@@ -378,6 +378,7 @@ function validateAndSanitizeDropData(data) {
     // Define allowed columns based on actual database schema
     const allowedColumns = [
         'title',
+        'subtitle',
         'description',
         'sub_header',
         'sub_header_title',
