@@ -298,25 +298,24 @@
             }
         }
 
-        /* Title Section - Enhanced Responsive Positioning and Spacing */
+        /* Title Section - Left-aligned to match card consistently */
         .drop-title-section {
             width: 100%;
-            text-align: center; /* Center on mobile/tablet */
-            padding: 8px 16px 12px 16px; /* Enhanced vertical padding for better breathing room */
+            text-align: left; /* Left-align consistently to match card */
+            padding: 8px 0 12px 0; /* Clean padding without horizontal constraints */
             box-sizing: border-box;
             margin-bottom: 8px; /* Additional spacing below title section */
+            overflow: visible; /* Prevent any overflow issues */
         }
 
-        /* Desktop title section alignment */
-        @media (min-width: 1024px) {
+        /* Mobile title section - keep left alignment but add mobile padding */
+        @media (max-width: 767px) {
             .drop-title-section {
-                text-align: left; /* Left-align on desktop to match card */
-                padding: 12px 0 16px 0; /* Enhanced desktop padding */
-                margin-bottom: 12px; /* Consistent desktop spacing */
+                padding: 8px 16px 12px 16px; /* Add horizontal padding only on mobile */
             }
         }
 
-        /* Title - Enhanced Responsive Typography and Spacing */
+        /* Title - Left-aligned consistently to match card */
         .drop-title {
             /* TYPOGRAPHY: Increased font sizes for maximum impact */
             font-size: 52px !important; /* Increased from 48px */
@@ -328,11 +327,12 @@
             margin: 16px 0 20px 0 !important; /* Added top and bottom margins */
             padding: 0 !important;
 
-            /* ALIGNMENT: Responsive alignment */
-            width: 100% !important;
-            max-width: 100% !important;
-            text-align: center !important; /* Center on mobile/tablet */
+            /* ALIGNMENT: Left-aligned consistently to match card */
+            width: auto !important; /* Remove width constraints to prevent overflow */
+            max-width: none !important; /* Remove max-width constraints */
+            text-align: left !important; /* Left-align consistently */
             box-sizing: border-box !important;
+            overflow: visible !important; /* Prevent any overflow issues */
 
             /* VISUAL: Enhanced rendering */
             color: {{#if drop.title_color}}{{drop.title_color}}{{else}}var(--laylo-text-primary){{/if}};
@@ -343,10 +343,9 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title alignment and sizing */
+        /* Desktop title sizing enhancement */
         @media (min-width: 1024px) {
             .drop-title {
-                text-align: left !important; /* Left-align on desktop */
                 font-size: 56px !important; /* Increased from 42px for better desktop impact */
                 margin: 20px 0 28px 0 !important; /* Enhanced desktop spacing */
             }
@@ -1305,7 +1304,6 @@
                 font-size: 50px !important; /* Increased from 42px for better impact */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                text-align: left !important;
                 margin: 16px 0 24px 0 !important; /* Enhanced spacing */
             }
 
@@ -1313,6 +1311,7 @@
                 max-width: 380px !important;
                 padding: 8px 0 12px 0 !important; /* Consistent section padding */
                 margin-bottom: 8px !important;
+                overflow: visible !important; /* Prevent overflow issues */
             }
 
             .user-container {
@@ -1354,8 +1353,8 @@
                 grid-row: 1;
                 margin: 0 0 20px 0;
                 padding: 8px 0 12px 0; /* Enhanced section padding */
-                text-align: left;
                 max-width: 350px;
+                overflow: visible !important; /* Prevent overflow issues */
             }
 
             .rsvp-container {
@@ -1370,7 +1369,6 @@
                 font-size: clamp(36px, 5vw, 44px) !important; /* Increased from 28px-36px to 36px-44px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
-                text-align: left !important;
                 margin: 12px 0 20px 0 !important; /* Enhanced spacing */
             }
         }
@@ -1395,9 +1393,9 @@
 
             .drop-title-section {
                 grid-column: 1;
-                text-align: center;
                 margin: 0 auto 16px auto;
                 padding: 8px 16px 12px 16px; /* Enhanced section padding */
+                overflow: visible !important; /* Prevent overflow issues */
             }
 
             .rsvp-container {
@@ -1413,9 +1411,6 @@
                 font-size: clamp(40px, 6vw, 48px) !important; /* Increased from 32px-40px to 40px-48px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                text-align: center !important;
-                width: 100% !important;
-                max-width: 100% !important;
                 margin: 12px 0 20px 0 !important; /* Enhanced spacing */
             }
 
@@ -1451,16 +1446,15 @@
             }
 
             .drop-title-section {
-                text-align: center !important;
                 margin: 0 auto 8px auto !important; /* Increased from 2px for better spacing */
                 padding: 6px 16px 10px 16px !important; /* Enhanced section padding */
+                overflow: visible !important; /* Prevent overflow issues */
             }
 
             .drop-title {
                 font-size: clamp(32px, 7vw, 42px) !important; /* Increased from 28px-36px to 32px-42px */
                 line-height: 1.15 !important;
                 letter-spacing: -0.3px !important;
-                text-align: center !important;
                 margin: 10px 0 16px 0 !important; /* Enhanced spacing */
             }
 
@@ -1523,16 +1517,15 @@
             }
 
             .drop-title-section {
-                text-align: center !important;
                 margin: 0 auto 6px auto !important; /* Increased from 2px for better spacing */
                 padding: 4px 8px 8px 8px !important; /* Enhanced section padding */
+                overflow: visible !important; /* Prevent overflow issues */
             }
 
             .drop-title {
                 font-size: clamp(28px, 6.5vw, 36px) !important; /* Increased from 24px-30px to 28px-36px */
                 line-height: 1.2 !important;
                 letter-spacing: -0.2px !important;
-                text-align: center !important;
                 margin: 8px 0 12px 0 !important; /* Enhanced spacing */
             }
 
