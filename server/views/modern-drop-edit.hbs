@@ -117,6 +117,15 @@
                                     </div>
 
                                     <div>
+                                        <label for="edit-rsvp-title" class="block text-sm font-medium text-gray-700">RSVP Title</label>
+                                        <input type="text" id="edit-rsvp-title" name="rsvp_title" maxlength="30" placeholder="Get Notified" value="{{#if drop.rsvp_title}}{{drop.rsvp_title}}{{else}}Get Notified{{/if}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                        <div class="mt-1 flex justify-between">
+                                            <p class="text-sm text-gray-500">Text displayed on the RSVP button/card</p>
+                                            <span id="rsvp-title-counter" class="text-sm text-gray-400">0/30</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
                                         <label for="edit-sub-header-title" class="block text-sm font-medium text-gray-700">Sub-header Title</label>
                                         <input type="text" id="edit-sub-header-title" name="sub_header_title" maxlength="100" placeholder="About" value="{{drop.sub_header_title}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <p class="mt-1 text-sm text-gray-500">The title that appears above the sub-header content (e.g., "About", "Details", "More Info").</p>
@@ -600,7 +609,7 @@ let previewTitle, previewSubtitle, previewDescription, previewSubHeader, preview
 let previewCoverImage, previewCover;
 
 // Form input elements
-let titleInput, subtitleInput, descriptionInput, subHeaderInput, subHeaderTitleInput, slugInput, buttonTextInput, coverImageInput;
+let titleInput, subtitleInput, descriptionInput, rsvpTitleInput, subHeaderInput, subHeaderTitleInput, slugInput, buttonTextInput, coverImageInput;
 let backgroundColorInput, overscrollBackgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput, buttonColorInput, formFieldColorInput;
 let collectEmailToggle, collectPhoneToggle;
 
@@ -858,6 +867,7 @@ function initializeFormElements() {
     titleInput = document.getElementById('edit-title');
     subtitleInput = document.getElementById('edit-subtitle');
     descriptionInput = document.getElementById('edit-description');
+    rsvpTitleInput = document.getElementById('edit-rsvp-title');
     subHeaderInput = document.getElementById('edit-sub-header');
     subHeaderTitleInput = document.getElementById('edit-sub-header-title');
     slugInput = document.getElementById('edit-slug');
@@ -879,6 +889,33 @@ function initializeFormElements() {
     collectPhoneToggle = document.getElementById('edit-collect-phone');
 
     console.log('📝 Form elements initialized');
+
+    // Initialize RSVP title character counter
+    if (rsvpTitleInput) {
+        updateRsvpTitleCounter();
+    }
+}
+
+// RSVP Title character counter function
+function updateRsvpTitleCounter() {
+    if (!rsvpTitleInput) return;
+
+    const counter = document.getElementById('rsvp-title-counter');
+    if (!counter) return;
+
+    const currentLength = rsvpTitleInput.value.length;
+    const maxLength = 30;
+
+    counter.textContent = `${currentLength}/${maxLength}`;
+
+    // Update counter color based on length
+    if (currentLength > 25) {
+        counter.className = 'text-sm text-orange-500';
+    } else if (currentLength > 28) {
+        counter.className = 'text-sm text-red-500';
+    } else {
+        counter.className = 'text-sm text-gray-400';
+    }
 }
 
 function initializeTabSystem() {
@@ -1205,6 +1242,12 @@ function initializeRealTimeUpdates() {
     if (titleInput) titleInput.addEventListener('input', updatePreviewContent);
     if (subtitleInput) subtitleInput.addEventListener('input', updatePreviewContent);
     if (descriptionInput) descriptionInput.addEventListener('input', updatePreviewContent);
+    if (rsvpTitleInput) {
+        rsvpTitleInput.addEventListener('input', function() {
+            updateRsvpTitleCounter();
+            updatePreviewContent();
+        });
+    }
     if (subHeaderInput) subHeaderInput.addEventListener('input', updatePreviewContent);
     if (subHeaderTitleInput) subHeaderTitleInput.addEventListener('input', updatePreviewContent);
     if (buttonTextInput) buttonTextInput.addEventListener('input', updatePreviewContent);
@@ -1256,8 +1299,11 @@ function updatePreviewContent() {
         if (previewDocument && previewSubHeaderTitle && subHeaderTitleInput) {
             previewSubHeaderTitle.textContent = subHeaderTitleInput.value || 'About';
         }
-        if (previewDocument && previewButtonText && buttonTextInput) {
-            previewButtonText.textContent = buttonTextInput.value || 'Get Notified';
+        if (previewDocument && previewButtonText) {
+            // Use RSVP title if available, otherwise fall back to button text or default
+            const rsvpTitle = rsvpTitleInput ? rsvpTitleInput.value : '';
+            const buttonText = buttonTextInput ? buttonTextInput.value : '';
+            previewButtonText.textContent = rsvpTitle || buttonText || 'Get Notified';
         }
         if (previewDocument && previewUrlSlug && slugInput) {
             previewUrlSlug.textContent = slugInput.value || 'drop-slug';
@@ -2167,6 +2213,7 @@ function initializeFormSubmission() {
                 button_text_color: data.button_text_color,
                 title_color: data.title_color,
                 description_color: data.description_color,
+                rsvp_title: data.rsvp_title,
                 gradient_data: data.gradient_data
             };
 
@@ -2402,7 +2449,7 @@ function initializeDebugTest() {
                 console.log('📋 Current form data:', currentData);
 
                 // Check specific styling fields
-                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'overscroll_background_color', 'button_text_color', 'gradient_data'];
+                const stylingFields = ['background_type', 'card_background_type', 'background_color', 'overscroll_background_color', 'button_text_color', 'rsvp_title', 'gradient_data'];
                 stylingFields.forEach(field => {
                     const element = form.querySelector(`[name="${field}"]`);
                     if (element) {

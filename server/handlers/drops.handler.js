@@ -56,6 +56,11 @@ const createDropValidation = [
     .optional()
     .isLength({ max: 50 })
     .withMessage("Button text must be less than 50 characters"),
+    body("rsvp_title")
+    .optional()
+    .isLength({ max: 30 })
+    .withMessage("RSVP title must be less than 30 characters")
+    .trim(),
     body("collect_email")
     .optional()
     .isBoolean()
@@ -398,6 +403,7 @@ function validateAndSanitizeDropData(data) {
         'button_text_color',
         'form_field_color',
         'button_text',
+        'rsvp_title',
         'background_type',
         'card_background_type',
         'gradient_data',

@@ -612,7 +612,7 @@
             }
         }
 
-        /* Card Title - Laylo-inspired bold design */
+        /* Card Title - Laylo-inspired bold design with overflow protection */
         .laylo-card-title {
             font-family: "Inter", sans-serif;
             font-weight: 600; /* Bolder weight following Laylo pattern */
@@ -628,6 +628,16 @@
             text-align: center;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
+
+            /* Overflow protection for long RSVP titles */
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-wrap: break-word;
+
+            /* Responsive font sizing for mobile */
+            font-size: clamp(1rem, 3vw, 1.125rem);
         }
 
         /* Phone Input Container - Standardized Dimensions */
@@ -2094,7 +2104,7 @@
                         </div>
 
                         <!-- Card Title -->
-                        <h3 class="laylo-card-title">Get notified</h3>
+                        <h3 class="laylo-card-title">{{#if drop.rsvp_title}}{{drop.rsvp_title}}{{else}}Get notified{{/if}}</h3>
 
                         <!-- Dynamic Form Based on Collection Settings -->
                         <form id="drop-signup-form">
