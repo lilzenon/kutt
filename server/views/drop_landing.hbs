@@ -157,14 +157,14 @@
         /* Desktop Layout: Proper CSS Grid side-by-side layout */
         @media (min-width: 1024px) {
             .drop-container {
-                grid-template-columns: 1fr 400px; /* Side-by-side: image left, content right */
+                grid-template-columns: 1fr 420px; /* Slightly wider content area for better balance */
                 grid-template-rows: auto 1fr; /* Title row, then flexible space for form */
                 grid-template-areas:
                     "image title"
                     "image form"; /* Proper grid area for form */
-                gap: 24px 40px; /* Proper row gap for title-to-form spacing, column gap for separation */
+                gap: 24px 48px; /* Increased column gap for better separation */
                 align-items: start;
-                max-width: 1200px;
+                max-width: 1240px; /* Slightly wider to accommodate new proportions */
                 padding: 40px 24px;
                 min-height: 100vh;
                 box-sizing: border-box;
@@ -191,7 +191,9 @@
             .drop-image-container {
                 max-width: min(690px, 58.3333vw);
                 margin-bottom: 0;
-                align-self: center;
+                align-self: start; /* Align to top instead of center */
+                justify-content: flex-start; /* Left-align image within container */
+                margin-left: 0; /* Ensure left alignment */
             }
         }
 
@@ -253,14 +255,14 @@
         @media (min-width: 1024px) {
             .drop-title-section {
                 grid-area: title; /* Use proper grid area */
-                max-width: 400px;
+                max-width: 420px;
                 margin: 0 !important; /* Remove all margins */
                 padding: 0 !important; /* Remove all padding */
                 text-align: left !important; /* Left-aligned to match form */
                 align-self: start;
                 justify-self: start; /* Align to left side of grid area */
-                width: 400px;
-                min-width: 400px;
+                width: 420px;
+                min-width: 420px;
             }
         }
 
@@ -292,12 +294,12 @@
         @media (min-width: 1024px) {
             .rsvp-container {
                 grid-area: form; /* Use proper grid area */
-                width: 400px !important;
-                max-width: 400px !important;
-                min-width: 400px !important;
+                width: 420px !important;
+                max-width: 420px !important;
+                min-width: 420px !important;
                 align-items: flex-start;
                 align-self: start;
-                padding-bottom: 0;
+                padding-bottom: 40px; /* Add bottom padding for proper spacing */
                 margin: 0 !important; /* Reset all margins */
                 justify-self: start; /* Align to left side of grid area */
             }
@@ -359,9 +361,9 @@
         /* Desktop RSVP card container */
         @media (min-width: 1024px) {
             .rsvp-card-container {
-                width: 400px !important;
-                min-width: 400px !important;
-                max-width: 400px !important;
+                width: 420px !important;
+                min-width: 420px !important;
+                max-width: 420px !important;
             }
         }
 
