@@ -113,26 +113,39 @@ class AnalyticsCache {
      * Get or compute cached analytics with fallback
      */
     async getOrCompute(key, computeFunction, ttl = this.defaultTTL) {
-        // Try to get from cache first
-        let data = await this.get(key);
-        
-        if (data) {
-            console.log(`📊 Cache hit for key: ${key}`);
-            return data;
-        }
-
-        // Compute fresh data
-        console.log(`📊 Cache miss for key: ${key}, computing fresh data`);
         try {
+            // Try to get from cache first
+            let data = await this.get(key);
+
+            if (data) {
+                console.log(`📊 Cache hit for key: ${key}`);
+                return data;
+            }
+
+            // Compute fresh data
+            console.log(`📊 Cache miss for key: ${key}, computing fresh data`);
             data = await computeFunction();
-            
-            // Cache the result
-            await this.set(key, data, ttl);
-            
+
+            // Try to cache the result (don't fail if caching fails)
+            try {
+                await this.set(key, data, ttl);
+            } catch (cacheError) {
+                console.warn(`⚠️ Failed to cache result for key ${key}:`, cacheError.message);
+                // Continue without caching
+            }
+
             return data;
         } catch (error) {
-            console.error(`❌ Error computing analytics for key ${key}:`, error);
-            throw error;
+            console.error(`❌ Error in getOrCompute for key ${key}:`, error);
+
+            // If cache fails, try to compute directly
+            try {
+                console.log(`🔄 Attempting direct computation for key: ${key}`);
+                return await computeFunction();
+            } catch (computeError) {
+                console.error(`❌ Error computing analytics for key ${key}:`, computeError);
+                throw computeError;
+            }
         }
     }
 
@@ -161,7 +174,7 @@ class AnalyticsCache {
         try {
             const info = await redis.client.info('memory');
             const keyspace = await redis.client.info('keyspace');
-            
+
             return {
                 enabled: true,
                 memory: info,

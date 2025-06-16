@@ -749,7 +749,7 @@ async function getDropAnalytics(req, res) {
     }
 
     // Get recent signups for this drop
-    const recentSignups = await drop.findSignups({ drop_id: parseInt(id) }, { limit: 5 });
+    const recentSignups = await drop.findSignups(parseInt(id), { limit: 5 });
 
     // Calculate basic analytics
     const views = foundDrop.view_count || 0;

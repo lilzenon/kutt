@@ -1,7 +1,6 @@
 const query = require("../../queries");
 const cache = require("./cache.service");
 const knex = require("../../knex");
-const performanceMonitor = require("./performance.service");
 
 class AnalyticsService {
     /**
@@ -13,44 +12,83 @@ class AnalyticsService {
         return await cache.getOrCompute(cacheKey, async() => {
             console.log(`📊 Computing dashboard analytics for user ${userId}`);
 
-            // Use optimized single query for all stats
-            const [statsResult] = await knex.raw(`
-                SELECT 
-                    (SELECT COUNT(*) FROM drops WHERE user_id = ?) as total_drops,
-                    (SELECT COUNT(*) FROM drops WHERE user_id = ? AND is_active = true) as active_drops,
-                    (SELECT COUNT(*) FROM links WHERE user_id = ?) as total_links,
-                    (SELECT COALESCE(SUM(visit_count), 0) FROM links WHERE user_id = ?) as total_clicks,
-                    (SELECT COUNT(DISTINCT ds.email) 
-                     FROM drop_signups ds 
-                     JOIN drops d ON ds.drop_id = d.id 
-                     WHERE d.user_id = ?) as total_unique_fans,
-                    (SELECT COUNT(*) 
-                     FROM drop_signups ds 
-                     JOIN drops d ON ds.drop_id = d.id 
-                     WHERE d.user_id = ?) as total_signups
-            `, [userId, userId, userId, userId, userId, userId]);
+            try {
+                // Use optimized single query for all stats
+                const statsResult = await knex.raw(`
+                    SELECT
+                        (SELECT COUNT(*) FROM drops WHERE user_id = ?) as total_drops,
+                        (SELECT COUNT(*) FROM drops WHERE user_id = ? AND is_active = true) as active_drops,
+                        (SELECT COUNT(*) FROM links WHERE user_id = ?) as total_links,
+                        (SELECT COALESCE(SUM(visit_count), 0) FROM links WHERE user_id = ?) as total_clicks,
+                        (SELECT COUNT(DISTINCT ds.email)
+                         FROM drop_signups ds
+                         JOIN drops d ON ds.drop_id = d.id
+                         WHERE d.user_id = ?) as total_unique_fans,
+                        (SELECT COUNT(*)
+                         FROM drop_signups ds
+                         JOIN drops d ON ds.drop_id = d.id
+                         WHERE d.user_id = ?) as total_signups
+                `, [userId, userId, userId, userId, userId, userId]);
 
-            const stats = statsResult.rows ? statsResult.rows[0] : statsResult[0];
+                // Handle different database result formats
+                let stats;
+                if (statsResult.rows && statsResult.rows.length > 0) {
+                    // PostgreSQL format
+                    stats = statsResult.rows[0];
+                } else if (Array.isArray(statsResult) && statsResult.length > 0) {
+                    // MySQL/SQLite format
+                    stats = statsResult[0];
+                } else {
+                    // Fallback to empty stats
+                    console.warn('⚠️ No stats result found, using fallback');
+                    stats = {
+                        total_drops: 0,
+                        active_drops: 0,
+                        total_links: 0,
+                        total_clicks: 0,
+                        total_unique_fans: 0,
+                        total_signups: 0
+                    };
+                }
 
-            // Get recent drops and links in parallel
-            const [recentDrops, recentLinks] = await Promise.all([
-                query.drop.findByUserWithStats(userId, { limit: 5 }),
-                query.link.get({ "links.user_id": userId }, { skip: 0, limit: 5 })
-            ]);
+                // Get recent drops and links in parallel
+                const [recentDrops, recentLinks] = await Promise.all([
+                    query.drop.findByUserWithStats(userId, { limit: 5 }),
+                    query.link.get({ "links.user_id": userId }, { skip: 0, limit: 5 })
+                ]);
 
-            return {
-                stats: {
-                    totalDrops: parseInt(stats.total_drops) || 0,
-                    activeDrops: parseInt(stats.active_drops) || 0,
-                    totalLinks: parseInt(stats.total_links) || 0,
-                    totalClicks: parseInt(stats.total_clicks) || 0,
-                    totalFans: parseInt(stats.total_unique_fans) || 0,
-                    totalSignups: parseInt(stats.total_signups) || 0
-                },
-                recentDrops: recentDrops || [],
-                recentLinks: recentLinks || [],
-                lastUpdated: new Date().toISOString()
-            };
+                return {
+                    stats: {
+                        totalDrops: parseInt(stats.total_drops) || 0,
+                        activeDrops: parseInt(stats.active_drops) || 0,
+                        totalLinks: parseInt(stats.total_links) || 0,
+                        totalClicks: parseInt(stats.total_clicks) || 0,
+                        totalFans: parseInt(stats.total_unique_fans) || 0,
+                        totalSignups: parseInt(stats.total_signups) || 0
+                    },
+                    recentDrops: recentDrops || [],
+                    recentLinks: recentLinks || [],
+                    lastUpdated: new Date().toISOString()
+                };
+            } catch (error) {
+                console.error(`❌ Error computing dashboard analytics for user ${userId}:`, error);
+
+                // Return fallback data on error
+                return {
+                    stats: {
+                        totalDrops: 0,
+                        activeDrops: 0,
+                        totalLinks: 0,
+                        totalClicks: 0,
+                        totalFans: 0,
+                        totalSignups: 0
+                    },
+                    recentDrops: [],
+                    recentLinks: [],
+                    lastUpdated: new Date().toISOString(),
+                    error: error.message
+                };
+            }
         }, cache.defaultTTL);
     }
 
@@ -63,21 +101,49 @@ class AnalyticsService {
         return await cache.getOrCompute(cacheKey, async() => {
             console.log(`📊 Computing analytics page data for user ${userId}`);
 
-            // Get dashboard analytics as base
-            const dashboardData = await this.getDashboardAnalytics(userId);
+            try {
+                // Get dashboard analytics as base
+                const dashboardData = await this.getDashboardAnalytics(userId);
 
-            // Get additional analytics data
-            const [fanAnalytics, performanceMetrics] = await Promise.all([
-                query.drop.getFanAnalytics(userId, { limit: 50 }),
-                this.getPerformanceMetrics(userId)
-            ]);
+                // Get additional analytics data
+                const [fanAnalytics, performanceMetrics] = await Promise.all([
+                    query.drop.getFanAnalytics(userId, { limit: 50 }).catch(err => {
+                        console.error('❌ Error getting fan analytics:', err);
+                        return { fans: [], totalCount: 0 };
+                    }),
+                    this.getPerformanceMetrics(userId).catch(err => {
+                        console.error('❌ Error getting performance metrics:', err);
+                        return {};
+                    })
+                ]);
 
-            return {
-                ...dashboardData,
-                fanAnalytics: fanAnalytics || { fans: [], totalCount: 0 },
-                performanceMetrics: performanceMetrics || {},
-                lastUpdated: new Date().toISOString()
-            };
+                return {
+                    ...dashboardData,
+                    fanAnalytics: fanAnalytics || { fans: [], totalCount: 0 },
+                    performanceMetrics: performanceMetrics || {},
+                    lastUpdated: new Date().toISOString()
+                };
+            } catch (error) {
+                console.error(`❌ Error computing analytics page data for user ${userId}:`, error);
+
+                // Return fallback data
+                return {
+                    stats: {
+                        totalDrops: 0,
+                        activeDrops: 0,
+                        totalLinks: 0,
+                        totalClicks: 0,
+                        totalFans: 0,
+                        totalSignups: 0
+                    },
+                    recentDrops: [],
+                    recentLinks: [],
+                    fanAnalytics: { fans: [], totalCount: 0 },
+                    performanceMetrics: {},
+                    lastUpdated: new Date().toISOString(),
+                    error: error.message
+                };
+            }
         }, cache.defaultTTL);
     }
 
@@ -86,12 +152,12 @@ class AnalyticsService {
      */
     async getPerformanceMetrics(userId) {
         try {
-            const [metricsResult] = await knex.raw(`
+            const metricsResult = await knex.raw(`
                 WITH user_drops AS (
                     SELECT id FROM drops WHERE user_id = ?
                 ),
                 signup_metrics AS (
-                    SELECT 
+                    SELECT
                         COUNT(*) as total_signups,
                         COUNT(DISTINCT email) as unique_signups,
                         AVG(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 ELSE 0 END) as weekly_growth_rate
@@ -99,21 +165,36 @@ class AnalyticsService {
                     JOIN user_drops ud ON ds.drop_id = ud.id
                 ),
                 link_metrics AS (
-                    SELECT 
+                    SELECT
                         AVG(visit_count) as avg_clicks_per_link,
                         MAX(visit_count) as max_clicks,
                         COUNT(CASE WHEN visit_count > 0 THEN 1 END) as active_links_count
-                    FROM links 
+                    FROM links
                     WHERE user_id = ?
                 )
-                SELECT 
+                SELECT
                     sm.*,
                     lm.*
                 FROM signup_metrics sm
                 CROSS JOIN link_metrics lm
             `, [userId, userId]);
 
-            const metrics = metricsResult.rows ? metricsResult.rows[0] : metricsResult[0];
+            // Handle different database result formats
+            let metrics;
+            if (metricsResult.rows && metricsResult.rows.length > 0) {
+                metrics = metricsResult.rows[0];
+            } else if (Array.isArray(metricsResult) && metricsResult.length > 0) {
+                metrics = metricsResult[0];
+            } else {
+                metrics = {
+                    total_signups: 0,
+                    unique_signups: 0,
+                    weekly_growth_rate: 0,
+                    avg_clicks_per_link: 0,
+                    max_clicks: 0,
+                    active_links_count: 0
+                };
+            }
 
             return {
                 totalSignups: parseInt(metrics.total_signups) || 0,
@@ -142,8 +223,8 @@ class AnalyticsService {
 
             const [drop, signups, recentSignups] = await Promise.all([
                 query.drop.findWithStats({ id: dropId }),
-                query.drop.findSignups({ drop_id: dropId }),
-                query.drop.findSignups({ drop_id: dropId }, { limit: 10 })
+                query.drop.findSignups(dropId),
+                query.drop.findSignups(dropId, { limit: 10 })
             ]);
 
             if (!drop) {
@@ -191,22 +272,41 @@ class AnalyticsService {
      * Get real-time analytics summary
      */
     async getRealTimeStats(userId) {
-        // This bypasses cache for real-time data
-        const [statsResult] = await knex.raw(`
-            SELECT 
-                (SELECT COUNT(*) FROM drops WHERE user_id = ? AND created_at >= NOW() - INTERVAL '24 hours') as drops_today,
-                (SELECT COUNT(*) FROM drop_signups ds JOIN drops d ON ds.drop_id = d.id WHERE d.user_id = ? AND ds.created_at >= NOW() - INTERVAL '24 hours') as signups_today,
-                (SELECT COUNT(*) FROM visits v JOIN links l ON v.link_id = l.id WHERE l.user_id = ? AND v.created_at >= NOW() - INTERVAL '24 hours') as clicks_today
-        `, [userId, userId, userId]);
+        try {
+            // This bypasses cache for real-time data
+            const statsResult = await knex.raw(`
+                SELECT
+                    (SELECT COUNT(*) FROM drops WHERE user_id = ? AND created_at >= NOW() - INTERVAL '24 hours') as drops_today,
+                    (SELECT COUNT(*) FROM drop_signups ds JOIN drops d ON ds.drop_id = d.id WHERE d.user_id = ? AND ds.created_at >= NOW() - INTERVAL '24 hours') as signups_today,
+                    (SELECT COUNT(*) FROM visits v JOIN links l ON v.link_id = l.id WHERE l.user_id = ? AND v.created_at >= NOW() - INTERVAL '24 hours') as clicks_today
+            `, [userId, userId, userId]);
 
-        const stats = statsResult.rows ? statsResult.rows[0] : statsResult[0];
+            // Handle different database result formats
+            let stats;
+            if (statsResult.rows && statsResult.rows.length > 0) {
+                stats = statsResult.rows[0];
+            } else if (Array.isArray(statsResult) && statsResult.length > 0) {
+                stats = statsResult[0];
+            } else {
+                stats = { drops_today: 0, signups_today: 0, clicks_today: 0 };
+            }
 
-        return {
-            dropsToday: parseInt(stats.drops_today) || 0,
-            signupsToday: parseInt(stats.signups_today) || 0,
-            clicksToday: parseInt(stats.clicks_today) || 0,
-            timestamp: new Date().toISOString()
-        };
+            return {
+                dropsToday: parseInt(stats.drops_today) || 0,
+                signupsToday: parseInt(stats.signups_today) || 0,
+                clicksToday: parseInt(stats.clicks_today) || 0,
+                timestamp: new Date().toISOString()
+            };
+        } catch (error) {
+            console.error(`❌ Error getting real-time stats for user ${userId}:`, error);
+            return {
+                dropsToday: 0,
+                signupsToday: 0,
+                clicksToday: 0,
+                timestamp: new Date().toISOString(),
+                error: error.message
+            };
+        }
     }
 }
 
