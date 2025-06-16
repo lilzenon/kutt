@@ -320,7 +320,7 @@
                 align-items: flex-start;
                 align-self: start;
                 padding-bottom: 40px; /* Add bottom padding for proper spacing */
-                margin: 0 !important; /* Reset all margins */
+                margin: 32px 0 0 0 !important; /* Add top margin for spacing from title */
                 justify-self: start; /* Align to left side of grid area */
             }
         }
@@ -1417,6 +1417,7 @@
                 width: 350px !important;
                 max-width: 350px !important;
                 min-width: 350px !important;
+                margin: 24px 0 0 0 !important; /* Add top margin for spacing from title */
             }
 
             .rsvp-card-container {
@@ -1429,17 +1430,7 @@
                 font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.3px !important;
-                margin: 0 !important; /* Override any conflicting rules */
-                margin-bottom: 0 !important; /* Force override */
-                transform: translateY(-12px) !important; /* Physical movement */
-                position: relative !important;
-                z-index: 1 !important;
-            }
-
-            .rsvp-container {
-                transform: translateY(-20px) !important; /* Pull container closer */
-                position: relative !important;
-                z-index: 2 !important;
+                margin: 0 0 16px 0 !important; /* Clean margins with bottom spacing */
             }
 
             .laylo-rsvp-card {
