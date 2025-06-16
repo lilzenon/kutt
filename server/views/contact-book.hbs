@@ -21,7 +21,32 @@
                             </svg>
                             Create Group
                         </button>
+
+                        <!-- Groups Toggle Button -->
+                        <button onclick="toggleGroupsView()" id="groupsToggleBtn" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14-4H5m14 8H5" />
+                            </svg>
+                            <span id="groupsToggleText">Show Groups</span>
+                        </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Groups Section -->
+    <div id="groupsSection" class="hidden bg-white shadow rounded-lg mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Contact Groups</h3>
+            <p class="text-sm text-gray-600 mt-1">Organize your contacts into groups for better management</p>
+        </div>
+        <div class="p-6">
+            <div id="groupsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Groups will be loaded here -->
+                <div class="text-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                    <p class="text-gray-500">Loading groups...</p>
                 </div>
             </div>
         </div>
@@ -253,20 +278,114 @@
     </div>
 </div>
 
-<!-- Contact Detail Modal -->
-<div id="contactDetailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-10 mx-auto p-5 border max-w-4xl shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <div class="flex justify-between items-start mb-4">
-                <h3 class="text-lg font-medium text-gray-900">Contact Details</h3>
-                <button onclick="closeContactDetailModal()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+<!-- Modern Contact Details Modal -->
+<div id="contactDetailModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full hidden z-50 backdrop-blur-sm">
+    <div class="relative top-4 mx-auto border max-w-6xl shadow-2xl rounded-xl bg-white transform transition-all duration-300 mb-8">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-primary-50 to-primary-100 px-6 py-4 border-b border-gray-200 flex items-center justify-between rounded-t-xl">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold text-lg" id="contactAvatar">
+                    ?
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900" id="contactModalTitle">Contact Details</h3>
+                    <p class="text-sm text-gray-600" id="contactModalSubtitle">Loading...</p>
+                </div>
             </div>
-            <div id="contactDetailContent">
-                <!-- Contact details will be loaded here -->
+            <button onclick="closeContactDetailModal()" class="w-8 h-8 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition-colors duration-200">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="flex flex-col lg:flex-row max-h-[80vh]">
+            <!-- Left Sidebar - Contact Info -->
+            <div class="w-full lg:w-1/3 bg-gray-50 border-r-0 lg:border-r border-b lg:border-b-0 border-gray-200 overflow-y-auto">
+                <div class="p-6 space-y-6">
+                    <!-- Contact Information -->
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Contact Information</h4>
+                        <div class="space-y-3" id="contactInfo">
+                            <!-- Contact info will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Contact Groups -->
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Groups</h4>
+                        <div class="space-y-2" id="contactGroups">
+                            <!-- Groups will be populated here -->
+                        </div>
+                        <button onclick="showAddToGroupModal()" class="mt-2 text-sm text-primary-600 hover:text-primary-700 font-medium">
+                            + Add to Group
+                        </button>
+                    </div>
+
+                    <!-- Engagement Stats -->
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">Engagement</h4>
+                        <div class="grid grid-cols-2 gap-3" id="contactStats">
+                            <!-- Stats will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content - Activity & History -->
+            <div class="flex-1 overflow-y-auto">
+                <div class="p-6">
+                    <!-- Tab Navigation -->
+                    <div class="border-b border-gray-200 mb-6">
+                        <nav class="-mb-px flex flex-wrap space-x-4 lg:space-x-8">
+                            <button onclick="switchContactTab('activity')" class="contact-tab-btn active py-3 px-2 lg:px-1 border-b-2 border-primary-500 font-medium text-sm text-primary-600 min-h-[44px] flex items-center" data-tab="activity">
+                                <span class="hidden sm:inline">Activity Timeline</span>
+                                <span class="sm:hidden">Activity</span>
+                            </button>
+                            <button onclick="switchContactTab('drops')" class="contact-tab-btn py-3 px-2 lg:px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 min-h-[44px] flex items-center" data-tab="drops">
+                                <span class="hidden sm:inline">Drop History</span>
+                                <span class="sm:hidden">Drops</span>
+                            </button>
+                            <button onclick="switchContactTab('notes')" class="contact-tab-btn py-3 px-2 lg:px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 min-h-[44px] flex items-center" data-tab="notes">
+                                <span class="hidden sm:inline">Notes</span>
+                                <span class="sm:hidden">Notes</span>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div id="contactTabContent">
+                        <!-- Activity Timeline -->
+                        <div id="activityTab" class="contact-tab-content">
+                            <div class="space-y-4" id="activityTimeline">
+                                <!-- Activity items will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Drop History -->
+                        <div id="dropsTab" class="contact-tab-content hidden">
+                            <div class="space-y-3" id="dropHistory">
+                                <!-- Drop history will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div id="notesTab" class="contact-tab-content hidden">
+                            <div class="space-y-4" id="contactNotes">
+                                <!-- Notes will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="contactModalLoading" class="hidden absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center rounded-xl">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                <p class="text-gray-600">Loading contact details...</p>
             </div>
         </div>
     </div>
@@ -660,11 +779,213 @@ function closeContactDetailModal() {
     document.getElementById('contactDetailModal').classList.add('hidden');
 }
 
-// Placeholder functions (to be implemented)
+// Contact Group Management Functions
 function renderGroups(groups) {
     console.log('📁 Rendering groups:', groups);
-    // TODO: Implement group rendering
+    const container = document.getElementById('groupsContainer');
+
+    if (!groups || groups.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">No groups created yet</p>';
+        return;
+    }
+
+    let groupsHTML = '';
+    groups.forEach(group => {
+        groupsHTML += `
+            <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 rounded-full" style="background-color: ${group.color}"></div>
+                        <h3 class="text-sm font-medium text-gray-900">${group.name}</h3>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-gray-500">${group.contact_count || 0} contacts</span>
+                        <button onclick="editGroup(${group.id})" class="text-gray-400 hover:text-primary-600">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                            </svg>
+                        </button>
+                        <button onclick="deleteGroup(${group.id})" class="text-gray-400 hover:text-red-600">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                ${group.description ? `<p class="text-sm text-gray-600">${group.description}</p>` : ''}
+                <div class="mt-2 text-xs text-gray-500">
+                    Created ${formatDate(group.created_at)}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = groupsHTML;
 }
+
+// Initialize form submission handler
+document.addEventListener('DOMContentLoaded', function() {
+    const createGroupForm = document.getElementById('createGroupForm');
+    if (createGroupForm) {
+        createGroupForm.addEventListener('submit', handleCreateGroup);
+    }
+});
+
+async function handleCreateGroup(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Creating...';
+
+    try {
+        const groupData = {
+            name: formData.get('name'),
+            description: formData.get('description'),
+            color: formData.get('color') || '#3b82f6'
+        };
+
+        console.log('📁 Creating group:', groupData);
+
+        const response = await fetch('/api/contact-book/groups', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(groupData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('✅ Group created successfully:', result.data);
+
+            // Close modal and reset form
+            closeCreateGroupModal();
+
+            // Show success message
+            showNotification('Group created successfully!', 'success');
+
+            // Refresh groups list
+            await loadGroups();
+
+        } else {
+            throw new Error(result.error || 'Failed to create group');
+        }
+
+    } catch (error) {
+        console.error('❌ Error creating group:', error);
+        showNotification(error.message || 'Failed to create group', 'error');
+    } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+    }
+}
+
+async function loadGroups() {
+    try {
+        console.log('📁 Loading contact groups...');
+
+        const response = await fetch('/api/contact-book/groups', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            renderGroups(result.data);
+        } else {
+            throw new Error(result.error || 'Failed to load groups');
+        }
+
+    } catch (error) {
+        console.error('❌ Error loading groups:', error);
+        showNotification('Failed to load groups', 'error');
+    }
+}
+
+async function editGroup(groupId) {
+    console.log('✏️ Editing group:', groupId);
+    // TODO: Implement group editing modal
+    showNotification('Group editing coming soon!', 'info');
+}
+
+async function deleteGroup(groupId) {
+    if (!confirm('Are you sure you want to delete this group? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        console.log('🗑️ Deleting group:', groupId);
+
+        const response = await fetch(`/api/contact-book/groups/${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showNotification('Group deleted successfully!', 'success');
+            await loadGroups(); // Refresh groups list
+        } else {
+            throw new Error(result.error || 'Failed to delete group');
+        }
+
+    } catch (error) {
+        console.error('❌ Error deleting group:', error);
+        showNotification(error.message || 'Failed to delete group', 'error');
+    }
+}
+
+// Groups View Toggle
+function toggleGroupsView() {
+    const groupsSection = document.getElementById('groupsSection');
+    const toggleBtn = document.getElementById('groupsToggleBtn');
+    const toggleText = document.getElementById('groupsToggleText');
+
+    if (groupsSection.classList.contains('hidden')) {
+        groupsSection.classList.remove('hidden');
+        toggleText.textContent = 'Hide Groups';
+        loadGroups(); // Load groups when showing
+    } else {
+        groupsSection.classList.add('hidden');
+        toggleText.textContent = 'Show Groups';
+    }
+}
+
+// Enhanced page initialization
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📋 Initializing Contact Book...');
+
+    // Initialize form handlers
+    const createGroupForm = document.getElementById('createGroupForm');
+    if (createGroupForm) {
+        createGroupForm.addEventListener('submit', handleCreateGroup);
+    }
+
+    // Load initial data
+    loadContacts();
+
+    // Auto-load groups if groups section is visible
+    const groupsSection = document.getElementById('groupsSection');
+    if (groupsSection && !groupsSection.classList.contains('hidden')) {
+        loadGroups();
+    }
+
+    console.log('✅ Contact Book initialized');
+});
 
 function hideGroupsLoading() {
     const loading = document.getElementById('groupsLoading');
@@ -689,15 +1010,53 @@ function showSearchSuggestions(query) {
     // TODO: Implement search suggestions
 }
 
-function showContactDetails(contactIdentifier) {
+async function showContactDetails(contactIdentifier) {
     console.log('👤 Showing contact details for:', contactIdentifier);
-    // TODO: Implement contact details modal
-    // For now, just show an alert
+
     const decodedId = decodeURIComponent(contactIdentifier);
     const isPhone = isPhoneNumber(decodedId);
     const contactType = isPhone ? 'phone' : 'email';
 
-    alert(`Contact details for: ${decodedId}\nType: ${contactType}\n\nThis feature will show detailed contact information, drop history, and group memberships.`);
+    // Show modal immediately with loading state
+    const modal = document.getElementById('contactDetailModal');
+    const loading = document.getElementById('contactModalLoading');
+
+    modal.classList.remove('hidden');
+    loading.classList.remove('hidden');
+
+    // Add modal animation
+    setTimeout(() => {
+        modal.querySelector('.relative').style.transform = 'scale(1)';
+        modal.querySelector('.relative').style.opacity = '1';
+    }, 10);
+
+    try {
+        // Fetch contact details from API
+        const response = await fetch(`/api/contact-book/contacts/${encodeURIComponent(decodedId)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch contact details: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            populateContactModal(result.data);
+        } else {
+            throw new Error(result.error || 'Failed to load contact details');
+        }
+
+    } catch (error) {
+        console.error('❌ Error loading contact details:', error);
+        showContactError(error.message);
+    } finally {
+        loading.classList.add('hidden');
+    }
 }
 
 // Phone number utility functions
@@ -732,6 +1091,521 @@ function isPhoneNumber(identifier) {
 function normalizePhoneNumber(phone) {
     if (!phone) return null;
     return phone.replace(/[^0-9+]/g, '');
+}
+
+// Contact Modal Management Functions
+function populateContactModal(contactData) {
+    console.log('📋 Populating contact modal with data:', contactData);
+
+    // Update header
+    const avatar = document.getElementById('contactAvatar');
+    const title = document.getElementById('contactModalTitle');
+    const subtitle = document.getElementById('contactModalSubtitle');
+
+    const displayName = contactData.display_name || contactData.name || contactData.email || contactData.phone;
+    avatar.textContent = displayName.charAt(0).toUpperCase();
+    title.textContent = displayName;
+    subtitle.textContent = `${contactData.contact_type === 'phone' ? 'Phone' : 'Email'} Contact • Joined ${formatDate(contactData.join_date)}`;
+
+    // Populate contact information
+    populateContactInfo(contactData);
+
+    // Populate contact groups
+    populateContactGroups(contactData.groups || []);
+
+    // Populate engagement stats
+    populateContactStats(contactData);
+
+    // Populate activity timeline (default tab)
+    populateActivityTimeline(contactData);
+
+    // Store contact data for tab switching
+    window.currentContactData = contactData;
+}
+
+function populateContactInfo(contact) {
+    const container = document.getElementById('contactInfo');
+
+    let infoHTML = '';
+
+    // Email
+    if (contact.email) {
+        infoHTML += `
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Email</p>
+                    <p class="text-sm text-gray-600">${contact.email}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Phone
+    if (contact.phone) {
+        const formattedPhone = formatPhoneNumber(contact.phone);
+        infoHTML += `
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Phone</p>
+                    <p class="text-sm text-gray-600">${formattedPhone || contact.phone}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Join Date
+    if (contact.join_date) {
+        infoHTML += `
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Joined</p>
+                    <p class="text-sm text-gray-600">${formatDate(contact.join_date)}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Last Activity
+    if (contact.last_activity_at) {
+        infoHTML += `
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Last Activity</p>
+                    <p class="text-sm text-gray-600">${formatDate(contact.last_activity_at)}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    container.innerHTML = infoHTML;
+}
+
+function populateContactGroups(groups) {
+    const container = document.getElementById('contactGroups');
+
+    if (!groups || groups.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500">No groups assigned</p>';
+        return;
+    }
+
+    let groupsHTML = '';
+    groups.forEach(group => {
+        groupsHTML += `
+            <div class="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 rounded-full" style="background-color: ${group.color}"></div>
+                    <span class="text-sm font-medium text-gray-900">${group.name}</span>
+                </div>
+                <button onclick="removeFromGroup('${group.id}')" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+    });
+
+    container.innerHTML = groupsHTML;
+}
+
+function populateContactStats(contact) {
+    const container = document.getElementById('contactStats');
+
+    const stats = [
+        {
+            label: 'Drop Signups',
+            value: contact.total_drop_signups || 0,
+            color: 'blue'
+        },
+        {
+            label: 'Link Clicks',
+            value: contact.total_link_clicks || 0,
+            color: 'green'
+        },
+        {
+            label: 'Engagement',
+            value: contact.engagement_score || 0,
+            color: 'purple'
+        },
+        {
+            label: 'Groups',
+            value: (contact.groups && contact.groups.length) || 0,
+            color: 'orange'
+        }
+    ];
+
+    let statsHTML = '';
+    stats.forEach(stat => {
+        statsHTML += `
+            <div class="bg-white p-3 rounded-lg border border-gray-200 text-center">
+                <div class="text-lg font-semibold text-${stat.color}-600">${stat.value}</div>
+                <div class="text-xs text-gray-500 mt-1">${stat.label}</div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = statsHTML;
+}
+
+function populateActivityTimeline(contact) {
+    const container = document.getElementById('activityTimeline');
+
+    // Create timeline from drop history and interactions
+    let activities = [];
+
+    // Add drop signups
+    if (contact.dropHistory && contact.dropHistory.length > 0) {
+        contact.dropHistory.forEach(drop => {
+            activities.push({
+                type: 'signup',
+                date: drop.signup_date,
+                title: `Signed up for "${drop.drop_title}"`,
+                description: `Joined drop via ${drop.referrer || 'direct link'}`,
+                icon: 'user-add',
+                color: 'blue'
+            });
+        });
+    }
+
+    // Add interactions
+    if (contact.interactions && contact.interactions.length > 0) {
+        contact.interactions.forEach(interaction => {
+            activities.push({
+                type: 'interaction',
+                date: interaction.interaction_date,
+                title: interaction.interaction_type,
+                description: interaction.notes || 'No additional details',
+                icon: 'chat',
+                color: 'green'
+            });
+        });
+    }
+
+    // Sort by date (newest first)
+    activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (activities.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500 text-center py-8">No activity recorded</p>';
+        return;
+    }
+
+    let timelineHTML = '';
+    activities.forEach((activity, index) => {
+        const isLast = index === activities.length - 1;
+        timelineHTML += `
+            <div class="flex space-x-3">
+                <div class="flex flex-col items-center">
+                    <div class="w-8 h-8 bg-${activity.color}-100 rounded-full flex items-center justify-center">
+                        ${getActivityIcon(activity.icon, activity.color)}
+                    </div>
+                    ${!isLast ? '<div class="w-px h-6 bg-gray-200 mt-2"></div>' : ''}
+                </div>
+                <div class="flex-1 pb-6">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-medium text-gray-900">${activity.title}</h4>
+                        <span class="text-xs text-gray-500">${formatDate(activity.date)}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">${activity.description}</p>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = timelineHTML;
+}
+
+function getActivityIcon(iconType, color) {
+    const icons = {
+        'user-add': `<svg class="w-4 h-4 text-${color}-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+        </svg>`,
+        'chat': `<svg class="w-4 h-4 text-${color}-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+        </svg>`,
+        'default': `<svg class="w-4 h-4 text-${color}-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>`
+    };
+
+    return icons[iconType] || icons['default'];
+}
+
+function switchContactTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.contact-tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'border-primary-500', 'text-primary-600');
+        btn.classList.add('border-transparent', 'text-gray-500');
+    });
+
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active', 'border-primary-500', 'text-primary-600');
+    document.querySelector(`[data-tab="${tabName}"]`).classList.remove('border-transparent', 'text-gray-500');
+
+    // Hide all tab content
+    document.querySelectorAll('.contact-tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+
+    // Show selected tab content
+    const selectedTab = document.getElementById(`${tabName}Tab`);
+    if (selectedTab) {
+        selectedTab.classList.remove('hidden');
+
+        // Load content if not already loaded
+        if (window.currentContactData) {
+            switch (tabName) {
+                case 'drops':
+                    populateDropHistory(window.currentContactData);
+                    break;
+                case 'notes':
+                    populateContactNotes(window.currentContactData);
+                    break;
+                case 'activity':
+                    // Already loaded
+                    break;
+            }
+        }
+    }
+}
+
+function populateDropHistory(contact) {
+    const container = document.getElementById('dropHistory');
+
+    if (!contact.dropHistory || contact.dropHistory.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500 text-center py-8">No drop signups recorded</p>';
+        return;
+    }
+
+    let historyHTML = '';
+    contact.dropHistory.forEach(drop => {
+        historyHTML += `
+            <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="text-sm font-medium text-gray-900">${drop.drop_title}</h4>
+                    <span class="text-xs text-gray-500">${formatDate(drop.signup_date)}</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p><strong>Name:</strong> ${drop.signup_name || 'Not provided'}</p>
+                    <p><strong>Email:</strong> ${drop.signup_email || 'Not provided'}</p>
+                    ${drop.signup_phone ? `<p><strong>Phone:</strong> ${drop.signup_phone}</p>` : ''}
+                    ${drop.referrer ? `<p><strong>Source:</strong> ${drop.referrer}</p>` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = historyHTML;
+}
+
+function populateContactNotes(contact) {
+    const container = document.getElementById('contactNotes');
+
+    if (!contact.notes || contact.notes.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-8">
+                <p class="text-sm text-gray-500 mb-4">No notes recorded</p>
+                <button onclick="addContactNote()" class="px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
+                    Add Note
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    let notesHTML = `
+        <div class="mb-4">
+            <button onclick="addContactNote()" class="px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600">
+                Add Note
+            </button>
+        </div>
+    `;
+
+    contact.notes.forEach(note => {
+        notesHTML += `
+            <div class="bg-white p-4 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs text-gray-500">${formatDate(note.created_at)}</span>
+                    <button onclick="deleteContactNote('${note.id}')" class="text-gray-400 hover:text-red-500">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-700">${note.content}</p>
+            </div>
+        `;
+    });
+
+    container.innerHTML = notesHTML;
+}
+
+function closeContactDetailModal() {
+    const modal = document.getElementById('contactDetailModal');
+    const modalContent = modal.querySelector('.relative');
+
+    // Animate out
+    modalContent.style.transform = 'scale(0.95)';
+    modalContent.style.opacity = '0';
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        // Reset modal state
+        modalContent.style.transform = 'scale(0.95)';
+        modalContent.style.opacity = '0';
+
+        // Clear current contact data
+        window.currentContactData = null;
+
+        // Reset to activity tab
+        switchContactTab('activity');
+    }, 200);
+}
+
+function showContactError(message) {
+    const container = document.getElementById('contactInfo');
+    container.innerHTML = `
+        <div class="text-center py-8">
+            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <p class="text-sm text-red-600 font-medium">Error Loading Contact</p>
+            <p class="text-sm text-gray-500 mt-1">${message}</p>
+            <button onclick="closeContactDetailModal()" class="mt-4 px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400">
+                Close
+            </button>
+        </div>
+    `;
+}
+
+// Keyboard and click-outside support
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('contactDetailModal');
+        if (!modal.classList.contains('hidden')) {
+            closeContactDetailModal();
+        }
+    }
+});
+
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('contactDetailModal');
+    if (e.target === modal && !modal.classList.contains('hidden')) {
+        closeContactDetailModal();
+    }
+});
+
+// Helper function to format phone numbers for display
+function formatPhoneNumber(phone) {
+    if (!phone) return '';
+
+    // Remove all non-digit characters except +
+    const cleaned = phone.replace(/[^\d+]/g, '');
+
+    // US phone number formatting
+    if (cleaned.startsWith('+1') && cleaned.length === 12) {
+        return cleaned.replace(/^\+1(\d{3})(\d{3})(\d{4})$/, '+1 ($1) $2-$3');
+    }
+
+    // International formatting (basic)
+    if (cleaned.startsWith('+')) {
+        return cleaned;
+    }
+
+    // US domestic formatting
+    if (cleaned.length === 10) {
+        return cleaned.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1) $2-$3');
+    }
+
+    return phone; // Return original if no formatting rules match
+}
+
+// Notification System
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(n => n.remove());
+
+    const notification = document.createElement('div');
+    notification.className = `notification fixed top-4 right-4 z-50 max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 transform transition-all duration-300 translate-x-full`;
+
+    const colors = {
+        success: 'text-green-800 bg-green-50 border-green-200',
+        error: 'text-red-800 bg-red-50 border-red-200',
+        warning: 'text-yellow-800 bg-yellow-50 border-yellow-200',
+        info: 'text-blue-800 bg-blue-50 border-blue-200'
+    };
+
+    const icons = {
+        success: `<svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>`,
+        error: `<svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+        </svg>`,
+        warning: `<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>`,
+        info: `<svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+        </svg>`
+    };
+
+    notification.innerHTML = `
+        <div class="p-4 ${colors[type]} border rounded-lg">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    ${icons[type]}
+                </div>
+                <div class="ml-3 w-0 flex-1">
+                    <p class="text-sm font-medium">${message}</p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button onclick="this.closest('.notification').remove()" class="inline-flex text-gray-400 hover:text-gray-600 focus:outline-none">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 5000);
 }
 
 function showPagination(data) {
