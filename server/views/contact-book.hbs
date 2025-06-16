@@ -1,4 +1,118 @@
 <!-- Contact Book Page -->
+<style>
+/* Table Density Styles */
+.table-compact td {
+    padding: 0.5rem 1.5rem !important;
+}
+
+.table-compact .h-10 {
+    height: 2rem !important;
+    width: 2rem !important;
+}
+
+.table-comfortable td {
+    padding: 1rem 1.5rem !important;
+}
+
+.table-spacious td {
+    padding: 1.5rem 1.5rem !important;
+}
+
+.table-spacious .h-10 {
+    height: 3rem !important;
+    width: 3rem !important;
+}
+
+/* Enhanced Hover Effects */
+.contact-row:hover {
+    background-color: #f9fafb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Smooth Transitions */
+.contact-row {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Bulk Selection Styles */
+.contact-checkbox:checked + * {
+    background-color: #eff6ff;
+}
+
+/* Modern Button Styles */
+.btn-modern {
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm transition-all duration-200 ease-in-out;
+}
+
+.btn-modern:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Enhanced Modal Styles */
+.modal-backdrop {
+    backdrop-filter: blur(4px);
+}
+
+/* Loading Animation */
+@keyframes pulse-subtle {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.loading-pulse {
+    animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive Improvements */
+@media (max-width: 640px) {
+    .contact-row td:nth-child(3),
+    .contact-row td:nth-child(4),
+    .contact-row td:nth-child(5) {
+        display: none;
+    }
+
+    .table-compact td {
+        padding: 0.75rem 1rem !important;
+    }
+}
+
+/* Group Color Indicators */
+.group-indicator {
+    position: relative;
+}
+
+.group-indicator::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 100%;
+    border-radius: 2px;
+}
+
+/* Enhanced Focus States */
+.focus-ring:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Keyboard Navigation */
+.contact-row:focus-within {
+    background-color: #eff6ff;
+    outline: 2px solid #3b82f6;
+    outline-offset: -2px;
+}
+</style>
+
 <div class="min-h-screen bg-gray-50">
     <!-- Page Header -->
     <div class="bg-white shadow">
@@ -14,20 +128,55 @@
                         </p>
                     </div>
                     <div class="flex items-center space-x-3">
+                        <!-- Bulk Actions Toolbar (hidden by default) -->
+                        <div id="bulkActionsToolbar" class="hidden flex items-center space-x-2 mr-4 px-3 py-2 bg-primary-50 rounded-lg border border-primary-200">
+                            <span class="text-sm font-medium text-primary-700" id="selectedContactsCount">0 selected</span>
+                            <button onclick="bulkAddToGroup()" class="text-sm text-primary-600 hover:text-primary-700 font-medium px-2 py-1 rounded hover:bg-primary-100">Add to Group</button>
+                            <button onclick="bulkExport()" class="text-sm text-primary-600 hover:text-primary-700 font-medium px-2 py-1 rounded hover:bg-primary-100">Export</button>
+                            <button onclick="clearSelection()" class="text-sm text-gray-500 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-100">Clear</button>
+                        </div>
+
+                        <!-- View Options -->
+                        <div class="hidden sm:flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+                            <button onclick="setTableDensity('compact')" id="densityCompact" class="px-3 py-1 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md transition-colors" title="Compact view">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="setTableDensity('comfortable')" id="densityComfortable" class="px-3 py-1 text-sm font-medium text-gray-900 bg-white rounded-md shadow-sm transition-colors" title="Comfortable view">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                            <button onclick="setTableDensity('spacious')" id="densitySpacious" class="px-3 py-1 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md transition-colors" title="Spacious view">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Import Button -->
+                        <button onclick="openImportModal()" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            <svg class="-ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                            <span class="hidden sm:inline">Import</span>
+                        </button>
+
                         <!-- Create Group Button -->
-                        <button onclick="openCreateGroupModal()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <button onclick="openCreateGroupModal()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
                             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                            Create Group
+                            <span class="hidden sm:inline">Create Group</span>
+                            <span class="sm:hidden">Group</span>
                         </button>
 
-                        <!-- Groups Toggle Button -->
-                        <button onclick="toggleGroupsView()" id="groupsToggleBtn" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14-4H5m14 8H5" />
+                        <!-- Mobile Menu Toggle -->
+                        <button onclick="toggleMobileMenu()" id="mobileMenuToggle" class="sm:hidden inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
-                            <span id="groupsToggleText">Show Groups</span>
                         </button>
                     </div>
                 </div>
@@ -391,6 +540,87 @@
     </div>
 </div>
 
+<!-- Add to Group Modal -->
+<div id="addToGroupModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border max-w-md shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Add to Group</h3>
+                <button onclick="closeAddToGroupModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form id="addToGroupForm" onsubmit="handleAddToGroup(event)">
+                <div class="mb-4">
+                    <label for="groupSelect" class="block text-sm font-medium text-gray-700 mb-2">Select Group</label>
+                    <select id="groupSelect" name="groupId" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
+                        <option value="">Loading groups...</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <p class="text-sm text-gray-600" id="selectedContactsInfo">
+                        <!-- Contact info will be populated here -->
+                    </p>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeAddToGroupModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        Add to Group
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Import Contacts Modal -->
+<div id="importModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border max-w-lg shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Import Contacts</h3>
+                <button onclick="closeImportModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form id="importForm" onsubmit="handleImportContacts(event)">
+                <div class="mb-4">
+                    <label for="importFile" class="block text-sm font-medium text-gray-700 mb-2">Choose CSV File</label>
+                    <input type="file" id="importFile" name="file" accept=".csv,.xlsx,.xls" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
+                    <p class="text-xs text-gray-500 mt-1">Supported formats: CSV, Excel (.xlsx, .xls)</p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="skipDuplicates" name="skipDuplicates" checked class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <span class="ml-2 text-sm text-gray-700">Skip duplicate contacts</span>
+                    </label>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeImportModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        Import Contacts
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 // Contact Book JavaScript
 let currentSearchQuery = '';
@@ -410,6 +640,13 @@ async function initializeContactBook() {
     // Initialize search functionality
     initializeSearch();
 
+    // Initialize keyboard shortcuts
+    initializeKeyboardShortcuts();
+
+    // Initialize table density from localStorage
+    const savedDensity = localStorage.getItem('contactTableDensity') || 'comfortable';
+    setTableDensity(savedDensity);
+
     // Load initial data
     await Promise.all([
         loadGroups(),
@@ -418,6 +655,92 @@ async function initializeContactBook() {
     ]);
 
     console.log('📇 Contact Book initialized successfully');
+}
+
+// Keyboard Shortcuts
+function initializeKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Only handle shortcuts when not in input fields
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+            return;
+        }
+
+        // Ctrl/Cmd + G: Add to Group
+        if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
+            e.preventDefault();
+            if (selectedContacts.size > 0) {
+                bulkAddToGroup();
+            } else {
+                showNotification('Select contacts first (Ctrl+A to select all)', 'info');
+            }
+        }
+
+        // Ctrl/Cmd + A: Select All
+        if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+            e.preventDefault();
+            const selectAllCheckbox = document.getElementById('selectAllContacts');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = true;
+                toggleSelectAll();
+            }
+        }
+
+        // Escape: Clear selection or close modals
+        if (e.key === 'Escape') {
+            // Close modals first
+            const modals = document.querySelectorAll('.fixed.inset-0:not(.hidden)');
+            if (modals.length > 0) {
+                modals.forEach(modal => {
+                    if (modal.id === 'createGroupModal') closeCreateGroupModal();
+                    if (modal.id === 'addToGroupModal') closeAddToGroupModal();
+                    if (modal.id === 'importModal') closeImportModal();
+                    if (modal.id === 'contactDetailModal') closeContactDetailModal();
+                });
+            } else {
+                // Clear selection if no modals open
+                clearSelection();
+            }
+        }
+
+        // Ctrl/Cmd + N: Create new group
+        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+            e.preventDefault();
+            openCreateGroupModal();
+        }
+
+        // Ctrl/Cmd + I: Import contacts
+        if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+            e.preventDefault();
+            openImportModal();
+        }
+
+        // Ctrl/Cmd + E: Export selected contacts
+        if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+            e.preventDefault();
+            if (selectedContacts.size > 0) {
+                bulkExport();
+            } else {
+                showNotification('Select contacts first to export', 'info');
+            }
+        }
+
+        // Number keys 1-3: Change table density
+        if (e.key >= '1' && e.key <= '3' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            e.preventDefault();
+            const densities = ['compact', 'comfortable', 'spacious'];
+            setTableDensity(densities[parseInt(e.key) - 1]);
+        }
+    });
+
+    console.log('⌨️ Keyboard shortcuts initialized');
+    console.log('📋 Available shortcuts:');
+    console.log('  • Ctrl+G: Add to Group');
+    console.log('  • Ctrl+A: Select All');
+    console.log('  • Ctrl+N: Create Group');
+    console.log('  • Ctrl+I: Import Contacts');
+    console.log('  • Ctrl+E: Export Selected');
+    console.log('  • 1/2/3: Table Density');
+    console.log('  • Escape: Clear/Close');
 }
 
 // Search functionality
@@ -590,9 +913,12 @@ function renderContacts(data) {
 
     let contactsHTML = `
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-300">
+            <table class="min-w-full divide-y divide-gray-300" id="contactsTable">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="relative px-6 py-3">
+                            <input type="checkbox" id="selectAllContacts" onchange="toggleSelectAll()" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Groups</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
@@ -616,12 +942,16 @@ function renderContacts(data) {
         const formattedPhone = contact.phone ? formatPhoneNumber(contact.phone) : null;
 
         contactsHTML += `
-            <tr class="hover:bg-gray-50 cursor-pointer" onclick="showContactDetails('${encodeURIComponent(contactId)}')">
+            <tr class="hover:bg-gray-50 transition-colors contact-row" data-contact-id="${encodeURIComponent(contactId)}">
                 <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="contact-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                           value="${encodeURIComponent(contactId)}" onchange="updateBulkSelection()">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap cursor-pointer" onclick="showContactDetails('${encodeURIComponent(contactId)}')">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 h-10 w-10">
                             <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                <span class="text-sm font-medium text-primary-700">${displayName.charAt(0).toUpperCase()}</span>
+                                <span class="text-sm font-medium text-primary-700">${displayName && displayName.length > 0 ? displayName.charAt(0).toUpperCase() : '?'}</span>
                             </div>
                         </div>
                         <div class="ml-4">
@@ -663,9 +993,21 @@ function renderContacts(data) {
                     <div class="text-sm text-gray-500">Score: ${contact.engagement_score || 0}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button onclick="event.stopPropagation(); showContactDetails('${encodeURIComponent(contactId)}')" class="text-primary-600 hover:text-primary-900">
-                        View
-                    </button>
+                    <div class="flex items-center justify-end space-x-2">
+                        <button onclick="event.stopPropagation(); showContactDetails('${encodeURIComponent(contactId)}')"
+                                class="text-primary-600 hover:text-primary-900 px-2 py-1 rounded hover:bg-primary-50 transition-colors" title="View details">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button onclick="event.stopPropagation(); addContactToGroup('${encodeURIComponent(contactId)}')"
+                                class="text-green-600 hover:text-green-900 px-2 py-1 rounded hover:bg-green-50 transition-colors" title="Add to group">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </button>
+                    </div>
                 </td>
             </tr>
         `;
@@ -1063,6 +1405,236 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Contact Book initialized');
 });
 
+// Bulk Selection and Add to Group Functions
+let selectedContacts = new Set();
+
+function toggleSelectAll() {
+    const selectAllCheckbox = document.getElementById('selectAllContacts');
+    const contactCheckboxes = document.querySelectorAll('.contact-checkbox');
+
+    if (selectAllCheckbox.checked) {
+        contactCheckboxes.forEach(checkbox => {
+            checkbox.checked = true;
+            selectedContacts.add(checkbox.value);
+        });
+    } else {
+        contactCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        selectedContacts.clear();
+    }
+
+    updateBulkSelection();
+}
+
+function updateBulkSelection() {
+    const contactCheckboxes = document.querySelectorAll('.contact-checkbox');
+    const checkedCheckboxes = document.querySelectorAll('.contact-checkbox:checked');
+    const selectAllCheckbox = document.getElementById('selectAllContacts');
+    const bulkToolbar = document.getElementById('bulkActionsToolbar');
+    const selectedCount = document.getElementById('selectedContactsCount');
+
+    // Update selected contacts set
+    selectedContacts.clear();
+    checkedCheckboxes.forEach(checkbox => {
+        selectedContacts.add(checkbox.value);
+    });
+
+    // Update select all checkbox state
+    if (checkedCheckboxes.length === 0) {
+        selectAllCheckbox.indeterminate = false;
+        selectAllCheckbox.checked = false;
+    } else if (checkedCheckboxes.length === contactCheckboxes.length) {
+        selectAllCheckbox.indeterminate = false;
+        selectAllCheckbox.checked = true;
+    } else {
+        selectAllCheckbox.indeterminate = true;
+        selectAllCheckbox.checked = false;
+    }
+
+    // Show/hide bulk actions toolbar
+    if (selectedContacts.size > 0) {
+        bulkToolbar.classList.remove('hidden');
+        selectedCount.textContent = `${selectedContacts.size} selected`;
+    } else {
+        bulkToolbar.classList.add('hidden');
+    }
+}
+
+function clearSelection() {
+    selectedContacts.clear();
+    document.querySelectorAll('.contact-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    document.getElementById('selectAllContacts').checked = false;
+    document.getElementById('selectAllContacts').indeterminate = false;
+    document.getElementById('bulkActionsToolbar').classList.add('hidden');
+}
+
+function addContactToGroup(contactId) {
+    selectedContacts.clear();
+    selectedContacts.add(contactId);
+    openAddToGroupModal();
+}
+
+function bulkAddToGroup() {
+    if (selectedContacts.size === 0) {
+        showNotification('No contacts selected', 'warning');
+        return;
+    }
+    openAddToGroupModal();
+}
+
+async function openAddToGroupModal() {
+    const modal = document.getElementById('addToGroupModal');
+    const groupSelect = document.getElementById('groupSelect');
+    const contactsInfo = document.getElementById('selectedContactsInfo');
+
+    if (!modal) {
+        console.error('❌ Add to group modal not found');
+        showNotification('Add to group modal not available', 'error');
+        return;
+    }
+
+    // Show modal
+    modal.classList.remove('hidden');
+
+    // Update contact info
+    const contactCount = selectedContacts.size;
+    contactsInfo.textContent = `Adding ${contactCount} contact${contactCount !== 1 ? 's' : ''} to group`;
+
+    // Load groups for selection
+    try {
+        groupSelect.innerHTML = '<option value="">Loading groups...</option>';
+
+        const response = await fetch('/api/contact-book/groups', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to load groups: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            groupSelect.innerHTML = '<option value="">Select a group...</option>';
+            result.data.forEach(group => {
+                const option = document.createElement('option');
+                option.value = group.id;
+                option.textContent = group.name;
+                groupSelect.appendChild(option);
+            });
+
+            if (result.data.length === 0) {
+                groupSelect.innerHTML = '<option value="">No groups available - create one first</option>';
+            }
+        } else {
+            throw new Error(result.error || 'Failed to load groups');
+        }
+
+    } catch (error) {
+        console.error('❌ Error loading groups for selection:', error);
+        groupSelect.innerHTML = '<option value="">Error loading groups</option>';
+        showNotification('Failed to load groups', 'error');
+    }
+}
+
+function closeAddToGroupModal() {
+    const modal = document.getElementById('addToGroupModal');
+    if (modal) {
+        modal.classList.add('hidden');
+
+        // Reset form
+        const form = document.getElementById('addToGroupForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+async function handleAddToGroup(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const groupId = formData.get('groupId');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+
+    if (!groupId) {
+        showNotification('Please select a group', 'warning');
+        return;
+    }
+
+    if (selectedContacts.size === 0) {
+        showNotification('No contacts selected', 'warning');
+        return;
+    }
+
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Adding...';
+
+    try {
+        const contactIds = Array.from(selectedContacts);
+
+        console.log('📁 Adding contacts to group:', { groupId, contactIds });
+
+        const response = await fetch(`/api/contact-book/groups/${groupId}/contacts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ contactIds })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('✅ Contacts added to group successfully:', result.data);
+
+            // Close modal and clear selection
+            closeAddToGroupModal();
+            clearSelection();
+
+            // Show success message
+            const addedCount = result.data.added || 0;
+            const skippedCount = result.data.skipped || 0;
+            let message = `Added ${addedCount} contact${addedCount !== 1 ? 's' : ''} to group`;
+            if (skippedCount > 0) {
+                message += ` (${skippedCount} already in group)`;
+            }
+            showNotification(message, 'success');
+
+            // Refresh contacts and groups
+            await loadContacts();
+            await loadGroups();
+
+        } else {
+            throw new Error(result.error || 'Failed to add contacts to group');
+        }
+
+    } catch (error) {
+        console.error('❌ Error adding contacts to group:', error);
+        showNotification(error.message || 'Failed to add contacts to group', 'error');
+    } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+    }
+}
+
 // Missing Modal Functions
 function openCreateGroupModal() {
     const modal = document.getElementById('createGroupModal');
@@ -1112,6 +1684,174 @@ function removeFromGroup(groupId) {
     // TODO: Implement remove from group functionality
     console.log('Remove contact from group:', groupId);
     showNotification('Remove from group functionality coming soon!', 'info');
+}
+
+// Table Density Functions
+let currentTableDensity = 'comfortable';
+
+function setTableDensity(density) {
+    currentTableDensity = density;
+
+    // Update button states
+    document.querySelectorAll('[id^="density"]').forEach(btn => {
+        btn.classList.remove('bg-white', 'shadow-sm', 'text-gray-900');
+        btn.classList.add('text-gray-600', 'hover:text-gray-900');
+    });
+
+    const activeBtn = document.getElementById(`density${density.charAt(0).toUpperCase() + density.slice(1)}`);
+    if (activeBtn) {
+        activeBtn.classList.remove('text-gray-600', 'hover:text-gray-900');
+        activeBtn.classList.add('bg-white', 'shadow-sm', 'text-gray-900');
+    }
+
+    // Apply density styles to table
+    const table = document.getElementById('contactsTable');
+    if (table) {
+        table.classList.remove('table-compact', 'table-comfortable', 'table-spacious');
+        table.classList.add(`table-${density}`);
+    }
+
+    // Store preference
+    localStorage.setItem('contactTableDensity', density);
+
+    console.log(`📊 Table density set to: ${density}`);
+}
+
+// Import/Export Functions
+function openImportModal() {
+    const modal = document.getElementById('importModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    } else {
+        console.error('❌ Import modal not found');
+        showNotification('Import modal not available', 'error');
+    }
+}
+
+function closeImportModal() {
+    const modal = document.getElementById('importModal');
+    if (modal) {
+        modal.classList.add('hidden');
+
+        // Reset form
+        const form = document.getElementById('importForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+async function handleImportContacts(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.textContent = 'Importing...';
+
+    try {
+        console.log('📥 Importing contacts...');
+
+        const response = await fetch('/api/contact-book/import', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('✅ Contacts imported successfully:', result.data);
+
+            // Close modal
+            closeImportModal();
+
+            // Show success message
+            const importedCount = result.data.imported || 0;
+            const skippedCount = result.data.skipped || 0;
+            let message = `Imported ${importedCount} contact${importedCount !== 1 ? 's' : ''}`;
+            if (skippedCount > 0) {
+                message += ` (${skippedCount} duplicates skipped)`;
+            }
+            showNotification(message, 'success');
+
+            // Refresh contacts and stats
+            await loadContacts();
+            await loadStats();
+
+        } else {
+            throw new Error(result.error || 'Failed to import contacts');
+        }
+
+    } catch (error) {
+        console.error('❌ Error importing contacts:', error);
+        showNotification(error.message || 'Failed to import contacts', 'error');
+    } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+    }
+}
+
+async function bulkExport() {
+    if (selectedContacts.size === 0) {
+        showNotification('No contacts selected', 'warning');
+        return;
+    }
+
+    try {
+        console.log('📤 Exporting selected contacts...');
+
+        const contactIds = Array.from(selectedContacts);
+
+        const response = await fetch('/api/contact-book/export', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ contactIds })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        // Download the file
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `contacts-export-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showNotification(`Exported ${selectedContacts.size} contacts`, 'success');
+
+    } catch (error) {
+        console.error('❌ Error exporting contacts:', error);
+        showNotification(error.message || 'Failed to export contacts', 'error');
+    }
+}
+
+// Mobile Menu Functions
+function toggleMobileMenu() {
+    // TODO: Implement mobile menu toggle
+    console.log('📱 Mobile menu toggle');
+    showNotification('Mobile menu functionality coming soon!', 'info');
 }
 
 function hideGroupsLoading() {
