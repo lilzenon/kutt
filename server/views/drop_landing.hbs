@@ -127,67 +127,7 @@
             background-position: center center;
         }
 
-        .drop-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            grid-template-rows: auto auto auto; /* Default: mobile-first three-section layout */
-            gap: 8px; /* Further reduced for compact layout without subtitle */
-            width: 100%;
-            max-width: 1400px;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-
-        /* Desktop grid layout - Fixed side-by-side layout with proper grid areas */
-        @media (min-width: 1024px) {
-            .drop-container {
-                display: grid;
-                grid-template-columns: 1fr 400px; /* Side-by-side layout: image left, content right */
-                grid-template-rows: auto auto; /* Two rows: title, then form */
-                grid-template-areas:
-                    "image title"
-                    "image form";
-                gap: 40px 40px; /* 40px gap between columns, 24px gap between rows */
-                align-items: start; /* Align items to top */
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 40px 24px;
-                min-height: 100vh;
-                box-sizing: border-box;
-            }
-
-            .drop-image-container {
-                grid-area: image;
-                margin-bottom: 0;
-                align-self: center;
-                max-width: min(690px, 58.3333vw);
-            }
-
-            /* Title section in top-right */
-            .drop-title-section {
-                grid-area: title;
-                margin: 0 !important;
-                padding: 0 !important;
-                text-align: left;
-                max-width: 400px;
-                align-self: start;
-            }
-
-            /* Form section in bottom-right */
-            .rsvp-container {
-                grid-area: form;
-                margin: 0 !important;
-                width: 400px !important;
-                max-width: 400px !important;
-                min-width: 400px !important;
-                align-items: flex-start;
-                align-self: start;
-            }
-        }
-
-        /* Mobile Layout: Default three-section vertical layout */
+        /* MAIN CONTAINER - Mobile First Approach */
         .drop-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -205,80 +145,53 @@
             padding: 0 16px;
         }
 
-        .drop-image-container {
-            grid-area: image;
-            max-width: 100%;
-            margin-bottom: 16px;
-        }
-
-        .drop-title-section {
-            grid-area: title;
-            max-width: 100%;
-            margin: 0 auto 4px auto;
-            padding: 0 8px;
-            text-align: center; /* Center on mobile */
-        }
-
-        .rsvp-container {
-            grid-area: form;
-            max-width: 100%;
-        }
-
         /* Tablet Layout: Stacked layout with better spacing */
         @media (min-width: 768px) and (max-width: 1023px) {
             .drop-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto;
-                grid-template-areas:
-                    "image"
-                    "title"
-                    "form";
                 gap: 16px;
                 padding: 0 24px;
                 max-width: 600px;
             }
+        }
 
-            .drop-title-section {
-                margin: 0 auto;
-                padding: 0 16px;
-                text-align: center; /* Center on tablet */
-            }
-
-            .rsvp-container {
-                width: 100% !important;
-                max-width: 100% !important;
-                min-width: auto !important;
-            }
-
-            .rsvp-card-container {
-                width: 100% !important;
-                max-width: 100% !important;
-                min-width: auto !important;
+        /* Desktop Layout: Side-by-side with proper grid areas */
+        @media (min-width: 1024px) {
+            .drop-container {
+                grid-template-columns: 1fr 400px; /* Side-by-side: image left, content right */
+                grid-template-rows: auto auto; /* Two rows: title, then form */
+                grid-template-areas:
+                    "image title"
+                    "image form";
+                gap: 40px 40px; /* 40px gap between columns and rows */
+                align-items: start;
+                max-width: 1200px;
+                padding: 40px 24px;
+                min-height: 100vh;
+                box-sizing: border-box;
             }
         }
 
-        /* Desktop Layout: Side-by-side with image and content - REMOVED CONFLICTING RULES */
-        /* This section has been moved to the proper location later in the CSS to prevent conflicts */
-
-        /* Image Container - Mobile-Optimized Responsive Design */
+        /* Image Container - Responsive Design */
         .drop-image-container {
+            grid-area: image;
             position: relative;
             width: 100%;
-            max-width: 100%; /* Full width on mobile */
+            max-width: 100%;
             height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
             background: transparent;
-            grid-column: 1;
-            overflow: visible; /* Prevent image cutoff */
-            margin: 0 auto; /* Center the container */
+            overflow: visible;
+            margin: 0 auto 16px auto; /* Bottom margin for mobile spacing */
         }
 
-        /* Desktop image container sizing */
+        /* Desktop image container */
         @media (min-width: 1024px) {
             .drop-image-container {
-                max-width: min(690px, 58.3333vw); /* Restore desktop sizing */
+                max-width: min(690px, 58.3333vw);
+                margin-bottom: 0;
+                align-self: center;
             }
         }
 
@@ -309,8 +222,47 @@
             }
         }
 
+        /* Title Section - Responsive alignment */
+        .drop-title-section {
+            grid-area: title;
+            width: 100%;
+            max-width: 100%;
+            padding: 8px 0 12px 0;
+            box-sizing: border-box;
+            margin: 0 auto 4px auto;
+            overflow: visible;
+            text-align: center; /* Center on mobile/tablet */
+        }
+
+        /* Mobile title section */
+        @media (max-width: 767px) {
+            .drop-title-section {
+                padding: 8px 16px 12px 16px;
+            }
+        }
+
+        /* Tablet title section */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .drop-title-section {
+                margin: 0 auto;
+                padding: 0 16px;
+            }
+        }
+
+        /* Desktop title section - left-aligned to match form */
+        @media (min-width: 1024px) {
+            .drop-title-section {
+                max-width: 400px;
+                margin: 0 !important;
+                padding: 0 !important;
+                text-align: left;
+                align-self: start;
+            }
+        }
+
         /* RSVP Container - Responsive Layout */
         .rsvp-container {
+            grid-area: form;
             width: 100%;
             max-width: 100%;
             padding-bottom: 32px;
@@ -323,42 +275,24 @@
             box-sizing: border-box;
         }
 
+        /* Tablet RSVP container */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .rsvp-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: auto !important;
+            }
+        }
+
         /* Desktop RSVP container */
         @media (min-width: 1024px) {
             .rsvp-container {
-                width: 400px;
-                max-width: 400px;
-                min-width: 400px;
-                align-items: flex-start; /* Left-align on desktop */
-                padding-bottom: 0; /* Grid handles spacing */
-            }
-        }
-
-        /* Title Section - Responsive alignment */
-        .drop-title-section {
-            width: 100%;
-            padding: 8px 0 12px 0;
-            box-sizing: border-box;
-            margin-bottom: 8px;
-            overflow: visible;
-            /* Default: center-aligned on mobile/small tablet */
-            text-align: center;
-        }
-
-        /* Mobile title section - center-aligned with padding */
-        @media (max-width: 767px) {
-            .drop-title-section {
-                padding: 8px 16px 12px 16px;
-                text-align: center;
-            }
-        }
-
-        /* Large tablet/desktop title section - left-aligned to match form */
-        @media (min-width: 1024px) {
-            .drop-title-section {
-                padding: 0 !important;
-                margin-bottom: 0 !important; /* Grid gap handles spacing */
-                text-align: left; /* Left-align on desktop to match form */
+                width: 400px !important;
+                max-width: 400px !important;
+                min-width: 400px !important;
+                align-items: flex-start;
+                align-self: start;
+                padding-bottom: 0;
             }
         }
 
@@ -1355,7 +1289,7 @@
             }
         }
 
-        /* Medium Desktop: 1024px - 1439px - Adjusted for new grid layout */
+        /* Medium Desktop: 1024px - 1439px - Optimized spacing */
         @media only screen and (max-width: 1439px) and (min-width: 1024px) {
             .drop-page-container {
                 padding: clamp(32px, 8vh, 80px) clamp(80px, 10vw, 150px) 24px;
@@ -1366,20 +1300,14 @@
                 gap: 32px 32px; /* Smaller gaps for medium screens */
             }
 
+            .drop-title-section {
+                max-width: 380px !important;
+            }
+
             .rsvp-container {
                 width: 380px !important;
                 max-width: 380px !important;
                 min-width: 380px !important;
-            }
-
-            .drop-title {
-                font-size: 50px !important;
-                line-height: 1.1 !important;
-                letter-spacing: -0.4px !important;
-            }
-
-            .drop-title-section {
-                max-width: 380px !important;
             }
 
             .rsvp-card-container {
@@ -1387,9 +1315,15 @@
                 min-width: 380px !important;
                 max-width: 380px !important;
             }
+
+            .drop-title {
+                font-size: 50px !important;
+                line-height: 1.1 !important;
+                letter-spacing: -0.4px !important;
+            }
         }
 
-        /* Large Tablet: 900px - 1023px - Side-by-side layout with proper grid */
+        /* Large Tablet: 900px - 1023px - Side-by-side layout */
         @media only screen and (max-width: 1023px) and (min-width: 900px) {
             .drop-page-container {
                 padding: clamp(24px, 6vh, 60px) clamp(32px, 6vw, 64px) 24px;
@@ -1407,33 +1341,30 @@
             }
 
             .drop-image-container {
-                grid-area: image;
-                margin-bottom: 0;
-                align-self: center;
                 max-width: min(450px, 55vw);
             }
 
             .drop-title-section {
-                grid-area: title;
-                margin: 0 !important;
-                padding: 0 !important;
                 max-width: 350px;
                 text-align: left;
             }
 
             .rsvp-container {
-                grid-area: form;
                 width: 350px !important;
                 max-width: 350px !important;
                 min-width: 350px !important;
-                align-items: flex-start;
+            }
+
+            .rsvp-card-container {
+                width: 350px !important;
+                max-width: 350px !important;
+                min-width: 350px !important;
             }
 
             .drop-title {
                 font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
-                margin: 0 !important;
             }
         }
 
