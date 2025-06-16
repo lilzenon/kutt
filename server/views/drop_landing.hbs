@@ -158,7 +158,7 @@
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr 420px; /* Slightly wider content area for better balance */
-                grid-template-rows: auto 1fr; /* Title row, then flexible space for form */
+                grid-template-rows: auto auto; /* Both rows auto-sized for better content fitting */
                 grid-template-areas:
                     "image title"
                     "image form"; /* Proper grid area for form */
@@ -190,10 +190,12 @@
         @media (min-width: 1024px) {
             .drop-image-container {
                 max-width: min(690px, 58.3333vw);
+                max-height: 600px; /* Constrain image height for better balance */
                 margin-bottom: 0;
                 align-self: start; /* Align to top instead of center */
                 justify-content: flex-start; /* Left-align image within container */
                 margin-left: 0; /* Ensure left alignment */
+                overflow: hidden; /* Ensure image doesn't exceed container */
             }
         }
 
@@ -201,6 +203,7 @@
             width: 100%;
             height: auto;
             max-width: 100%;
+            max-height: 100%; /* Ensure image respects container height */
             border-radius: 12px;
             object-fit: contain; /* Changed from cover to contain to prevent cutoff */
             object-position: center center;
@@ -209,6 +212,26 @@
             animation: bloom 0.3s cubic-bezier(0.2, 0.2, 0.25, 1) normal forwards;
             animation-delay: 0.15s;
             display: block;
+        }
+
+        /* Desktop image sizing - Better proportional control */
+        @media (min-width: 1024px) {
+            .drop-image-container img {
+                max-height: 600px; /* Match container constraint */
+                object-fit: cover; /* Use cover for better desktop presentation */
+                object-position: center top; /* Focus on top portion of image */
+            }
+        }
+
+        /* Medium desktop optimization - Better balance for 1200-1400px viewports */
+        @media (min-width: 1200px) and (max-width: 1400px) {
+            .drop-image-container {
+                max-height: 500px; /* Reduce height for better proportion */
+            }
+
+            .drop-image-container img {
+                max-height: 500px; /* Match container */
+            }
         }
 
         @keyframes bloom {
