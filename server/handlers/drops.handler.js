@@ -11,6 +11,10 @@ const createDropValidation = [
     .optional()
     .isLength({ max: 1000 })
     .withMessage("Description must be less than 1000 characters"),
+    body("subtitle")
+    .optional()
+    .isLength({ max: 500 })
+    .withMessage("Subtitle must be less than 500 characters"),
     body("sub_header")
     .optional()
     .isLength({ max: 500 })

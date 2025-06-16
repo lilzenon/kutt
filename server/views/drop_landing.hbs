@@ -353,14 +353,43 @@
             white-space-collapse: preserve-breaks;
         }
 
+        /* Subtitle Base Styling */
+        .drop-subtitle {
+            font-family: "Inter", sans-serif;
+            font-weight: 400; /* Lighter than title */
+            color: {{#if drop.title_color}}{{drop.title_color}}{{else}}var(--laylo-text-primary){{/if}};
+            opacity: 0.85; /* Slightly muted */
+            margin: 8px 0 0 0; /* Minimal spacing from title */
+            padding: 0;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-wrap: wrap;
+            white-space-collapse: preserve-breaks;
+
+            /* Mobile/Tablet: Center-aligned */
+            text-align: center;
+            font-size: clamp(18px, 4vw, 24px); /* Responsive mobile sizing */
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
         /* Desktop title sizing - Clean grid-based layout */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Larger on desktop */
-                margin: 0 0 24px 0 !important; /* Balanced bottom spacing */
+                margin: 0 0 12px 0 !important; /* Reduced bottom spacing when subtitle present */
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 padding: 0 !important; /* Clean padding */
                 text-align: left !important; /* Left-aligned to match form */
+            }
+
+            .drop-subtitle {
+                font-size: 34px; /* 60% of title size (56px * 0.6 ≈ 34px) */
+                text-align: left !important; /* Left-aligned to match title */
+                margin: 10px 0 24px 0; /* Spacing: 10px from title, 24px to form */
+                line-height: 1.2;
+                letter-spacing: -0.02em;
             }
         }
 
@@ -1369,7 +1398,15 @@
                 font-size: 50px !important;
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.4px !important;
-                margin: 0 0 20px 0 !important; /* Clean margins with bottom spacing */
+                margin: 0 0 10px 0 !important; /* Reduced bottom spacing when subtitle present */
+            }
+
+            .drop-subtitle {
+                font-size: 30px !important; /* 60% of title size (50px * 0.6 = 30px) */
+                text-align: left !important; /* Left-aligned to match title */
+                margin: 8px 0 20px 0 !important; /* Spacing: 8px from title, 20px to form */
+                line-height: 1.2 !important;
+                letter-spacing: -0.02em !important;
             }
 
             .rsvp-container {
@@ -1424,7 +1461,15 @@
                 font-size: clamp(36px, 5vw, 44px) !important;
                 line-height: 1.0 !important; /* Tight but readable line-height */
                 letter-spacing: -0.3px !important;
-                margin: 0 0 16px 0 !important; /* Clean margins with bottom spacing */
+                margin: 0 0 8px 0 !important; /* Reduced bottom spacing when subtitle present */
+            }
+
+            .drop-subtitle {
+                font-size: clamp(22px, 3vw, 28px) !important; /* 60-65% of title size */
+                text-align: left !important; /* Left-aligned to match title */
+                margin: 6px 0 16px 0 !important; /* Spacing: 6px from title, 16px to form */
+                line-height: 1.25 !important;
+                letter-spacing: -0.02em !important;
             }
 
             .laylo-rsvp-card {
@@ -1470,7 +1515,15 @@
                 font-size: clamp(40px, 6vw, 48px) !important; /* Increased from 32px-40px to 40px-48px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 6px 0 6px 0 !important; /* Minimal spacing for better connection */
+                margin: 6px 0 4px 0 !important; /* Reduced bottom spacing when subtitle present */
+            }
+
+            .drop-subtitle {
+                font-size: clamp(24px, 4vw, 30px) !important; /* 60-65% of title size */
+                text-align: center !important; /* Center-aligned on tablet */
+                margin: 4px 0 8px 0 !important; /* Minimal spacing for compact layout */
+                line-height: 1.3 !important;
+                letter-spacing: -0.02em !important;
             }
 
             .user-container {
@@ -1514,7 +1567,15 @@
                 font-size: clamp(32px, 7vw, 42px) !important; /* Increased from 28px-36px to 32px-42px */
                 line-height: 1.15 !important;
                 letter-spacing: -0.3px !important;
-                margin: 10px 0 16px 0 !important; /* Enhanced spacing */
+                margin: 10px 0 6px 0 !important; /* Reduced bottom spacing when subtitle present */
+            }
+
+            .drop-subtitle {
+                font-size: clamp(20px, 4.5vw, 26px) !important; /* 60-65% of title size */
+                text-align: center !important; /* Center-aligned on mobile */
+                margin: 4px 0 12px 0 !important; /* Minimal spacing for mobile layout */
+                line-height: 1.3 !important;
+                letter-spacing: -0.01em !important;
             }
 
             .user-container {
@@ -1585,7 +1646,15 @@
                 font-size: clamp(28px, 6.5vw, 36px) !important; /* Increased from 24px-30px to 28px-36px */
                 line-height: 1.2 !important;
                 letter-spacing: -0.2px !important;
-                margin: 8px 0 12px 0 !important; /* Enhanced spacing */
+                margin: 8px 0 4px 0 !important; /* Reduced bottom spacing when subtitle present */
+            }
+
+            .drop-subtitle {
+                font-size: clamp(18px, 4vw, 22px) !important; /* 60-65% of title size */
+                text-align: center !important; /* Center-aligned on small mobile */
+                margin: 3px 0 10px 0 !important; /* Minimal spacing for compact mobile layout */
+                line-height: 1.35 !important;
+                letter-spacing: 0 !important;
             }
 
             .user-container {
@@ -1728,10 +1797,14 @@
                 {{/if}}
             </div>
 
-            <!-- Title Section - Simplified without subtitle -->
+            <!-- Title Section - With Optional Subtitle -->
             <div class="drop-title-section">
-                <!-- Main Title Only -->
+                <!-- Main Title -->
                 <h1 class="drop-title">{{drop.title}}</h1>
+                <!-- Optional Subtitle -->
+                {{#if drop.subtitle}}
+                <h2 class="drop-subtitle">{{drop.subtitle}}</h2>
+                {{/if}}
             </div>
 
             <!-- RSVP Container - Now positioned lower like Laylo -->

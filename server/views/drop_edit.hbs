@@ -69,6 +69,13 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="edit-subtitle">Subtitle</label>
+                            <input type="text" id="edit-subtitle" name="subtitle" maxlength="500"
+                                   value="{{drop.subtitle}}" placeholder="Optional subtitle text (appears below main title)">
+                            <small class="form-help">Appears directly underneath the main title with smaller, lighter styling</small>
+                        </div>
+
+                        <div class="form-group">
                             <label for="edit-description">Description</label>
                             <textarea id="edit-description" name="description" rows="4"
                                       placeholder="Describe what this drop is about">{{drop.description}}</textarea>
