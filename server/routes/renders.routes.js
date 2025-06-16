@@ -236,26 +236,16 @@ router.get(
     asyncHandler(locals.user),
     async(req, res) => {
         try {
-            // Get real data from database using existing queries
-            const query = require("../queries");
-
-            // Get user's drops with stats
-            const userDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 5 });
-
-            // Get user's links using existing function
-            const userLinks = await query.link.get({ "links.user_id": req.user.id }, { skip: 0, limit: 5 });
-
-            // Calculate stats from actual data
-            const totalDrops = userDrops.length;
-            const activeDrops = userDrops.filter(drop => drop.is_active).length;
-            const totalLinks = userLinks.length;
-            const totalFans = userDrops.reduce((sum, drop) => sum + (drop.signup_count || 0), 0);
+            // Use optimized analytics service
+            const analyticsService = require("../services/analytics/analytics.service");
+            const dashboardData = await analyticsService.getDashboardAnalytics(req.user.id);
 
             console.log(`📊 Dashboard loaded for user ${req.user.id}:`, {
-                totalDrops,
-                activeDrops,
-                totalLinks,
-                totalFans
+                totalDrops: dashboardData.stats.totalDrops,
+                activeDrops: dashboardData.stats.activeDrops,
+                totalLinks: dashboardData.stats.totalLinks,
+                totalFans: dashboardData.stats.totalFans,
+                cached: dashboardData.lastUpdated
             });
 
             res.render("modern-dashboard", {
@@ -265,14 +255,10 @@ router.get(
                 currentPage: "dashboard",
                 user: req.user,
                 domain: env.DEFAULT_DOMAIN,
-                stats: {
-                    totalDrops: totalDrops || 0,
-                    activeDrops: activeDrops || 0,
-                    totalLinks: totalLinks || 0,
-                    totalFans: totalFans || 0
-                },
-                recentDrops: userDrops || [],
-                recentLinks: userLinks || []
+                stats: dashboardData.stats,
+                recentDrops: dashboardData.recentDrops,
+                recentLinks: dashboardData.recentLinks,
+                lastUpdated: dashboardData.lastUpdated
             });
         } catch (error) {
             console.error('❌ Dashboard error:', error);
@@ -289,7 +275,8 @@ router.get(
                     totalDrops: 0,
                     activeDrops: 0,
                     totalLinks: 0,
-                    totalFans: 0
+                    totalFans: 0,
+                    totalClicks: 0
                 },
                 recentDrops: [],
                 recentLinks: [],
@@ -518,29 +505,18 @@ router.get(
     asyncHandler(locals.user),
     async(req, res) => {
         try {
-            const query = require("../queries");
-
-            // Get analytics data using existing functions
-            const recentDrops = await query.drop.findByUserWithStats(req.user.id, { limit: 10 });
-            const recentLinks = await query.link.get({ "links.user_id": req.user.id }, { skip: 0, limit: 10 });
-
-            // Get recent fan signups for analytics page
-            const fanAnalytics = await query.drop.getFanAnalytics(req.user.id, { limit: 50 });
-
-            // Calculate stats from actual data
-            const totalDrops = recentDrops.length;
-            const activeDrops = recentDrops.filter(drop => drop.is_active).length;
-            const totalLinks = recentLinks.length;
-            const totalFans = recentDrops.reduce((sum, drop) => sum + (drop.signup_count || 0), 0);
-            const totalClicks = recentLinks.reduce((sum, link) => sum + (link.visit_count || 0), 0);
+            // Use optimized analytics service
+            const analyticsService = require("../services/analytics/analytics.service");
+            const analyticsData = await analyticsService.getAnalyticsPageData(req.user.id);
 
             console.log(`📊 Analytics page loaded for user ${req.user.id}:`, {
-                totalDrops,
-                activeDrops,
-                totalLinks,
-                totalFans,
-                totalClicks,
-                recentFanSignups: fanAnalytics.fans.length
+                totalDrops: analyticsData.stats.totalDrops,
+                activeDrops: analyticsData.stats.activeDrops,
+                totalLinks: analyticsData.stats.totalLinks,
+                totalFans: analyticsData.stats.totalFans,
+                totalClicks: analyticsData.stats.totalClicks,
+                recentFanSignups: analyticsData.fanAnalytics.fans.length,
+                cached: analyticsData.lastUpdated
             });
 
             res.render("modern-analytics", {
@@ -549,16 +525,12 @@ router.get(
                 layout: "layouts/modern-dashboard",
                 currentPage: "analytics",
                 user: req.user,
-                stats: {
-                    totalDrops: totalDrops || 0,
-                    activeDrops: activeDrops || 0,
-                    totalLinks: totalLinks || 0,
-                    totalFans: totalFans || 0,
-                    totalClicks: totalClicks || 0
-                },
-                recentDrops: recentDrops || [],
-                recentLinks: recentLinks || [],
-                fanAnalytics: fanAnalytics || { fans: [], totalCount: 0 }
+                stats: analyticsData.stats,
+                recentDrops: analyticsData.recentDrops,
+                recentLinks: analyticsData.recentLinks,
+                fanAnalytics: analyticsData.fanAnalytics,
+                performanceMetrics: analyticsData.performanceMetrics,
+                lastUpdated: analyticsData.lastUpdated
             });
         } catch (error) {
             console.error('❌ Analytics error:', error);
@@ -577,7 +549,10 @@ router.get(
                     totalClicks: 0
                 },
                 recentDrops: [],
-                recentLinks: []
+                recentLinks: [],
+                fanAnalytics: { fans: [], totalCount: 0 },
+                performanceMetrics: {},
+                error: "Failed to load analytics data"
             });
         }
     }

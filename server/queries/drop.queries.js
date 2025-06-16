@@ -126,21 +126,34 @@ async function findWithStats(match) {
     };
 }
 
-// Get drops with stats for user
+// Get drops with stats for user - OPTIMIZED VERSION
 async function findByUserWithStats(userId, options = {}) {
-    const drops = await findByUser(userId, options);
+    const query = knex("drops as d")
+        .select([
+            "d.*",
+            knex.raw("COALESCE(signup_counts.count, 0) as signup_count")
+        ])
+        .leftJoin(
+            knex("drop_signups")
+            .select("drop_id")
+            .count("* as count")
+            .groupBy("drop_id")
+            .as("signup_counts"),
+            "d.id",
+            "signup_counts.drop_id"
+        )
+        .where("d.user_id", userId)
+        .orderBy("d.created_at", "desc");
 
-    const dropsWithStats = await Promise.all(
-        drops.map(async(drop) => {
-            const signupCount = await getSignupCount(drop.id);
-            return {
-                ...drop,
-                signup_count: signupCount
-            };
-        })
-    );
+    if (options.limit) {
+        query.limit(options.limit);
+    }
 
-    return dropsWithStats;
+    if (options.offset) {
+        query.offset(options.offset);
+    }
+
+    return await query;
 }
 
 // Create a signup for a drop
@@ -162,6 +175,20 @@ async function createSignup(dropId, signupData) {
         const insertedSignup = Array.isArray(result) ? result[0] : result;
 
         console.log('✅ Inserted signup:', insertedSignup);
+
+        // Invalidate analytics cache when new signup is created
+        try {
+            const analyticsService = require("../services/analytics/analytics.service");
+            const drop = await knex("drops").where("id", dropId).first();
+            if (drop) {
+                await analyticsService.invalidateDropCache(dropId, drop.user_id);
+                await analyticsService.invalidateUserCache(drop.user_id);
+                console.log(`📊 Invalidated analytics cache for drop ${dropId} and user ${drop.user_id}`);
+            }
+        } catch (cacheError) {
+            console.error("❌ Error invalidating cache after signup:", cacheError);
+            // Don't fail the signup if cache invalidation fails
+        }
 
         return insertedSignup;
     } catch (error) {

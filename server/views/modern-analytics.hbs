@@ -10,7 +10,13 @@
                 Track your drops and links performance with detailed insights.
             </p>
         </div>
-        <div class="mt-4 flex md:mt-0 md:ml-4">
+        <div class="mt-4 flex space-x-3 md:mt-0 md:ml-4">
+            <button onclick="refreshAnalytics()" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Refresh
+            </button>
             <button onclick="exportData()" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -373,31 +379,114 @@ function setActiveTab(activeTabId) {
     });
 }
 
-function exportData() {
-    // Export analytics data
-    const data = {
-        stats: {
-            totalDrops: {{stats.totalDrops}},
-            activeDrops: {{stats.activeDrops}},
-            totalLinks: {{stats.totalLinks}},
-            totalFans: {{stats.totalFans}},
-            totalClicks: {{stats.totalClicks}}
-        },
-        exportDate: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'analytics-export.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showToast('Analytics data exported successfully!', 'success');
+// Refresh analytics data
+async function refreshAnalytics() {
+    try {
+        showToast('Refreshing analytics data...', 'info');
+
+        // Invalidate cache first
+        await fetch('/api/analytics/invalidate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Reload the page to get fresh data
+        window.location.reload();
+    } catch (error) {
+        console.error('Error refreshing analytics:', error);
+        showToast('Failed to refresh analytics data', 'error');
+    }
 }
+
+function exportData() {
+    // Use the new analytics export API
+    window.open('/api/analytics/export?format=json', '_blank');
+    showToast('Analytics data export started!', 'success');
+}
+
+// Toast notification system
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 px-4 py-2 rounded-md shadow-lg z-50 text-white transition-opacity duration-300 ${getToastColor(type)}`;
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    // Fade out after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            if (document.body.contains(toast)) {
+                document.body.removeChild(toast);
+            }
+        }, 300);
+    }, 3000);
+}
+
+function getToastColor(type) {
+    switch (type) {
+        case 'success': return 'bg-green-500';
+        case 'error': return 'bg-red-500';
+        case 'warning': return 'bg-yellow-500';
+        case 'info':
+        default: return 'bg-blue-500';
+    }
+}
+
+// Real-time analytics updates
+let realTimeInterval;
+
+function startRealTimeUpdates() {
+    // Update real-time stats every 30 seconds
+    realTimeInterval = setInterval(async () => {
+        try {
+            const response = await fetch('/api/analytics/realtime');
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    updateRealTimeStats(result.data);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching real-time stats:', error);
+        }
+    }, 30000);
+}
+
+function stopRealTimeUpdates() {
+    if (realTimeInterval) {
+        clearInterval(realTimeInterval);
+        realTimeInterval = null;
+    }
+}
+
+function updateRealTimeStats(stats) {
+    // Update any real-time indicators on the page
+    const indicators = document.querySelectorAll('[data-realtime]');
+    indicators.forEach(indicator => {
+        const metric = indicator.dataset.realtime;
+        if (stats[metric] !== undefined) {
+            indicator.textContent = stats[metric];
+            // Add a subtle animation to show the update
+            indicator.classList.add('animate-pulse');
+            setTimeout(() => {
+                indicator.classList.remove('animate-pulse');
+            }, 1000);
+        }
+    });
+}
+
+// Initialize real-time updates when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    startRealTimeUpdates();
+});
+
+// Clean up when page unloads
+window.addEventListener('beforeunload', function() {
+    stopRealTimeUpdates();
+});
 
 // Fan Signups functionality
 async function loadFanSignups() {
