@@ -688,14 +688,14 @@
             }
         }
 
-        /* Sub-header Section - Laylo-inspired design with enhanced spacing */
+        /* Sub-header Section - Compact spacing (50% reduction) */
         .drop-sub-header {
-            margin-top: 40px; /* Increased spacing following Laylo pattern */
+            margin-top: 20px; /* Reduced from 40px (50% reduction) */
             max-width: 400px;
             text-align: left; /* Left-aligned like Laylo reference */
             width: 100%;
             box-sizing: border-box;
-            padding: 0 20px; /* Enhanced padding for better visual breathing room */
+            padding: 0 10px; /* Reduced from 20px (50% reduction) */
         }
 
         .drop-sub-header-title {
@@ -709,7 +709,7 @@
             {{else}}
             color: #ffffff; /* Pure white for maximum contrast like Laylo */
             {{/if}}
-            margin: 0 0 20px 0; /* Enhanced spacing following Laylo pattern */
+            margin: 0 0 10px 0; /* Reduced from 20px (50% reduction) */
             padding: 0; /* Remove padding for cleaner alignment */
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
@@ -728,25 +728,25 @@
             color: rgba(255, 255, 255, 0.9); /* Higher opacity like Laylo */
             {{/if}}
             text-align: left;
-            margin: 0 0 24px 0; /* Added bottom margin for spacing */
+            margin: 0 0 12px 0; /* Reduced from 24px (50% reduction) */
             padding: 0; /* Remove padding for cleaner alignment */
             display: flex;
             align-items: center;
-            gap: 8px; /* Space for potential icons like Laylo */
+            gap: 4px; /* Reduced from 8px (50% reduction) */
         }
 
-        /* Responsive sub-header - Laylo-inspired mobile design */
+        /* Responsive sub-header - Compact mobile design (50% spacing reduction) */
         @media screen and (max-width: 767px) {
             .drop-sub-header {
-                margin-top: 32px; /* Enhanced spacing following Laylo pattern */
+                margin-top: 16px; /* Reduced from 32px (50% reduction) */
                 max-width: 100%;
-                padding: 0 24px; /* Increased padding for better mobile experience */
+                padding: 0 12px; /* Reduced from 24px (50% reduction) */
             }
 
             .drop-sub-header-title {
                 font-size: 1.75rem; /* Larger on mobile following Laylo pattern */
                 padding: 0; /* Clean alignment */
-                margin-bottom: 16px; /* Enhanced spacing */
+                margin-bottom: 8px; /* Reduced from 16px (50% reduction) */
                 text-align: center; /* Center on mobile for better hierarchy */
             }
 
@@ -754,33 +754,33 @@
                 font-size: 1.125rem; /* Improved readability following Laylo */
                 padding: 0; /* Clean alignment */
                 text-align: center; /* Center on mobile for consistency */
-                margin-bottom: 32px; /* Enhanced bottom spacing */
+                margin-bottom: 16px; /* Reduced from 32px (50% reduction) */
             }
         }
 
         @media screen and (max-width: 480px) {
             .drop-sub-header {
-                margin-top: 16px; /* 8px grid system */
+                margin-top: 8px; /* Reduced from 16px (50% reduction) */
             }
 
             .drop-sub-header-title {
                 font-size: 1.375rem; /* Still prominent on small screens */
-                padding: 0 12px;
-                margin-bottom: 8px; /* 8px grid system */
+                padding: 0 6px; /* Reduced from 12px (50% reduction) */
+                margin-bottom: 4px; /* Reduced from 8px (50% reduction) */
             }
 
             .drop-sub-header-content {
                 font-size: 0.9rem;
-                padding: 0 12px;
+                padding: 0 6px; /* Reduced from 12px (50% reduction) */
                 text-align: left;
             }
         }
 
-        /* Tablet responsive improvements */
+        /* Tablet responsive improvements - Compact spacing (50% reduction) */
         @media screen and (min-width: 768px) and (max-width: 1023px) {
             .drop-sub-header-title {
                 font-size: 2rem; /* Larger on tablet */
-                margin-bottom: 20px; /* Enhanced spacing */
+                margin-bottom: 10px; /* Reduced from 20px (50% reduction) */
             }
 
             .drop-sub-header-content {
@@ -788,11 +788,11 @@
             }
         }
 
-        /* Desktop responsive improvements */
+        /* Desktop responsive improvements - Compact spacing (50% reduction) */
         @media screen and (min-width: 1024px) {
             .drop-sub-header-title {
                 font-size: 2.25rem; /* Maximum impact on desktop */
-                margin-bottom: 24px; /* 8px grid system */
+                margin-bottom: 12px; /* Reduced from 24px (50% reduction) */
             }
 
             .drop-sub-header-content {
@@ -973,7 +973,7 @@
         .laylo-form-footer {
             font-family: "Inter", sans-serif;
             font-weight: 400;
-            font-size: 0.75rem;
+            font-size: 0.75rem; /* Base size for mobile */
             line-height: 1.57;
             letter-spacing: 0.00714em;
             {{#if (eq drop.card_background_type "solid_white")}}
@@ -994,6 +994,26 @@
                 line-height: 1.3; /* Tighter but readable (was 1.57) */
                 margin-top: 8px; /* Slightly reduced margin */
                 letter-spacing: 0.005em; /* Adjusted for smaller text */
+            }
+        }
+
+        /* Tablet Form Footer - Scaled down appropriately */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .laylo-form-footer {
+                font-size: 0.6rem; /* Smaller for tablet */
+                line-height: 1.4;
+                margin-top: 10px;
+                letter-spacing: 0.004em;
+            }
+        }
+
+        /* Desktop Form Footer - Smallest for large screens */
+        @media (min-width: 1024px) {
+            .laylo-form-footer {
+                font-size: 0.55rem; /* Smallest for desktop */
+                line-height: 1.45;
+                margin-top: 10px;
+                letter-spacing: 0.003em;
             }
         }
 
