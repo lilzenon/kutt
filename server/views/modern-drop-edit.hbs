@@ -167,6 +167,13 @@
                                                 <label for="edit-background-color" class="block text-sm font-medium text-gray-700">Background Color</label>
                                                 <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
                                             </div>
+                                            <div>
+                                                <label for="edit-overscroll-background-color" class="block text-sm font-medium text-gray-700">
+                                                    Pull-to-Refresh Color
+                                                    <span class="block text-xs text-gray-500 font-normal mt-1">Color shown when pulling down to refresh on mobile</span>
+                                                </label>
+                                                <input type="color" id="edit-overscroll-background-color" name="overscroll_background_color" value="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
+                                            </div>
 
                                             <!-- Advanced Gradient Editor -->
                                             <div id="gradient-editor" style="display: {{#if (eq drop.background_type "gradient")}}block{{else}}none{{/if}};">
@@ -594,7 +601,7 @@ let previewCoverImage, previewCover;
 
 // Form input elements
 let titleInput, subtitleInput, descriptionInput, subHeaderInput, subHeaderTitleInput, slugInput, buttonTextInput, coverImageInput;
-let backgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput, buttonColorInput, formFieldColorInput;
+let backgroundColorInput, overscrollBackgroundColorInput, cardColorInput, titleColorInput, descriptionColorInput, buttonColorInput, formFieldColorInput;
 let collectEmailToggle, collectPhoneToggle;
 
 // Intelligent navigation function for back button
@@ -858,6 +865,7 @@ function initializeFormElements() {
 
     // Color inputs
     backgroundColorInput = document.getElementById('edit-background-color');
+    overscrollBackgroundColorInput = document.getElementById('edit-overscroll-background-color');
     const backgroundTypeSelect = document.getElementById('edit-background-type');
     const cardBackgroundTypeSelect = document.getElementById('edit-card-background-type');
     titleColorInput = document.getElementById('edit-title-color');
@@ -1203,6 +1211,7 @@ function initializeRealTimeUpdates() {
 
     // Color updates
     if (backgroundColorInput) backgroundColorInput.addEventListener('input', updatePreviewColors);
+    if (overscrollBackgroundColorInput) overscrollBackgroundColorInput.addEventListener('input', updatePreviewColors);
     const backgroundTypeSelect = document.getElementById('edit-background-type');
     const cardBackgroundTypeSelect = document.getElementById('edit-card-background-type');
     const buttonTextColorInput = document.getElementById('edit-button-text-color');
@@ -1283,6 +1292,7 @@ function updatePreviewColors() {
         if (!previewDocument) return;
 
         const backgroundColor = backgroundColorInput?.value || '#ffffff';
+        const overscrollBackgroundColor = overscrollBackgroundColorInput?.value || '#ffffff';
         const cardColor = cardColorInput?.value || '#ffffff';
         const titleColor = titleColorInput?.value || '#000000';
         const descriptionColor = descriptionColorInput?.value || '#666666';
@@ -1293,6 +1303,7 @@ function updatePreviewColors() {
         const documentRoot = previewDocument.documentElement;
 
         documentRoot.style.setProperty('--drop-background-color', backgroundColor);
+        documentRoot.style.setProperty('--drop-overscroll-background-color', overscrollBackgroundColor);
         documentRoot.style.setProperty('--drop-card-color', cardColor);
         documentRoot.style.setProperty('--drop-title-color', titleColor);
         documentRoot.style.setProperty('--drop-description-color', descriptionColor);
