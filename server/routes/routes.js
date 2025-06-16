@@ -12,6 +12,7 @@ const drops = require("./drops.routes");
 const publicDrops = require("./public_drops.routes");
 const sms = require("./sms.routes");
 const analytics = require("./api/analytics.routes");
+const contactBook = require("./api/contact-book.routes");
 
 const renderRouter = Router();
 renderRouter.use(renders);
@@ -27,6 +28,7 @@ apiRouter.use("/auth", auth);
 apiRouter.use("/drops", drops);
 apiRouter.use("/sms", sms);
 apiRouter.use("/analytics", analytics);
+apiRouter.use("/contact-book", contactBook);
 
 module.exports = {
     api: apiRouter,

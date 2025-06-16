@@ -1,0 +1,675 @@
+<!-- Contact Book Page -->
+<div class="min-h-screen bg-gray-50">
+    <!-- Page Header -->
+    <div class="bg-white shadow">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="py-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1 min-w-0">
+                        <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                            Contact Book
+                        </h1>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Manage and organize your fan contacts
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <!-- Create Group Button -->
+                        <button onclick="openCreateGroupModal()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Create Group
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Contacts</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="totalContactsCount">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Contact Groups</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="totalGroupsCount">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Active This Week</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="activeThisWeekCount">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">New This Month</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="newThisMonthCount">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Sidebar - Groups -->
+            <div class="lg:w-1/4">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Contact Groups</h3>
+                        
+                        <!-- All Contacts -->
+                        <div class="space-y-2">
+                            <button onclick="selectGroup(null)" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 group-item active" data-group-id="all">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-gray-400 mr-3"></div>
+                                        <span>All Contacts</span>
+                                    </div>
+                                    <span class="text-gray-500 text-xs" id="allContactsCount">0</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- Groups List -->
+                        <div id="groupsList" class="mt-4 space-y-2">
+                            <!-- Groups will be loaded here -->
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="groupsLoading" class="mt-4 text-center">
+                            <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm text-gray-500">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Loading groups...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content - Contacts -->
+            <div class="lg:w-3/4">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <!-- Search and Filters -->
+                        <div class="mb-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 sm:space-x-4">
+                                <!-- Search Input -->
+                                <div class="flex-1 relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </div>
+                                    <input 
+                                        type="text" 
+                                        id="contactSearchInput"
+                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                        placeholder="Search contacts by name, email, phone..."
+                                        autocomplete="off"
+                                    >
+                                    <!-- Search Suggestions Dropdown -->
+                                    <div id="contactSearchSuggestions" class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm hidden">
+                                        <!-- Suggestions will be populated here -->
+                                    </div>
+                                </div>
+
+                                <!-- Sort and Filter Controls -->
+                                <div class="flex items-center space-x-3">
+                                    <select id="sortBy" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
+                                        <option value="recent_activity">Recent Activity</option>
+                                        <option value="name">Name A-Z</option>
+                                        <option value="email">Email A-Z</option>
+                                        <option value="join_date">Join Date</option>
+                                        <option value="engagement">Engagement</option>
+                                    </select>
+
+                                    <button 
+                                        id="clearSearchBtn" 
+                                        onclick="clearContactSearch()" 
+                                        class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 hidden"
+                                    >
+                                        <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        Clear
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Search Status -->
+                            <div id="searchStatus" class="mt-3 text-sm text-gray-600 hidden">
+                                <!-- Search status will be shown here -->
+                            </div>
+                        </div>
+
+                        <!-- Contacts List -->
+                        <div id="contactsContainer">
+                            <!-- Contacts will be loaded here -->
+                        </div>
+
+                        <!-- Pagination -->
+                        <div id="paginationContainer" class="mt-6 hidden">
+                            <!-- Pagination will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Group Modal -->
+<div id="createGroupModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Create Contact Group</h3>
+            <form id="createGroupForm" class="space-y-4">
+                <div>
+                    <label for="groupName" class="block text-sm font-medium text-gray-700">Group Name *</label>
+                    <input type="text" name="name" id="groupName" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm" placeholder="Enter group name">
+                </div>
+
+                <div>
+                    <label for="groupDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="description" id="groupDescription" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm" placeholder="Describe this group"></textarea>
+                </div>
+
+                <div>
+                    <label for="groupColor" class="block text-sm font-medium text-gray-700">Color</label>
+                    <div class="mt-1 flex items-center space-x-3">
+                        <input type="color" name="color" id="groupColor" value="#3b82f6" class="h-10 w-16 border border-gray-300 rounded-md">
+                        <span class="text-sm text-gray-500">Choose a color for this group</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeCreateGroupModal()" class="px-4 py-2 bg-gray-500 text-white text-sm font-medium rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-300">
+                        Create Group
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Detail Modal -->
+<div id="contactDetailModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-10 mx-auto p-5 border max-w-4xl shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Contact Details</h3>
+                <button onclick="closeContactDetailModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="contactDetailContent">
+                <!-- Contact details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Contact Book JavaScript
+let currentSearchQuery = '';
+let currentGroupId = null;
+let currentSortBy = 'recent_activity';
+let searchTimeout;
+let contactsData = null;
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    initializeContactBook();
+});
+
+async function initializeContactBook() {
+    console.log('📇 Initializing Contact Book...');
+
+    // Initialize search functionality
+    initializeSearch();
+
+    // Load initial data
+    await Promise.all([
+        loadGroups(),
+        loadContacts(),
+        loadStats()
+    ]);
+
+    console.log('📇 Contact Book initialized successfully');
+}
+
+// Search functionality
+function initializeSearch() {
+    const searchInput = document.getElementById('contactSearchInput');
+    const sortSelect = document.getElementById('sortBy');
+    const suggestionsContainer = document.getElementById('contactSearchSuggestions');
+
+    // Debounced search
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+
+        if (searchTimeout) clearTimeout(searchTimeout);
+
+        const clearBtn = document.getElementById('clearSearchBtn');
+        if (query) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+
+        searchTimeout = setTimeout(() => {
+            if (query !== currentSearchQuery) {
+                currentSearchQuery = query;
+                loadContacts();
+            }
+        }, 300);
+
+        // Show suggestions for partial queries
+        if (query.length >= 2) {
+            showSearchSuggestions(query);
+        } else {
+            hideSuggestions();
+        }
+    });
+
+    // Handle sort change
+    sortSelect.addEventListener('change', () => {
+        currentSortBy = sortSelect.value;
+        loadContacts();
+    });
+
+    // Handle keyboard shortcuts
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            clearContactSearch();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            hideSuggestions();
+            loadContacts();
+        }
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+            hideSuggestions();
+        }
+    });
+}
+
+// Load contacts
+async function loadContacts() {
+    try {
+        showContactsLoading();
+
+        const params = new URLSearchParams({
+            search: currentSearchQuery,
+            sortBy: currentSortBy,
+            limit: 50,
+            offset: 0
+        });
+
+        if (currentGroupId) {
+            params.append('groupId', currentGroupId);
+        }
+
+        console.log(`📇 Loading contacts with params:`, Object.fromEntries(params));
+
+        const response = await fetch(`/api/contact-book/contacts?${params}`);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        if (!result.success) {
+            throw new Error(result.error || 'Failed to load contacts');
+        }
+
+        contactsData = result.data;
+        renderContacts(result.data);
+        updateSearchStatus(result.data);
+
+    } catch (error) {
+        console.error('❌ Error loading contacts:', error);
+        showContactsError(error.message);
+    }
+}
+
+// Load groups
+async function loadGroups() {
+    try {
+        const response = await fetch('/api/contact-book/groups');
+        if (!response.ok) {
+            throw new Error('Failed to load groups');
+        }
+
+        const result = await response.json();
+        if (!result.success) {
+            throw new Error(result.error || 'Failed to load groups');
+        }
+
+        renderGroups(result.data);
+        hideGroupsLoading();
+
+    } catch (error) {
+        console.error('❌ Error loading groups:', error);
+        hideGroupsLoading();
+        showGroupsError(error.message);
+    }
+}
+
+// Load stats
+async function loadStats() {
+    try {
+        const response = await fetch('/api/contact-book/stats');
+        if (!response.ok) {
+            throw new Error('Failed to load stats');
+        }
+
+        const result = await response.json();
+        if (result.success) {
+            updateStatsDisplay(result.data);
+        }
+
+    } catch (error) {
+        console.error('❌ Error loading stats:', error);
+        // Don't show error for stats, just log it
+    }
+}
+
+// Render functions
+function renderContacts(data) {
+    const container = document.getElementById('contactsContainer');
+
+    if (!data.contacts || data.contacts.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No contacts found</h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    ${currentSearchQuery ? 'Try adjusting your search terms.' : 'Contacts will appear here when fans sign up for your drops.'}
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    let contactsHTML = `
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Groups</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Engagement</th>
+                        <th class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+    `;
+
+    data.contacts.forEach(contact => {
+        const displayName = contact.display_name || getDisplayName(contact);
+        const joinDate = new Date(contact.join_date).toLocaleDateString();
+        const lastActivity = contact.last_activity_at ? new Date(contact.last_activity_at).toLocaleDateString() : 'Never';
+
+        contactsHTML += `
+            <tr class="hover:bg-gray-50 cursor-pointer" onclick="showContactDetails(${contact.id})">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                <span class="text-sm font-medium text-primary-700">${displayName.charAt(0).toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">${displayName}</div>
+                            <div class="text-sm text-gray-500">${contact.email || 'No email'}</div>
+                            ${contact.phone ? `<div class="text-sm text-gray-500">${contact.phone}</div>` : ''}
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex flex-wrap gap-1">
+                        ${contact.stats && contact.stats.groups ? contact.stats.groups.map(group => `
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style="background-color: ${group.color}20; color: ${group.color};">
+                                ${group.name}
+                            </span>
+                        `).join('') : '<span class="text-sm text-gray-500">No groups</span>'}
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div>Joined: ${joinDate}</div>
+                    <div>Last: ${lastActivity}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${contact.stats ? contact.stats.totalSignups : 0} signups</div>
+                    <div class="text-sm text-gray-500">Score: ${contact.engagement_score || 0}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button onclick="event.stopPropagation(); showContactDetails(${contact.id})" class="text-primary-600 hover:text-primary-900">
+                        View
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    contactsHTML += `
+                </tbody>
+            </table>
+        </div>
+    `;
+
+    container.innerHTML = contactsHTML;
+
+    // Show pagination if needed
+    if (data.hasMore) {
+        showPagination(data);
+    } else {
+        hidePagination();
+    }
+}
+
+function getDisplayName(contact) {
+    if (contact.first_name && contact.last_name) {
+        return `${contact.first_name} ${contact.last_name}`;
+    } else if (contact.first_name) {
+        return contact.first_name;
+    } else if (contact.last_name) {
+        return contact.last_name;
+    } else if (contact.email) {
+        return contact.email.split('@')[0];
+    } else {
+        return 'Anonymous Contact';
+    }
+}
+
+// Utility functions
+function showContactsLoading() {
+    const container = document.getElementById('contactsContainer');
+    container.innerHTML = `
+        <div class="text-center py-12">
+            <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm text-gray-500">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Loading contacts...
+            </div>
+        </div>
+    `;
+}
+
+function showContactsError(message) {
+    const container = document.getElementById('contactsContainer');
+    container.innerHTML = `
+        <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">Error loading contacts</h3>
+            <p class="mt-1 text-sm text-gray-500">${message}</p>
+            <button onclick="loadContacts()" class="mt-3 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
+                Try Again
+            </button>
+        </div>
+    `;
+}
+
+function clearContactSearch() {
+    const searchInput = document.getElementById('contactSearchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const statusElement = document.getElementById('searchStatus');
+
+    searchInput.value = '';
+    clearBtn.classList.add('hidden');
+    statusElement.classList.add('hidden');
+
+    currentSearchQuery = '';
+    hideSuggestions();
+    loadContacts();
+}
+
+function hideSuggestions() {
+    const suggestionsContainer = document.getElementById('contactSearchSuggestions');
+    if (suggestionsContainer) {
+        suggestionsContainer.classList.add('hidden');
+    }
+}
+
+function updateSearchStatus(data) {
+    const statusElement = document.getElementById('searchStatus');
+    if (currentSearchQuery && statusElement) {
+        statusElement.innerHTML = `Found ${data.total} result${data.total !== 1 ? 's' : ''} for "${currentSearchQuery}"`;
+        statusElement.classList.remove('hidden');
+    } else if (statusElement) {
+        statusElement.classList.add('hidden');
+    }
+}
+
+// Modal functions
+function openCreateGroupModal() {
+    document.getElementById('createGroupModal').classList.remove('hidden');
+    document.getElementById('groupName').focus();
+}
+
+function closeCreateGroupModal() {
+    document.getElementById('createGroupModal').classList.add('hidden');
+    document.getElementById('createGroupForm').reset();
+}
+
+function closeContactDetailModal() {
+    document.getElementById('contactDetailModal').classList.add('hidden');
+}
+
+// Placeholder functions (to be implemented)
+function renderGroups(groups) {
+    console.log('📁 Rendering groups:', groups);
+    // TODO: Implement group rendering
+}
+
+function hideGroupsLoading() {
+    const loading = document.getElementById('groupsLoading');
+    if (loading) loading.classList.add('hidden');
+}
+
+function showGroupsError(message) {
+    console.error('Groups error:', message);
+}
+
+function updateStatsDisplay(stats) {
+    console.log('📊 Updating stats:', stats);
+    // TODO: Implement stats display
+}
+
+function selectGroup(groupId) {
+    currentGroupId = groupId;
+    loadContacts();
+}
+
+function showSearchSuggestions(query) {
+    // TODO: Implement search suggestions
+}
+
+function showContactDetails(contactId) {
+    console.log('👤 Showing contact details for:', contactId);
+    // TODO: Implement contact details modal
+}
+
+function showPagination(data) {
+    // TODO: Implement pagination
+}
+
+function hidePagination() {
+    const container = document.getElementById('paginationContainer');
+    if (container) container.classList.add('hidden');
+}
+
+</script>

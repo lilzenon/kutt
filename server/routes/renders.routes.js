@@ -387,6 +387,33 @@ router.get(
 );
 
 // New Laylo-style pages
+
+// Contact Book page
+router.get(
+    "/contact-book",
+    asyncHandler(auth.jwt),
+    asyncHandler(locals.user),
+    asyncHandler(async(req, res) => {
+        try {
+            res.render("contact-book", {
+                title: "Contact Book",
+                pageTitle: "Contact Book",
+                layout: "layouts/modern-dashboard",
+                currentPage: "contact-book",
+                user: req.user,
+                domain: env.DEFAULT_DOMAIN
+            });
+        } catch (error) {
+            console.error('❌ Contact Book page error:', error);
+            res.status(500).render("error", {
+                title: "Error",
+                layout: "layouts/modern-dashboard",
+                error: "Failed to load contact book page"
+            });
+        }
+    })
+);
+
 router.get(
     "/profile",
     asyncHandler(auth.jwt),
