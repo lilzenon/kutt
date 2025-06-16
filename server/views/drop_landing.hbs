@@ -140,12 +140,12 @@
             padding: 0 16px;
         }
 
-        /* Desktop grid layout - Reduced gap for better visual connection */
+        /* Desktop grid layout - Minimal gap for tight connection */
         @media (min-width: 1024px) {
             .drop-container {
                 grid-template-columns: 1fr auto; /* Side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(16px, 3vw, 24px); /* Reduced from larger gaps for better connection */
+                gap: clamp(8px, 1.5vw, 12px); /* Minimal gap for tight title-to-card connection */
                 align-items: flex-start;
             }
         }
@@ -318,11 +318,11 @@
             overflow: visible; /* Prevent any overflow issues */
         }
 
-        /* Desktop title section - Reduced spacing for better connection */
+        /* Desktop title section - Minimal spacing for tight connection */
         @media (min-width: 1024px) {
             .drop-title-section {
-                padding: 4px 0 6px 0; /* Reduced padding for tighter connection */
-                margin-bottom: 4px; /* Reduced margin for better visual connection */
+                padding: 0 !important; /* Remove all padding for tight connection */
+                margin-bottom: 0 !important; /* Remove margin for tight connection */
             }
         }
 
@@ -341,8 +341,8 @@
             letter-spacing: -0.5px !important;
             font-weight: 700 !important;
 
-            /* SPACING: Improved vertical breathing room */
-            margin: 16px 0 20px 0 !important; /* Added top and bottom margins */
+            /* SPACING: Minimal spacing for tight connection to card */
+            margin: 16px 0 8px 0 !important; /* Drastically reduced bottom margin */
             padding: 0 !important;
 
             /* ALIGNMENT: Left-aligned consistently to match card */
@@ -361,11 +361,11 @@
             white-space-collapse: preserve-breaks;
         }
 
-        /* Desktop title sizing enhancement - Reduced gap to card */
+        /* Desktop title sizing enhancement - Minimal gap to card */
         @media (min-width: 1024px) {
             .drop-title {
                 font-size: 56px !important; /* Increased from 42px for better desktop impact */
-                margin: 12px 0 16px 0 !important; /* Reduced spacing to connect better with card */
+                margin: 8px 0 4px 0 !important; /* Minimal spacing for tight connection */
             }
         }
 
@@ -1342,13 +1342,13 @@
                 font-size: 50px !important; /* Increased from 42px for better impact */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 12px 0 16px 0 !important; /* Reduced spacing for better connection */
+                margin: 8px 0 4px 0 !important; /* Minimal spacing for tight connection */
             }
 
             .drop-title-section {
                 max-width: 380px !important;
-                padding: 4px 0 6px 0 !important; /* Reduced section padding for tighter connection */
-                margin-bottom: 4px !important; /* Reduced margin for better visual connection */
+                padding: 0 !important; /* Remove padding for tight connection */
+                margin-bottom: 0 !important; /* Remove margin for tight connection */
                 overflow: visible !important; /* Prevent overflow issues */
             }
 
@@ -1374,7 +1374,7 @@
             .drop-container {
                 grid-template-columns: 1fr auto; /* Keep side-by-side layout */
                 grid-template-rows: auto auto;
-                gap: clamp(16px, 3vw, 24px); /* Reduced gap for better visual connection */
+                gap: clamp(8px, 1.5vw, 12px); /* Minimal gap for tight connection */
                 align-items: flex-start;
             }
 
@@ -1389,8 +1389,8 @@
             .drop-title-section {
                 grid-column: 2;
                 grid-row: 1;
-                margin: 0 0 12px 0; /* Reduced from 20px for better connection */
-                padding: 4px 0 6px 0; /* Reduced section padding for tighter connection */
+                margin: 0 !important; /* Remove margin for tight connection */
+                padding: 0 !important; /* Remove padding for tight connection */
                 max-width: 350px;
                 overflow: visible !important; /* Prevent overflow issues */
             }
@@ -1407,7 +1407,7 @@
                 font-size: clamp(36px, 5vw, 44px) !important; /* Increased from 28px-36px to 36px-44px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.3px !important;
-                margin: 8px 0 12px 0 !important; /* Reduced spacing for better connection */
+                margin: 4px 0 4px 0 !important; /* Minimal spacing for tight connection */
             }
         }
 
@@ -1449,7 +1449,7 @@
                 font-size: clamp(40px, 6vw, 48px) !important; /* Increased from 32px-40px to 40px-48px */
                 line-height: 1.1 !important;
                 letter-spacing: -0.4px !important;
-                margin: 8px 0 12px 0 !important; /* Reduced spacing for smoother transition */
+                margin: 6px 0 6px 0 !important; /* Minimal spacing for better connection */
             }
 
             .user-container {
