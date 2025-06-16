@@ -4,7 +4,12 @@
     <title>{{drop.title}} - BOUNCE2BOUNCE</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    
+
+    <!-- Theme Color for Mobile Overscroll Background -->
+    <meta name="theme-color" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}"/>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}"/>
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}"/>
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="{{drop.description}}">
     <meta name="keywords" content="music, artist, drop, signup, {{drop.title}}">
