@@ -30,27 +30,15 @@ class ContactBookService {
         return await cache.getOrCompute(cacheKey, async() => {
             console.log(`📇 Loading contacts for user ${userId} with phone-first approach:`, options);
 
-            // Phone-first contact identification
-            // Step 1: Get all unique contacts using phone as primary, email as fallback
-            const contactsSubquery = knex("drop_signups as ds")
+            // Simplified phone-first contact identification
+            // Step 1: Get phone-based contacts
+            const phoneContactsQuery = knex("drop_signups as ds")
                 .select([
-                    knex.raw(`
-                        CASE
-                            WHEN ds.phone IS NOT NULL AND ds.phone != ''
-                            THEN ds.phone
-                            ELSE ds.email
-                        END as contact_id
-                    `),
-                    knex.raw(`
-                        CASE
-                            WHEN ds.phone IS NOT NULL AND ds.phone != ''
-                            THEN 'phone'
-                            ELSE 'email'
-                        END as contact_type
-                    `),
-                    knex.raw("MAX(ds.phone) as phone"),
+                    "ds.phone as id",
+                    knex.raw("'phone' as contact_type"),
+                    "ds.phone",
                     knex.raw("MAX(ds.email) as email"),
-                    knex.raw("MAX(ds.name) as name"),
+                    knex.raw("COALESCE(MAX(ds.name), ds.phone) as display_name"),
                     knex.raw("MIN(ds.created_at) as join_date"),
                     knex.raw("MAX(ds.created_at) as last_activity_at"),
                     knex.raw("COUNT(ds.id) as total_drop_signups"),
@@ -59,34 +47,36 @@ class ContactBookService {
                 ])
                 .join("drops as d", "ds.drop_id", "d.id")
                 .where("d.user_id", userId)
-                .where(function() {
-                    this.where(function() {
-                        this.whereNotNull("ds.phone").andWhere("ds.phone", "!=", "");
-                    }).orWhere(function() {
-                        this.whereNotNull("ds.email").andWhere("ds.email", "!=", "");
-                    });
-                })
-                .groupBy(knex.raw(`
-                    CASE
-                        WHEN ds.phone IS NOT NULL AND ds.phone != ''
-                        THEN ds.phone
-                        ELSE ds.email
-                    END
-                `));
+                .whereNotNull("ds.phone")
+                .where("ds.phone", "!=", "")
+                .groupBy("ds.phone");
 
-            let query = knex.from(contactsSubquery.as('contacts'))
+            // Step 2: Get email-only contacts (no phone number)
+            const emailOnlyContactsQuery = knex("drop_signups as ds")
                 .select([
-                    "contact_id as id",
-                    "contact_type",
-                    "phone",
-                    "email",
-                    knex.raw("COALESCE(name, CASE WHEN contact_type = 'phone' THEN phone ELSE email END) as display_name"),
-                    "join_date",
-                    "last_activity_at",
-                    "total_drop_signups",
-                    "total_link_clicks",
-                    "engagement_score"
-                ]);
+                    "ds.email as id",
+                    knex.raw("'email' as contact_type"),
+                    knex.raw("NULL as phone"),
+                    "ds.email",
+                    knex.raw("COALESCE(MAX(ds.name), ds.email) as display_name"),
+                    knex.raw("MIN(ds.created_at) as join_date"),
+                    knex.raw("MAX(ds.created_at) as last_activity_at"),
+                    knex.raw("COUNT(ds.id) as total_drop_signups"),
+                    knex.raw("0 as total_link_clicks"),
+                    knex.raw("CASE WHEN COUNT(ds.id) > 1 THEN 75 ELSE 50 END as engagement_score")
+                ])
+                .join("drops as d", "ds.drop_id", "d.id")
+                .where("d.user_id", userId)
+                .whereNotNull("ds.email")
+                .where("ds.email", "!=", "")
+                .where(function() {
+                    this.whereNull("ds.phone").orWhere("ds.phone", "");
+                })
+                .groupBy("ds.email");
+
+            // Step 3: Union both queries
+            const unionQuery = phoneContactsQuery.union(emailOnlyContactsQuery);
+            let query = knex.from(unionQuery.as('contacts'));
 
             // Apply search filters
             if (search && search.trim()) {
@@ -98,19 +88,19 @@ class ContactBookService {
 
                 query = query.where(function() {
                     // Search in display name
-                    this.where("display_name", "like", `%${trimmedSearch}%`);
+                    this.where("contacts.display_name", "like", `%${trimmedSearch}%`);
 
                     // Search in email
                     if (trimmedSearch.includes('@') || !isPhoneSearch) {
-                        this.orWhere("email", "like", `%${trimmedSearch}%`);
+                        this.orWhere("contacts.email", "like", `%${trimmedSearch}%`);
                     }
 
                     // Search in phone (both original and normalized)
                     if (isPhoneSearch) {
-                        this.orWhere("phone", "like", `%${trimmedSearch}%`)
-                            .orWhere("phone", "like", `%${normalizedPhone}%`);
+                        this.orWhere("contacts.phone", "like", `%${trimmedSearch}%`)
+                            .orWhere("contacts.phone", "like", `%${normalizedPhone}%`);
                     } else {
-                        this.orWhere("phone", "like", `%${trimmedSearch}%`);
+                        this.orWhere("contacts.phone", "like", `%${trimmedSearch}%`);
                     }
                 });
             }
@@ -141,26 +131,26 @@ class ContactBookService {
             // Apply sorting
             switch (sortBy) {
                 case 'recent_activity':
-                    query = query.orderBy("last_activity_at", "desc").orderBy("join_date", "desc");
+                    query = query.orderBy("contacts.last_activity_at", "desc").orderBy("contacts.join_date", "desc");
                     break;
                 case 'name':
-                    query = query.orderBy("display_name", "asc");
+                    query = query.orderBy("contacts.display_name", "asc");
                     break;
                 case 'email':
-                    query = query.orderBy("email", "asc");
+                    query = query.orderBy("contacts.email", "asc");
                     break;
                 case 'join_date':
-                    query = query.orderBy("join_date", "desc");
+                    query = query.orderBy("contacts.join_date", "desc");
                     break;
                 case 'engagement':
-                    query = query.orderBy("engagement_score", "desc").orderBy("total_drop_signups", "desc");
+                    query = query.orderBy("contacts.engagement_score", "desc").orderBy("contacts.total_drop_signups", "desc");
                     break;
                 default:
-                    query = query.orderBy("last_activity_at", "desc");
+                    query = query.orderBy("contacts.last_activity_at", "desc");
             }
 
             // Get total count for pagination
-            const countQuery = query.clone().clearSelect().clearOrder().count("* as total");
+            const countQuery = query.clone().clearSelect().clearOrder().count("contacts.id as total");
             const [{ total }] = await countQuery;
 
             // Apply pagination
