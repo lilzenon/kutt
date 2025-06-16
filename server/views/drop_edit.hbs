@@ -129,6 +129,14 @@
                                 <input type="color" id="edit-background-color" name="background_color"
                                        value="{{drop.background_color}}" class="modern-color-input">
                             </div>
+                            <div class="color-picker-group">
+                                <label for="edit-overscroll-background-color" class="color-picker-label">
+                                    Pull-to-Refresh Color
+                                    <span class="color-picker-hint">Color shown when pulling down to refresh on mobile</span>
+                                </label>
+                                <input type="color" id="edit-overscroll-background-color" name="overscroll_background_color"
+                                       value="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}" class="modern-color-input">
+                            </div>
                         </div>
 
                         <!-- Card Settings -->
@@ -771,6 +779,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonColorInput = document.getElementById('edit-button-color');
     const buttonTextColorInput = document.getElementById('edit-button-text-color');
     const backgroundColorInput = document.getElementById('edit-background-color');
+    const overscrollBackgroundColorInput = document.getElementById('edit-overscroll-background-color');
     const backgroundTypeSelect = document.getElementById('edit-background-type');
     const cardBackgroundTypeSelect = document.getElementById('edit-card-background-type');
     const titleColorInput = document.getElementById('edit-title-color');
@@ -960,6 +969,7 @@ document.addEventListener('DOMContentLoaded', function() {
     buttonColorInput.addEventListener('input', updatePreviewColors);
     if (buttonTextColorInput) buttonTextColorInput.addEventListener('input', updatePreviewColors);
     backgroundColorInput.addEventListener('input', updatePreviewColors);
+    if (overscrollBackgroundColorInput) overscrollBackgroundColorInput.addEventListener('input', updatePreviewColors);
     if (backgroundTypeSelect) backgroundTypeSelect.addEventListener('change', updatePreviewColors);
     if (cardBackgroundTypeSelect) cardBackgroundTypeSelect.addEventListener('change', updatePreviewColors);
     titleColorInput.addEventListener('input', updatePreviewColors);
@@ -969,6 +979,7 @@ document.addEventListener('DOMContentLoaded', function() {
     buttonColorInput.addEventListener('change', updatePreviewColors);
     if (buttonTextColorInput) buttonTextColorInput.addEventListener('change', updatePreviewColors);
     backgroundColorInput.addEventListener('change', updatePreviewColors);
+    if (overscrollBackgroundColorInput) overscrollBackgroundColorInput.addEventListener('change', updatePreviewColors);
     titleColorInput.addEventListener('change', updatePreviewColors);
     descriptionColorInput.addEventListener('change', updatePreviewColors);
 

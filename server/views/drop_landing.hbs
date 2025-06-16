@@ -52,6 +52,7 @@
             --drop-button-color: {{drop.button_color}};
             --drop-button-text-color: {{drop.button_text_color}};
             --drop-background-color: {{drop.background_color}};
+            --drop-overscroll-background-color: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}};
 
             /* Dynamic button shadow color - extract RGB values for shadow effects */
             --drop-button-shadow: {{#if drop.button_color}}{{drop.button_color}}{{else}}#000000{{/if}};
@@ -79,23 +80,7 @@
             -webkit-text-size-adjust: 100%; /* Prevent text scaling on iOS */
             overflow-x: hidden; /* Prevent horizontal scroll */
             /* Set overscroll background for pull-to-refresh */
-            {{#if (eq drop.background_type "solid")}}
-            background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}};
-            {{else}}
-                {{#if drop.gradient_data}}
-                    {{! Use gradient data if available }}
-                    background: {{{parseGradientData drop.gradient_data}}};
-                {{else}}
-                    {{! Fallback gradient }}
-                    background: linear-gradient(
-                        179deg,
-                        {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
-                        {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
-                        {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
-                        rgba(0, 0, 0, 0.9) 100%
-                    );
-                {{/if}}
-            {{/if}}
+            background: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}};
         }
 
         body, html {
@@ -108,24 +93,8 @@
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overscroll-behavior-x: none; /* Prevent horizontal overscroll */
             overscroll-behavior-y: auto; /* Allow vertical overscroll for pull-to-refresh */
-            /* Set overscroll background to match drop background */
-            {{#if (eq drop.background_type "solid")}}
-            background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} !important;
-            {{else}}
-                {{#if drop.gradient_data}}
-                    {{! Use gradient data if available }}
-                    background: {{{parseGradientData drop.gradient_data}}} !important;
-                {{else}}
-                    {{! Fallback gradient }}
-                    background: linear-gradient(
-                        179deg,
-                        {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
-                        {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
-                        {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
-                        rgba(0, 0, 0, 0.9) 100%
-                    ) !important;
-                {{/if}}
-            {{/if}}
+            /* Set overscroll background for pull-to-refresh */
+            background: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}} !important;
             overflow-x: hidden;
             /* Enhanced mobile scrolling optimization */
             -webkit-overflow-scrolling: touch;
@@ -207,27 +176,11 @@
                 overflow-x: hidden; /* Prevent horizontal scroll */
             }
 
-            /* Enable pull-to-refresh on mobile with matching background */
+            /* Enable pull-to-refresh on mobile with custom background */
             body {
                 overscroll-behavior-y: auto !important; /* Allow vertical overscroll for pull-to-refresh */
-                /* Ensure overscroll background matches drop background */
-                {{#if (eq drop.background_type "solid")}}
-                background: {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} !important;
-                {{else}}
-                    {{#if drop.gradient_data}}
-                        {{! Use gradient data if available }}
-                        background: {{{parseGradientData drop.gradient_data}}} !important;
-                    {{else}}
-                        {{! Fallback gradient }}
-                        background: linear-gradient(
-                            179deg,
-                            {{#if drop.background_color}}{{drop.background_color}}{{else}}var(--laylo-red){{/if}} 0%,
-                            {{#if drop.background_color}}{{drop.background_color}}CC{{else}}#DC2626CC{{/if}} 30%,
-                            {{#if drop.background_color}}{{drop.background_color}}80{{else}}#DC262680{{/if}} 60%,
-                            rgba(0, 0, 0, 0.9) 100%
-                        ) !important;
-                    {{/if}}
-                {{/if}}
+                /* Use custom overscroll background color */
+                background: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}} !important;
             }
         }
 

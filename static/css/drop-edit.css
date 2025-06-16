@@ -613,6 +613,15 @@
     transition: color 0.2s ease;
 }
 
+.color-picker-hint {
+    display: block;
+    font-weight: 400;
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 2px;
+    font-style: italic;
+}
+
 .color-picker-label:hover {
     color: #1f2937;
 }
