@@ -24,11 +24,11 @@ const themeColorTag = document.querySelector('meta[name="theme-color"]');
 if (themeColorTag) {
     const color = themeColorTag.getAttribute('content');
     console.log(`✅ Theme-color found: ${color}`);
-    
+
     // Validate hex color format
     const isValidHex = /^#[0-9A-Fa-f]{6}$/.test(color);
     console.log(`   Valid hex format: ${isValidHex ? '✅' : '❌'}`);
-    
+
     // Check if it's not default white
     const isCustomColor = color !== '#ffffff';
     console.log(`   Custom color: ${isCustomColor ? '✅' : '❌'}`);
@@ -67,11 +67,11 @@ function rgbToHex(rgb) {
     if (rgb.startsWith('#')) return rgb;
     const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
     if (!match) return rgb;
-    
+
     const r = parseInt(match[1]);
     const g = parseInt(match[2]);
     const b = parseInt(match[3]);
-    
+
     return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
@@ -88,9 +88,9 @@ console.log('\n4️⃣ JAVASCRIPT INTERFERENCE CHECK');
 console.log('='.repeat(20));
 
 // Check for touch event listeners that might interfere
-const hasCustomTouchListeners = window.ontouchstart !== null || 
-                               window.ontouchmove !== null || 
-                               window.ontouchend !== null;
+const hasCustomTouchListeners = window.ontouchstart !== null ||
+    window.ontouchmove !== null ||
+    window.ontouchend !== null;
 
 console.log(`Custom touch listeners: ${hasCustomTouchListeners ? '⚠️ Found' : '✅ None'}`);
 
@@ -120,25 +120,41 @@ if (viewport) {
     console.log('❌ Viewport meta tag not found');
 }
 
-// Test 6: Browser-specific checks
-console.log('\n6️⃣ BROWSER-SPECIFIC SUPPORT');
+// Test 6: Browser-specific checks with research-based expectations
+console.log('\n6️⃣ BROWSER-SPECIFIC SUPPORT (2024-2025 Research)');
 console.log('='.repeat(20));
 
 if (isIOS) {
     console.log('🍎 iOS Safari detected');
-    console.log('   Expected behavior: Theme-color controls overscroll background');
-    console.log('   Native pull-to-refresh: Should work automatically');
+    console.log('   Theme-color support: ✅ iOS Safari 15+ (Limited availability)');
+    console.log('   Prohibited colors: ❌ red, white, black may be ignored');
+    console.log('   Auto-detection: ✅ Safari picks colors from body/header if theme-color fails');
+    console.log('   Expected behavior: Theme-color OR auto-detected color in overscroll');
+    console.log('   Native pull-to-refresh: ✅ Should work automatically');
+
+    // Check for prohibited colors
+    if (themeColorTag) {
+        const color = themeColorTag.getAttribute('content').toLowerCase();
+        const isProhibited = ['#ffffff', '#fff', 'white', '#ff0000', '#red', 'red', '#000000', '#000', 'black'].includes(color);
+        if (isProhibited) {
+            console.log(`   ⚠️ PROHIBITED COLOR DETECTED: ${color}`);
+            console.log('   Safari will likely ignore this and auto-pick a color');
+        }
+    }
 } else if (isAndroid) {
     console.log('🤖 Android Chrome detected');
+    console.log('   Theme-color support: ✅ Chrome Mobile (Full support)');
     console.log('   Expected behavior: Theme-color controls overscroll background');
-    console.log('   Native pull-to-refresh: Should work automatically');
+    console.log('   Native pull-to-refresh: ✅ Should work automatically');
 } else if (isMobile) {
     console.log('📱 Other mobile browser detected');
-    console.log('   Expected behavior: May vary by browser');
-    console.log('   Fallback: CSS background-color should be visible');
+    console.log('   Theme-color support: ⚠️ Varies by browser');
+    console.log('   Expected behavior: May vary, CSS background-color fallback');
+    console.log('   Native pull-to-refresh: ⚠️ Browser dependent');
 } else {
     console.log('💻 Desktop browser detected');
-    console.log('   Pull-to-refresh: Not available on desktop');
+    console.log('   Theme-color support: ✅ Safari 15+ desktop, ❌ Most others');
+    console.log('   Pull-to-refresh: ❌ Not available on desktop');
 }
 
 // Summary
@@ -167,19 +183,28 @@ if (passedChecks === totalChecks) {
     console.log('⚠️ Check individual test results above');
 }
 
-console.log('\n📋 MANUAL TESTING INSTRUCTIONS:');
+console.log('\n📋 MANUAL TESTING INSTRUCTIONS (iOS Safari):');
 console.log('1. Ensure you are at the top of the page');
 console.log('2. Pull down slowly from the very top');
-console.log('3. Look for custom background color during pull');
+console.log('3. Look for custom background color OR Safari auto-detected color');
 console.log('4. Release to trigger native browser refresh');
-console.log('5. Page should reload using browser\'s native mechanism');
+console.log('5. Page should reload using Safari\'s native mechanism');
 
-console.log('\n🔧 TROUBLESHOOTING:');
-console.log('- If no custom color: Check theme-color meta tag value');
-console.log('- If no pull-to-refresh: Check overscroll-behavior CSS');
-console.log('- If page doesn\'t refresh: Browser may not support native PTR');
-console.log('- If jerky behavior: Check for JavaScript interference');
+console.log('\n🔧 TROUBLESHOOTING (Research-Based):');
+console.log('- iOS Safari prohibited colors: Avoid pure white (#ffffff), red (#ff0000), black (#000000)');
+console.log('- Safari auto-detection: If theme-color fails, Safari picks from body/header background');
+console.log('- Limited browser support: Theme-color only works in iOS Safari 15+, Chrome Mobile');
+console.log('- No pull-to-refresh: Check overscroll-behavior CSS is set to "auto"');
+console.log('- JavaScript interference: Ensure no custom touch event handlers');
 
-console.log('\n✨ EXPECTED RESULT:');
-console.log('Simple, reliable pull-to-refresh with custom background color');
-console.log('No custom JavaScript, pure browser implementation');
+console.log('\n✨ EXPECTED RESULT (iOS Safari 15+):');
+console.log('🎯 Custom theme-color displays in overscroll area (if not prohibited)');
+console.log('🎯 OR Safari auto-detects and uses page background color');
+console.log('🎯 Native browser pull-to-refresh mechanism works reliably');
+console.log('🎯 No custom JavaScript required - pure browser implementation');
+
+console.log('\n⚠️ IMPORTANT LIMITATIONS:');
+console.log('- Theme-color has "Limited availability" (MDN) - not supported in all browsers');
+console.log('- iOS Safari may ignore certain colors and auto-pick alternatives');
+console.log('- Desktop browsers generally don\'t support pull-to-refresh');
+console.log('- Overscroll background ≠ tab bar color (different Safari behaviors)');

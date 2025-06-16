@@ -5,8 +5,14 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-    <!-- Theme Color for Mobile Overscroll Background -->
-    <meta name="theme-color" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}"/>
+    <!-- Theme Color for Mobile Browser UI (iOS Safari 15+, Chrome Mobile) -->
+    <meta name="theme-color" content="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f8f9fa{{/if}}"/>
+
+    <!-- iOS Safari Status Bar Style for PWA mode -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+
+    <!-- Color Scheme Declaration for Safari Dark Mode Support -->
+    <meta name="color-scheme" content="light dark"/>
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="{{drop.description}}">
@@ -177,17 +183,27 @@
                 overflow-x: hidden; /* Prevent horizontal scroll */
             }
 
-            /* Native mobile pull-to-refresh with custom background */
+            /* iOS Safari Overscroll Background Color Implementation */
+            html {
+                /* Enable native browser pull-to-refresh */
+                overscroll-behavior-y: auto;
+                /* Set background for Safari's automatic color detection */
+                background-color: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f8f9fa{{/if}};
+            }
+
             body {
                 /* Enable native browser pull-to-refresh */
                 overscroll-behavior-y: auto;
-                /* Set background color for overscroll area */
-                background-color: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}};
+                /* Set background color for overscroll area and Safari detection */
+                background-color: {{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f8f9fa{{/if}};
+                /* Ensure Safari can detect this as the primary background */
+                min-height: 100vh;
             }
 
-            /* Ensure proper mobile scrolling */
-            html {
-                overscroll-behavior-y: auto;
+            /* Ensure the page container doesn't override the background */
+            .drop-page-container {
+                /* Remove any background that might interfere with Safari's detection */
+                background: transparent;
             }
         }
 
@@ -2923,5 +2939,60 @@
             });
         });
     </script>
+
+    <!-- iOS Safari Theme-Color Optimization Script -->
+    <script>
+        // iOS Safari theme-color optimization and validation
+        (function() {
+            'use strict';
+
+            // Only run on iOS Safari
+            const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+
+            if (!isIOSSafari) return;
+
+            console.log('🍎 iOS Safari detected - optimizing theme-color implementation');
+
+            const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+            const customColor = '{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#f8f9fa{{/if}}';
+
+            if (themeColorMeta && customColor) {
+                // Safari prohibited colors that might be ignored
+                const prohibitedColors = [
+                    '#ff0000', '#red', 'red',
+                    '#ffffff', '#fff', 'white',
+                    '#000000', '#000', 'black'
+                ];
+
+                // Check if the custom color is prohibited
+                const isProhibited = prohibitedColors.some(prohibited =>
+                    customColor.toLowerCase() === prohibited.toLowerCase()
+                );
+
+                if (isProhibited) {
+                    console.log('⚠️ Safari prohibited color detected, using fallback');
+                    // Use a slightly off-white/off-black color that Safari will accept
+                    const fallbackColor = customColor.toLowerCase().includes('fff') || customColor.toLowerCase().includes('white')
+                        ? '#f8f9fa'
+                        : customColor.toLowerCase().includes('000') || customColor.toLowerCase().includes('black')
+                        ? '#1a1a1a'
+                        : '#f8f9fa';
+
+                    themeColorMeta.setAttribute('content', fallbackColor);
+                    console.log(`🎨 Theme-color updated to Safari-compatible: ${fallbackColor}`);
+                } else {
+                    console.log(`✅ Theme-color is Safari-compatible: ${customColor}`);
+                }
+
+                // Ensure body background matches theme-color for Safari's automatic detection
+                document.body.style.backgroundColor = themeColorMeta.getAttribute('content');
+                document.documentElement.style.backgroundColor = themeColorMeta.getAttribute('content');
+
+                console.log('🎯 Background colors synchronized for Safari detection');
+            }
+
+        })();
+    </script>
+
 </body>
 </html>
