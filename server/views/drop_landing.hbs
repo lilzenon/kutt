@@ -150,7 +150,7 @@
             .drop-container {
                 gap: 16px;
                 padding: 0 24px;
-                max-width: 600px;
+                max-width: 800px; /* Increased from 600px to better utilize tablet screen space */
             }
         }
 
@@ -184,6 +184,14 @@
             background: transparent;
             overflow: visible;
             margin: 0 auto 16px auto; /* Bottom margin for mobile spacing */
+        }
+
+        /* Tablet image container - Better space utilization */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .drop-image-container {
+                max-width: 700px; /* Allow larger images on tablet */
+                margin: 0 auto 24px auto; /* Center with better bottom spacing */
+            }
         }
 
         /* Desktop image container */
@@ -356,6 +364,15 @@
             width: 100% !important;
             max-width: 100% !important;
             box-sizing: border-box;
+        }
+
+        /* Tablet RSVP card container - Better space utilization */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .rsvp-card-container {
+                width: 100% !important;
+                max-width: 500px !important; /* Allow wider cards on tablet */
+                margin: 0 auto !important;
+            }
         }
 
         /* Desktop RSVP card container */
