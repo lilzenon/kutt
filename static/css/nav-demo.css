@@ -67,20 +67,22 @@ body {
 /* Hero Card Component */
 
 .hero-card {
-    max-width: 800px;
+    max-width: 400px;
     margin: 0 auto 3rem auto;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 50px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0;
+    padding: 3rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .hero-card::before {
@@ -102,17 +104,16 @@ body {
 /* Event Image Section */
 
 .event-image {
-    padding: 3rem 3rem 2rem 3rem;
+    margin-bottom: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 200px;
 }
 
 .image-placeholder {
     width: 120px;
     height: 120px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
     border-radius: 25px;
     display: flex;
     align-items: center;
@@ -120,6 +121,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .image-placeholder svg {
@@ -131,21 +133,30 @@ body {
 
 .event-info {
     text-align: center;
-    padding: 0 3rem 2rem 3rem;
+    margin-bottom: 2.5rem;
 }
 
 .event-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     line-height: 1.2;
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
+.event-artist {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
 .event-date {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
     letter-spacing: 0.1em;
@@ -153,21 +164,128 @@ body {
 }
 
 
-/* Posh Integration */
+/* Tickets CTA Button */
 
-.posh-integration {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 0 0 50px 50px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-    min-height: 600px;
+.tickets-cta-container {
+    width: 100%;
 }
 
-.posh-integration iframe {
+.tickets-cta {
+    width: 100%;
+    padding: 16px 32px;
+    background: #ff0000;
+    border: none;
+    border-radius: 25px;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 16px rgba(255, 0, 0, 0.3);
+}
+
+.tickets-cta:hover {
+    background: #e60000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+}
+
+.tickets-cta:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 12px rgba(255, 0, 0, 0.5);
+}
+
+
+/* Modal Overlay */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(0.9) translateY(20px);
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 200ms ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+.modal-iframe-container {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.modal-iframe-container iframe {
     width: 100%;
     border: none;
-    background: #ffffff;
-    transition: opacity 250ms ease-in-out;
+    display: block;
 }
 
 .navbar-container {
@@ -326,30 +444,32 @@ body {
 
 @media (min-width: 1024px) {
     .hero-card {
-        max-width: 800px;
+        max-width: 450px;
         margin-bottom: 4rem;
-    }
-    .event-image {
-        padding: 3.5rem 3.5rem 2.5rem 3.5rem;
-        min-height: 240px;
+        padding: 3.5rem;
     }
     .image-placeholder {
         width: 140px;
         height: 140px;
     }
-    .event-info {
-        padding: 0 3.5rem 2.5rem 3.5rem;
-    }
     .event-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
+    }
+    .event-artist {
+        font-size: 1.1rem;
     }
     .event-date {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
     }
-    .posh-integration {
-        min-height: 600px;
+    .tickets-cta {
+        padding: 18px 36px;
+        font-size: 1.2rem;
     }
-    .posh-integration iframe {
+    .modal-content {
+        padding: 3rem;
+        border-radius: 40px;
+    }
+    .modal-iframe-container iframe {
         height: 600px;
     }
     .modern-navbar {
@@ -370,30 +490,32 @@ body {
 
 @media (max-width: 1023px) and (min-width: 768px) {
     .hero-card {
-        max-width: 600px;
+        max-width: 400px;
         margin-bottom: 3rem;
-    }
-    .event-image {
-        padding: 2.5rem 2.5rem 2rem 2.5rem;
-        min-height: 200px;
+        padding: 3rem;
     }
     .image-placeholder {
         width: 120px;
         height: 120px;
     }
-    .event-info {
-        padding: 0 2.5rem 2rem 2.5rem;
-    }
     .event-title {
         font-size: 2.2rem;
     }
+    .event-artist {
+        font-size: 1rem;
+    }
     .event-date {
-        font-size: 1.15rem;
+        font-size: 1rem;
     }
-    .posh-integration {
-        min-height: 500px;
+    .tickets-cta {
+        padding: 16px 32px;
+        font-size: 1.1rem;
     }
-    .posh-integration iframe {
+    .modal-content {
+        padding: 2.5rem;
+        border-radius: 35px;
+    }
+    .modal-iframe-container iframe {
         height: 500px;
     }
     .page-header h1 {
@@ -423,30 +545,33 @@ body {
         max-width: calc(100vw - 32px);
         margin-bottom: 2rem;
         border-radius: 30px;
-    }
-    .event-image {
-        padding: 2rem 1.5rem 1.5rem 1.5rem;
-        min-height: 160px;
+        padding: 2rem;
     }
     .image-placeholder {
         width: 100px;
         height: 100px;
         border-radius: 20px;
     }
-    .event-info {
-        padding: 0 1.5rem 1.5rem 1.5rem;
-    }
     .event-title {
         font-size: 1.8rem;
     }
+    .event-artist {
+        font-size: 0.9rem;
+    }
     .event-date {
+        font-size: 0.9rem;
+    }
+    .tickets-cta {
+        padding: 14px 28px;
         font-size: 1rem;
     }
-    .posh-integration {
-        min-height: 400px;
-        border-radius: 0 0 30px 30px;
+    .modal-content {
+        padding: 1.5rem;
+        border-radius: 25px;
+        max-width: calc(100vw - 32px);
+        max-height: calc(100vh - 64px);
     }
-    .posh-integration iframe {
+    .modal-iframe-container iframe {
         height: 400px;
     }
     .page-header h1 {
@@ -482,31 +607,39 @@ body {
         max-width: calc(100vw - 24px);
         margin-bottom: 1.5rem;
         border-radius: 25px;
-    }
-    .event-image {
-        padding: 1.5rem 1rem 1rem 1rem;
-        min-height: 140px;
+        padding: 1.5rem;
     }
     .image-placeholder {
         width: 80px;
         height: 80px;
         border-radius: 15px;
     }
-    .event-info {
-        padding: 0 1rem 1rem 1rem;
-    }
     .event-title {
         font-size: 1.5rem;
     }
+    .event-artist {
+        font-size: 0.85rem;
+    }
     .event-date {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
-    .posh-integration {
-        min-height: 300px;
-        border-radius: 0 0 25px 25px;
+    .tickets-cta {
+        padding: 12px 24px;
+        font-size: 0.95rem;
     }
-    .posh-integration iframe {
-        height: 300px;
+    .modal-content {
+        padding: 1rem;
+        border-radius: 20px;
+        max-width: calc(100vw - 24px);
+        max-height: calc(100vh - 48px);
+    }
+    .modal-close {
+        width: 36px;
+        height: 36px;
+        font-size: 1.3rem;
+    }
+    .modal-iframe-container iframe {
+        height: 350px;
     }
     .page-header h1 {
         font-size: 1.5rem;
@@ -546,10 +679,16 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
     .hero-card,
-    .posh-integration iframe {
+    .tickets-cta,
+    .modal-overlay,
+    .modal-content,
+    .modal-close {
         transition: background-color 0.2s ease, color 0.2s ease;
     }
-    .hero-card:hover {
+    .hero-card:hover,
+    .tickets-cta:hover,
+    .tickets-cta:active,
+    .modal-close:hover {
         transform: none;
     }
     .nav-item {
