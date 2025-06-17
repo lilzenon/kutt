@@ -444,6 +444,13 @@ function registerHandlebarsHelpers() {
         return str.substring(start, length || str.length);
     });
 
+    hbs.registerHelper("truncate", function(str, length) {
+        if (!str) return "";
+        if (typeof str !== "string") return "";
+        if (str.length <= length) return str;
+        return str.substring(0, length) + "...";
+    });
+
     hbs.registerHelper("parseGradientData", function(gradientData) {
         if (!gradientData) return "";
 

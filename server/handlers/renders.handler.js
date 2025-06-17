@@ -27,6 +27,47 @@ async function homepage(req, res) {
     });
 }
 
+async function modernHomepage(req, res) {
+    try {
+        let drops = [];
+        let stats = {
+            totalDrops: 0,
+            activeDrops: 0,
+            totalSignups: 0,
+            totalViews: 0
+        };
+
+        if (req.user) {
+            // Load user's drops with stats for the modern homepage
+            drops = await query.drop.findByUserWithStats(req.user.id, { limit: 8 });
+
+            // Calculate basic stats
+            stats.totalDrops = drops.length;
+            stats.activeDrops = drops.filter(drop => drop.is_active).length;
+            stats.totalSignups = drops.reduce((sum, drop) => sum + (drop.signup_count || 0), 0);
+            stats.totalViews = drops.reduce((sum, drop) => sum + (drop.view_count || 0), 0);
+        }
+
+        res.render("home", {
+            title: "BOUNCE2BOUNCE - Modern B2B Platform",
+            pageTitle: "Home",
+            layout: "layouts/home",
+            drops: drops,
+            stats: stats,
+            user: req.user,
+            domain: env.DEFAULT_DOMAIN,
+            currentPage: "home"
+        });
+    } catch (error) {
+        console.error('❌ Modern homepage error:', error);
+        res.status(500).render("error", {
+            title: "Error",
+            layout: "layouts/home",
+            error: "Failed to load home page"
+        });
+    }
+}
+
 async function login(req, res) {
     if (req.user) {
         res.redirect("/");
@@ -92,6 +133,21 @@ async function resetPassword(req, res) {
     res.render("reset_password", {
         title: "Reset password",
     });
+}
+
+async function navDemo(req, res) {
+    try {
+        res.render("nav-demo", {
+            layout: "layouts/nav-demo",
+            title: "Modern Navigation Demo"
+        });
+    } catch (error) {
+        console.error("Error rendering nav demo:", error);
+        res.status(500).render("error", {
+            title: "Error",
+            message: "Unable to load navigation demo"
+        });
+    }
 }
 
 async function resetPasswordSetNewPassword(req, res) {
@@ -343,10 +399,12 @@ module.exports = {
     dropEdit,
     getSupportEmail,
     homepage,
+    modernHomepage,
     linkEdit,
     linkEditAdmin,
     login,
     logout,
+    navDemo,
     notFound,
     resetPassword,
     resetPasswordSetNewPassword,

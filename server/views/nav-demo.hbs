@@ -1,0 +1,48 @@
+<div class="page-container">
+    <div class="page-header">
+        <h1>MODERN NAVBAR</h1>
+        <div class="page-subtitle">
+            <div># / HOVER</div>
+            <div># / SELECTED</div>
+        </div>
+    </div>
+
+    <div class="navbar-container">
+        <nav class="modern-navbar">
+            <a href="#" class="nav-item" data-nav="home">Home</a>
+            <a href="#" class="nav-item" data-nav="work">Work</a>
+            <a href="#" class="nav-item selected" data-nav="awards">Awards</a>
+            <a href="#" class="nav-item" data-nav="team">Team</a>
+            <a href="#" class="nav-item" data-nav="prices">Prices</a>
+            <a href="#" class="nav-item contact" data-nav="contact">Contact</a>
+        </nav>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Add click animation class
+            this.classList.add('clicking');
+
+            // Remove selected state from all items
+            navItems.forEach(navItem => {
+                navItem.classList.remove('selected');
+            });
+
+            // Add selected state to clicked item
+            this.classList.add('selected');
+
+            // Remove click animation after animation completes
+            setTimeout(() => {
+                this.classList.remove('clicking');
+            }, 200);
+        });
+    });
+});
+</script>
