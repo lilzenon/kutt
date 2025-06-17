@@ -69,34 +69,58 @@ body {
 }
 
 .modern-navbar {
-    background: rgba(255, 255, 255, 0.1);
+    /* Fallback for browsers without backdrop-filter support */
+    background: rgba(255, 255, 255, 0.15);
+    /* Modern glassmorphism with browser prefixes */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    -moz-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50px;
-    padding: 8px;
+    padding: 6px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: 6px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    /* Optimized for two items */
+    width: fit-content;
+    min-width: 200px;
+    max-width: 320px;
+}
+
+
+/* Fallback for browsers without backdrop-filter support */
+
+@supports not (backdrop-filter: blur(20px)) and not (-webkit-backdrop-filter: blur(20px)) {
+    .modern-navbar {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
 }
 
 .nav-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px;
+    padding: 14px 32px;
     border-radius: 25px;
     text-decoration: none;
     color: #ffffff;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 500;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     white-space: nowrap;
-    min-width: 80px;
+    /* Apple HIG 44px minimum touch target */
+    min-height: 44px;
+    min-width: 88px;
     cursor: pointer;
     user-select: none;
+    /* Flex grow for equal width distribution */
+    flex: 1;
+    /* Material Design 3 typography scale */
+    letter-spacing: 0.01em;
 }
 
 
@@ -188,42 +212,133 @@ body {
 }
 
 
-/* Responsive design */
+/* Responsive design following Apple HIG and Material Design 3 */
 
-@media (max-width: 768px) {
-    .page-header h1 {
-        font-size: 2rem;
-    }
+
+/* Desktop (1024px+) - Material Design 3 large screens */
+
+@media (min-width: 1024px) {
     .modern-navbar {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 6px;
-        gap: 3px;
+        min-width: 280px;
+        max-width: 400px;
+        padding: 8px;
+        gap: 8px;
     }
     .nav-item {
-        padding: 10px 18px;
+        padding: 16px 40px;
+        font-size: 1.1rem;
+        min-height: 48px;
+    }
+}
+
+
+/* Tablet (768px - 1023px) - Material Design 3 medium screens */
+
+@media (max-width: 1023px) and (min-width: 768px) {
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+    .modern-navbar {
+        min-width: 240px;
+        max-width: 320px;
+        padding: 6px;
+        gap: 6px;
+    }
+    .nav-item {
+        padding: 14px 32px;
+        font-size: 1rem;
+        min-height: 44px;
+    }
+    .page-container {
+        padding: 1.5rem;
+    }
+}
+
+
+/* Mobile (320px - 767px) - Apple HIG mobile guidelines */
+
+@media (max-width: 767px) {
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+    .page-subtitle {
         font-size: 0.9rem;
-        min-width: 70px;
+    }
+    .modern-navbar {
+        /* Ensure navbar fits mobile screens with proper margins */
+        min-width: 200px;
+        max-width: calc(100vw - 32px);
+        padding: 4px;
+        gap: 4px;
+    }
+    .nav-item {
+        /* Apple HIG 44px minimum touch target */
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        min-height: 44px;
+        min-width: 88px;
     }
     .page-container {
         padding: 1rem;
     }
 }
 
-@media (max-width: 480px) {
+
+/* Small mobile (320px - 479px) - Optimized for smallest screens */
+
+@media (max-width: 479px) {
     .page-header h1 {
         font-size: 1.5rem;
     }
-    .page-subtitle {
-        font-size: 0.9rem;
-    }
     .modern-navbar {
-        padding: 4px;
-        gap: 2px;
+        min-width: 180px;
+        max-width: calc(100vw - 24px);
+        padding: 3px;
+        gap: 3px;
     }
     .nav-item {
-        padding: 8px 14px;
-        font-size: 0.85rem;
-        min-width: 60px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        /* Maintain 44px touch target */
+        min-height: 44px;
+        min-width: 80px;
+    }
+    .page-container {
+        padding: 0.75rem;
+    }
+}
+
+
+/* High DPI displays - Retina optimization */
+
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .modern-navbar {
+        /* Enhanced blur for high DPI */
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+    }
+}
+
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-item {
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .nav-item.clicking,
+    .nav-item:active {
+        transform: none;
+    }
+}
+
+
+/* Dark mode support */
+
+@media (prefers-color-scheme: dark) {
+    .modern-navbar {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 }
