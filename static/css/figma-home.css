@@ -31,6 +31,10 @@ body {
     align-items: center;
     max-width: 400px;
     margin: 0 auto;
+    /* Add the distinctive red border from the design */
+    border: 2px solid #ff3333;
+    border-radius: 24px;
+    box-shadow: 0 0 20px rgba(255, 51, 51, 0.3);
 }
 
 
@@ -483,6 +487,12 @@ body {
 /* Tablet Styles (768px - 1023px) */
 
 @media (min-width: 768px) {
+    .figma-home-container {
+        max-width: 500px;
+        padding: 24px;
+        border: 3px solid #ff3333;
+        border-radius: 28px;
+    }
     .figma-header {
         padding: 32px 24px 40px;
     }
@@ -564,6 +574,12 @@ body {
 /* Desktop Styles (1024px+) */
 
 @media (min-width: 1024px) {
+    .figma-home-container {
+        max-width: 600px;
+        padding: 32px;
+        border: 4px solid #ff3333;
+        border-radius: 32px;
+    }
     .figma-header {
         padding: 40px 32px 48px;
     }
