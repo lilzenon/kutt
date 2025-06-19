@@ -423,12 +423,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function validatePhoneWithDelay(value, countryCode) {
         clearTimeout(validationTimeout);
 
+        // Handle completely empty input
         if (value.length === 0) {
             updateValidationState('neutral');
             return;
         }
 
-        // Show loading state
+        // Get clean digits only
+        const cleanDigits = value.replace(/[^\d]/g, '');
+
+        // If no digits, treat as empty
+        if (cleanDigits.length === 0) {
+            updateValidationState('neutral');
+            return;
+        }
+
+        // Show loading state for non-empty input
         updateValidationState('loading');
 
         validationTimeout = setTimeout(() => {
@@ -439,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isValid) {
                 updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
-            } else if (value.replace(/[^\d]/g, '').length > 0) {
+            } else if (cleanDigits.length > 0) {
                 const exampleFormat = pattern ? pattern.placeholder : 'valid format';
                 updateValidationState('invalid',
                     `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
@@ -484,8 +494,18 @@ document.addEventListener('DOMContentLoaded', function() {
             phoneInput.focus();
 
             // Re-validate with new country if there's existing input
-            if (phoneInput.value.trim().length > 0) {
-                validatePhoneWithDelay(phoneInput.value, selectedCode);
+            const currentValue = phoneInput.value.trim();
+            if (currentValue.length > 0) {
+                // Clear validation state first
+                updateValidationState('neutral');
+
+                // Re-format and validate with new country
+                const cleanNumber = currentValue.replace(/[^\d]/g, '');
+                if (cleanNumber.length > 0) {
+                    const newFormattedValue = formatPhoneNumber(cleanNumber, selectedCode);
+                    phoneInput.value = newFormattedValue;
+                    validatePhoneWithDelay(newFormattedValue, selectedCode);
+                }
             }
         }
     });
@@ -494,15 +514,40 @@ document.addEventListener('DOMContentLoaded', function() {
     phoneInput.addEventListener('input', function(e) {
         const cursorPosition = e.target.selectionStart;
         const oldValue = e.target.value;
+        const inputValue = e.target.value;
 
-        const newValue = formatPhoneNumber(e.target.value, currentCountryCode);
+        // Handle complete clearing (backspace to empty)
+        if (inputValue === '') {
+            e.target.value = '';
+            updateValidationState('neutral');
+            return;
+        }
+
+        // Format the phone number
+        const newValue = formatPhoneNumber(inputValue, currentCountryCode);
         e.target.value = newValue;
 
-        // Maintain cursor position
-        const newCursorPosition = Math.min(
-            cursorPosition + (newValue.length - oldValue.length),
-            newValue.length
-        );
+        // Maintain cursor position with improved logic
+        let newCursorPosition;
+        if (newValue.length < oldValue.length) {
+            // Deleting - maintain relative position
+            newCursorPosition = Math.max(0, cursorPosition);
+        } else {
+            // Adding - adjust for formatting characters
+            newCursorPosition = Math.min(
+                cursorPosition + (newValue.length - oldValue.length),
+                newValue.length
+            );
+        }
+
+        // Ensure cursor doesn't land on formatting characters
+        const formatChars = /[\s\-\(\)]/;
+        while (newCursorPosition > 0 && newCursorPosition < newValue.length &&
+               formatChars.test(newValue[newCursorPosition - 1]) &&
+               newCursorPosition < cursorPosition + 2) {
+            newCursorPosition++;
+        }
+
         e.target.setSelectionRange(newCursorPosition, newCursorPosition);
 
         // Validate with debouncing
@@ -521,26 +566,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Handle special keys (backspace, delete) for better UX
+    phoneInput.addEventListener('keydown', function(e) {
+        // Handle complete clearing with Ctrl+A + Delete/Backspace
+        if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+            // Allow Ctrl+A to select all
+            return;
+        }
+
+        // Handle backspace/delete on empty field
+        if ((e.key === 'Backspace' || e.key === 'Delete') && e.target.value === '') {
+            updateValidationState('neutral');
+            return;
+        }
+    });
+
     // Validate on blur
     phoneInput.addEventListener('blur', function(e) {
         const value = e.target.value.trim();
         if (value.length > 0) {
-            const isValid = isValidPhoneNumber(value, currentCountryCode);
-            const pattern = phonePatterns[currentCountryCode];
-            const countryOption = document.querySelector(`option[value="${currentCountryCode}"]`);
-            const countryName = countryOption?.dataset.name || currentCountryCode;
+            const cleanDigits = value.replace(/[^\d]/g, '');
+            if (cleanDigits.length > 0) {
+                const isValid = isValidPhoneNumber(value, currentCountryCode);
+                const pattern = phonePatterns[currentCountryCode];
+                const countryOption = document.querySelector(`option[value="${currentCountryCode}"]`);
+                const countryName = countryOption?.dataset.name || currentCountryCode;
 
-            if (isValid) {
-                updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
+                if (isValid) {
+                    updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
+                } else {
+                    const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+                    updateValidationState('invalid',
+                        `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                        'error'
+                    );
+                }
             } else {
-                const exampleFormat = pattern ? pattern.placeholder : 'valid format';
-                updateValidationState('invalid',
-                    `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
-                    'error'
-                );
+                updateValidationState('neutral');
             }
         } else {
-            hideValidationMessage();
+            updateValidationState('neutral');
         }
     });
 
