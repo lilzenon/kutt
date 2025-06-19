@@ -158,14 +158,7 @@ async function home(req, res) {
                 .replace(',', 'th,'); // Add 'th' suffix
         }
 
-        console.log(`🏠 Homepage loaded with ${featuredDrops.length} featured drops:`,
-            featuredDrops.map(drop => ({
-                id: drop.id,
-                title: drop.title,
-                artist_name: drop.artist_name,
-                show_on_homepage: drop.show_on_homepage
-            }))
-        );
+        console.log(`🏠 Homepage loaded with ${featuredDrops.length} featured drops`);
 
         res.render("home", {
             layout: "layouts/home",

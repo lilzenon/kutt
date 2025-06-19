@@ -552,24 +552,27 @@ function getAcquisitionChannel(referrer) {
 async function getFeaturedDrops(options = {}) {
     const { limit = 6 } = options;
 
-    const query = knex("drops")
-        .select([
-            "drops.*",
-            knex.raw("COUNT(drop_signups.id) as signup_count"),
-            knex.raw("COUNT(DISTINCT visits.id) as view_count")
-        ])
-        .leftJoin("drop_signups", "drops.id", "drop_signups.drop_id")
-        .leftJoin("visits", function() {
-            this.on("visits.link_id", "=", knex.raw("CONCAT('/drop/', drops.slug)"))
-                .orOn("visits.link_id", "=", knex.raw("CONCAT('drop/', drops.slug)"));
-        })
-        .where("drops.show_on_homepage", true)
-        .where("drops.is_active", true)
-        .groupBy("drops.id")
-        .orderBy("drops.created_at", "desc")
-        .limit(limit);
+    try {
+        // Simplified query without visits join to avoid PostgreSQL issues
+        const query = knex("drops")
+            .select([
+                "drops.*",
+                knex.raw("COALESCE(COUNT(drop_signups.id), 0) as signup_count")
+            ])
+            .leftJoin("drop_signups", "drops.id", "drop_signups.drop_id")
+            .where("drops.show_on_homepage", true)
+            .where("drops.is_active", true)
+            .groupBy("drops.id")
+            .orderBy("drops.created_at", "desc")
+            .limit(limit);
 
-    return await query;
+        const result = await query;
+        return result;
+    } catch (error) {
+        console.error('❌ Error in getFeaturedDrops:', error);
+        // Return empty array as fallback
+        return [];
+    }
 }
 
 module.exports = {
