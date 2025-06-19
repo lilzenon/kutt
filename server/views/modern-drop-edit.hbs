@@ -327,15 +327,20 @@
 
                             <!-- Form Actions -->
                             <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="btn-text">Save Changes</span>
-                                    <span class="btn-loader" style="display: none;">
-                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                    </span>
-                                </button>
+                                <div class="flex items-center space-x-3">
+                                    <button type="button" id="undo-changes-btn" class="btn btn-secondary" style="display: none;">
+                                        <span class="btn-text">Undo Changes</span>
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-text">Save Changes</span>
+                                        <span class="btn-loader" style="display: none;">
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- Response Area -->
@@ -560,6 +565,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize form elements
     initializeFormElements();
+
+    // Initialize undo changes functionality
+    initializeUndoChanges();
 
     // Initialize form elements
     initializeFormElements();
@@ -2069,9 +2077,26 @@ function updateLivePreviewGradient(gradientCSS) {
 
 function initializeFormSubmission() {
     const form = document.getElementById('drop-edit-form');
-    const saveBtn = document.getElementById('save-btn');
-    const saveBtnText = document.getElementById('save-btn-text');
-    const saveBtnSpinner = document.getElementById('save-btn-spinner');
+    if (!form) {
+        console.error('❌ Form element not found! Cannot initialize form submission.');
+        return;
+    }
+
+    const saveBtn = form.querySelector('button[type="submit"]');
+    if (!saveBtn) {
+        console.error('❌ Save button not found! Cannot initialize form submission.');
+        return;
+    }
+
+    const saveBtnText = saveBtn.querySelector('.btn-text');
+    const saveBtnSpinner = saveBtn.querySelector('.btn-loader');
+
+    if (!saveBtnText || !saveBtnSpinner) {
+        console.error('❌ Save button elements not found! Button text or spinner missing.');
+        return;
+    }
+
+    console.log('✅ Form submission elements found successfully');
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -2082,7 +2107,7 @@ function initializeFormSubmission() {
         // Show loading state
         saveBtn.disabled = true;
         saveBtnText.textContent = 'Saving...';
-        saveBtnSpinner.classList.remove('hidden');
+        saveBtnSpinner.style.display = 'inline-flex';
 
         // Show immediate feedback
         showToast('🔄 Saving changes...', 'info', 2000);
@@ -2195,6 +2220,11 @@ function initializeFormSubmission() {
                     refreshPreview();
                 }, 1000);
 
+                // Trigger undo button update by dispatching a custom event
+                setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('formSaveSuccess'));
+                }, 1500);
+
             } else {
                 console.error('❌ DROP UPDATE FAILED');
                 console.error('='.repeat(30));
@@ -2246,7 +2276,7 @@ function initializeFormSubmission() {
             // Reset button state
             saveBtn.disabled = false;
             saveBtnText.textContent = 'Save Changes';
-            saveBtnSpinner.classList.add('hidden');
+            saveBtnSpinner.style.display = 'none';
 
             console.log('🔄 Form submission completed (finally block)');
         }
@@ -2278,6 +2308,188 @@ function initializeFormSubmission() {
         }
     });
 }
+
+// Initialize undo changes functionality
+function initializeUndoChanges() {
+    const form = document.getElementById('drop-edit-form');
+    const undoBtn = document.getElementById('undo-changes-btn');
+
+    if (!form || !undoBtn) {
+        console.log('⚠️ Form or undo button not found');
+        return;
+    }
+
+    // Store original form values
+    const originalValues = {};
+
+    // Capture original values for all form inputs
+    function captureOriginalValues() {
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (input.type === 'checkbox') {
+                originalValues[input.name || input.id] = input.checked;
+            } else if (input.type === 'file') {
+                // Skip file inputs as they can't be reset to original files
+                return;
+            } else {
+                originalValues[input.name || input.id] = input.value;
+            }
+        });
+        console.log('📝 Original form values captured:', originalValues);
+    }
+
+    // Check if form has been modified
+    function hasFormChanged() {
+        const inputs = form.querySelectorAll('input, textarea, select');
+        for (let input of inputs) {
+            if (input.type === 'file') continue; // Skip file inputs
+
+            const key = input.name || input.id;
+            const currentValue = input.type === 'checkbox' ? input.checked : input.value;
+            const originalValue = originalValues[key];
+
+            if (currentValue !== originalValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Update undo button visibility
+    function updateUndoButtonVisibility() {
+        if (hasFormChanged()) {
+            undoBtn.style.display = 'inline-flex';
+        } else {
+            undoBtn.style.display = 'none';
+        }
+    }
+
+    // Reset form to original values
+    function resetFormToOriginal() {
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (input.type === 'file') return; // Skip file inputs
+
+            const key = input.name || input.id;
+            const originalValue = originalValues[key];
+
+            if (originalValue !== undefined) {
+                if (input.type === 'checkbox') {
+                    input.checked = originalValue;
+                } else {
+                    input.value = originalValue;
+                }
+
+                // Trigger change event to update any dependent UI
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+
+        updateUndoButtonVisibility();
+        console.log('🔄 Form reset to original values');
+    }
+
+    // Initialize
+    captureOriginalValues();
+
+    // Add event listeners to form inputs
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+        input.addEventListener('input', updateUndoButtonVisibility);
+        input.addEventListener('change', updateUndoButtonVisibility);
+    });
+
+    console.log(`📝 Added change listeners to ${inputs.length} form inputs`);
+
+    // Add click handler to undo button
+    undoBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to undo all changes? This will reset the form to its original state.')) {
+            // Show loading state
+            const btnText = undoBtn.querySelector('.btn-text');
+            const originalText = btnText.textContent;
+
+            undoBtn.disabled = true;
+            btnText.textContent = 'Undoing...';
+
+            // Reset form with a slight delay for visual feedback
+            setTimeout(() => {
+                resetFormToOriginal();
+
+                // Reset button state
+                undoBtn.disabled = false;
+                btnText.textContent = originalText;
+
+                // Show success feedback
+                showToast('✅ Changes undone successfully!', 'success', 3000);
+            }, 300);
+        }
+    });
+
+    // Listen for successful save to update original values
+    window.addEventListener('formSaveSuccess', function() {
+        captureOriginalValues(); // Update original values after save
+        updateUndoButtonVisibility();
+        console.log('🔄 Original values updated after successful save');
+    });
+
+    console.log('✅ Undo changes functionality initialized');
+}
+
+// Test function to verify all functionality is working
+function testFormFunctionality() {
+    console.log('🧪 TESTING FORM FUNCTIONALITY');
+    console.log('='.repeat(50));
+
+    const form = document.getElementById('drop-edit-form');
+    const saveBtn = form?.querySelector('button[type="submit"]');
+    const undoBtn = document.getElementById('undo-changes-btn');
+
+    // Test 1: Form elements
+    console.log('1️⃣ Form Elements Test:');
+    console.log(`   Form found: ${form ? '✅' : '❌'}`);
+    console.log(`   Save button found: ${saveBtn ? '✅' : '❌'}`);
+    console.log(`   Undo button found: ${undoBtn ? '✅' : '❌'}`);
+
+    // Test 2: New event fields
+    console.log('\n2️⃣ New Event Fields Test:');
+    const eventFields = [
+        'artist_name',
+        'event_date',
+        'event_address',
+        'show_on_homepage'
+    ];
+
+    eventFields.forEach(fieldName => {
+        const field = document.querySelector(`[name="${fieldName}"]`);
+        console.log(`   ${fieldName}: ${field ? '✅' : '❌'}`);
+    });
+
+    // Test 3: Form submission handler
+    console.log('\n3️⃣ Event Handlers Test:');
+    const hasSubmitHandler = form?._events?.submit || form?.onsubmit;
+    console.log(`   Form submit handler: ${hasSubmitHandler ? '✅' : '❌'}`);
+
+    // Test 4: Responsive design
+    console.log('\n4️⃣ Responsive Design Test:');
+    const formActions = document.querySelector('.form-actions');
+    const computedStyle = window.getComputedStyle(formActions);
+    console.log(`   Form actions styling: ${formActions ? '✅' : '❌'}`);
+    console.log(`   Text align: ${computedStyle.textAlign}`);
+
+    console.log('\n✅ Form functionality test completed');
+    return {
+        form: !!form,
+        saveBtn: !!saveBtn,
+        undoBtn: !!undoBtn,
+        eventFields: eventFields.map(name => ({
+            name,
+            found: !!document.querySelector(`[name="${name}"]`)
+        }))
+    };
+}
+
+// Add test function to window for manual testing
+window.testFormFunctionality = testFormFunctionality;
 
 function showToast(message, type = 'info', duration = 5000) {
     console.log(`🍞 Toast: ${type.toUpperCase()} - ${message}`);
@@ -2619,11 +2831,63 @@ async function loadAnalytics() {
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
+.btn-primary:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:disabled {
+    background: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 .form-actions {
     text-align: center;
     padding: 1.5rem 0 0 0;
     border-top: 1px solid #e5e7eb;
     margin-top: 2rem;
+}
+
+.form-actions .flex {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .form-actions .flex {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 280px;
+    }
 }
 
 .success-message {
