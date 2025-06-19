@@ -221,8 +221,8 @@ body {
 }
 
 .figma-share-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 .figma-share-btn:hover {
@@ -697,7 +697,7 @@ body {
     width: 100%;
     text-align: center;
     margin-top: auto;
-    padding-bottom: 100px;
+    padding-bottom: 88px;
 }
 
 .figma-social-icons {
@@ -979,8 +979,8 @@ body {
         border-radius: 18px;
     }
     .figma-share-btn svg {
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
     }
     .figma-tickets-btn {
         height: 56px;
@@ -1030,7 +1030,7 @@ body {
         min-width: 60px;
     }
     .figma-footer {
-        padding: 40px 24px 120px;
+        padding: 32px 24px 96px;
     }
     .figma-social-icons {
         gap: 32px;
@@ -1096,8 +1096,8 @@ body {
         border-radius: 20px;
     }
     .figma-share-btn svg {
-        width: 26px;
-        height: 26px;
+        width: 32px;
+        height: 32px;
     }
     .figma-tickets-btn {
         height: 64px;
@@ -1138,7 +1138,7 @@ body {
         font-size: 14px;
     }
     .figma-footer {
-        padding: 48px 32px 120px;
+        padding: 32px 32px 80px;
     }
     .figma-social-icons {
         gap: 40px;
