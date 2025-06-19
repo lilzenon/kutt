@@ -311,9 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSlide = 0;
     const totalSlides = 2;
     let isTransitioning = false;
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let isDragging = false;
 
     // Update carousel position
     function updateCarousel(slideIndex, animate = true) {
@@ -369,35 +366,65 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Touch/swipe handling
+    // Mobile browser optimized touch handling
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let isHorizontalSwipe = false;
+    let startTime = 0;
+
     function handleTouchStart(e) {
-        touchStartX = e.touches[0].clientX;
-        touchEndX = touchStartX;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        currentX = startX;
+        currentY = startY;
         isDragging = true;
+        isHorizontalSwipe = false;
+        startTime = Date.now();
+
+        // Disable transitions for immediate feedback
         carouselTrack.style.transition = 'none';
     }
 
     function handleTouchMove(e) {
         if (!isDragging) return;
 
-        e.preventDefault(); // Prevent scrolling while dragging
-        touchEndX = e.touches[0].clientX;
-        const diff = touchStartX - touchEndX;
-        const currentTranslate = -currentSlide * 100;
-        const dragPercent = (diff / carouselTrack.offsetWidth) * 100;
+        const touch = e.touches[0];
+        currentX = touch.clientX;
+        currentY = touch.clientY;
 
-        // Apply drag effect with resistance at boundaries
-        let newTranslate = currentTranslate - dragPercent;
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
 
-        // Add resistance at boundaries
-        if (newTranslate > 0) {
-            newTranslate = newTranslate * 0.3;
-        } else if (newTranslate < -(totalSlides - 1) * 100) {
-            const excess = newTranslate + (totalSlides - 1) * 100;
-            newTranslate = -(totalSlides - 1) * 100 + excess * 0.3;
+        // Determine if this is a horizontal swipe
+        if (!isHorizontalSwipe && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+            isHorizontalSwipe = true;
         }
 
-        carouselTrack.style.transform = `translateX(${newTranslate}%)`;
+        // Only handle horizontal swipes for carousel
+        if (isHorizontalSwipe) {
+            // Prevent default scrolling for horizontal swipes
+            e.preventDefault();
+
+            const currentTranslate = -currentSlide * 100;
+            const dragPercent = (deltaX / carouselTrack.offsetWidth) * 100;
+
+            // Apply drag effect with resistance at boundaries
+            let newTranslate = currentTranslate + dragPercent;
+
+            // Add resistance at boundaries
+            if (newTranslate > 0) {
+                newTranslate = newTranslate * 0.3;
+            } else if (newTranslate < -(totalSlides - 1) * 100) {
+                const excess = newTranslate + (totalSlides - 1) * 100;
+                newTranslate = -(totalSlides - 1) * 100 + excess * 0.3;
+            }
+
+            carouselTrack.style.transform = `translateX(${newTranslate}%)`;
+        }
     }
 
     function handleTouchEnd(e) {
@@ -406,28 +433,42 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = false;
         carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
 
-        const diff = touchStartX - touchEndX;
-        const threshold = 50; // Minimum swipe distance
+        // Only process horizontal swipes
+        if (isHorizontalSwipe) {
+            const deltaX = currentX - startX;
+            const deltaTime = Date.now() - startTime;
+            const velocity = Math.abs(deltaX) / deltaTime;
 
-        if (Math.abs(diff) > threshold) {
-            if (diff > 0 && currentSlide < totalSlides - 1) {
-                // Swiping left (next slide)
-                nextSlide();
-            } else if (diff < 0 && currentSlide > 0) {
-                // Swiping right (previous slide)
-                prevSlide();
+            // Determine swipe threshold based on distance and velocity
+            const threshold = velocity > 0.5 ? 30 : 80; // Lower threshold for fast swipes
+
+            if (Math.abs(deltaX) > threshold) {
+                if (deltaX > 0 && currentSlide > 0) {
+                    // Swiping right (previous slide)
+                    prevSlide();
+                } else if (deltaX < 0 && currentSlide < totalSlides - 1) {
+                    // Swiping left (next slide)
+                    nextSlide();
+                } else {
+                    // At boundary, snap back
+                    updateCarousel(currentSlide);
+                }
             } else {
-                // At boundary, snap back
+                // Didn't swipe far enough, snap back
                 updateCarousel(currentSlide);
             }
         } else {
-            // Didn't swipe far enough, snap back
+            // Not a horizontal swipe, just snap back
             updateCarousel(currentSlide);
         }
 
-        // Reset touch coordinates
-        touchStartX = 0;
-        touchEndX = 0;
+        // Reset all touch state
+        startX = 0;
+        startY = 0;
+        currentX = 0;
+        currentY = 0;
+        isHorizontalSwipe = false;
+        startTime = 0;
     }
 
     // Event listeners
@@ -446,16 +487,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Touch events for mobile
+    // Mobile browser optimized touch events
     if (carouselTrack) {
-        carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
-        carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
-        carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
+        // Use passive: false for touchmove to allow preventDefault()
+        carouselTrack.addEventListener('touchstart', handleTouchStart, {
+            passive: true,
+            capture: false
+        });
 
-        // Prevent default touch behavior on carousel container
-        carouselTrack.addEventListener('touchstart', (e) => {
-            e.stopPropagation();
-        }, { passive: true });
+        carouselTrack.addEventListener('touchmove', handleTouchMove, {
+            passive: false, // Must be false to call preventDefault()
+            capture: false
+        });
+
+        carouselTrack.addEventListener('touchend', handleTouchEnd, {
+            passive: true,
+            capture: false
+        });
+
+        // Prevent context menu on long press (iOS Safari)
+        carouselTrack.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Prevent text selection during swipe
+        carouselTrack.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+        });
     }
 
     // Keyboard navigation
