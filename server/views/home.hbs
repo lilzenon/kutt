@@ -462,32 +462,26 @@ document.addEventListener('DOMContentLoaded', function() {
             isHorizontalSwipe: isHorizontalSwipe
         });
 
-        // 2024 Best Practice: Determine swipe direction before preventing default
+        // iOS Safari Fix: Simplified horizontal detection
         const absDeltaX = Math.abs(deltaX);
         const absDeltaY = Math.abs(deltaY);
-        const isMovingHorizontally = absDeltaX > absDeltaY && absDeltaX > 10;
 
-        // Only prevent default for horizontal swipes (preserve vertical scrolling)
-        if (isMovingHorizontally && !isHorizontalSwipe) {
+        // Detect horizontal swipe with lower threshold for iOS Safari
+        if (!isHorizontalSwipe && absDeltaX > 5) {
             isHorizontalSwipe = true;
-            console.log('🔄 Horizontal swipe detected - preventing default:', {
+            console.log('🔄 Horizontal swipe detected (iOS Safari):', {
                 deltaX: deltaX,
                 deltaY: deltaY,
                 absDeltaX: absDeltaX,
                 absDeltaY: absDeltaY
             });
-            // Now we can safely prevent default for horizontal swipes
-            e.preventDefault();
-            e.stopPropagation();
-        } else if (isHorizontalSwipe) {
-            // Continue preventing default for ongoing horizontal swipe
-            e.preventDefault();
-            e.stopPropagation();
         }
-        // If not horizontal swipe, allow normal page scrolling
 
-        // Only handle horizontal swipes for carousel
+        // iOS Safari: Always prevent default once we start dragging
         if (isHorizontalSwipe) {
+            e.preventDefault();
+            e.stopPropagation();
+
             console.log('✅ Processing horizontal swipe');
 
             const currentTranslate = -currentSlide * 100;
@@ -622,48 +616,51 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 2024 Modern Touch Events - Selective Prevention
-    console.log('🔧 Setting up modern selective touch events...');
+    // iOS Safari Fix: Document-level event delegation
+    console.log('🔧 Setting up iOS Safari compatible touch events...');
     console.log('carouselTrack element:', carouselTrack);
 
     if (carouselTrack) {
-        console.log('✅ carouselTrack found, adding event listeners');
+        console.log('✅ carouselTrack found, adding document-level event listeners');
 
-        // Fixed approach: non-passive touchstart to capture coordinates properly
-        carouselTrack.addEventListener('touchstart', handleTouchStart, {
-            passive: false, // Need to capture touch coordinates
-            capture: false
-        });
-        console.log('✅ touchstart listener added (non-passive for coordinate capture)');
+        // iOS Safari Fix: Use document-level event delegation
+        document.addEventListener('touchstart', function(e) {
+            if (carouselTrack.contains(e.target)) {
+                handleTouchStart(e);
+            }
+        }, { passive: false });
+        console.log('✅ document touchstart listener added');
 
-        carouselTrack.addEventListener('touchmove', handleTouchMove, {
-            passive: false, // Must be false to selectively call preventDefault()
-            capture: false
-        });
-        console.log('✅ touchmove listener added (non-passive for selective prevention)');
+        document.addEventListener('touchmove', function(e) {
+            if (carouselTrack.contains(e.target) || isDragging) {
+                handleTouchMove(e);
+            }
+        }, { passive: false });
+        console.log('✅ document touchmove listener added');
 
-        carouselTrack.addEventListener('touchend', handleTouchEnd, {
-            passive: false, // Allow selective preventDefault()
-            capture: false
-        });
-        console.log('✅ touchend listener added');
+        document.addEventListener('touchend', function(e) {
+            if (isDragging) {
+                handleTouchEnd(e);
+            }
+        }, { passive: false });
+        console.log('✅ document touchend listener added');
 
         // Handle touch cancellation
-        carouselTrack.addEventListener('touchcancel', (e) => {
-            console.log('🚫 Touch cancelled');
-            handleTouchEnd(e);
-        }, { passive: false, capture: false });
+        document.addEventListener('touchcancel', function(e) {
+            if (isDragging) {
+                console.log('🚫 Touch cancelled');
+                handleTouchEnd(e);
+            }
+        }, { passive: false });
 
         // Prevent context menu only on carousel elements
         carouselTrack.addEventListener('contextmenu', (e) => {
             e.preventDefault();
         }, { passive: false });
 
-        // Prevent text selection only during carousel interaction
-        carouselTrack.addEventListener('selectstart', (e) => {
-            if (isDragging && isHorizontalSwipe) {
-                e.preventDefault();
-            }
+        // iOS Safari specific: Prevent default on the element itself
+        carouselTrack.addEventListener('touchstart', (e) => {
+            e.preventDefault();
         }, { passive: false });
 
         console.log('🎯 All iOS Safari touch event listeners attached successfully');

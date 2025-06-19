@@ -77,24 +77,28 @@ body {
     max-width: 360px;
     position: relative;
     overflow: hidden;
-    /* 2024 Best Practice: Allow vertical scrolling, prevent horizontal */
-    touch-action: pan-y pinch-zoom;
+    /* iOS Safari Fix: manipulation is more reliable than pan-y */
+    touch-action: manipulation;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
     /* Smooth scrolling on iOS */
     -webkit-overflow-scrolling: touch;
+    /* Remove cursor to prevent iOS issues */
+    cursor: default;
 }
 
 .carousel-track {
     display: flex;
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
-    /* 2024 Best Practice: Allow vertical scrolling, prevent horizontal */
-    touch-action: pan-y pinch-zoom;
+    /* iOS Safari Fix: manipulation is more reliable */
+    touch-action: manipulation;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
+    /* Remove cursor to prevent iOS issues */
+    cursor: default;
 }
 
 .carousel-slide {
