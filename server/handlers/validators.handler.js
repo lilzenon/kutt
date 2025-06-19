@@ -658,8 +658,10 @@ const updateHomeSettings = [
         if (value) {
             const eventDate = new Date(value);
             const now = new Date();
-            if (eventDate < now) {
-                throw new Error("Event date cannot be in the past.");
+            // Allow dates up to 1 year in the past for flexibility
+            const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+            if (eventDate < oneYearAgo) {
+                throw new Error("Event date cannot be more than 1 year in the past.");
             }
         }
         return true;
