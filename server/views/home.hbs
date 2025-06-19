@@ -294,6 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
         ticketsBtn2: ticketsBtn2
     });
 
+    // Simple test to verify JavaScript is running
+    alert('🚀 Carousel JavaScript loaded! Check console for debug info.');
+
     // Navigation functionality
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -628,6 +631,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         console.log('🎯 All touch event listeners attached successfully');
+
+        // Add simple click handlers as fallback for testing
+        carouselTrack.addEventListener('click', (e) => {
+            console.log('🖱️ Click detected on carousel track');
+            const rect = carouselTrack.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const trackWidth = rect.width;
+
+            if (clickX < trackWidth / 2) {
+                console.log('👈 Left side clicked - going to previous slide');
+                prevSlide();
+            } else {
+                console.log('👉 Right side clicked - going to next slide');
+                nextSlide();
+            }
+        });
+
     } else {
         console.error('❌ carouselTrack element not found!');
     }
