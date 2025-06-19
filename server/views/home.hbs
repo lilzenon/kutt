@@ -9,40 +9,99 @@
         </div>
     </header>
 
-    <!-- Event Card Section -->
+    <!-- Event Card Carousel Section -->
     <main class="figma-main">
-        <div class="figma-event-card">
-            <!-- Event Image with Gradient Background -->
-            <div class="figma-event-image">
-                {{#if homeSettings.event_image}}
-                    <img src="{{homeSettings.event_image}}" alt="{{homeSettings.event_title}}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" />
-                {{else}}
-                    <div class="figma-image-placeholder">
-                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor" opacity="0.4"/>
-                        </svg>
+        <div class="carousel-container" role="region" aria-label="Event carousel">
+            <!-- Carousel Track -->
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Event Card 1 -->
+                <div class="figma-event-card carousel-slide" data-slide="0">
+                    <!-- Event Image with Gradient Background -->
+                    <div class="figma-event-image">
+                        {{#if homeSettings.event_image}}
+                            <img src="{{homeSettings.event_image}}" alt="{{homeSettings.event_title}}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" />
+                        {{else}}
+                            <div class="figma-image-placeholder">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor" opacity="0.4"/>
+                                </svg>
+                            </div>
+                        {{/if}}
                     </div>
-                {{/if}}
+
+                    <!-- Event Information -->
+                    <div class="figma-event-info">
+                        <h1 class="figma-event-title">{{homeSettings.event_title}}</h1>
+                        <div class="figma-event-artist">{{homeSettings.artist_name}}</div>
+                        <div class="figma-event-date">📅 {{formattedDate}}</div>
+                        <div class="figma-event-address">📍 {{homeSettings.event_address}}</div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="figma-action-buttons">
+                        <button class="figma-share-btn" id="shareBtn">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 16L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="figma-tickets-btn" id="ticketsBtn">Tickets</button>
+                    </div>
+                </div>
+
+                <!-- Event Card 2 -->
+                <div class="figma-event-card carousel-slide" data-slide="1">
+                    <!-- Event Image with Gradient Background -->
+                    <div class="figma-event-image">
+                        <div class="figma-image-placeholder">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Event Information -->
+                    <div class="figma-event-info">
+                        <h1 class="figma-event-title">Summer Music Festival</h1>
+                        <div class="figma-event-artist">Various Artists</div>
+                        <div class="figma-event-date">📅 July 15, 2024</div>
+                        <div class="figma-event-address">📍 Central Park, New York</div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="figma-action-buttons">
+                        <button class="figma-share-btn" id="shareBtn2">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 16L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="figma-tickets-btn" id="ticketsBtn2">Tickets</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Event Information -->
-            <div class="figma-event-info">
-                <h1 class="figma-event-title">{{homeSettings.event_title}}</h1>
-                <div class="figma-event-artist">{{homeSettings.artist_name}}</div>
-                <div class="figma-event-date">📅 {{formattedDate}}</div>
-                <div class="figma-event-address">📍 {{homeSettings.event_address}}</div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="figma-action-buttons">
-                <button class="figma-share-btn" id="shareBtn">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 16L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Carousel Navigation -->
+            <div class="carousel-nav">
+                <!-- Previous/Next Buttons (Desktop) -->
+                <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Previous event">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <button class="figma-tickets-btn" id="ticketsBtn">Tickets</button>
+                <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Next event">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <!-- Dot Indicators -->
+                <div class="carousel-indicators" role="tablist" aria-label="Event navigation">
+                    <button class="carousel-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Event 1"></button>
+                    <button class="carousel-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Event 2"></button>
+                </div>
             </div>
         </div>
     </main>
@@ -217,6 +276,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const countrySelect = document.getElementById('country-select');
     const countryFlagDisplay = document.getElementById('country-flag-display');
 
+    // Carousel elements
+    const carouselTrack = document.getElementById('carouselTrack');
+    const carouselPrev = document.getElementById('carouselPrev');
+    const carouselNext = document.getElementById('carouselNext');
+    const carouselDots = document.querySelectorAll('.carousel-dot');
+    const shareBtn2 = document.getElementById('shareBtn2');
+    const ticketsBtn2 = document.getElementById('ticketsBtn2');
+
     // Navigation functionality
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -240,11 +307,158 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Carousel functionality
+    let currentSlide = 0;
+    const totalSlides = 2;
+    let isTransitioning = false;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let isDragging = false;
+
+    // Update carousel position
+    function updateCarousel(slideIndex, animate = true) {
+        if (isTransitioning) return;
+
+        currentSlide = Math.max(0, Math.min(slideIndex, totalSlides - 1));
+        const translateX = -currentSlide * 100;
+
+        if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            isTransitioning = true;
+            carouselTrack.style.transform = `translateX(${translateX}%)`;
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 300);
+        } else {
+            carouselTrack.style.transform = `translateX(${translateX}%)`;
+        }
+
+        // Update dot indicators
+        carouselDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+            dot.setAttribute('aria-selected', index === currentSlide ? 'true' : 'false');
+        });
+
+        // Update ARIA attributes
+        const slides = document.querySelectorAll('.carousel-slide');
+        slides.forEach((slide, index) => {
+            slide.setAttribute('aria-hidden', index !== currentSlide ? 'true' : 'false');
+        });
+    }
+
+    // Previous slide
+    function prevSlide() {
+        if (currentSlide > 0) {
+            updateCarousel(currentSlide - 1);
+        }
+    }
+
+    // Next slide
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            updateCarousel(currentSlide + 1);
+        }
+    }
+
+    // Touch/swipe handling
+    function handleTouchStart(e) {
+        touchStartX = e.touches[0].clientX;
+        isDragging = true;
+        carouselTrack.style.transition = 'none';
+    }
+
+    function handleTouchMove(e) {
+        if (!isDragging) return;
+
+        touchEndX = e.touches[0].clientX;
+        const diff = touchStartX - touchEndX;
+        const currentTranslate = -currentSlide * 100;
+        const dragPercent = (diff / carouselTrack.offsetWidth) * 100;
+
+        // Apply drag effect with resistance at boundaries
+        let newTranslate = currentTranslate - dragPercent;
+
+        // Add resistance at boundaries
+        if (newTranslate > 0) {
+            newTranslate = newTranslate * 0.3;
+        } else if (newTranslate < -(totalSlides - 1) * 100) {
+            const excess = newTranslate + (totalSlides - 1) * 100;
+            newTranslate = -(totalSlides - 1) * 100 + excess * 0.3;
+        }
+
+        carouselTrack.style.transform = `translateX(${newTranslate}%)`;
+    }
+
+    function handleTouchEnd(e) {
+        if (!isDragging) return;
+
+        isDragging = false;
+        carouselTrack.style.transition = '';
+
+        const diff = touchStartX - touchEndX;
+        const threshold = 50; // Minimum swipe distance
+
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0 && currentSlide < totalSlides - 1) {
+                nextSlide();
+            } else if (diff < 0 && currentSlide > 0) {
+                prevSlide();
+            } else {
+                updateCarousel(currentSlide);
+            }
+        } else {
+            updateCarousel(currentSlide);
+        }
+    }
+
+    // Event listeners
+    if (carouselPrev) {
+        carouselPrev.addEventListener('click', prevSlide);
+    }
+
+    if (carouselNext) {
+        carouselNext.addEventListener('click', nextSlide);
+    }
+
+    // Dot navigation
+    carouselDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            updateCarousel(index);
+        });
+    });
+
+    // Touch events for mobile
+    if (carouselTrack) {
+        carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
+        carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
+        carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+        }
+    });
+
+    // Initialize carousel
+    updateCarousel(0, false);
+
     // Modal functionality for tickets
     ticketsBtn.addEventListener('click', function() {
         modalOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     });
+
+    // Modal functionality for second card tickets
+    if (ticketsBtn2) {
+        ticketsBtn2.addEventListener('click', function() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
 
     modalClose.addEventListener('click', function() {
         modalOverlay.classList.remove('active');
@@ -268,13 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Share functionality with Web Share API and fallbacks
-    shareBtn.addEventListener('click', async function() {
-        const shareData = {
-            title: '{{homeSettings.event_title}} - {{homeSettings.artist_name}}',
-            text: 'Join us for an amazing event! {{formattedDate}} at {{homeSettings.event_address}}',
-            url: window.location.href
-        };
-
+    async function handleShare(button, shareData) {
         try {
             // Try Web Share API first (mobile browsers)
             if (navigator.share) {
@@ -286,13 +494,13 @@ document.addEventListener('DOMContentLoaded', function() {
             await navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
 
             // Show success feedback
-            const originalText = this.innerHTML;
-            this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-            this.style.backgroundColor = '#10b981';
+            const originalText = button.innerHTML;
+            button.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            button.style.backgroundColor = '#10b981';
 
             setTimeout(() => {
-                this.innerHTML = originalText;
-                this.style.backgroundColor = '';
+                button.innerHTML = originalText;
+                button.style.backgroundColor = '';
             }, 2000);
 
         } catch (err) {
@@ -300,7 +508,28 @@ document.addEventListener('DOMContentLoaded', function() {
             // Final fallback: Show share options
             alert('Share this event:\n\n' + shareData.title + '\n' + shareData.text + '\n' + shareData.url);
         }
+    }
+
+    shareBtn.addEventListener('click', async function() {
+        const shareData = {
+            title: '{{homeSettings.event_title}} - {{homeSettings.artist_name}}',
+            text: 'Join us for an amazing event! {{formattedDate}} at {{homeSettings.event_address}}',
+            url: window.location.href
+        };
+        await handleShare(this, shareData);
     });
+
+    // Share functionality for second card
+    if (shareBtn2) {
+        shareBtn2.addEventListener('click', async function() {
+            const shareData = {
+                title: 'Summer Music Festival - Various Artists',
+                text: 'Join us for an amazing event! July 15, 2024 at Central Park, New York',
+                url: window.location.href
+            };
+            await handleShare(this, shareData);
+        });
+    }
 
     // Country flags and phone patterns from live drop
     const countryFlags = {
