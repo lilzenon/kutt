@@ -317,20 +317,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update carousel position
     function updateCarousel(slideIndex, animate = true) {
-        if (isTransitioning) return;
+        if (isTransitioning && animate) return;
 
         currentSlide = Math.max(0, Math.min(slideIndex, totalSlides - 1));
         const translateX = -currentSlide * 100;
 
+        // Ensure transition is properly set
         if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             isTransitioning = true;
+            carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
             carouselTrack.style.transform = `translateX(${translateX}%)`;
 
             setTimeout(() => {
                 isTransitioning = false;
             }, 300);
         } else {
+            carouselTrack.style.transition = 'none';
             carouselTrack.style.transform = `translateX(${translateX}%)`;
+            if (!animate) {
+                // Restore transition after immediate positioning
+                setTimeout(() => {
+                    carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
+                }, 10);
+            }
         }
 
         // Update dot indicators
@@ -363,6 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Touch/swipe handling
     function handleTouchStart(e) {
         touchStartX = e.touches[0].clientX;
+        touchEndX = touchStartX;
         isDragging = true;
         carouselTrack.style.transition = 'none';
     }
@@ -370,6 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleTouchMove(e) {
         if (!isDragging) return;
 
+        e.preventDefault(); // Prevent scrolling while dragging
         touchEndX = e.touches[0].clientX;
         const diff = touchStartX - touchEndX;
         const currentTranslate = -currentSlide * 100;
@@ -393,22 +404,30 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isDragging) return;
 
         isDragging = false;
-        carouselTrack.style.transition = '';
+        carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
 
         const diff = touchStartX - touchEndX;
         const threshold = 50; // Minimum swipe distance
 
         if (Math.abs(diff) > threshold) {
             if (diff > 0 && currentSlide < totalSlides - 1) {
+                // Swiping left (next slide)
                 nextSlide();
             } else if (diff < 0 && currentSlide > 0) {
+                // Swiping right (previous slide)
                 prevSlide();
             } else {
+                // At boundary, snap back
                 updateCarousel(currentSlide);
             }
         } else {
+            // Didn't swipe far enough, snap back
             updateCarousel(currentSlide);
         }
+
+        // Reset touch coordinates
+        touchStartX = 0;
+        touchEndX = 0;
     }
 
     // Event listeners
@@ -432,6 +451,11 @@ document.addEventListener('DOMContentLoaded', function() {
         carouselTrack.addEventListener('touchstart', handleTouchStart, { passive: true });
         carouselTrack.addEventListener('touchmove', handleTouchMove, { passive: false });
         carouselTrack.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+        // Prevent default touch behavior on carousel container
+        carouselTrack.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+        }, { passive: true });
     }
 
     // Keyboard navigation
