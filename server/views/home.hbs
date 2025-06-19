@@ -1,35 +1,126 @@
-<div class="page-container">
-    <div class="page-header">
-        <h1>MODERN NAVBAR</h1>
-        <div class="page-subtitle">
-            <div># / HOVER</div>
-            <div># / SELECTED</div>
+<!-- Main Container -->
+<div class="figma-home-container">
+    <!-- Header Section with BOUNCE2BOUNCE Logo -->
+    <header class="figma-header">
+        <div class="figma-logo-container">
+            <svg class="figma-logo" viewBox="0 0 3784.75 1161.8" xmlns="http://www.w3.org/2000/svg">
+                <path d="M162.87,658.37c39.48.14,79.1-.14,118.58,0,0,41.61-9.47,60.49-25.25,102.1,80.41-45.97,220.81-67.25,274.26,7.28,40.36,48.32-28.97,173.84-65.7,228.53-28.63,42.97-51.43,72.73-93.37,95.25-69.33,37.1-199.33,35.47-247.04-20.71-2.88,14.1-4.83,28.19-5.64,42.29-39.57.13-79.15.27-118.72.4,9.13-159.43,162.87-295.71,162.87-455.14ZM189.97,891.75c-8.96,17.92-17.84,35.84-26.21,53.77,2.2,52.05,40.5,47.39,91.53,50.17,66.96,2.17,113.65-43.58,134.33-106.01,6.04-16.18,6.61-30.36-1.82-43.78-11.87-12.79-31.76-12.32-48.48-12.6-69.37-.05-118.88,19.43-149.34,58.45ZM830.6,718.26c75.06-1.62,181.75,17.46,163.81,114.56-18.44,83.93-78.18,190.32-147.47,240.35-75.25,53.79-247.76,62.61-318.22.22-64.06-64.91,9.31-178.01,54.84-239.18,60.76-81.27,148.31-118.45,247.05-115.95ZM708.51,1005.11c64.54-.84,101.27-27.47,130.75-87.79,12.3-26.42,21.59-53.38,2.59-72.13-21.36-17.63-49.74-18.5-76.83-13.89-31.84,6.27-61.51,22.69-83.67,48.61-42.97,50.77-64.03,128.87,27.15,125.2ZM1384.85,720.64c39.48.09,78.97.19,118.45.28-36.1,129.34-141.44,258.68-148.84,388.02-39.57.13-79.15.27-118.72.4,1.14-19.88,4.59-39.76,9.74-59.65-39.81,39.39-82.51,59.22-139.6,59.41-77.41-2.33-141.29-9.57-145.58-92.33,3.39-97.12,72.42-177.95,107.37-296.9,39.32.09,78.63.19,117.95.28-13.64,50.37-42.12,107.42-65.83,155.77-8.9,20.05-21.79,47.98-18.48,70.82,1.32,16.83,10.2,22.12,25.24,28.47,58.68,15.08,105.33-9.6,171.09-56.43,32.3-66.05,68.76-132.11,87.2-198.16ZM1887.14,800.5c-13.33,95.98-90.05,176.17-100.98,306.98-39.57.13-79.15.27-118.72.4,2.5-49.93,22.38-105.22,44.15-152.65,9.88-23.12,24.14-53.69,24.99-79.15.38-28.53-18.88-38.32-46.01-38.29-46.39-.09-75.35,18.8-112.07,47.28-37.28,74.46-74.07,148.92-78.34,223.38-39.57.13-79.14.27-118.72.4,7.4-129.29,112.7-258.58,148.78-387.86,39.48.09,78.97.19,118.45.28-4.98,17.83-11.27,35.66-18.45,53.5,36.55-24.3,61.45-42.87,103.21-52.63,59.32-9.89,166.18-8.29,153.7,78.36ZM2161.64,721.47c93.02-2.34,214.33,34.77,159.5,145.62-43.45,7.68-86.94,15.38-130.42,23.1,12.23-67.21-110.77-54.77-146.27-33.1-23.92,13.73-41.48,34.6-52.99,58.96-28.91,54.87.36,78.59,57.67,77.36,43.81.32,90.72-13.33,116.2-49.05,36.01,7.01,72.12,14.01,108.33,20.99-55.21,133.9-209.3,165.79-339.94,136.19-98.16-23.82-105.76-104.75-63-184.77,63.8-120.73,149.21-196.24,290.92-195.31ZM330.42,159.13c39.4.14,78.81.28,118.21.42,0,41.51-10.66,83.03-26.54,124.54,80.29-45.79,220.48-67.19,273.73,7.26,40.13,48.2-29.5,173.45-66.04,228-28.52,42.84-51.1,72.54-92.87,95.04-69.24,37.13-198.88,35.27-246.7-20.66-2.81,14.06-4.67,28.13-5.36,42.19-39.5.13-79,.27-118.5.4,7.89-159.06,164.06-318.13,164.06-477.19ZM360.11,416.79c-9,17.92-17.9,35.84-26.25,53.76,2.28,52.03,40.64,47.39,91.67,50.17,66.98,2.18,113.44-43.64,134.23-106,6.07-16.16,6.71-30.34-1.68-43.78-11.84-12.8-31.72-12.31-48.43-12.59-69.36-.05-118.99,19.42-149.55,58.45ZM999.38,241.88c74.99-1.64,181.75,17.46,163.44,114.55-18.77,83.73-78.36,190.14-147.36,240.33-75.9,59.79-343.04,73.77-343.69-61.25-1.34-52.36,44.71-134.69,80.19-177.69,61.01-81.19,148.58-118.44,247.42-115.95ZM876.7,528.71c64.57-.84,101.16-27.48,130.74-87.79,12.33-26.4,21.73-53.33,2.79-72.13-21.32-17.64-49.71-18.49-76.78-13.88-31.88,6.28-61.6,22.69-83.83,48.61-43.13,50.74-64.16,128.86,27.08,125.19ZM1554.98,245.22c38.91.09,77.81.18,116.72.28-36.7,129.19-142.79,258.38-148.5,387.56-38.99.13-77.98.27-116.97.4.88-19.86,4.12-39.72,9.12-59.58-39.44,39.35-81.77,59.16-138.78,59.35-77.31-2.32-141.41-9.6-146.14-92.22,3-97.14,72.42-177.79,107.9-296.54,38.91.09,77.81.18,116.72.28-13.89,50.37-42.69,107.4-66.55,155.76-8.95,20.03-21.89,47.96-18.52,70.81,1.37,16.86,10.33,22.12,25.42,28.47,58.88,15.08,105.62-9.58,171.58-56.43,32.36-66.05,69.23-132.09,87.99-198.14ZM2055.56,325.49c-13.64,95.54-90.7,175.57-100.08,306.09-39.5.13-79,.27-118.5.4,1.83-49.93,21.48-105.26,43.21-152.64,9.87-23.14,24.18-53.69,25.13-79.15.5-28.48-18.59-38.32-45.7-38.29-46.31-.09-75.28,18.84-111.98,47.28-37.48,74.45-74.18,148.91-77.48,223.36-39.84.14-79.68.27-119.51.41,5.7-128.91,111.39-257.83,148.25-386.74,39.75.09,79.5.19,119.25.28-5.08,17.78-11.48,35.56-18.74,53.34,36.6-24.22,61.55-42.74,103.3-52.48,59.06-9.84,165.81-8.36,152.85,78.12ZM2614.63,713.55c174.97.18,185.08,96.8,105.99,235.07-100.63.1-201.26.2-301.88.31-14.92,73.64,206.18,27,241.79,13.52,1.27,35.38,5.27,70.74,15.54,106.07-74.54,39.08-286.34,54.41-355.6.35-51.86-42.03-31.04-105.61-3.56-160.7,63.57-120.76,156.77-195.66,297.73-194.62ZM2568.74,834.62c-46.02-.14-95.97,11.27-119.01,50.61,60.62,0,121.24,0,181.86-.01,16.99-41.9-15.83-50.06-62.85-50.6ZM2326.82,243.29c93.02-2.34,214.33,34.77,159.5,145.62-43.45,7.68-86.94,15.38-130.42,23.1,12.23-67.21-110.77-54.77-146.27-33.1-23.92,13.73-41.48,34.6-52.99,58.96-28.91,54.87.36,78.59,57.67,77.36,43.81.32,90.72-13.33,116.2-49.05,36.01,7.01,72.12,14.01,108.33,20.99-55.21,133.9-209.3,165.79-339.94,136.19-98.16-23.82-105.76-104.75-63-184.77,63.8-120.73,149.21-196.24,290.92-195.31ZM2779.81,235.37c174.97.18,185.08,96.8,105.99,235.07-100.63.1-201.26.2-301.88.31-14.92,73.64,206.18,27,241.79,13.52,1.27,35.38,5.27,70.74,15.54,106.07-74.54,39.08-286.34,54.41-355.6.35-51.86-42.03-31.04-105.61-3.56-160.7,63.57-120.76,156.77-195.66,297.73-194.62ZM2733.93,356.44c-46.02-.14-95.97,11.27-119.01,50.61,60.62,0,121.24,0,181.86-.01,16.99-41.9-15.83-50.06-62.85-50.6ZM2269.4,1023.85c-14.22,21.01-75.88,115.1-90.98,137.95,40.57-12.22,134.31-43.94,175.91-52.63-43.26-13.61-76.99-41.67-84.94-85.33M2759.65,641.68c-45.32,6.97-97.16,10.21-146.67,8.82-11.91,13.12-22.26,27.97-33.83,42.42,36-3.13,81.51-1.08,112.61,6.74,21.34-22.81,43.94-41.77,67.89-57.97M3340.83,359.43l.04.03s-.03-.02-.04-.03M3193.79,230.91c-81.07.64-172.88,19.15-249.48,56.57,15.3,27.54,12.22,71.44.11,106.27,102.25-70.18,296.4-104.02,400.66-31.18-18.11,18.61-50.8,35.37-77.15,42.52h.03c-118.98,32.99-243.05,44.28-362.21,75.64-.17.32-.33.64-.5.96-4.41.99-8.84,1.95-13.23,3.05l.05.05c-2.27.51-4.57,1.04-6.82,1.58v-.06c-.09.02-.36.1-.44.13h0c-.45.11-1.09.34-1.54.48h.25c-2.93.86-5.86,1.72-8.77,2.61h0c-9.4,2.84-18.76,5.84-28.07,9.03,2,34.93,7.15,63.67,15.57,91.48,152.71-63.91,425.2-51.51,543.07-158.47,52.7-48.09,48.58-106.99-11.08-146.34-56.78-40.33-129.43-54.2-200.43-54.3M3387.08,1065.37h0M3382.23,1051.72h13.79-13.79M3382.69,1047.4h0M2837.5,721.51h0M2839.28,721.28h0M3313.99,0c-25.46,0-50.37.74-74.3,2h.07c-206.6,10.39-379.08,70.65-528.98,200.69l.17-.15c-11.55,9.92-23.47,19.65-35.58,29.54,46.74-14.39,109.47-17.71,159.48-10.17,138.29-96.68,300.71-130.77,479.14-130.49,131.62,3.94,289.87,10.87,361.94,129.69,59.37,120.08-45.97,215.84-148.63,277.62l.03-.02c-154.9,91.21-292.98,96.41-466.1,159.86-81.64,23.45-152.7,44.6-224.61,63.09h0c2.01,9.08,5.39,27.44,6.61,36.61,0,0,.27,2.49.27,2.49l.47,51.7c.21,0,.41,0,.6,0h0c217.61-3.4,435.2-6.74,652.76-10.01-28.9,57.59-57.32,115.46-83.93,173.65-48.75-19.19-92.25-23.53-152.33-28.95-177.19-11.59-364.3-.76-552.02,17.61v-.03c-5.27.46-9.89,1.02-15.3,1.55h0c-3.52.31-7.03.65-10.54,1.1l.09.44-.54.08c.03.46.13,1.4.21,1.85h-.41c1.66,33.45,5.87,61.69,13.09,87.91,211.57-19.31,415.24-36.03,615.14-13.32,28.55,4.89,53.88,7.75,76.27,21.03l9.1-9.61,4.9-2.39,68.2,22.14c51.65-120.27,116.97-246.24,177.9-366.74-154.79,2.32-311.08,4.67-465.75,7.04,210.42-55,495.09-121.86,588.7-344.76,23.62-63.26,18.16-131.18-12.99-191.91C3672.33,24.22,3473.4,1.68,3313.99,0"/>
+            </svg>
         </div>
-    </div>
+    </header>
 
-    <!-- Hero Card Component -->
-    <div class="hero-card">
-        <!-- Event Image Section -->
-        <div class="event-image">
-            <div class="image-placeholder">
-                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor" opacity="0.4"/>
-                </svg>
+    <!-- Event Card Section -->
+    <main class="figma-main">
+        <div class="figma-event-card">
+            <!-- Event Image with Gradient Background -->
+            <div class="figma-event-image">
+                <div class="figma-image-placeholder">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor" opacity="0.4"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Event Information -->
+            <div class="figma-event-info">
+                <h1 class="figma-event-title">EVENT TITLE</h1>
+                <div class="figma-event-artist">Artist Name</div>
+                <div class="figma-event-date">📅 March 29th, 9:00 P.M.</div>
+                <div class="figma-event-address">📍 101 Address Drive, Asbury Park, NJ</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="figma-action-buttons">
+                <button class="figma-share-btn" id="shareBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="figma-tickets-btn" id="ticketsBtn">Tickets</button>
             </div>
         </div>
+    </main>
 
-        <!-- Event Information -->
-        <div class="event-info">
-            <h1 class="event-title">EVENT TITLE</h1>
-            <div class="event-artist">ARTIST NAME</div>
-            <div class="event-date">DATE</div>
-        </div>
+    <!-- Text Us Section -->
+    <section class="figma-text-us">
+        <div class="figma-text-us-content">
+            <h2 class="figma-text-us-title">Text us</h2>
+            <p class="figma-text-us-subtitle">Exclusive events, contests, and more</p>
 
-        <!-- Tickets CTA Button -->
-        <div class="tickets-cta-container">
-            <button class="tickets-cta" id="ticketsBtn">Tickets</button>
+            <!-- International Phone Input -->
+            <div class="figma-phone-container">
+                <div class="figma-phone-input-wrapper">
+                    <!-- Country Flag and Select -->
+                    <div class="figma-country-select">
+                        <div class="figma-country-flag" id="countryFlag">🇺🇸</div>
+                        <select class="figma-country-dropdown" id="countrySelect">
+                            <option value="+1" data-country="US" data-flag="🇺🇸" selected>US +1 United States</option>
+                            <option value="+44" data-country="GB" data-flag="🇬🇧">GB +44 United Kingdom</option>
+                            <option value="+33" data-country="FR" data-flag="🇫🇷">FR +33 France</option>
+                            <option value="+49" data-country="DE" data-flag="🇩🇪">DE +49 Germany</option>
+                            <option value="+39" data-country="IT" data-flag="🇮🇹">IT +39 Italy</option>
+                            <option value="+34" data-country="ES" data-flag="🇪🇸">ES +34 Spain</option>
+                            <option value="+81" data-country="JP" data-flag="🇯🇵">JP +81 Japan</option>
+                            <option value="+82" data-country="KR" data-flag="🇰🇷">KR +82 South Korea</option>
+                            <option value="+55" data-country="BR" data-flag="🇧🇷">BR +55 Brazil</option>
+                            <option value="+52" data-country="MX" data-flag="🇲🇽">MX +52 Mexico</option>
+                            <option value="+91" data-country="IN" data-flag="🇮🇳">IN +91 India</option>
+                            <option value="+86" data-country="CN" data-flag="🇨🇳">CN +86 China</option>
+                        </select>
+                    </div>
+
+                    <!-- Phone Number Input -->
+                    <input
+                        type="tel"
+                        class="figma-phone-input"
+                        id="phoneInput"
+                        placeholder="(555)-434-3904"
+                        maxlength="20"
+                        autocomplete="tel"
+                        aria-label="Phone number"
+                    />
+                </div>
+
+                <!-- Send Button -->
+                <button class="figma-send-btn" id="sendBtn">SEND</button>
+            </div>
+
+            <!-- Disclaimer Text -->
+            <p class="figma-disclaimer">
+                By submitting my information, I agree to receive recurring automated messages to the contact information provided and to
+                <a href="https://terms.bounce2bounce.com" target="_blank">Terms of Service</a>,
+                <a href="https://terms.bounce2bounce.com" target="_blank">Cookie Policy</a> and
+                <a href="https://terms.bounce2bounce.com" target="_blank">Privacy Policy</a>.
+                Msg & Data Rates may apply. Reply STOP to cancel, HELP for help.
+            </p>
         </div>
-    </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="figma-footer">
+        <div class="figma-social-icons">
+            <a href="#" class="figma-social-link" aria-label="Instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            </a>
+            <a href="#" class="figma-social-link" aria-label="TikTok">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-.88-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+                </svg>
+            </a>
+            <a href="#" class="figma-social-link" aria-label="Twitter">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                </svg>
+            </a>
+            <a href="#" class="figma-social-link" aria-label="Email">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </a>
+        </div>
+    </footer>
 
     <!-- Modal Overlay -->
     <div class="modal-overlay" id="modalOverlay">
@@ -49,6 +140,7 @@
         </div>
     </div>
 
+    <!-- Glassmorphism Navigation Bar -->
     <div class="navbar-container">
         <nav class="modern-navbar">
             <a href="#" class="nav-item selected" data-nav="home">Home</a>
@@ -61,8 +153,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     const navItems = document.querySelectorAll('.nav-item');
     const ticketsBtn = document.getElementById('ticketsBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const sendBtn = document.getElementById('sendBtn');
     const modalOverlay = document.getElementById('modalOverlay');
     const modalClose = document.getElementById('modalClose');
+    const phoneInput = document.getElementById('phoneInput');
+    const countrySelect = document.getElementById('countrySelect');
+    const countryFlag = document.getElementById('countryFlag');
 
     // Navigation functionality
     navItems.forEach(item => {
@@ -87,18 +184,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Modal functionality
+    // Modal functionality for tickets
     ticketsBtn.addEventListener('click', function() {
         modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
     });
 
     modalClose.addEventListener('click', function() {
         modalOverlay.classList.remove('active');
-        document.body.style.overflow = ''; // Restore scrolling
+        document.body.style.overflow = '';
     });
 
-    // Close modal when clicking outside the modal content
+    // Close modal when clicking outside
     modalOverlay.addEventListener('click', function(e) {
         if (e.target === modalOverlay) {
             modalOverlay.classList.remove('active');
@@ -113,5 +210,124 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = '';
         }
     });
+
+    // Share functionality with Web Share API and fallbacks
+    shareBtn.addEventListener('click', async function() {
+        const shareData = {
+            title: 'EVENT TITLE - Artist Name',
+            text: 'Join us for an amazing event! March 29th, 9:00 P.M. at 101 Address Drive, Asbury Park, NJ',
+            url: window.location.href
+        };
+
+        try {
+            // Try Web Share API first (mobile browsers)
+            if (navigator.share) {
+                await navigator.share(shareData);
+                return;
+            }
+
+            // Fallback: Copy to clipboard
+            await navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
+
+            // Show success feedback
+            const originalText = this.innerHTML;
+            this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            this.style.backgroundColor = '#10b981';
+
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.style.backgroundColor = '';
+            }, 2000);
+
+        } catch (err) {
+            console.error('Error sharing:', err);
+            // Final fallback: Show share options
+            alert('Share this event:\n\n' + shareData.title + '\n' + shareData.text + '\n' + shareData.url);
+        }
+    });
+
+    // Country selection functionality
+    countrySelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const flag = selectedOption.dataset.flag;
+        countryFlag.textContent = flag;
+
+        // Update phone input placeholder based on country
+        const countryCode = selectedOption.value;
+        const placeholders = {
+            '+1': '(555) 123-4567',
+            '+44': '20 1234 5678',
+            '+33': '01 23 45 67 89',
+            '+49': '30 12345678',
+            '+39': '06 1234 5678',
+            '+34': '91 123 45 67',
+            '+81': '03-1234-5678',
+            '+82': '02-123-4567',
+            '+55': '(11) 91234-5678',
+            '+52': '55 1234 5678',
+            '+91': '98765 43210',
+            '+86': '138 0013 8000'
+        };
+        phoneInput.placeholder = placeholders[countryCode] || '(555) 123-4567';
+    });
+
+    // Phone input formatting
+    phoneInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        const countryCode = countrySelect.value;
+
+        // Format based on country
+        if (countryCode === '+1') {
+            // US/Canada formatting
+            if (value.length >= 6) {
+                value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6,10)}`;
+            } else if (value.length >= 3) {
+                value = `(${value.slice(0,3)}) ${value.slice(3)}`;
+            }
+        }
+
+        e.target.value = value;
+    });
+
+    // Send button functionality
+    sendBtn.addEventListener('click', function() {
+        const phoneValue = phoneInput.value.trim();
+        const countryCode = countrySelect.value;
+
+        if (!phoneValue) {
+            alert('Please enter a phone number');
+            phoneInput.focus();
+            return;
+        }
+
+        // Simple validation
+        const cleanPhone = phoneValue.replace(/\D/g, '');
+        if (cleanPhone.length < 10) {
+            alert('Please enter a valid phone number');
+            phoneInput.focus();
+            return;
+        }
+
+        // Show success state
+        const originalText = this.textContent;
+        this.textContent = 'SENT!';
+        this.style.backgroundColor = '#10b981';
+        this.disabled = true;
+
+        // Reset after 3 seconds
+        setTimeout(() => {
+            this.textContent = originalText;
+            this.style.backgroundColor = '';
+            this.disabled = false;
+            phoneInput.value = '';
+        }, 3000);
+
+        console.log('Phone submission:', { phone: phoneValue, country: countryCode });
+    });
+
+    // Ensure mobile font size is 16px to prevent zoom
+    if (window.innerWidth <= 767) {
+        phoneInput.style.fontSize = '16px';
+    }
 });
 </script>
