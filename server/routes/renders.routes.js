@@ -27,6 +27,14 @@ router.get(
     asyncHandler(renders.home)
 );
 
+// Home Editor dashboard page
+router.get(
+    "/home-editor",
+    asyncHandler(auth.jwtPage),
+    asyncHandler(locals.user),
+    asyncHandler(renders.homeEditor)
+);
+
 router.get(
     "/login",
     asyncHandler(auth.jwtLoosePage),

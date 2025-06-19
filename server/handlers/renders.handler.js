@@ -186,6 +186,28 @@ async function home(req, res) {
     }
 }
 
+async function homeEditor(req, res) {
+    try {
+        // Get current home settings for the form
+        const homeSettings = await query.homeSettings.getForAdmin();
+
+        res.render("home-editor", {
+            title: "Home Editor",
+            layout: "layouts/dashboard",
+            currentPage: "home-editor",
+            homeSettings: homeSettings
+        });
+    } catch (error) {
+        console.error("Error loading home editor:", error);
+        res.render("home-editor", {
+            title: "Home Editor",
+            layout: "layouts/dashboard",
+            currentPage: "home-editor",
+            homeSettings: {}
+        });
+    }
+}
+
 async function resetPasswordSetNewPassword(req, res) {
     const reset_password_token = req.params.resetPasswordToken;
 
@@ -435,6 +457,7 @@ module.exports = {
     dropEdit,
     getSupportEmail,
     home,
+    homeEditor,
     homepage,
     modernHomepage,
     linkEdit,
