@@ -135,17 +135,17 @@ async function resetPassword(req, res) {
     });
 }
 
-async function navDemo(req, res) {
+async function home(req, res) {
     try {
-        res.render("nav-demo", {
-            layout: "layouts/nav-demo",
-            title: "Modern Navigation Demo"
+        res.render("home", {
+            layout: "layouts/home",
+            title: "BOUNCE2BOUNCE - Home"
         });
     } catch (error) {
-        console.error("Error rendering nav demo:", error);
+        console.error("Error rendering home page:", error);
         res.status(500).render("error", {
             title: "Error",
-            message: "Unable to load navigation demo"
+            message: "Unable to load home page"
         });
     }
 }
@@ -398,13 +398,13 @@ module.exports = {
     createUser,
     dropEdit,
     getSupportEmail,
+    home,
     homepage,
     modernHomepage,
     linkEdit,
     linkEditAdmin,
     login,
     logout,
-    navDemo,
     notFound,
     resetPassword,
     resetPasswordSetNewPassword,

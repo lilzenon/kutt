@@ -18,13 +18,13 @@ router.get(
     asyncHandler(renders.homepage)
 );
 
-// Modern Navigation Demo
+// Home page with modern navigation
 router.get(
-    "/nav-demo",
+    "/home",
     asyncHandler(auth.jwtLoosePage),
     asyncHandler(helpers.adminSetup),
     asyncHandler(locals.user),
-    asyncHandler(renders.navDemo)
+    asyncHandler(renders.home)
 );
 
 router.get(
