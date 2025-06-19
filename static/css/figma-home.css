@@ -140,7 +140,9 @@ body {
 /* Event Image - Exact Gradient Match */
 
 .figma-event-image {
-    height: 280px;
+    width: calc(100% - 32px);
+    height: calc(100% - 32px);
+    aspect-ratio: 1 / 1;
     background: linear-gradient(135deg, #666 0%, #999 50%, #ccc 100%);
     display: flex;
     align-items: center;
@@ -957,9 +959,7 @@ body {
     .figma-event-card {
         max-width: 480px;
     }
-    .figma-event-image {
-        height: 320px;
-    }
+    /* .figma-event-image uses aspect-ratio: 1/1 from base styles */
     .figma-event-info {
         padding: 32px 32px 20px;
     }
@@ -1057,8 +1057,8 @@ body {
         max-width: 440px;
     }
     .figma-main {
-        padding: 0 32px 48px;
-        margin-bottom: 4px;
+        padding: 0 32px 24px;
+        margin-bottom: 0px;
     }
     .carousel-container {
         max-width: 560px;
@@ -1070,9 +1070,7 @@ body {
     .figma-event-card {
         max-width: 560px;
     }
-    .figma-event-image {
-        height: 360px;
-    }
+    /* .figma-event-image uses aspect-ratio: 1/1 from base styles */
     .figma-event-info {
         padding: 40px 40px 24px;
     }
@@ -1105,7 +1103,7 @@ body {
         border-radius: 20px;
     }
     .figma-text-us {
-        padding: 36px 32px;
+        padding: 24px 32px;
         margin: 0 32px;
     }
     .figma-text-us-content {
