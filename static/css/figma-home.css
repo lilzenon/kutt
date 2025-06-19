@@ -1,4 +1,4 @@
-/* Figma Home Page Styles - Pixel Perfect Implementation */
+/* Figma Home Page - Exact Pixel Perfect Implementation */
 
 
 /* Reset and Base Styles */
@@ -13,26 +13,33 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: #000;
     color: #fff;
-    line-height: 1.5;
+    line-height: 1.2;
     overflow-x: hidden;
+    font-weight: 400;
 }
 
 
-/* Main Container */
+/* Main Container - Mobile First Design */
 
 .figma-home-container {
     min-height: 100vh;
     background: #000;
-    padding: 0;
+    padding: 20px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 
 /* Header Section */
 
 .figma-header {
-    padding: 24px 16px 32px;
+    padding: 0 0 24px 0;
     text-align: center;
+    width: 100%;
 }
 
 .figma-logo-container {
@@ -42,90 +49,96 @@ body {
 }
 
 .figma-logo {
-    height: 32px;
+    height: 20px;
     width: auto;
     fill: #fff;
-    max-width: 280px;
+    max-width: 200px;
 }
 
 
 /* Main Content */
 
 .figma-main {
-    padding: 0 16px 32px;
+    width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 32px;
 }
 
 
-/* Event Card */
+/* Event Card - Exact Figma Match */
 
 .figma-event-card {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    background: #1a1a1a;
     border-radius: 24px;
     padding: 0;
     width: 100%;
-    max-width: 400px;
+    max-width: 360px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #333;
+    position: relative;
 }
 
 
-/* Event Image */
+/* Event Image - Exact Gradient Match */
 
 .figma-event-image {
     height: 280px;
-    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+    background: linear-gradient(135deg, #666 0%, #999 50%, #ccc 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    border-radius: 20px;
+    margin: 16px;
+    margin-bottom: 0;
 }
 
 .figma-image-placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 48px;
 }
 
 
 /* Event Information */
 
 .figma-event-info {
-    padding: 24px 24px 16px;
+    padding: 20px 20px 16px;
     text-align: left;
 }
 
 .figma-event-title {
-    font-size: 28px;
-    font-weight: 800;
+    font-size: 32px;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    margin-bottom: 8px;
-    line-height: 1.2;
+    margin-bottom: 4px;
+    line-height: 1.1;
+    text-transform: uppercase;
 }
 
 .figma-event-artist {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 400;
     color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .figma-event-date,
 .figma-event-address {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 
 /* Action Buttons */
 
 .figma-action-buttons {
-    padding: 0 24px 24px;
+    padding: 0 20px 20px;
     display: flex;
     gap: 12px;
     align-items: center;
@@ -143,7 +156,6 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
 }
 
 .figma-share-btn:hover {
@@ -151,23 +163,19 @@ body {
     transform: translateY(-1px);
 }
 
-.figma-share-btn:active {
-    transform: translateY(0);
-}
-
 .figma-tickets-btn {
     flex: 1;
     height: 48px;
     background: #ff3333;
     border: none;
-    border-radius: 12px;
+    border-radius: 24px;
     color: #fff;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-transform: capitalize;
+    letter-spacing: 0;
 }
 
 .figma-tickets-btn:hover {
@@ -175,37 +183,30 @@ body {
     transform: translateY(-1px);
 }
 
-.figma-tickets-btn:active {
-    transform: translateY(0);
-}
-
 
 /* Text Us Section */
 
 .figma-text-us {
-    padding: 32px 16px;
-    background: #111;
-    margin: 0 16px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    margin-bottom: 32px;
 }
 
 .figma-text-us-content {
-    max-width: 400px;
+    max-width: 360px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
 }
 
 .figma-text-us-title {
     font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 8px;
+    font-weight: 600;
+    margin-bottom: 4px;
 }
 
 .figma-text-us-subtitle {
-    font-size: 16px;
+    font-size: 14px;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 
@@ -214,15 +215,15 @@ body {
 .figma-phone-container {
     display: flex;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .figma-phone-input-wrapper {
     flex: 1;
     display: flex;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    background: #333;
+    border: none;
+    border-radius: 24px;
     overflow: hidden;
     min-height: 48px;
 }
@@ -234,14 +235,13 @@ body {
     display: flex;
     align-items: center;
     padding: 0 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
     position: relative;
 }
 
 .figma-country-flag {
     font-size: 20px;
-    margin-right: 8px;
+    margin-right: 4px;
 }
 
 .figma-country-dropdown {
@@ -252,11 +252,10 @@ body {
     cursor: pointer;
     outline: none;
     appearance: none;
-    padding-right: 20px;
 }
 
 .figma-country-dropdown option {
-    background: #222;
+    background: #333;
     color: #fff;
 }
 
@@ -283,7 +282,7 @@ body {
 .figma-send-btn {
     background: #00ff88;
     border: none;
-    border-radius: 12px;
+    border-radius: 24px;
     color: #000;
     font-size: 14px;
     font-weight: 700;
@@ -292,16 +291,11 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .figma-send-btn:hover {
     background: #00e67a;
     transform: translateY(-1px);
-}
-
-.figma-send-btn:active {
-    transform: translateY(0);
 }
 
 .figma-send-btn:disabled {
@@ -314,9 +308,9 @@ body {
 /* Disclaimer */
 
 .figma-disclaimer {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.4;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.3;
     text-align: left;
 }
 
@@ -333,22 +327,23 @@ body {
 /* Footer */
 
 .figma-footer {
-    padding: 32px 16px 120px;
+    width: 100%;
     text-align: center;
+    margin-top: auto;
+    padding-bottom: 100px;
 }
 
 .figma-social-icons {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 16px;
 }
 
 .figma-social-link {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
@@ -358,9 +353,9 @@ body {
 }
 
 .figma-social-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     color: #fff;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 
