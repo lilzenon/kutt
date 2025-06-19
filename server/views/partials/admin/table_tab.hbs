@@ -1,0 +1,189 @@
+<tr class="table-tabs">
+  <th colspan="100%">
+    <div class="admin-tabs">
+      <button 
+        type="button" 
+        class="admin-tab {{#ifEquals title 'links'}}active{{/ifEquals}}"
+        onclick="switchAdminTab('links')"
+        data-tab="links"
+      >
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        Links
+      </button>
+      
+      <button 
+        type="button" 
+        class="admin-tab {{#ifEquals title 'users'}}active{{/ifEquals}}"
+        onclick="switchAdminTab('users')"
+        data-tab="users"
+      >
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Users
+      </button>
+      
+      <button 
+        type="button" 
+        class="admin-tab {{#ifEquals title 'domains'}}active{{/ifEquals}}"
+        onclick="switchAdminTab('domains')"
+        data-tab="domains"
+      >
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        Domains
+      </button>
+      
+      <button 
+        type="button" 
+        class="admin-tab {{#ifEquals title 'home_settings'}}active{{/ifEquals}}"
+        onclick="switchAdminTab('home_settings')"
+        data-tab="home_settings"
+      >
+        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2V7"/>
+          <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
+          <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
+        </svg>
+        Home Editor
+      </button>
+    </div>
+  </th>
+</tr>
+
+<script>
+function switchAdminTab(tabName) {
+  // Update active tab styling
+  document.querySelectorAll('.admin-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+  
+  // Load the appropriate table content
+  const tableWrapper = document.getElementById('main-table-wrapper');
+  if (tableWrapper) {
+    // Show loading state
+    tableWrapper.innerHTML = '<div class="loading-state">Loading...</div>';
+    
+    // Fetch the appropriate content based on tab
+    let endpoint = '';
+    let title = '';
+    
+    switch(tabName) {
+      case 'links':
+        endpoint = '/admin/links/table';
+        title = 'Recent shortened links.';
+        break;
+      case 'users':
+        endpoint = '/admin/users/table';
+        title = 'Manage users.';
+        break;
+      case 'domains':
+        endpoint = '/admin/domains/table';
+        title = 'Manage domains.';
+        break;
+      case 'home_settings':
+        endpoint = '/admin/home-settings/table';
+        title = 'Home Page Settings';
+        break;
+    }
+    
+    // Update the title
+    const titleElement = document.getElementById('admin-table-title');
+    if (titleElement) {
+      titleElement.textContent = title;
+    }
+    
+    // Use HTMX to load the content if available, otherwise use fetch
+    if (window.htmx) {
+      htmx.ajax('GET', endpoint, {
+        target: '#main-table-wrapper',
+        swap: 'innerHTML'
+      });
+    } else {
+      fetch(endpoint)
+        .then(response => response.text())
+        .then(html => {
+          tableWrapper.innerHTML = html;
+        })
+        .catch(error => {
+          console.error('Error loading tab content:', error);
+          tableWrapper.innerHTML = '<div class="error-state">Error loading content</div>';
+        });
+    }
+  }
+}
+</script>
+
+<style>
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e9ecef;
+  background: #f8f9fa;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+
+.admin-tab:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.admin-tab.active {
+  background: #fff;
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.tab-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.loading-state, .error-state {
+  padding: 40px;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.error-state {
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .admin-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .admin-tab {
+    white-space: nowrap;
+    min-width: fit-content;
+  }
+}
+</style>

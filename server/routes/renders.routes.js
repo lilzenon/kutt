@@ -208,6 +208,55 @@ router.get(
     asyncHandler(renders.linkEditAdmin)
 );
 
+// Admin table endpoints for tab switching
+router.get(
+    "/admin/links/table",
+    locals.noLayout,
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    (req, res) => {
+        res.render("partials/admin/links/table", {
+            onload: true
+        });
+    }
+);
+
+router.get(
+    "/admin/users/table",
+    locals.noLayout,
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    (req, res) => {
+        res.render("partials/admin/users/table", {
+            onload: true
+        });
+    }
+);
+
+router.get(
+    "/admin/domains/table",
+    locals.noLayout,
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    (req, res) => {
+        res.render("partials/admin/domains/table", {
+            onload: true
+        });
+    }
+);
+
+router.get(
+    "/admin/home-settings/table",
+    locals.noLayout,
+    asyncHandler(auth.jwt),
+    asyncHandler(auth.admin),
+    (req, res) => {
+        res.render("partials/admin/home_settings/table", {
+            onload: true
+        });
+    }
+);
+
 router.get(
     "/add-domain-form",
     locals.noLayout,

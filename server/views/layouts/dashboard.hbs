@@ -103,6 +103,15 @@
                     <span class="laylo-mobile-nav-text">Fans</span>
                 </a>
 
+                <a href="/admin" class="laylo-mobile-nav-item {{#if (eq currentPage 'home-editor')}}active{{/if}}">
+                    <svg class="laylo-mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2V7"/>
+                        <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
+                        <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
+                    </svg>
+                    <span class="laylo-mobile-nav-text">Home Editor</span>
+                </a>
+
                 <a href="/settings" class="laylo-mobile-nav-item {{#if (eq currentPage 'settings')}}active{{/if}}">
                     <svg class="laylo-mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"/>
@@ -210,6 +219,15 @@
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                     </svg>
                     <span class="laylo-nav-text">Fans</span>
+                </a>
+
+                <a href="/admin" class="laylo-nav-item {{#if (eq currentPage 'home-editor')}}active{{/if}}">
+                    <svg class="laylo-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2V7"/>
+                        <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/>
+                        <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/>
+                    </svg>
+                    <span class="laylo-nav-text">Home Editor</span>
                 </a>
             </div>
 
