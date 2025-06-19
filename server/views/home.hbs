@@ -398,13 +398,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleTouchStart(e) {
         console.log('🚀 TOUCH START EVENT FIRED!', e);
 
-        // 2024 Best Practice: Don't preventDefault in touchstart to allow page scrolling
-        // Only prevent if we're sure it's a carousel interaction
-
         if (!e.touches || e.touches.length === 0) {
             console.error('❌ No touches found in touchstart event');
             return;
         }
+
+        // Don't preventDefault here - let the browser handle page scrolling initially
 
         const touch = e.touches[0];
         startX = touch.clientX;
@@ -421,7 +420,9 @@ document.addEventListener('DOMContentLoaded', function() {
             currentSlide: currentSlide,
             totalSlides: totalSlides,
             touchesLength: e.touches.length,
-            target: e.target
+            target: e.target,
+            touchClientX: touch.clientX,
+            touchClientY: touch.clientY
         });
 
         // Disable transitions for immediate feedback
@@ -542,7 +543,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 deltaTime: deltaTime,
                 startX: startX,
                 currentX: currentX,
-                isHorizontalSwipe: isHorizontalSwipe
+                isHorizontalSwipe: isHorizontalSwipe,
+                'deltaX > 0 (right swipe)': deltaX > 0,
+                'deltaX < 0 (left swipe)': deltaX < 0,
+                'Math.abs(deltaX)': Math.abs(deltaX)
             });
 
             // Determine swipe threshold based on distance and velocity
@@ -625,12 +629,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (carouselTrack) {
         console.log('✅ carouselTrack found, adding event listeners');
 
-        // Modern approach: passive touchstart to allow page scrolling
+        // Fixed approach: non-passive touchstart to capture coordinates properly
         carouselTrack.addEventListener('touchstart', handleTouchStart, {
-            passive: true,  // Allow page scrolling by default
+            passive: false, // Need to capture touch coordinates
             capture: false
         });
-        console.log('✅ touchstart listener added (passive)');
+        console.log('✅ touchstart listener added (non-passive for coordinate capture)');
 
         carouselTrack.addEventListener('touchmove', handleTouchMove, {
             passive: false, // Must be false to selectively call preventDefault()

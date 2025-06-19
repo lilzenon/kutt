@@ -841,6 +841,8 @@ body {
 .carousel-nav {
     position: relative;
     margin-top: 24px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
