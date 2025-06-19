@@ -284,6 +284,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const shareBtn2 = document.getElementById('shareBtn2');
     const ticketsBtn2 = document.getElementById('ticketsBtn2');
 
+    // Debug element selection
+    console.log('🔍 Element Debug:', {
+        carouselTrack: carouselTrack,
+        carouselPrev: carouselPrev,
+        carouselNext: carouselNext,
+        carouselDotsCount: carouselDots.length,
+        shareBtn2: shareBtn2,
+        ticketsBtn2: ticketsBtn2
+    });
+
     // Navigation functionality
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
@@ -384,6 +394,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let startTime = 0;
 
     function handleTouchStart(e) {
+        console.log('🚀 TOUCH START EVENT FIRED!', e);
+
+        if (!e.touches || e.touches.length === 0) {
+            console.error('❌ No touches found in touchstart event');
+            return;
+        }
+
         const touch = e.touches[0];
         startX = touch.clientX;
         startY = touch.clientY;
@@ -393,11 +410,13 @@ document.addEventListener('DOMContentLoaded', function() {
         isHorizontalSwipe = false;
         startTime = Date.now();
 
-        console.log('🚀 Touch Start:', {
+        console.log('🚀 Touch Start Data:', {
             startX: startX,
             startY: startY,
             currentSlide: currentSlide,
-            totalSlides: totalSlides
+            totalSlides: totalSlides,
+            touchesLength: e.touches.length,
+            target: e.target
         });
 
         // Disable transitions for immediate feedback
@@ -405,7 +424,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleTouchMove(e) {
-        if (!isDragging) return;
+        console.log('🔄 TOUCH MOVE EVENT FIRED!', {
+            isDragging: isDragging,
+            touchesLength: e.touches ? e.touches.length : 0
+        });
+
+        if (!isDragging) {
+            console.log('❌ Not dragging, returning');
+            return;
+        }
+
+        if (!e.touches || e.touches.length === 0) {
+            console.error('❌ No touches found in touchmove event');
+            return;
+        }
 
         const touch = e.touches[0];
         currentX = touch.clientX;
@@ -413,6 +445,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const deltaX = currentX - startX;
         const deltaY = currentY - startY;
+
+        console.log('📏 Touch Move Delta:', {
+            deltaX: deltaX,
+            deltaY: deltaY,
+            absDeltaX: Math.abs(deltaX),
+            absDeltaY: Math.abs(deltaY),
+            startX: startX,
+            currentX: currentX,
+            isHorizontalSwipe: isHorizontalSwipe
+        });
 
         // Determine if this is a horizontal swipe
         if (!isHorizontalSwipe && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
@@ -427,6 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Only handle horizontal swipes for carousel
         if (isHorizontalSwipe) {
+            console.log('✅ Processing horizontal swipe');
             // Prevent default scrolling for horizontal swipes
             e.preventDefault();
 
@@ -445,6 +488,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             carouselTrack.style.transform = `translateX(${newTranslate}%)`;
+            console.log('🎨 Applied transform:', `translateX(${newTranslate}%)`);
+        } else {
+            console.log('⏸️ Not a horizontal swipe yet');
         }
     }
 
@@ -546,22 +592,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Mobile browser optimized touch events
+    console.log('🔧 Setting up touch events...');
+    console.log('carouselTrack element:', carouselTrack);
+
     if (carouselTrack) {
+        console.log('✅ carouselTrack found, adding event listeners');
+
         // Use passive: false for touchmove to allow preventDefault()
         carouselTrack.addEventListener('touchstart', handleTouchStart, {
             passive: true,
             capture: false
         });
+        console.log('✅ touchstart listener added');
 
         carouselTrack.addEventListener('touchmove', handleTouchMove, {
             passive: false, // Must be false to call preventDefault()
             capture: false
         });
+        console.log('✅ touchmove listener added');
 
         carouselTrack.addEventListener('touchend', handleTouchEnd, {
             passive: true,
             capture: false
         });
+        console.log('✅ touchend listener added');
 
         // Prevent context menu on long press (iOS Safari)
         carouselTrack.addEventListener('contextmenu', (e) => {
@@ -572,6 +626,10 @@ document.addEventListener('DOMContentLoaded', function() {
         carouselTrack.addEventListener('selectstart', (e) => {
             e.preventDefault();
         });
+
+        console.log('🎯 All touch event listeners attached successfully');
+    } else {
+        console.error('❌ carouselTrack element not found!');
     }
 
     // Keyboard navigation
