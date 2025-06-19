@@ -140,6 +140,9 @@ async function home(req, res) {
         // Fetch home page settings from database
         const homeSettings = await query.homeSettings.get();
 
+        // Fetch featured drops for homepage display
+        const featuredDrops = await query.drop.getFeaturedDrops({ limit: 6 });
+
         // Format the date for display
         let formattedDate = "March 29th, 9:00 P.M.";
         if (homeSettings.event_date) {
@@ -155,10 +158,20 @@ async function home(req, res) {
                 .replace(',', 'th,'); // Add 'th' suffix
         }
 
+        console.log(`🏠 Homepage loaded with ${featuredDrops.length} featured drops:`,
+            featuredDrops.map(drop => ({
+                id: drop.id,
+                title: drop.title,
+                artist_name: drop.artist_name,
+                show_on_homepage: drop.show_on_homepage
+            }))
+        );
+
         res.render("home", {
             layout: "layouts/home",
             title: "BOUNCE2BOUNCE - Home",
             homeSettings: homeSettings,
+            featuredDrops: featuredDrops,
             formattedDate: formattedDate,
             isPreview: req.query.preview === 'true'
         });
@@ -182,6 +195,7 @@ async function home(req, res) {
             layout: "layouts/home",
             title: "BOUNCE2BOUNCE - Home",
             homeSettings: defaultSettings,
+            featuredDrops: [], // Empty array for fallback
             formattedDate: "March 29th, 9:00 P.M.",
             isPreview: req.query.preview === 'true'
         });

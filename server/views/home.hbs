@@ -14,7 +14,8 @@
         <div class="carousel-container" role="region" aria-label="Event carousel">
             <!-- Carousel Track -->
             <div class="carousel-track" id="carouselTrack">
-                <!-- Event Card 1 -->
+                <!-- Home Settings Event Card (Always First) -->
+                {{#if homeSettings.event_title}}
                 <div class="figma-event-card carousel-slide" data-slide="0">
                     <!-- Event Image with Gradient Background -->
                     <div class="figma-event-image">
@@ -39,48 +40,64 @@
 
                     <!-- Action Buttons -->
                     <div class="figma-action-buttons">
-                        <button class="figma-share-btn" id="shareBtn">
+                        <button class="figma-share-btn" data-share-url="{{homeSettings.tickets_url}}">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M12 16L12 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
-                        <button class="figma-tickets-btn" id="ticketsBtn">Tickets</button>
+                        <button class="figma-tickets-btn" data-tickets-url="{{homeSettings.tickets_url}}">Tickets</button>
                     </div>
                 </div>
+                {{/if}}
 
-                <!-- Event Card 2 -->
-                <div class="figma-event-card carousel-slide" data-slide="1">
+                <!-- Featured Drops Cards -->
+                {{#each featuredDrops}}
+                <div class="figma-event-card carousel-slide" data-slide="{{@index}}{{#if ../homeSettings.event_title}}{{math @index "+" 1}}{{else}}{{@index}}{{/if}}">
                     <!-- Event Image with Gradient Background -->
                     <div class="figma-event-image">
-                        <div class="figma-image-placeholder">
-                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
+                        {{#if this.image_url}}
+                            <img src="{{this.image_url}}" alt="{{this.title}}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" />
+                        {{else}}
+                            <div class="figma-image-placeholder" style="{{#if this.background_color}}background: {{this.background_color}};{{/if}}{{#if this.gradient_data}}background: {{this.gradient_data}};{{/if}}">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        {{/if}}
                     </div>
 
                     <!-- Event Information -->
                     <div class="figma-event-info">
-                        <h1 class="figma-event-title">Summer Music Festival</h1>
-                        <div class="figma-event-artist">Various Artists</div>
-                        <div class="figma-event-date">📅 July 15, 2024</div>
-                        <div class="figma-event-address">📍 Central Park, New York</div>
+                        <h1 class="figma-event-title">{{this.title}}</h1>
+                        {{#if this.artist_name}}
+                        <div class="figma-event-artist">{{this.artist_name}}</div>
+                        {{/if}}
+                        {{#if this.event_date}}
+                        <div class="figma-event-date">📅 {{formatDate this.event_date "MMM d, yyyy 'at' h:mm a"}}</div>
+                        {{/if}}
+                        {{#if this.event_address}}
+                        <div class="figma-event-address">📍 {{this.event_address}}</div>
+                        {{/if}}
+                        {{#if this.description}}
+                        <div class="figma-event-description">{{this.description}}</div>
+                        {{/if}}
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="figma-action-buttons">
-                        <button class="figma-share-btn" id="shareBtn2">
+                        <button class="figma-share-btn" data-share-url="/drop/{{this.slug}}">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M12 16L12 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
-                        <button class="figma-tickets-btn" id="ticketsBtn2">Tickets</button>
+                        <button class="figma-tickets-btn" data-drop-url="/drop/{{this.slug}}">{{this.button_text}}</button>
                     </div>
                 </div>
+                {{/each}}
             </div>
 
             <!-- Carousel Navigation -->
@@ -99,8 +116,16 @@
 
                 <!-- Dot Indicators -->
                 <div class="carousel-indicators" role="tablist" aria-label="Event navigation">
-                    <button class="carousel-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Event 1"></button>
-                    <button class="carousel-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Event 2"></button>
+                    {{#if homeSettings.event_title}}
+                    <button class="carousel-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Main Event"></button>
+                    {{/if}}
+                    {{#each featuredDrops}}
+                    <button class="carousel-dot{{#unless @index}}{{#unless ../homeSettings.event_title}} active{{/unless}}{{/unless}}"
+                            data-slide="{{@index}}{{#if ../homeSettings.event_title}}{{math @index "+" 1}}{{else}}{{@index}}{{/if}}"
+                            role="tab"
+                            aria-selected="{{#unless @index}}{{#unless ../homeSettings.event_title}}true{{else}}false{{/unless}}{{else}}false{{/unless}}"
+                            aria-label="Featured Event {{math @index "+" 1}}"></button>
+                    {{/each}}
                 </div>
             </div>
         </div>
@@ -290,8 +315,49 @@ document.addEventListener('DOMContentLoaded', function() {
         carouselPrev: carouselPrev,
         carouselNext: carouselNext,
         carouselDotsCount: carouselDots.length,
-        shareBtn2: shareBtn2,
-        ticketsBtn2: ticketsBtn2
+        totalSlides: totalSlides
+    });
+
+    // Handle dynamic share and tickets buttons
+    document.addEventListener('click', function(e) {
+        // Handle share buttons
+        if (e.target.closest('.figma-share-btn')) {
+            const shareBtn = e.target.closest('.figma-share-btn');
+            const shareUrl = shareBtn.getAttribute('data-share-url');
+
+            if (shareUrl) {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Check out this event!',
+                        url: shareUrl
+                    }).catch(console.error);
+                } else {
+                    // Fallback: copy to clipboard
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        console.log('✅ URL copied to clipboard');
+                        // You could show a toast notification here
+                    }).catch(console.error);
+                }
+            }
+        }
+
+        // Handle tickets/drop buttons
+        if (e.target.closest('.figma-tickets-btn')) {
+            const ticketsBtn = e.target.closest('.figma-tickets-btn');
+            const ticketsUrl = ticketsBtn.getAttribute('data-tickets-url');
+            const dropUrl = ticketsBtn.getAttribute('data-drop-url');
+
+            if (ticketsUrl) {
+                // Open tickets modal for home settings
+                if (modalOverlay) {
+                    modalOverlay.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+            } else if (dropUrl) {
+                // Navigate to drop page
+                window.location.href = dropUrl;
+            }
+        }
     });
 
     // JavaScript loaded successfully
@@ -321,8 +387,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Carousel functionality
     let currentSlide = 0;
-    const totalSlides = 2;
+    const totalSlides = document.querySelectorAll('.carousel-slide').length;
     let isTransitioning = false;
+
+    console.log(`🎠 Carousel initialized with ${totalSlides} slides`);
 
     // Update carousel position
     function updateCarousel(slideIndex, animate = true) {

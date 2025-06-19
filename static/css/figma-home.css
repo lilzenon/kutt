@@ -195,6 +195,21 @@ body {
     gap: 8px;
 }
 
+.figma-event-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 12px;
+    line-height: 1.5;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
 
 /* Action Buttons */
 
@@ -1088,6 +1103,11 @@ body {
     .figma-event-date,
     .figma-event-address {
         font-size: 18px;
+    }
+    .figma-event-description {
+        font-size: 16px;
+        margin-top: 16px;
+        max-height: 72px;
     }
     .figma-action-buttons {
         padding: 0 40px 40px;
