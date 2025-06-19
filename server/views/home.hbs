@@ -313,34 +313,144 @@ document.addEventListener('DOMContentLoaded', function() {
     const phonePatterns = {
         '+1': { // US/Canada
             pattern: /^\d{10}$/,
-            format: (num) => `(${num.slice(0,3)}) ${num.slice(3,6)}-${num.slice(6)}`,
+            format: (num) => {
+                if (num.length <= 3) return `(${num}`;
+                if (num.length <= 6) return `(${num.slice(0,3)}) ${num.slice(3)}`;
+                return `(${num.slice(0,3)}) ${num.slice(3,6)}-${num.slice(6,10)}`;
+            },
             placeholder: '(555) 123-4567',
             maxLength: 14
         },
         '+44': { // UK
             pattern: /^\d{10,11}$/,
-            format: (num) => num.length === 10 ? `${num.slice(0,2)} ${num.slice(2,6)} ${num.slice(6)}` : `${num.slice(0,3)} ${num.slice(3,7)} ${num.slice(7)}`,
+            format: (num) => {
+                if (num.length <= 2) return num;
+                if (num.length <= 6) return `${num.slice(0,2)} ${num.slice(2)}`;
+                if (num.length === 10) return `${num.slice(0,2)} ${num.slice(2,6)} ${num.slice(6)}`;
+                return `${num.slice(0,3)} ${num.slice(3,7)} ${num.slice(7)}`;
+            },
             placeholder: '20 1234 5678',
             maxLength: 13
         },
         '+49': { // Germany
             pattern: /^\d{10,12}$/,
-            format: (num) => `${num.slice(0,2)} ${num.slice(2,5)} ${num.slice(5)}`,
+            format: (num) => {
+                if (num.length <= 2) return num;
+                if (num.length <= 5) return `${num.slice(0,2)} ${num.slice(2)}`;
+                return `${num.slice(0,2)} ${num.slice(2,5)} ${num.slice(5)}`;
+            },
             placeholder: '30 123 45678',
             maxLength: 15
         },
         '+33': { // France
             pattern: /^\d{10}$/,
-            format: (num) => `${num.slice(0,2)} ${num.slice(2,4)} ${num.slice(4,6)} ${num.slice(6,8)} ${num.slice(8)}`,
+            format: (num) => {
+                if (num.length <= 2) return num;
+                if (num.length <= 4) return `${num.slice(0,2)} ${num.slice(2)}`;
+                if (num.length <= 6) return `${num.slice(0,2)} ${num.slice(2,4)} ${num.slice(4)}`;
+                if (num.length <= 8) return `${num.slice(0,2)} ${num.slice(2,4)} ${num.slice(4,6)} ${num.slice(6)}`;
+                return `${num.slice(0,2)} ${num.slice(2,4)} ${num.slice(4,6)} ${num.slice(6,8)} ${num.slice(8)}`;
+            },
             placeholder: '01 23 45 67 89',
             maxLength: 14
+        },
+        '+34': { // Spain
+            pattern: /^\d{9}$/,
+            format: (num) => {
+                if (num.length <= 3) return num;
+                if (num.length <= 6) return `${num.slice(0,3)} ${num.slice(3)}`;
+                return `${num.slice(0,3)} ${num.slice(3,6)} ${num.slice(6)}`;
+            },
+            placeholder: '612 345 678',
+            maxLength: 11
+        },
+        '+39': { // Italy
+            pattern: /^\d{9,11}$/,
+            format: (num) => {
+                if (num.length <= 3) return num;
+                if (num.length <= 6) return `${num.slice(0,3)} ${num.slice(3)}`;
+                return `${num.slice(0,3)} ${num.slice(3,6)} ${num.slice(6)}`;
+            },
+            placeholder: '312 345 6789',
+            maxLength: 13
+        },
+        '+61': { // Australia
+            pattern: /^\d{9}$/,
+            format: (num) => {
+                if (num.length <= 1) return num;
+                if (num.length <= 5) return `${num.slice(0,1)} ${num.slice(1)}`;
+                return `${num.slice(0,1)} ${num.slice(1,5)} ${num.slice(5)}`;
+            },
+            placeholder: '4 1234 5678',
+            maxLength: 12
+        },
+        '+81': { // Japan
+            pattern: /^\d{10,11}$/,
+            format: (num) => {
+                if (num.length <= 2) return num;
+                if (num.length <= 6) return `${num.slice(0,2)}-${num.slice(2)}`;
+                if (num.length === 10) return `${num.slice(0,2)}-${num.slice(2,6)}-${num.slice(6)}`;
+                return `${num.slice(0,3)}-${num.slice(3,7)}-${num.slice(7)}`;
+            },
+            placeholder: '90-1234-5678',
+            maxLength: 13
+        },
+        '+82': { // South Korea
+            pattern: /^\d{9,11}$/,
+            format: (num) => {
+                if (num.length <= 2) return num;
+                if (num.length <= 6) return `${num.slice(0,2)}-${num.slice(2)}`;
+                return `${num.slice(0,2)}-${num.slice(2,6)}-${num.slice(6)}`;
+            },
+            placeholder: '10-1234-5678',
+            maxLength: 13
+        },
+        '+91': { // India
+            pattern: /^\d{10}$/,
+            format: (num) => {
+                if (num.length <= 5) return num;
+                return `${num.slice(0,5)} ${num.slice(5)}`;
+            },
+            placeholder: '98765 43210',
+            maxLength: 11
+        },
+        '+86': { // China
+            pattern: /^\d{11}$/,
+            format: (num) => {
+                if (num.length <= 3) return num;
+                if (num.length <= 7) return `${num.slice(0,3)} ${num.slice(3)}`;
+                return `${num.slice(0,3)} ${num.slice(3,7)} ${num.slice(7)}`;
+            },
+            placeholder: '138 0013 8000',
+            maxLength: 13
+        },
+        '+55': { // Brazil
+            pattern: /^\d{10,11}$/,
+            format: (num) => {
+                if (num.length <= 2) return `(${num}`;
+                if (num.length <= 6) return `(${num.slice(0,2)}) ${num.slice(2)}`;
+                if (num.length === 10) return `(${num.slice(0,2)}) ${num.slice(2,6)}-${num.slice(6)}`;
+                return `(${num.slice(0,2)}) ${num.slice(2,7)}-${num.slice(7)}`;
+            },
+            placeholder: '(11) 91234-5678',
+            maxLength: 15
+        },
+        '+52': { // Mexico
+            pattern: /^\d{10}$/,
+            format: (num) => {
+                if (num.length <= 3) return num;
+                if (num.length <= 6) return `${num.slice(0,3)} ${num.slice(3)}`;
+                return `${num.slice(0,3)} ${num.slice(3,6)} ${num.slice(6)}`;
+            },
+            placeholder: '555 123 4567',
+            maxLength: 12
         }
     };
 
     let currentCountryCode = '+1';
     let validationTimeout;
 
-    // International phone number formatting function
+    // Robust phone number formatting function with progressive formatting
     function formatPhoneNumber(value, countryCode = currentCountryCode) {
         const phoneNumber = value.replace(/[^\d]/g, '');
         if (phoneNumber.length === 0) return '';
@@ -353,6 +463,53 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             return phoneNumber;
         }
+    }
+
+    // Calculate cursor position after formatting
+    function calculateCursorPosition(oldValue, newValue, oldCursor, isDeleting = false) {
+        // If deleting, try to maintain relative position
+        if (isDeleting) {
+            // Find the position in the clean number
+            const cleanOld = oldValue.replace(/[^\d]/g, '');
+            const cleanNew = newValue.replace(/[^\d]/g, '');
+
+            // Count digits before cursor in old value
+            let digitsBefore = 0;
+            for (let i = 0; i < Math.min(oldCursor, oldValue.length); i++) {
+                if (/\d/.test(oldValue[i])) digitsBefore++;
+            }
+
+            // Find position after same number of digits in new value
+            let newPos = 0;
+            let digitsFound = 0;
+            for (let i = 0; i < newValue.length && digitsFound < digitsBefore; i++) {
+                if (/\d/.test(newValue[i])) digitsFound++;
+                newPos = i + 1;
+            }
+
+            return Math.min(newPos, newValue.length);
+        }
+
+        // For adding characters, place cursor after the last typed digit
+        const cleanOld = oldValue.replace(/[^\d]/g, '');
+        const cleanNew = newValue.replace(/[^\d]/g, '');
+
+        if (cleanNew.length > cleanOld.length) {
+            // Find position after the newly added digit
+            let digitCount = 0;
+            for (let i = 0; i < newValue.length; i++) {
+                if (/\d/.test(newValue[i])) {
+                    digitCount++;
+                    if (digitCount === cleanNew.length) {
+                        return i + 1;
+                    }
+                }
+            }
+        }
+
+        // Default: try to maintain relative position
+        const ratio = oldCursor / Math.max(oldValue.length, 1);
+        return Math.round(ratio * newValue.length);
     }
 
     // International phone number validation
@@ -510,45 +667,58 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Real-time international formatting and validation on input
+    // Enhanced input handler with robust formatting and cursor management
+    let isComposing = false;
+    let lastInputType = '';
+
+    phoneInput.addEventListener('compositionstart', () => { isComposing = true; });
+    phoneInput.addEventListener('compositionend', () => { isComposing = false; });
+
+    phoneInput.addEventListener('beforeinput', function(e) {
+        lastInputType = e.inputType || '';
+    });
+
     phoneInput.addEventListener('input', function(e) {
+        // Skip processing during composition (for international keyboards)
+        if (isComposing) return;
+
         const cursorPosition = e.target.selectionStart;
-        const oldValue = e.target.value;
+        const oldValue = phoneInput.dataset.lastValue || '';
         const inputValue = e.target.value;
 
-        // Handle complete clearing (backspace to empty)
+        // Store current value for next comparison
+        phoneInput.dataset.lastValue = inputValue;
+
+        // Handle complete clearing
         if (inputValue === '') {
             e.target.value = '';
             updateValidationState('neutral');
             return;
         }
 
+        // Detect if this was a deletion operation
+        const isDeleting = lastInputType.includes('delete') ||
+                          inputValue.length < oldValue.length ||
+                          inputValue.replace(/[^\d]/g, '').length < oldValue.replace(/[^\d]/g, '').length;
+
         // Format the phone number
         const newValue = formatPhoneNumber(inputValue, currentCountryCode);
-        e.target.value = newValue;
 
-        // Maintain cursor position with improved logic
-        let newCursorPosition;
-        if (newValue.length < oldValue.length) {
-            // Deleting - maintain relative position
-            newCursorPosition = Math.max(0, cursorPosition);
-        } else {
-            // Adding - adjust for formatting characters
-            newCursorPosition = Math.min(
-                cursorPosition + (newValue.length - oldValue.length),
-                newValue.length
-            );
+        // Only update if the formatted value is different
+        if (newValue !== inputValue) {
+            e.target.value = newValue;
+
+            // Calculate and set new cursor position
+            const newCursorPosition = calculateCursorPosition(oldValue, newValue, cursorPosition, isDeleting);
+
+            // Use requestAnimationFrame to ensure DOM is updated before setting cursor
+            requestAnimationFrame(() => {
+                e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+            });
         }
 
-        // Ensure cursor doesn't land on formatting characters
-        const formatChars = /[\s\-\(\)]/;
-        while (newCursorPosition > 0 && newCursorPosition < newValue.length &&
-               formatChars.test(newValue[newCursorPosition - 1]) &&
-               newCursorPosition < cursorPosition + 2) {
-            newCursorPosition++;
-        }
-
-        e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+        // Update stored value after formatting
+        phoneInput.dataset.lastValue = newValue;
 
         // Validate with debouncing
         validatePhoneWithDelay(newValue, currentCountryCode);
@@ -566,18 +736,63 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle special keys (backspace, delete) for better UX
+    // Enhanced keydown handler for better UX
     phoneInput.addEventListener('keydown', function(e) {
-        // Handle complete clearing with Ctrl+A + Delete/Backspace
-        if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
-            // Allow Ctrl+A to select all
+        // Allow navigation and selection keys
+        const allowedKeys = [
+            'Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'Home', 'End',
+            'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'
+        ];
+
+        // Allow Ctrl/Cmd combinations
+        if (e.ctrlKey || e.metaKey) {
+            const allowedCtrlKeys = ['a', 'c', 'v', 'x', 'z', 'y'];
+            if (allowedCtrlKeys.includes(e.key.toLowerCase())) {
+                return; // Allow these combinations
+            }
+        }
+
+        // Allow allowed keys
+        if (allowedKeys.includes(e.key)) {
             return;
         }
 
-        // Handle backspace/delete on empty field
-        if ((e.key === 'Backspace' || e.key === 'Delete') && e.target.value === '') {
-            updateValidationState('neutral');
+        // Allow numeric keys (both main keyboard and numpad)
+        if ((e.key >= '0' && e.key <= '9') ||
+            (e.keyCode >= 96 && e.keyCode <= 105)) {
             return;
+        }
+
+        // Block everything else
+        e.preventDefault();
+    });
+
+    // Handle paste events for better UX
+    phoneInput.addEventListener('paste', function(e) {
+        e.preventDefault();
+
+        // Get pasted content
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+
+        // Extract only digits from pasted content
+        const digits = pastedText.replace(/[^\d]/g, '');
+
+        if (digits.length > 0) {
+            // Format the pasted digits
+            const formattedValue = formatPhoneNumber(digits, currentCountryCode);
+
+            // Set the formatted value
+            e.target.value = formattedValue;
+            phoneInput.dataset.lastValue = formattedValue;
+
+            // Place cursor at the end
+            const cursorPos = formattedValue.length;
+            requestAnimationFrame(() => {
+                e.target.setSelectionRange(cursorPos, cursorPos);
+            });
+
+            // Validate the pasted content
+            validatePhoneWithDelay(formattedValue, currentCountryCode);
         }
     });
 
