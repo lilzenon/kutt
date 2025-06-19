@@ -193,7 +193,8 @@ async function homeEditor(req, res) {
 
         res.render("home-editor", {
             title: "Home Editor",
-            layout: "layouts/dashboard",
+            pageTitle: "Home Editor",
+            layout: "layouts/modern-dashboard",
             currentPage: "home-editor",
             homeSettings: homeSettings
         });
@@ -201,7 +202,8 @@ async function homeEditor(req, res) {
         console.error("Error loading home editor:", error);
         res.render("home-editor", {
             title: "Home Editor",
-            layout: "layouts/dashboard",
+            pageTitle: "Home Editor",
+            layout: "layouts/modern-dashboard",
             currentPage: "home-editor",
             homeSettings: {}
         });
