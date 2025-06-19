@@ -411,6 +411,38 @@ function registerHandlebarsHelpers() {
         }
     });
 
+    hbs.registerHelper("formatDateForInput", function(date) {
+        if (!date) return "";
+        try {
+            let parsedDate;
+
+            // Handle different date types
+            if (date instanceof Date) {
+                parsedDate = date;
+            } else if (typeof date === 'string' || typeof date === 'number') {
+                parsedDate = new Date(date);
+            } else {
+                parsedDate = parseDatetime(date);
+            }
+
+            if (!parsedDate || isNaN(parsedDate.getTime())) {
+                return "";
+            }
+
+            // Format for datetime-local input: YYYY-MM-DDTHH:MM
+            const year = parsedDate.getFullYear();
+            const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(parsedDate.getDate()).padStart(2, '0');
+            const hours = String(parsedDate.getHours()).padStart(2, '0');
+            const minutes = String(parsedDate.getMinutes()).padStart(2, '0');
+
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        } catch (error) {
+            console.error("Date formatting for input error:", error, "for date:", date);
+            return "";
+        }
+    });
+
     hbs.registerHelper("getContrastColor", function(hexColor) {
         return getContrastColor(hexColor);
     });

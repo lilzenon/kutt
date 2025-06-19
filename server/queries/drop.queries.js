@@ -548,6 +548,30 @@ function getAcquisitionChannel(referrer) {
     return 'Other';
 }
 
+// Get featured drops for homepage display
+async function getFeaturedDrops(options = {}) {
+    const { limit = 6 } = options;
+
+    const query = knex("drops")
+        .select([
+            "drops.*",
+            knex.raw("COUNT(drop_signups.id) as signup_count"),
+            knex.raw("COUNT(DISTINCT visits.id) as view_count")
+        ])
+        .leftJoin("drop_signups", "drops.id", "drop_signups.drop_id")
+        .leftJoin("visits", function() {
+            this.on("visits.link_id", "=", knex.raw("CONCAT('/drop/', drops.slug)"))
+                .orOn("visits.link_id", "=", knex.raw("CONCAT('drop/', drops.slug)"));
+        })
+        .where("drops.show_on_homepage", true)
+        .where("drops.is_active", true)
+        .groupBy("drops.id")
+        .orderBy("drops.created_at", "desc")
+        .limit(limit);
+
+    return await query;
+}
+
 module.exports = {
     create,
     find,
@@ -569,5 +593,7 @@ module.exports = {
     getFanAnalytics,
     getFanSummaryStats,
     getLocationFromIP,
-    getAcquisitionChannel
+    getAcquisitionChannel,
+    // 🏠 Homepage Features
+    getFeaturedDrops
 };

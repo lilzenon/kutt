@@ -73,6 +73,24 @@ const createDropValidation = [
     .optional()
     .isBoolean()
     .withMessage("Is active must be a boolean"),
+    body("artist_name")
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("Artist name must be less than 100 characters")
+    .trim(),
+    body("event_date")
+    .optional()
+    .isISO8601()
+    .withMessage("Event date must be a valid date"),
+    body("event_address")
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage("Event address must be less than 200 characters")
+    .trim(),
+    body("show_on_homepage")
+    .optional()
+    .isBoolean()
+    .withMessage("Show on homepage must be a boolean"),
 ];
 
 const updateDropValidation = [
@@ -418,7 +436,11 @@ function validateAndSanitizeDropData(data) {
         'spotify_link',
         'tiktok_link',
         'apple_music_url',
-        'soundcloud_url'
+        'soundcloud_url',
+        'artist_name',
+        'event_date',
+        'event_address',
+        'show_on_homepage'
     ];
 
     const sanitizedData = {};

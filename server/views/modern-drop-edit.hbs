@@ -133,6 +133,27 @@
                                         <input type="text" id="edit-button-text" name="button_text" maxlength="50" value="{{drop.button_text}}" placeholder="Get Notified" class="form-input">
                                         {{#if errors.button_text}}<p class="error">{{errors.button_text}}</p>{{/if}}
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-artist-name">Artist Name</label>
+                                        <input type="text" id="edit-artist-name" name="artist_name" maxlength="100" value="{{drop.artist_name}}" placeholder="Performing artist or creator name" class="form-input">
+                                        <small class="form-help">The name of the performing artist or event creator</small>
+                                        {{#if errors.artist_name}}<p class="error">{{errors.artist_name}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-event-date">Event Date & Time</label>
+                                        <input type="datetime-local" id="edit-event-date" name="event_date" value="{{#if drop.event_date}}{{formatDateForInput drop.event_date}}{{/if}}" class="form-input">
+                                        <small class="form-help">When the event or drop will occur</small>
+                                        {{#if errors.event_date}}<p class="error">{{errors.event_date}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-event-address">Event Address</label>
+                                        <input type="text" id="edit-event-address" name="event_address" maxlength="200" value="{{drop.event_address}}" placeholder="Venue address or location" class="form-input">
+                                        <small class="form-help">Physical location or venue address for the event</small>
+                                        {{#if errors.event_address}}<p class="error">{{errors.event_address}}</p>{{/if}}
+                                    </div>
                                 </div>
 
                                 <!-- Visual Design Section -->
@@ -292,6 +313,14 @@
                                             <span class="checkbox-text">Active Drop</span>
                                         </label>
                                         <small class="form-help">When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="edit-show-on-homepage" name="show_on_homepage" {{#if drop.show_on_homepage}}checked{{/if}} class="checkbox-input">
+                                            <span class="checkbox-text">Show on Homepage</span>
+                                        </label>
+                                        <small class="form-help">When enabled, this drop will appear as a featured card on the homepage for all visitors to see.</small>
                                     </div>
                                 </div>
                             </div>
@@ -2068,6 +2097,7 @@ function initializeFormSubmission() {
             data.is_active = formData.has('is_active');
             data.collect_email = formData.has('collect_email');
             data.collect_phone = formData.has('collect_phone');
+            data.show_on_homepage = formData.has('show_on_homepage');
 
             // CRITICAL FIX: Ensure gradient data is captured
             const gradientDataInput = document.getElementById('gradient-data');
