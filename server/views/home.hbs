@@ -306,14 +306,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const carouselPrev = document.getElementById('carouselPrev');
     const carouselNext = document.getElementById('carouselNext');
     const carouselDots = document.querySelectorAll('.carousel-dot');
-    const shareBtn2 = document.getElementById('shareBtn2');
-    const ticketsBtn2 = document.getElementById('ticketsBtn2');
 
     // Debug element selection
     console.log('🔍 Element Debug:', {
-        carouselTrack: carouselTrack,
-        carouselPrev: carouselPrev,
-        carouselNext: carouselNext,
+        carouselTrack: !!carouselTrack,
+        carouselPrev: !!carouselPrev,
+        carouselNext: !!carouselNext,
         carouselDotsCount: carouselDots.length,
         totalSlides: totalSlides
     });
@@ -786,37 +784,35 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCarousel(index);
     };
 
-    // Modal functionality for tickets
-    ticketsBtn.addEventListener('click', function() {
-        modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
-
-    // Modal functionality for second card tickets
-    if (ticketsBtn2) {
-        ticketsBtn2.addEventListener('click', function() {
-            modalOverlay.classList.add('active');
+    // Modal functionality for tickets (home settings)
+    if (ticketsBtn) {
+        ticketsBtn.addEventListener('click', function() {
+            modalOverlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         });
     }
 
-    modalClose.addEventListener('click', function() {
-        modalOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-    });
+    if (modalClose) {
+        modalClose.addEventListener('click', function() {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
 
     // Close modal when clicking outside
-    modalOverlay.addEventListener('click', function(e) {
-        if (e.target === modalOverlay) {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+    }
 
     // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-            modalOverlay.classList.remove('active');
+        if (e.key === 'Escape' && modalOverlay && modalOverlay.style.display === 'flex') {
+            modalOverlay.style.display = 'none';
             document.body.style.overflow = '';
         }
     });
@@ -859,17 +855,7 @@ document.addEventListener('DOMContentLoaded', function() {
         await handleShare(this, shareData);
     });
 
-    // Share functionality for second card
-    if (shareBtn2) {
-        shareBtn2.addEventListener('click', async function() {
-            const shareData = {
-                title: 'Summer Music Festival - Various Artists',
-                text: 'Join us for an amazing event! July 15, 2024 at Central Park, New York',
-                url: window.location.href
-            };
-            await handleShare(this, shareData);
-        });
-    }
+    // Share functionality is now handled by the dynamic event listener above
 
     // Country flags and phone patterns from live drop
     const countryFlags = {
