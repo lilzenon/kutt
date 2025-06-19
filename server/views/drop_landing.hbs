@@ -666,12 +666,115 @@
 
         .phone-input-container.valid {
             border-color: #10B981;
-            box-shadow: 0 0 0 1px #10B981;
+            box-shadow: 0 0 0 1px #10B981, 0 0 0 3px rgba(16, 185, 129, 0.1);
+            background-color: rgba(16, 185, 129, 0.05);
         }
 
         .phone-input-container.invalid {
             border-color: #EF4444;
-            box-shadow: 0 0 0 1px #EF4444;
+            box-shadow: 0 0 0 1px #EF4444, 0 0 0 3px rgba(239, 68, 68, 0.1);
+            background-color: rgba(239, 68, 68, 0.05);
+        }
+
+        .phone-input-container.loading {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 1px #3B82F6, 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Validation Icons */
+        .validation-icon {
+            position: absolute;
+            right: 100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .phone-input-container.valid .validation-icon.success {
+            opacity: 1;
+            color: #10B981;
+        }
+
+        .phone-input-container.invalid .validation-icon.error {
+            opacity: 1;
+            color: #EF4444;
+        }
+
+        .phone-input-container.loading .validation-icon.loading {
+            opacity: 1;
+            color: #3B82F6;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        /* Error shake animation */
+        .phone-input-container.shake {
+            animation: shake 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        /* Validation Messages */
+        .validation-message {
+            margin-top: 8px;
+            font-family: "Inter", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(-8px);
+            transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .validation-message.show {
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 100px;
+        }
+
+        .validation-message.error {
+            color: #EF4444;
+        }
+
+        .validation-message.success {
+            color: #10B981;
+        }
+
+        .validation-message.help {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .phone-input-container,
+            .validation-icon,
+            .validation-message {
+                transition: none;
+                animation: none;
+            }
+
+            .phone-input-container.shake {
+                animation: none;
+            }
+
+            .validation-icon.loading {
+                animation: none;
+            }
         }
 
         /* Email Input Container - Identical to Phone Input Design */
@@ -2055,8 +2158,29 @@
                                     maxlength="20"
                                     autocomplete="tel"
                                     aria-label="Phone number"
+                                    aria-describedby="phone-validation-message"
+                                    aria-invalid="false"
                                     {{#if drop.collect_phone}}required{{/if}}
                                 />
+
+                                <!-- Validation Icons -->
+                                <div class="validation-icon success" aria-hidden="true">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="validation-icon error" aria-hidden="true">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                        <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2"/>
+                                        <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div class="validation-icon loading" aria-hidden="true">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 12a9 9 0 11-6.219-8.56" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
 
                                 {{#if (and drop.collect_phone (not drop.collect_email))}}
                                 <!-- Inlaid Button for Phone-Only Mode -->
@@ -2070,6 +2194,11 @@
                                 </button>
                                 {{/if}}
                             </div>
+
+                            <!-- Phone Validation Message -->
+                            {{#if drop.collect_phone}}
+                            <div id="phone-validation-message" class="validation-message" role="alert" aria-live="polite" aria-atomic="true"></div>
+                            {{/if}}
                             {{/if}}
 
                             {{#if (and drop.collect_email (not drop.collect_phone))}}
@@ -2511,19 +2640,97 @@
                     return pattern.pattern.test(phoneNumber);
                 }
 
-                // Add visual feedback for validation
-                function updateValidationState(isValid) {
+                // Enhanced validation state management
+                let validationTimeout;
+
+                function updateValidationState(state, message = '', type = 'neutral') {
                     const container = phoneInput.closest('.phone-input-container');
-                    if (isValid) {
-                        container.style.borderColor = '#10B981';
-                        container.style.boxShadow = '0 0 0 1px #10B981';
-                    } else if (phoneInput.value.length > 0) {
-                        container.style.borderColor = '#EF4444';
-                        container.style.boxShadow = '0 0 0 1px #EF4444';
-                    } else {
-                        container.style.borderColor = '';
-                        container.style.boxShadow = '';
+                    const messageElement = document.getElementById('phone-validation-message');
+
+                    // Clear existing states
+                    container.classList.remove('valid', 'invalid', 'loading', 'shake');
+                    if (messageElement) {
+                        messageElement.classList.remove('show', 'error', 'success', 'help');
                     }
+
+                    // Set ARIA attributes
+                    phoneInput.setAttribute('aria-invalid', state === 'invalid' ? 'true' : 'false');
+
+                    // Apply new state
+                    if (state !== 'neutral') {
+                        container.classList.add(state);
+                    }
+
+                    // Show message if provided and element exists
+                    if (message && messageElement) {
+                        messageElement.textContent = message;
+                        messageElement.classList.add('show', type);
+
+                        // Auto-hide help messages after 5 seconds
+                        if (type === 'help') {
+                            setTimeout(() => {
+                                hideValidationMessage();
+                            }, 5000);
+                        }
+                    } else if (messageElement) {
+                        hideValidationMessage();
+                    }
+
+                    // Add shake animation for errors
+                    if (state === 'invalid' && type === 'error') {
+                        container.classList.add('shake');
+                        setTimeout(() => {
+                            container.classList.remove('shake');
+                        }, 400);
+                    }
+                }
+
+                function hideValidationMessage() {
+                    const messageElement = document.getElementById('phone-validation-message');
+                    if (messageElement) {
+                        messageElement.classList.remove('show', 'error', 'success', 'help');
+                    }
+                }
+
+                function showValidationMessage(message, type = 'help') {
+                    const messageElement = document.getElementById('phone-validation-message');
+                    if (messageElement) {
+                        messageElement.textContent = message;
+                        messageElement.classList.remove('error', 'success', 'help');
+                        messageElement.classList.add('show', type);
+                    }
+                }
+
+                // Debounced validation function
+                function validatePhoneWithDelay(value, countryCode) {
+                    clearTimeout(validationTimeout);
+
+                    if (value.length === 0) {
+                        updateValidationState('neutral');
+                        return;
+                    }
+
+                    // Show loading state
+                    updateValidationState('loading');
+
+                    validationTimeout = setTimeout(() => {
+                        const isValid = isValidPhoneNumber(value, countryCode);
+                        const pattern = phonePatterns[countryCode];
+                        const countryOption = document.querySelector(`option[value="${countryCode}"]`);
+                        const countryName = countryOption?.dataset.name || countryCode;
+
+                        if (isValid) {
+                            updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
+                        } else if (value.replace(/[^\d]/g, '').length > 0) {
+                            const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+                            updateValidationState('invalid',
+                                `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                                'error'
+                            );
+                        } else {
+                            updateValidationState('neutral');
+                        }
+                    }, 300); // 300ms debounce delay
                 }
 
                 // Real-time international formatting on input with auto-detection
@@ -2558,24 +2765,47 @@
                     );
                     e.target.setSelectionRange(newCursorPosition, newCursorPosition);
 
-                    // Update validation state with current country
-                    updateValidationState(isValidPhoneNumber(newValue, currentCountryCode));
+                    // Validate with debouncing
+                    validatePhoneWithDelay(newValue, currentCountryCode);
+                });
 
-                    // Hide error message when user starts typing valid input
-                    if (newValue.length > 0 && isValidPhoneNumber(newValue, currentCountryCode)) {
-                        hideError();
+                // Show help message on focus
+                phoneInput.addEventListener('focus', function(e) {
+                    e.target.closest('.phone-input-container').style.backgroundColor = 'var(--laylo-input-focus)';
+
+                    const pattern = phonePatterns[currentCountryCode];
+                    const countryOption = document.querySelector(`option[value="${currentCountryCode}"]`);
+                    const countryName = countryOption?.dataset.name || currentCountryCode;
+                    const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+
+                    if (e.target.value.length === 0) {
+                        showValidationMessage(`Enter your ${countryName} phone number (e.g., ${exampleFormat})`, 'help');
                     }
                 });
 
-                // Focus styling
-                phoneInput.addEventListener('focus', function(e) {
-                    e.target.closest('.phone-input-container').style.backgroundColor = 'var(--laylo-input-focus)';
-                });
-
-                // Blur styling and validation with international support
+                // Validate on blur
                 phoneInput.addEventListener('blur', function(e) {
                     e.target.closest('.phone-input-container').style.backgroundColor = 'var(--laylo-input-bg)';
-                    updateValidationState(isValidPhoneNumber(e.target.value, currentCountryCode));
+
+                    const value = e.target.value.trim();
+                    if (value.length > 0) {
+                        const isValid = isValidPhoneNumber(value, currentCountryCode);
+                        const pattern = phonePatterns[currentCountryCode];
+                        const countryOption = document.querySelector(`option[value="${currentCountryCode}"]`);
+                        const countryName = countryOption?.dataset.name || currentCountryCode;
+
+                        if (isValid) {
+                            updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
+                        } else {
+                            const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+                            updateValidationState('invalid',
+                                `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                                'error'
+                            );
+                        }
+                    } else {
+                        hideValidationMessage();
+                    }
                 });
 
                 // Prevent invalid characters

@@ -99,14 +99,38 @@
                         maxlength="20"
                         autocomplete="tel"
                         aria-label="Phone number"
+                        aria-describedby="phone-validation-message"
+                        aria-invalid="false"
                         required
                     />
+
+                    <!-- Validation Icons -->
+                    <div class="validation-icon success" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="validation-icon error" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2"/>
+                            <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="validation-icon loading" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12a9 9 0 11-6.219-8.56" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
 
                     <!-- Inlaid Send Button -->
                     <button type="submit" class="laylo-rsvp-button inlaid" id="sendBtn" name="send" alt="Send Message" title="Send Message">
                         SEND
                     </button>
                 </div>
+
+                <!-- Validation Message -->
+                <div id="phone-validation-message" class="validation-message" role="alert" aria-live="polite" aria-atomic="true"></div>
             </div>
 
             <!-- Disclaimer Text -->
@@ -314,6 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     let currentCountryCode = '+1';
+    let validationTimeout;
 
     // International phone number formatting function
     function formatPhoneNumber(value, countryCode = currentCountryCode) {
@@ -338,6 +363,92 @@ document.addEventListener('DOMContentLoaded', function() {
             return phoneNumber.length >= 10 && phoneNumber.length <= 15;
         }
         return pattern.pattern.test(phoneNumber);
+    }
+
+    // Enhanced validation state management
+    function updateValidationState(state, message = '', type = 'neutral') {
+        const container = phoneInput.closest('.phone-input-container');
+        const messageElement = document.getElementById('phone-validation-message');
+        const phoneInputElement = document.getElementById('phoneInput');
+
+        // Clear existing states
+        container.classList.remove('valid', 'invalid', 'loading', 'shake');
+        messageElement.classList.remove('show', 'error', 'success', 'help');
+
+        // Set ARIA attributes
+        phoneInputElement.setAttribute('aria-invalid', state === 'invalid' ? 'true' : 'false');
+
+        // Apply new state
+        if (state !== 'neutral') {
+            container.classList.add(state);
+        }
+
+        // Show message if provided
+        if (message) {
+            messageElement.textContent = message;
+            messageElement.classList.add('show', type);
+
+            // Auto-hide help messages after 5 seconds
+            if (type === 'help') {
+                setTimeout(() => {
+                    hideValidationMessage();
+                }, 5000);
+            }
+        } else {
+            hideValidationMessage();
+        }
+
+        // Add shake animation for errors
+        if (state === 'invalid' && type === 'error') {
+            container.classList.add('shake');
+            setTimeout(() => {
+                container.classList.remove('shake');
+            }, 400);
+        }
+    }
+
+    function hideValidationMessage() {
+        const messageElement = document.getElementById('phone-validation-message');
+        messageElement.classList.remove('show', 'error', 'success', 'help');
+    }
+
+    function showValidationMessage(message, type = 'help') {
+        const messageElement = document.getElementById('phone-validation-message');
+        messageElement.textContent = message;
+        messageElement.classList.remove('error', 'success', 'help');
+        messageElement.classList.add('show', type);
+    }
+
+    // Debounced validation function
+    function validatePhoneWithDelay(value, countryCode) {
+        clearTimeout(validationTimeout);
+
+        if (value.length === 0) {
+            updateValidationState('neutral');
+            return;
+        }
+
+        // Show loading state
+        updateValidationState('loading');
+
+        validationTimeout = setTimeout(() => {
+            const isValid = isValidPhoneNumber(value, countryCode);
+            const pattern = phonePatterns[countryCode];
+            const countryOption = document.querySelector(`option[value="${countryCode}"]`);
+            const countryName = countryOption?.dataset.name || countryCode;
+
+            if (isValid) {
+                updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
+            } else if (value.replace(/[^\d]/g, '').length > 0) {
+                const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+                updateValidationState('invalid',
+                    `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                    'error'
+                );
+            } else {
+                updateValidationState('neutral');
+            }
+        }, 300); // 300ms debounce delay
     }
 
     // Country selection functionality
@@ -371,10 +482,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Focus phone input after country selection for better UX
         if (phoneInput) {
             phoneInput.focus();
+
+            // Re-validate with new country if there's existing input
+            if (phoneInput.value.trim().length > 0) {
+                validatePhoneWithDelay(phoneInput.value, selectedCode);
+            }
         }
     });
 
-    // Real-time international formatting on input
+    // Real-time international formatting and validation on input
     phoneInput.addEventListener('input', function(e) {
         const cursorPosition = e.target.selectionStart;
         const oldValue = e.target.value;
@@ -388,15 +504,55 @@ document.addEventListener('DOMContentLoaded', function() {
             newValue.length
         );
         e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+
+        // Validate with debouncing
+        validatePhoneWithDelay(newValue, currentCountryCode);
     });
 
-    // Send button functionality with international validation
-    sendBtn.addEventListener('click', function() {
+    // Show help message on focus
+    phoneInput.addEventListener('focus', function(e) {
+        const pattern = phonePatterns[currentCountryCode];
+        const countryOption = document.querySelector(`option[value="${currentCountryCode}"]`);
+        const countryName = countryOption?.dataset.name || currentCountryCode;
+        const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+
+        if (e.target.value.length === 0) {
+            showValidationMessage(`Enter your ${countryName} phone number (e.g., ${exampleFormat})`, 'help');
+        }
+    });
+
+    // Validate on blur
+    phoneInput.addEventListener('blur', function(e) {
+        const value = e.target.value.trim();
+        if (value.length > 0) {
+            const isValid = isValidPhoneNumber(value, currentCountryCode);
+            const pattern = phonePatterns[currentCountryCode];
+            const countryOption = document.querySelector(`option[value="${currentCountryCode}"]`);
+            const countryName = countryOption?.dataset.name || currentCountryCode;
+
+            if (isValid) {
+                updateValidationState('valid', `✓ Valid ${countryName} phone number`, 'success');
+            } else {
+                const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+                updateValidationState('invalid',
+                    `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                    'error'
+                );
+            }
+        } else {
+            hideValidationMessage();
+        }
+    });
+
+    // Send button functionality with enhanced validation
+    sendBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
         const phoneValue = phoneInput.value.trim();
         const countryCode = currentCountryCode;
 
         if (!phoneValue) {
-            alert('Please enter a phone number');
+            updateValidationState('invalid', 'Please enter a phone number', 'error');
             phoneInput.focus();
             return;
         }
@@ -408,10 +564,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const countryName = countryOption && countryOption.dataset.name ? countryOption.dataset.name : countryCode;
             const exampleFormat = pattern ? pattern.placeholder : 'valid format';
 
-            alert(`Please enter a valid ${countryName} phone number (e.g., ${exampleFormat}).`);
+            updateValidationState('invalid',
+                `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                'error'
+            );
             phoneInput.focus();
             return;
         }
+
+        // Show loading state
+        updateValidationState('loading', 'Sending...', 'help');
 
         // Show success state
         const originalText = this.textContent;
@@ -419,13 +581,19 @@ document.addEventListener('DOMContentLoaded', function() {
         this.style.backgroundColor = '#10b981';
         this.disabled = true;
 
-        // Reset after 3 seconds
+        // Simulate success
         setTimeout(() => {
-            this.textContent = originalText;
-            this.style.backgroundColor = '';
-            this.disabled = false;
-            phoneInput.value = '';
-        }, 3000);
+            updateValidationState('valid', '✓ Message sent successfully!', 'success');
+
+            // Reset after 3 seconds
+            setTimeout(() => {
+                this.textContent = originalText;
+                this.style.backgroundColor = '';
+                this.disabled = false;
+                phoneInput.value = '';
+                updateValidationState('neutral');
+            }, 3000);
+        }, 1000);
 
         console.log('Phone submission:', { phone: phoneValue, country: countryCode });
     });
