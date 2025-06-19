@@ -294,8 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ticketsBtn2: ticketsBtn2
     });
 
-    // Simple test to verify JavaScript is running
-    alert('🚀 Carousel JavaScript loaded! Check console for debug info.');
+    // JavaScript loaded successfully
 
     // Navigation functionality
     navItems.forEach(item => {
@@ -399,6 +398,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleTouchStart(e) {
         console.log('🚀 TOUCH START EVENT FIRED!', e);
 
+        // iOS Safari: Prevent default immediately
+        e.preventDefault();
+        e.stopPropagation();
+
         if (!e.touches || e.touches.length === 0) {
             console.error('❌ No touches found in touchstart event');
             return;
@@ -470,11 +473,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        // iOS Safari: Always prevent default for any touch movement
+        e.preventDefault();
+        e.stopPropagation();
+
         // Only handle horizontal swipes for carousel
         if (isHorizontalSwipe) {
             console.log('✅ Processing horizontal swipe');
-            // Prevent default scrolling for horizontal swipes
-            e.preventDefault();
 
             const currentTranslate = -currentSlide * 100;
             const dragPercent = (deltaX / carouselTrack.offsetWidth) * 100;
@@ -498,7 +503,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleTouchEnd(e) {
-        if (!isDragging) return;
+        console.log('🏁 TOUCH END EVENT FIRED!');
+
+        // iOS Safari: Prevent default
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!isDragging) {
+            console.log('❌ Not dragging, returning');
+            return;
+        }
 
         isDragging = false;
         carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
@@ -594,43 +608,54 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Mobile browser optimized touch events
-    console.log('🔧 Setting up touch events...');
+    // iOS Safari optimized touch events
+    console.log('🔧 Setting up iOS Safari touch events...');
     console.log('carouselTrack element:', carouselTrack);
 
     if (carouselTrack) {
         console.log('✅ carouselTrack found, adding event listeners');
 
-        // Use passive: false for touchmove to allow preventDefault()
+        // iOS Safari requires specific event listener configuration
         carouselTrack.addEventListener('touchstart', handleTouchStart, {
-            passive: true,
-            capture: false
+            passive: false, // Changed to false for iOS Safari
+            capture: true   // Changed to true for iOS Safari
         });
         console.log('✅ touchstart listener added');
 
         carouselTrack.addEventListener('touchmove', handleTouchMove, {
             passive: false, // Must be false to call preventDefault()
-            capture: false
+            capture: true   // Changed to true for iOS Safari
         });
         console.log('✅ touchmove listener added');
 
         carouselTrack.addEventListener('touchend', handleTouchEnd, {
-            passive: true,
-            capture: false
+            passive: false, // Changed to false for iOS Safari
+            capture: true   // Changed to true for iOS Safari
         });
         console.log('✅ touchend listener added');
 
-        // Prevent context menu on long press (iOS Safari)
+        // iOS Safari specific event prevention
+        carouselTrack.addEventListener('touchcancel', (e) => {
+            console.log('🚫 Touch cancelled');
+            handleTouchEnd(e);
+        }, { passive: false, capture: true });
+
         carouselTrack.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-        });
+            e.stopPropagation();
+        }, { passive: false });
 
-        // Prevent text selection during swipe
         carouselTrack.addEventListener('selectstart', (e) => {
             e.preventDefault();
-        });
+            e.stopPropagation();
+        }, { passive: false });
 
-        console.log('🎯 All touch event listeners attached successfully');
+        // Prevent iOS Safari bounce scrolling
+        carouselTrack.addEventListener('touchforcechange', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        console.log('🎯 All iOS Safari touch event listeners attached successfully');
 
         // Add simple click handlers as fallback for testing
         carouselTrack.addEventListener('click', (e) => {

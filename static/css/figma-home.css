@@ -77,8 +77,11 @@ body {
     max-width: 360px;
     position: relative;
     overflow: hidden;
-    /* Allow all touch actions for carousel */
-    touch-action: manipulation;
+    /* iOS Safari specific touch handling */
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
     /* Smooth scrolling on iOS */
     -webkit-overflow-scrolling: touch;
 }
@@ -87,8 +90,11 @@ body {
     display: flex;
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
-    /* Allow touch manipulation for carousel */
-    touch-action: manipulation;
+    /* iOS Safari specific touch handling */
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .carousel-slide {
