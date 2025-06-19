@@ -1,0 +1,193 @@
+<form
+  id="home-settings-form"
+  hx-post="/api/home-settings/admin"
+  hx-encoding="multipart/form-data"
+  hx-target="#home-settings-response"
+  hx-swap="innerHTML"
+  class="home-settings-form"
+>
+  <div class="home-settings-grid">
+    <!-- Event Information Section -->
+    <div class="form-section">
+      <h4>Event Information</h4>
+      
+      <div class="form-group">
+        <label for="event_title">Event Title (max 50 characters)</label>
+        <input
+          id="event_title"
+          name="event_title"
+          type="text"
+          maxlength="50"
+          value="{{settings.event_title}}"
+          placeholder="EVENT TITLE"
+          class="form-input"
+          required
+        />
+        {{#if errors.event_title}}<p class="error">{{errors.event_title}}</p>{{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="artist_name">Artist Name (max 30 characters)</label>
+        <input
+          id="artist_name"
+          name="artist_name"
+          type="text"
+          maxlength="30"
+          value="{{settings.artist_name}}"
+          placeholder="Artist Name"
+          class="form-input"
+          required
+        />
+        {{#if errors.artist_name}}<p class="error">{{errors.artist_name}}</p>{{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="event_date">Event Date & Time</label>
+        <input
+          id="event_date"
+          name="event_date"
+          type="datetime-local"
+          value="{{settings.event_date_formatted}}"
+          class="form-input"
+          required
+        />
+        {{#if errors.event_date}}<p class="error">{{errors.event_date}}</p>{{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="event_address">Event Address (max 100 characters)</label>
+        <input
+          id="event_address"
+          name="event_address"
+          type="text"
+          maxlength="100"
+          value="{{settings.event_address}}"
+          placeholder="101 Address Drive, Asbury Park, NJ"
+          class="form-input"
+          required
+        />
+        {{#if errors.event_address}}<p class="error">{{errors.event_address}}</p>{{/if}}
+      </div>
+    </div>
+
+    <!-- Event Image Section -->
+    <div class="form-section">
+      <h4>Event Image</h4>
+      
+      <div class="form-group">
+        <label for="event_image">Upload Event Image</label>
+        <input
+          id="event_image"
+          name="event_image"
+          type="file"
+          accept="image/*"
+          class="form-input file-input"
+        />
+        <small class="form-help">Supported formats: JPG, PNG, GIF. Max size: 5MB</small>
+        {{#if errors.event_image}}<p class="error">{{errors.event_image}}</p>{{/if}}
+        
+        {{#if settings.event_image}}
+          <div class="current-image">
+            <p>Current image:</p>
+            <img src="{{settings.event_image}}" alt="Current event image" class="image-preview" />
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- Tickets Configuration Section -->
+    <div class="form-section">
+      <h4>Tickets Configuration</h4>
+      
+      <div class="form-group">
+        <label for="tickets_url">Tickets URL/iframe Source (max 500 characters)</label>
+        <input
+          id="tickets_url"
+          name="tickets_url"
+          type="url"
+          maxlength="500"
+          value="{{settings.tickets_url}}"
+          placeholder="https://embed.posh.vip/ticket-iframe/..."
+          class="form-input"
+          required
+        />
+        <small class="form-help">This URL will be used as the iframe source for the tickets modal</small>
+        {{#if errors.tickets_url}}<p class="error">{{errors.tickets_url}}</p>{{/if}}
+      </div>
+    </div>
+
+    <!-- Social Media Links Section -->
+    <div class="form-section">
+      <h4>Social Media Links</h4>
+      
+      <div class="form-group">
+        <label for="instagram_url">Instagram URL</label>
+        <input
+          id="instagram_url"
+          name="instagram_url"
+          type="url"
+          maxlength="200"
+          value="{{settings.instagram_url}}"
+          placeholder="https://instagram.com/username"
+          class="form-input"
+        />
+        {{#if errors.instagram_url}}<p class="error">{{errors.instagram_url}}</p>{{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="tiktok_url">TikTok URL</label>
+        <input
+          id="tiktok_url"
+          name="tiktok_url"
+          type="url"
+          maxlength="200"
+          value="{{settings.tiktok_url}}"
+          placeholder="https://tiktok.com/@username"
+          class="form-input"
+        />
+        {{#if errors.tiktok_url}}<p class="error">{{errors.tiktok_url}}</p>{{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="twitter_url">Twitter URL</label>
+        <input
+          id="twitter_url"
+          name="twitter_url"
+          type="url"
+          maxlength="200"
+          value="{{settings.twitter_url}}"
+          placeholder="https://twitter.com/username"
+          class="form-input"
+        />
+        {{#if errors.twitter_url}}<p class="error">{{errors.twitter_url}}</p>{{/if}}
+      </div>
+
+      <div class="form-group">
+        <label for="email_url">Email URL</label>
+        <input
+          id="email_url"
+          name="email_url"
+          type="url"
+          maxlength="200"
+          value="{{settings.email_url}}"
+          placeholder="mailto:contact@example.com"
+          class="form-input"
+        />
+        {{#if errors.email_url}}<p class="error">{{errors.email_url}}</p>{{/if}}
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">
+      <span class="btn-text">Update Home Page Settings</span>
+      <span class="btn-loader" style="display: none;">
+        {{> icons/spinner}}
+      </span>
+    </button>
+  </div>
+
+  <!-- Response Area -->
+  <div id="home-settings-response" class="form-response"></div>
+</form>

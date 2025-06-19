@@ -1,0 +1,15 @@
+<tbody>
+  {{#if error}}
+    <tr>
+      <td colspan="2" class="error-message">
+        <p class="error">{{error}}</p>
+      </td>
+    </tr>
+  {{else}}
+    <tr>
+      <td colspan="2" class="home-settings-form-container">
+        {{> admin/home_settings/form}}
+      </td>
+    </tr>
+  {{/if}}
+</tbody>

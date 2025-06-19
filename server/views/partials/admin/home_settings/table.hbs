@@ -1,0 +1,19 @@
+<table 
+  hx-get="/api/home-settings/admin"
+  hx-target="tbody"
+  hx-swap="outerHTML" 
+  hx-select="tbody"
+  hx-disinherit="*"
+  hx-sync="this:replace"
+  hx-select-oob="#total,#category-total" 
+  hx-trigger="
+    {{#if onload}}load once,{{/if}}
+    reloadMainTable from:body
+  "
+>
+  {{> admin/home_settings/thead}}
+  {{> admin/home_settings/tbody}}
+</table>
+<template>
+  <h2 id="admin-table-title" hx-swap-oob="true">Home Page Settings</h2>
+</template>

@@ -631,6 +631,71 @@ async function bannedHost(domain) {
     }
 };
 
+const updateHomeSettings = [
+    body("event_title")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage("Event title length must be between 1 and 50 characters."),
+    body("artist_name")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 30 })
+    .withMessage("Artist name length must be between 1 and 30 characters."),
+    body("event_date")
+    .optional({ nullable: true, checkFalsy: true })
+    .isISO8601()
+    .withMessage("Event date must be a valid date."),
+    body("event_address")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Event address length must be between 1 and 100 characters."),
+    body("tickets_url")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 500 })
+    .withMessage("Tickets URL length must be between 1 and 500 characters.")
+    .isURL()
+    .withMessage("Tickets URL must be a valid URL."),
+    body("instagram_url")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage("Instagram URL length must be between 1 and 200 characters.")
+    .isURL()
+    .withMessage("Instagram URL must be a valid URL."),
+    body("tiktok_url")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage("TikTok URL length must be between 1 and 200 characters.")
+    .isURL()
+    .withMessage("TikTok URL must be a valid URL."),
+    body("twitter_url")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage("Twitter URL length must be between 1 and 200 characters.")
+    .isURL()
+    .withMessage("Twitter URL must be a valid URL."),
+    body("email_url")
+    .optional({ nullable: true, checkFalsy: true })
+    .isString()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .withMessage("Email URL length must be between 1 and 200 characters.")
+    .isURL()
+    .withMessage("Email URL must be a valid URL.")
+];
+
 module.exports = {
     addDomain,
     addDomainAdmin,
@@ -660,4 +725,5 @@ module.exports = {
     signupEmailTaken,
     updateProfile,
     updateProfilePassword,
+    updateHomeSettings,
 }
