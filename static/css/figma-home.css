@@ -252,11 +252,8 @@ body {
 /* Phone Input Container - Live Drop Design */
 
 .figma-phone-container {
-    display: flex;
-    gap: 12px;
     margin-bottom: 12px;
     width: 100%;
-    align-items: stretch;
 }
 
 
@@ -273,7 +270,6 @@ body {
     width: 100%;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
-    flex: 2;
 }
 
 .phone-input-container:focus-within {
@@ -425,49 +421,64 @@ body {
 }
 
 
-/* Send Button */
+/* Inlaid Send Button - Live Drop Design */
 
-.figma-send-btn {
-    background: #00ff88;
+.laylo-rsvp-button {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    background-color: #00ff88 !important;
+    background: #00ff88 !important;
     border: none;
-    border-radius: 16px;
-    color: #000;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0 28px;
-    min-height: 48px;
-    height: 48px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    min-width: 100px;
+    min-width: 80px;
+    height: 44px;
+    border-radius: 22px;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    color: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
 }
 
-.figma-send-btn:hover {
-    background: #00e67a;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+.laylo-rsvp-button:hover {
+    text-decoration: none;
+    background-color: #00e67a !important;
+    background: #00e67a !important;
+    transform: translateY(-50%) scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
 }
 
-.figma-send-btn:active {
-    transform: translateY(0);
-    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+.laylo-rsvp-button:active {
+    transform: translateY(-50%) scale(0.98);
+    background-color: #00e67a !important;
+    background: #00e67a !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+    opacity: 0.8;
 }
 
-.figma-send-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.4);
-}
-
-.figma-send-btn:disabled {
-    opacity: 0.5;
+.laylo-rsvp-button:disabled {
+    opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
-    background: #666;
+    transform: translateY(-50%);
+    filter: none;
+}
+
+.laylo-rsvp-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.3);
 }
 
 
@@ -712,9 +723,6 @@ body {
     .figma-text-us-subtitle {
         font-size: 18px;
     }
-    .figma-phone-container {
-        gap: 16px;
-    }
     .phone-input-container {
         height: 52px;
         padding: 10px 14px;
@@ -738,12 +746,11 @@ body {
         /* Ensure flag visibility on mobile */
         min-height: 18px;
     }
-    .figma-send-btn {
-        min-height: 56px;
-        height: 56px;
-        padding: 0 36px;
-        font-size: 16px;
-        border-radius: 18px;
+    .laylo-rsvp-button {
+        height: 40px;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        min-width: 60px;
     }
     .figma-footer {
         padding: 40px 24px 120px;
@@ -825,9 +832,6 @@ body {
     .figma-text-us-subtitle {
         font-size: 20px;
     }
-    .figma-phone-container {
-        gap: 20px;
-    }
     .phone-input-container {
         height: 64px;
         padding: 16px 20px;
@@ -839,12 +843,11 @@ body {
     .country-select {
         font-size: 18px;
     }
-    .figma-send-btn {
-        min-height: 64px;
-        height: 64px;
-        padding: 0 44px;
-        font-size: 18px;
-        border-radius: 20px;
+    .laylo-rsvp-button {
+        height: 48px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        min-width: 90px;
     }
     .figma-disclaimer {
         font-size: 14px;
