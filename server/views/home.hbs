@@ -354,15 +354,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Previous slide
     function prevSlide() {
+        console.log('🔙 prevSlide() called - currentSlide:', currentSlide);
         if (currentSlide > 0) {
+            console.log('✅ Moving to slide:', currentSlide - 1);
             updateCarousel(currentSlide - 1);
+        } else {
+            console.log('❌ Already at first slide, cannot go back');
         }
     }
 
     // Next slide
     function nextSlide() {
+        console.log('🔜 nextSlide() called - currentSlide:', currentSlide);
         if (currentSlide < totalSlides - 1) {
+            console.log('✅ Moving to slide:', currentSlide + 1);
             updateCarousel(currentSlide + 1);
+        } else {
+            console.log('❌ Already at last slide, cannot go forward');
         }
     }
 
@@ -385,6 +393,13 @@ document.addEventListener('DOMContentLoaded', function() {
         isHorizontalSwipe = false;
         startTime = Date.now();
 
+        console.log('🚀 Touch Start:', {
+            startX: startX,
+            startY: startY,
+            currentSlide: currentSlide,
+            totalSlides: totalSlides
+        });
+
         // Disable transitions for immediate feedback
         carouselTrack.style.transition = 'none';
     }
@@ -402,6 +417,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Determine if this is a horizontal swipe
         if (!isHorizontalSwipe && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
             isHorizontalSwipe = true;
+            console.log('🔄 Horizontal swipe detected:', {
+                deltaX: deltaX,
+                deltaY: deltaY,
+                absDeltaX: Math.abs(deltaX),
+                absDeltaY: Math.abs(deltaY)
+            });
         }
 
         // Only handle horizontal swipes for carousel
@@ -439,26 +460,63 @@ document.addEventListener('DOMContentLoaded', function() {
             const deltaTime = Date.now() - startTime;
             const velocity = Math.abs(deltaX) / deltaTime;
 
+            // DEBUG: Log all touch end values
+            console.log('🔍 Touch End Debug:', {
+                deltaX: deltaX,
+                currentSlide: currentSlide,
+                totalSlides: totalSlides,
+                velocity: velocity,
+                deltaTime: deltaTime,
+                startX: startX,
+                currentX: currentX,
+                isHorizontalSwipe: isHorizontalSwipe
+            });
+
             // Determine swipe threshold based on distance and velocity
             const threshold = velocity > 0.5 ? 30 : 80; // Lower threshold for fast swipes
+            console.log('📏 Threshold:', threshold, 'Distance:', Math.abs(deltaX));
 
             if (Math.abs(deltaX) > threshold) {
-                if (deltaX > 0 && currentSlide > 0) {
-                    // Swiping right (previous slide)
+                console.log('✅ Swipe distance sufficient');
+
+                // More explicit condition checking
+                const swipingRight = deltaX > 0;
+                const swipingLeft = deltaX < 0;
+                const canGoBack = currentSlide > 0;
+                const canGoForward = currentSlide < totalSlides - 1;
+
+                console.log('Direction Analysis:', {
+                    swipingRight: swipingRight,
+                    swipingLeft: swipingLeft,
+                    canGoBack: canGoBack,
+                    canGoForward: canGoForward,
+                    currentSlide: currentSlide,
+                    totalSlides: totalSlides
+                });
+
+                if (swipingRight && canGoBack) {
+                    console.log('👈 Swiping right (previous slide) - calling prevSlide()');
                     prevSlide();
-                } else if (deltaX < 0 && currentSlide < totalSlides - 1) {
-                    // Swiping left (next slide)
+                } else if (swipingLeft && canGoForward) {
+                    console.log('👉 Swiping left (next slide) - calling nextSlide()');
                     nextSlide();
                 } else {
-                    // At boundary, snap back
+                    console.log('🚫 At boundary or invalid condition - snapping back');
+                    if (swipingRight && !canGoBack) {
+                        console.log('Cannot go back - already at first slide');
+                    } else if (swipingLeft && !canGoForward) {
+                        console.log('Cannot go forward - already at last slide');
+                    } else {
+                        console.log('Unknown condition');
+                    }
                     updateCarousel(currentSlide);
                 }
             } else {
-                // Didn't swipe far enough, snap back
+                console.log('❌ Swipe distance insufficient - snapping back');
                 updateCarousel(currentSlide);
             }
         } else {
-            // Not a horizontal swipe, just snap back
+            console.log('🚫 Not a horizontal swipe - snapping back');
             updateCarousel(currentSlide);
         }
 
@@ -527,6 +585,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize carousel
     updateCarousel(0, false);
+
+    // DEBUG: Add manual test buttons (temporary)
+    console.log('🧪 Debug functions available:');
+    console.log('- window.testNextSlide() - manually trigger next slide');
+    console.log('- window.testPrevSlide() - manually trigger previous slide');
+    console.log('- window.testGoToSlide(index) - go to specific slide');
+
+    window.testNextSlide = () => {
+        console.log('🧪 Manual nextSlide test');
+        nextSlide();
+    };
+
+    window.testPrevSlide = () => {
+        console.log('🧪 Manual prevSlide test');
+        prevSlide();
+    };
+
+    window.testGoToSlide = (index) => {
+        console.log('🧪 Manual goToSlide test:', index);
+        updateCarousel(index);
+    };
 
     // Modal functionality for tickets
     ticketsBtn.addEventListener('click', function() {
