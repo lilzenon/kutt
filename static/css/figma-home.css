@@ -41,7 +41,7 @@ body {
 /* Header Section */
 
 .figma-header {
-    padding: 0 0 24px 0;
+    padding: 0 0 19px 0;
     text-align: center;
     width: 100%;
 }
@@ -53,10 +53,10 @@ body {
 }
 
 .figma-logo {
-    height: 20px;
+    height: 22px;
     width: auto;
     fill: #fff;
-    max-width: 200px;
+    max-width: 220px;
 }
 
 
@@ -214,6 +214,11 @@ body {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+}
+
+.figma-share-btn svg {
+    width: 20px;
+    height: 20px;
 }
 
 .figma-share-btn:hover {
@@ -932,15 +937,15 @@ body {
         padding: 24px;
     }
     .figma-header {
-        padding: 32px 24px 40px;
+        padding: 26px 24px 32px;
     }
     .figma-logo {
-        height: 40px;
-        max-width: 320px;
+        height: 44px;
+        max-width: 352px;
     }
     .figma-main {
         padding: 0 24px 40px;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
     }
     .carousel-container {
         max-width: 480px;
@@ -1041,15 +1046,15 @@ body {
         padding: 32px;
     }
     .figma-header {
-        padding: 40px 32px 48px;
+        padding: 32px 32px 38px;
     }
     .figma-logo {
-        height: 48px;
-        max-width: 400px;
+        height: 53px;
+        max-width: 440px;
     }
     .figma-main {
         padding: 0 32px 48px;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
     }
     .carousel-container {
         max-width: 560px;
