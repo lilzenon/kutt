@@ -191,3 +191,105 @@
   <!-- Response Area -->
   <div id="home-settings-response" class="form-response"></div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('home-settings-form');
+    const fileInput = document.getElementById('event_image');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoader = submitBtn.querySelector('.btn-loader');
+
+    // File input preview
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    e.target.value = '';
+                    return;
+                }
+
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB.');
+                    e.target.value = '';
+                    return;
+                }
+
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let preview = document.querySelector('.image-preview-new');
+                    if (!preview) {
+                        const currentImage = document.querySelector('.current-image');
+                        if (currentImage) {
+                            preview = document.createElement('img');
+                            preview.className = 'image-preview image-preview-new';
+                            preview.style.marginTop = '8px';
+                            currentImage.appendChild(preview);
+                        }
+                    }
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Form submission handling
+    if (form) {
+        form.addEventListener('submit', function() {
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.style.opacity = '0';
+            btnLoader.style.display = 'block';
+            form.classList.add('form-submitting');
+        });
+
+        // Reset form state on response
+        form.addEventListener('htmx:afterRequest', function() {
+            submitBtn.disabled = false;
+            btnText.style.opacity = '1';
+            btnLoader.style.display = 'none';
+            form.classList.remove('form-submitting');
+        });
+    }
+
+    // Character count for text inputs
+    const textInputs = form.querySelectorAll('input[maxlength]');
+    textInputs.forEach(input => {
+        const maxLength = input.getAttribute('maxlength');
+        const label = input.previousElementSibling;
+
+        function updateCount() {
+            const remaining = maxLength - input.value.length;
+            const countText = ` (${remaining} characters remaining)`;
+
+            // Remove existing count
+            label.textContent = label.textContent.replace(/ \(\d+ characters remaining\)/, '');
+
+            // Add new count
+            if (remaining < maxLength) {
+                label.textContent += countText;
+            }
+
+            // Color coding
+            if (remaining < 10) {
+                label.style.color = '#dc3545';
+            } else if (remaining < 20) {
+                label.style.color = '#fd7e14';
+            } else {
+                label.style.color = '';
+            }
+        }
+
+        input.addEventListener('input', updateCount);
+        updateCount(); // Initial count
+    });
+});
+</script>

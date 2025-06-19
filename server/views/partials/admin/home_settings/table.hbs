@@ -1,11 +1,12 @@
-<table 
+<link rel="stylesheet" href="/css/admin-home-settings.css">
+<table
   hx-get="/api/home-settings/admin"
   hx-target="tbody"
-  hx-swap="outerHTML" 
+  hx-swap="outerHTML"
   hx-select="tbody"
   hx-disinherit="*"
   hx-sync="this:replace"
-  hx-select-oob="#total,#category-total" 
+  hx-select-oob="#total,#category-total"
   hx-trigger="
     {{#if onload}}load once,{{/if}}
     reloadMainTable from:body

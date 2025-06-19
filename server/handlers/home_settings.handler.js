@@ -2,45 +2,54 @@ const query = require("../queries");
 const path = require("path");
 const fs = require("fs").promises;
 
-// TODO: Configure multer for image uploads when multer is installed
-// const multer = require("multer");
-// const storage = multer.diskStorage({
-//     destination: async function(req, file, cb) {
-//         const uploadDir = path.join(__dirname, "../../static/images/home");
-//         try {
-//             await fs.mkdir(uploadDir, { recursive: true });
-//             cb(null, uploadDir);
-//         } catch (error) {
-//             cb(error);
-//         }
-//     },
-//     filename: function(req, file, cb) {
-//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//         cb(null, 'event-' + uniqueSuffix + path.extname(file.originalname));
-//     }
-// });
+// Configure multer for image uploads
+let multer, upload;
 
-// const fileFilter = (req, file, cb) => {
-//     // Accept only image files
-//     if (file.mimetype.startsWith('image/')) {
-//         cb(null, true);
-//     } else {
-//         cb(new Error('Only image files are allowed!'), false);
-//     }
-// };
+try {
+    multer = require("multer");
 
-// const upload = multer({
-//     storage: storage,
-//     fileFilter: fileFilter,
-//     limits: {
-//         fileSize: 5 * 1024 * 1024 // 5MB limit
-//     }
-// });
+    const storage = multer.diskStorage({
+        destination: async function(req, file, cb) {
+            const uploadDir = path.join(__dirname, "../../static/images/home");
+            try {
+                await fs.mkdir(uploadDir, { recursive: true });
+                cb(null, uploadDir);
+            } catch (error) {
+                cb(error);
+            }
+        },
+        filename: function(req, file, cb) {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            cb(null, 'event-' + uniqueSuffix + path.extname(file.originalname));
+        }
+    });
 
-// Temporary placeholder for upload middleware
-const upload = {
-    single: () => (req, res, next) => next()
-};
+    const fileFilter = (req, file, cb) => {
+        // Accept only image files
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed!'), false);
+        }
+    };
+
+    upload = multer({
+        storage: storage,
+        fileFilter: fileFilter,
+        limits: {
+            fileSize: 5 * 1024 * 1024 // 5MB limit
+        }
+    });
+} catch (error) {
+    console.warn('Multer not installed, file upload will be disabled:', error.message);
+    // Fallback for when multer is not installed
+    upload = {
+        single: () => (req, res, next) => {
+            console.warn('File upload attempted but multer is not installed');
+            next();
+        }
+    };
+}
 
 async function getAdmin(req, res) {
     try {
@@ -90,7 +99,7 @@ async function update(req, res) {
         if (req.isHTML) {
             res.setHeader("HX-Trigger", "reloadMainTable");
             res.render("partials/admin/home_settings/success", {
-                message: "Home page settings updated successfully"
+                message: "Home page settings updated successfully! Changes are now live on your home page."
             });
             return;
         }

@@ -633,67 +633,122 @@ async function bannedHost(domain) {
 
 const updateHomeSettings = [
     body("event_title")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 50 })
-    .withMessage("Event title length must be between 1 and 50 characters."),
+    .withMessage("Event title must be between 1 and 50 characters.")
+    .matches(/^[a-zA-Z0-9\s\-_!@#$%^&*()+={}[\]:";'<>?,./]+$/)
+    .withMessage("Event title contains invalid characters."),
+
     body("artist_name")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 30 })
-    .withMessage("Artist name length must be between 1 and 30 characters."),
+    .withMessage("Artist name must be between 1 and 30 characters.")
+    .matches(/^[a-zA-Z0-9\s\-_&]+$/)
+    .withMessage("Artist name can only contain letters, numbers, spaces, hyphens, underscores, and ampersands."),
+
     body("event_date")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isISO8601()
-    .withMessage("Event date must be a valid date."),
+    .withMessage("Event date must be a valid date and time.")
+    .custom((value) => {
+        if (value) {
+            const eventDate = new Date(value);
+            const now = new Date();
+            if (eventDate < now) {
+                throw new Error("Event date cannot be in the past.");
+            }
+        }
+        return true;
+    }),
+
     body("event_address")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 100 })
-    .withMessage("Event address length must be between 1 and 100 characters."),
+    .withMessage("Event address must be between 1 and 100 characters.")
+    .matches(/^[a-zA-Z0-9\s\-_,.'#]+$/)
+    .withMessage("Event address contains invalid characters."),
+
     body("tickets_url")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 500 })
-    .withMessage("Tickets URL length must be between 1 and 500 characters.")
-    .isURL()
-    .withMessage("Tickets URL must be a valid URL."),
+    .withMessage("Tickets URL must be between 1 and 500 characters.")
+    .isURL({ protocols: ['http', 'https'], require_protocol: true })
+    .withMessage("Tickets URL must be a valid HTTP or HTTPS URL."),
+
     body("instagram_url")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 200 })
-    .withMessage("Instagram URL length must be between 1 and 200 characters.")
-    .isURL()
-    .withMessage("Instagram URL must be a valid URL."),
+    .withMessage("Instagram URL must be between 1 and 200 characters.")
+    .isURL({ protocols: ['http', 'https'], require_protocol: true })
+    .withMessage("Instagram URL must be a valid HTTP or HTTPS URL.")
+    .custom((value) => {
+        if (value && !value.includes('instagram.com')) {
+            throw new Error("Instagram URL must be from instagram.com domain.");
+        }
+        return true;
+    }),
+
     body("tiktok_url")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 200 })
-    .withMessage("TikTok URL length must be between 1 and 200 characters.")
-    .isURL()
-    .withMessage("TikTok URL must be a valid URL."),
+    .withMessage("TikTok URL must be between 1 and 200 characters.")
+    .isURL({ protocols: ['http', 'https'], require_protocol: true })
+    .withMessage("TikTok URL must be a valid HTTP or HTTPS URL.")
+    .custom((value) => {
+        if (value && !value.includes('tiktok.com')) {
+            throw new Error("TikTok URL must be from tiktok.com domain.");
+        }
+        return true;
+    }),
+
     body("twitter_url")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 200 })
-    .withMessage("Twitter URL length must be between 1 and 200 characters.")
-    .isURL()
-    .withMessage("Twitter URL must be a valid URL."),
+    .withMessage("Twitter URL must be between 1 and 200 characters.")
+    .isURL({ protocols: ['http', 'https'], require_protocol: true })
+    .withMessage("Twitter URL must be a valid HTTP or HTTPS URL.")
+    .custom((value) => {
+        if (value && !(value.includes('twitter.com') || value.includes('x.com'))) {
+            throw new Error("Twitter URL must be from twitter.com or x.com domain.");
+        }
+        return true;
+    }),
+
     body("email_url")
-    .optional({ nullable: true, checkFalsy: true })
+    .optional({ nullable: true, checkFalsy: false })
     .isString()
     .trim()
     .isLength({ min: 1, max: 200 })
-    .withMessage("Email URL length must be between 1 and 200 characters.")
-    .isURL()
-    .withMessage("Email URL must be a valid URL.")
+    .withMessage("Email URL must be between 1 and 200 characters.")
+    .custom((value) => {
+        if (value) {
+            // Allow mailto: links or regular URLs
+            if (!value.startsWith('mailto:') && !value.match(/^https?:\/\//)) {
+                throw new Error("Email URL must be a mailto: link or a valid HTTP/HTTPS URL.");
+            }
+            if (value.startsWith('mailto:')) {
+                const email = value.replace('mailto:', '');
+                if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                    throw new Error("Invalid email address in mailto: link.");
+                }
+            }
+        }
+        return true;
+    })
 ];
 
 module.exports = {

@@ -137,15 +137,51 @@ async function resetPassword(req, res) {
 
 async function home(req, res) {
     try {
+        // Fetch home page settings from database
+        const homeSettings = await query.homeSettings.get();
+
+        // Format the date for display
+        let formattedDate = "March 29th, 9:00 P.M.";
+        if (homeSettings.event_date) {
+            const eventDate = new Date(homeSettings.event_date);
+            const options = {
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            };
+            formattedDate = eventDate.toLocaleDateString('en-US', options)
+                .replace(',', 'th,'); // Add 'th' suffix
+        }
+
         res.render("home", {
             layout: "layouts/home",
-            title: "BOUNCE2BOUNCE - Home"
+            title: "BOUNCE2BOUNCE - Home",
+            homeSettings: homeSettings,
+            formattedDate: formattedDate
         });
     } catch (error) {
         console.error("Error rendering home page:", error);
-        res.status(500).render("error", {
-            title: "Error",
-            message: "Unable to load home page"
+
+        // Fallback to default values if database fails
+        const defaultSettings = {
+            event_title: "EVENT TITLE",
+            artist_name: "Artist Name",
+            event_address: "101 Address Drive, Asbury Park, NJ",
+            event_image: null,
+            tickets_url: "https://embed.posh.vip/ticket-iframe/680fb268087c97aeac2468cb/",
+            instagram_url: null,
+            tiktok_url: null,
+            twitter_url: null,
+            email_url: null
+        };
+
+        res.render("home", {
+            layout: "layouts/home",
+            title: "BOUNCE2BOUNCE - Home",
+            homeSettings: defaultSettings,
+            formattedDate: "March 29th, 9:00 P.M."
         });
     }
 }
