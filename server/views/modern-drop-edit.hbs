@@ -92,329 +92,231 @@
                 <!-- Form Content -->
                 <form id="drop-edit-form" class="drop-form">
                     <!-- PAGE TAB CONTENT -->
-                    <div class="tab-content active p-6 space-y-6" data-tab-content="page">
-                        <!-- Details Section -->
-                        <div class="space-y-6">
-                            <div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Details</h3>
-                                <p class="text-sm text-gray-500 mb-4">Configure the basic information for your drop page</p>
+                    <div class="tab-content active" data-tab-content="page">
+                        <div class="home-settings-form">
+                            <div class="home-settings-grid">
+                                <!-- Basic Information Section -->
+                                <div class="form-section">
+                                    <h4>Basic Information</h4>
 
-                                <div class="space-y-4">
-                                    <div>
-                                        <label for="edit-title" class="block text-sm font-medium text-gray-700">Title *</label>
-                                        <input type="text" id="edit-title" name="title" required maxlength="255" value="{{drop.title}}" placeholder="Enter drop title" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                    <div class="form-group">
+                                        <label for="edit-title">Title *</label>
+                                        <input type="text" id="edit-title" name="title" required maxlength="255" value="{{drop.title}}" placeholder="Enter drop title" class="form-input">
+                                        {{#if errors.title}}<p class="error">{{errors.title}}</p>{{/if}}
                                     </div>
 
-                                    <div>
-                                        <label for="edit-subtitle" class="block text-sm font-medium text-gray-700">Subtitle</label>
-                                        <input type="text" id="edit-subtitle" name="subtitle" maxlength="500" value="{{drop.subtitle}}" placeholder="Optional subtitle text (appears below main title)" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        <p class="mt-1 text-sm text-gray-500">Appears directly underneath the main title with smaller, lighter styling</p>
+                                    <div class="form-group">
+                                        <label for="edit-subtitle">Subtitle</label>
+                                        <input type="text" id="edit-subtitle" name="subtitle" maxlength="500" value="{{drop.subtitle}}" placeholder="Optional subtitle text (appears below main title)" class="form-input">
+                                        <small class="form-help">Appears directly underneath the main title with smaller, lighter styling</small>
+                                        {{#if errors.subtitle}}<p class="error">{{errors.subtitle}}</p>{{/if}}
                                     </div>
 
-                                    <div>
-                                        <label for="edit-description" class="block text-sm font-medium text-gray-700">Description</label>
-                                        <textarea id="edit-description" name="description" rows="4" placeholder="Describe what this drop is about" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">{{drop.description}}</textarea>
+                                    <div class="form-group">
+                                        <label for="edit-description">Description</label>
+                                        <textarea id="edit-description" name="description" rows="4" placeholder="Describe what this drop is about" class="form-input">{{drop.description}}</textarea>
+                                        {{#if errors.description}}<p class="error">{{errors.description}}</p>{{/if}}
                                     </div>
 
-                                    <div>
-                                        <label for="edit-rsvp-title" class="block text-sm font-medium text-gray-700">RSVP Title</label>
-                                        <input type="text" id="edit-rsvp-title" name="rsvp_title" maxlength="30" placeholder="Get Notified" value="{{#if drop.rsvp_title}}{{drop.rsvp_title}}{{else}}Get Notified{{/if}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        <div class="mt-1 flex justify-between">
-                                            <p class="text-sm text-gray-500">Text displayed on the RSVP button/card</p>
-                                            <span id="rsvp-title-counter" class="text-sm text-gray-400">0/30</span>
+                                    <div class="form-group">
+                                        <label for="edit-slug">URL Slug</label>
+                                        <div class="slug-input-wrapper">
+                                            <span class="slug-prefix">{{domain}}/drop/</span>
+                                            <input type="text" id="edit-slug" name="slug" value="{{drop.slug}}" placeholder="my-drop" class="form-input">
                                         </div>
+                                        <small class="form-help">This will be your drop's public URL</small>
+                                        {{#if errors.slug}}<p class="error">{{errors.slug}}</p>{{/if}}
                                     </div>
 
-                                    <div>
-                                        <label for="edit-sub-header-title" class="block text-sm font-medium text-gray-700">Sub-header Title</label>
-                                        <input type="text" id="edit-sub-header-title" name="sub_header_title" maxlength="100" placeholder="About" value="{{drop.sub_header_title}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        <p class="mt-1 text-sm text-gray-500">The title that appears above the sub-header content (e.g., "About", "Details", "More Info").</p>
-                                    </div>
-
-                                    <div>
-                                        <label for="edit-sub-header" class="block text-sm font-medium text-gray-700">Sub-header Content</label>
-                                        <textarea id="edit-sub-header" name="sub_header" rows="3" placeholder="Additional details or description that appears below the card" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">{{drop.sub_header}}</textarea>
-                                        <p class="mt-1 text-sm text-gray-500">This text will appear below the signup card to provide more context or details about your drop.</p>
-                                    </div>
-
-                                    <div>
-                                        <label for="edit-slug" class="block text-sm font-medium text-gray-700">URL Slug</label>
-                                        <div class="mt-1 flex rounded-md shadow-sm">
-                                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                                                {{domain}}/drop/
-                                            </span>
-                                            <input type="text" id="edit-slug" name="slug" value="{{drop.slug}}" class="flex-1 block w-full rounded-none rounded-r-md border-gray-300 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-button-text">Button Text</label>
+                                        <input type="text" id="edit-button-text" name="button_text" maxlength="50" value="{{drop.button_text}}" placeholder="Get Notified" class="form-input">
+                                        {{#if errors.button_text}}<p class="error">{{errors.button_text}}</p>{{/if}}
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Enhanced Styling Section -->
-                            <div class="border-t border-gray-200 pt-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Styling</h3>
-                                <p class="text-sm text-gray-500 mb-4">Customize the appearance of your drop page</p>
+                                <!-- Visual Design Section -->
+                                <div class="form-section">
+                                    <h4>Visual Design</h4>
 
-                                <div class="space-y-6">
-                                    <!-- Cover Image -->
-                                    <div>
-                                        <label for="edit-cover-image" class="block text-sm font-medium text-gray-700">Cover Image URL</label>
-                                        <input type="url" id="edit-cover-image" name="cover_image" value="{{drop.cover_image}}" placeholder="https://example.com/image.jpg" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                    <div class="form-group">
+                                        <label for="edit-cover-image">Cover Image URL</label>
+                                        <input type="url" id="edit-cover-image" name="cover_image" value="{{drop.cover_image}}" placeholder="https://example.com/image.jpg" class="form-input">
+                                        <small class="form-help">Optional: Add a cover image for your drop</small>
+                                        {{#if errors.cover_image}}<p class="error">{{errors.cover_image}}</p>{{/if}}
                                     </div>
 
-                                    <!-- Background Settings -->
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Background</h4>
-                                        <div class="space-y-4">
-                                            <div>
-                                                <label for="edit-background-type" class="block text-sm font-medium text-gray-700">Background Type</label>
-                                                <select id="edit-background-type" name="background_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                                    <option value="gradient" {{#if (eq drop.background_type "gradient")}}selected{{/if}}>Gradient</option>
-                                                    <option value="solid" {{#if (eq drop.background_type "solid")}}selected{{/if}}>Solid Color</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label for="edit-background-color" class="block text-sm font-medium text-gray-700">Background Color</label>
-                                                <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                            </div>
-                                            <div>
-                                                <label for="edit-overscroll-background-color" class="block text-sm font-medium text-gray-700">
-                                                    Pull-to-Refresh Color
-                                                    <span class="block text-xs text-gray-500 font-normal mt-1">Color shown when pulling down to refresh on mobile</span>
-                                                </label>
-                                                <input type="color" id="edit-overscroll-background-color" name="overscroll_background_color" value="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                            </div>
-
-                                            <!-- Advanced Gradient Editor -->
-                                            <div id="gradient-editor" style="display: {{#if (eq drop.background_type "gradient")}}block{{else}}none{{/if}};">
-                                                <label class="block text-sm font-medium text-gray-700 mb-3">Advanced Gradient Designer</label>
-
-                                                <!-- Gradient Preview -->
-                                                <div class="mb-3">
-                                                    <div id="gradient-preview" class="w-full h-16 rounded-md border border-gray-300 shadow-sm" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
-                                                </div>
-
-                                                <!-- Gradient Controls -->
-                                                <div class="space-y-3">
-                                                    <!-- Gradient Type -->
-                                                    <div>
-                                                        <label class="block text-xs font-medium text-gray-600 mb-1">Type</label>
-                                                        <div class="flex space-x-1">
-                                                            <button type="button" id="gradient-linear" class="gradient-type-btn active flex-1 px-2 py-1 text-xs font-medium border rounded">Linear</button>
-                                                            <button type="button" id="gradient-radial" class="gradient-type-btn flex-1 px-2 py-1 text-xs font-medium border rounded">Radial</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Gradient Direction -->
-                                                    <div id="gradient-direction-section">
-                                                        <label class="block text-xs font-medium text-gray-600 mb-1">Direction</label>
-                                                        <div class="grid grid-cols-4 gap-1">
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="0">0°</button>
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="45">45°</button>
-                                                            <button type="button" class="gradient-direction-btn active px-2 py-1 text-xs border rounded" data-angle="90">90°</button>
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="135">135°</button>
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="180">180°</button>
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="225">225°</button>
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="270">270°</button>
-                                                            <button type="button" class="gradient-direction-btn px-2 py-1 text-xs border rounded" data-angle="315">315°</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Color Stops -->
-                                                    <div>
-                                                        <div class="flex items-center justify-between mb-1">
-                                                            <label class="block text-xs font-medium text-gray-600">Colors</label>
-                                                            <div class="flex space-x-1">
-                                                                <button type="button" id="add-color-stop" class="px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded hover:bg-primary-200">+</button>
-                                                                <button type="button" id="remove-color-stop" class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">-</button>
-                                                            </div>
-                                                        </div>
-                                                        <div id="color-stops-container" class="space-y-1">
-                                                            <!-- Color stops will be dynamically generated -->
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Quick Presets -->
-                                                    <div>
-                                                        <label class="block text-xs font-medium text-gray-600 mb-1">Presets</label>
-                                                        <div class="grid grid-cols-6 gap-1">
-                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #667eea 0%, #764ba2 100%)" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></button>
-                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #f093fb 0%, #f5576c 100%)" style="background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);"></button>
-                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #4facfe 0%, #00f2fe 100%)" style="background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);"></button>
-                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #43e97b 0%, #38f9d7 100%)" style="background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);"></button>
-                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #fa709a 0%, #fee140 100%)" style="background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);"></button>
-                                                            <button type="button" class="gradient-preset h-6 rounded border hover:border-primary-300" data-gradient="linear-gradient(90deg, #a8edea 0%, #fed6e3 100%)" style="background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);"></button>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- CSS Export -->
-                                                    <div>
-                                                        <label class="block text-xs font-medium text-gray-600 mb-1">CSS</label>
-                                                        <div class="flex space-x-1">
-                                                            <input type="text" id="gradient-css-output" readonly class="flex-1 px-2 py-1 text-xs border border-gray-300 rounded bg-gray-50" placeholder="Generated CSS">
-                                                            <button type="button" id="copy-gradient-css" class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Copy</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Hidden inputs for form submission -->
-                                                <input type="hidden" id="gradient-data" name="gradient_data" value="{{drop.gradient_data}}">
-
-                                                <!-- Safe JSON data for gradient loading -->
-                                                <script type="application/json" id="gradient-data-json">{{#if drop.gradient_data}}{{{drop.gradient_data}}}{{else}}null{{/if}}</script>
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-background-type">Background Type</label>
+                                        <select id="edit-background-type" name="background_type" class="form-input">
+                                            <option value="gradient" {{#if (eq drop.background_type "gradient")}}selected{{/if}}>Gradient</option>
+                                            <option value="solid" {{#if (eq drop.background_type "solid")}}selected{{/if}}>Solid Color</option>
+                                        </select>
                                     </div>
 
-                                    <!-- Card Settings -->
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Card Background</h4>
-                                        <div>
-                                            <label for="edit-card-background-type" class="block text-sm font-medium text-gray-700">Card Style</label>
-                                            <select id="edit-card-background-type" name="card_background_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                                <option value="solid_white" {{#if (eq drop.card_background_type "solid_white")}}selected{{/if}}>Solid White</option>
-                                                <option value="solid_dark" {{#if (eq drop.card_background_type "solid_dark")}}selected{{/if}}>Solid Dark</option>
-                                                <option value="translucent_light" {{#if (eq drop.card_background_type "translucent_light")}}selected{{/if}}>Translucent Light</option>
-                                                <option value="translucent_dark" {{#if (eq drop.card_background_type "translucent_dark")}}selected{{/if}}>Translucent Dark</option>
-                                            </select>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-background-color">Background Color</label>
+                                        <input type="color" id="edit-background-color" name="background_color" value="{{drop.background_color}}" class="form-input file-input">
                                     </div>
 
-                                    <!-- Text Colors -->
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Text Colors</h4>
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div>
-                                                <label for="edit-title-color" class="block text-sm font-medium text-gray-700">Title Color</label>
-                                                <input type="color" id="edit-title-color" name="title_color" value="{{drop.title_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                            </div>
-
-                                            <div>
-                                                <label for="edit-description-color" class="block text-sm font-medium text-gray-700">Subtitle Color</label>
-                                                <input type="color" id="edit-description-color" name="description_color" value="{{drop.description_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-overscroll-background-color">Pull-to-Refresh Color</label>
+                                        <input type="color" id="edit-overscroll-background-color" name="overscroll_background_color" value="{{#if drop.overscroll_background_color}}{{drop.overscroll_background_color}}{{else}}#ffffff{{/if}}" class="form-input file-input">
+                                        <small class="form-help">Color shown when pulling down to refresh on mobile</small>
                                     </div>
 
-                                    <!-- Button Settings -->
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="text-sm font-medium text-gray-900 mb-3">Button Styling</h4>
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div>
-                                                <label for="edit-button-color" class="block text-sm font-medium text-gray-700">Button Background</label>
-                                                <input type="color" id="edit-button-color" name="button_color" value="{{drop.button_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                            </div>
-
-                                            <div>
-                                                <label for="edit-button-text-color" class="block text-sm font-medium text-gray-700">Button Text Color</label>
-                                                <input type="color" id="edit-button-text-color" name="button_text_color" value="{{drop.button_text_color}}" class="mt-1 block w-full h-10 border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 modern-color-input">
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-card-background-type">Card Style</label>
+                                        <select id="edit-card-background-type" name="card_background_type" class="form-input">
+                                            <option value="solid_white" {{#if (eq drop.card_background_type "solid_white")}}selected{{/if}}>Solid White</option>
+                                            <option value="solid_dark" {{#if (eq drop.card_background_type "solid_dark")}}selected{{/if}}>Solid Dark</option>
+                                            <option value="translucent_light" {{#if (eq drop.card_background_type "translucent_light")}}selected{{/if}}>Translucent Light</option>
+                                            <option value="translucent_dark" {{#if (eq drop.card_background_type "translucent_dark")}}selected{{/if}}>Translucent Dark</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Platform Links Section -->
-                            <div class="border-t border-gray-200 pt-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Platform Links</h3>
-                                <p class="text-sm text-gray-500 mb-4">Add links to your social media and streaming platforms</p>
+                                <!-- Text & Button Colors Section -->
+                                <div class="form-section">
+                                    <h4>Text & Button Colors</h4>
 
-                                <div class="space-y-4">
-                                    <div>
-                                        <label for="edit-button-text" class="block text-sm font-medium text-gray-700">Button Text</label>
-                                        <input type="text" id="edit-button-text" name="button_text" value="{{drop.button_text}}" placeholder="Get Notified" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                    <div class="form-group">
+                                        <label for="edit-title-color">Title Color</label>
+                                        <input type="color" id="edit-title-color" name="title_color" value="{{drop.title_color}}" class="form-input file-input">
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label for="edit-website-link" class="block text-sm font-medium text-gray-700">Website</label>
-                                            <input type="url" id="edit-website-link" name="website_link" value="{{drop.website_link}}" placeholder="https://yourwebsite.com" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-instagram-link" class="block text-sm font-medium text-gray-700">Instagram</label>
-                                            <input type="url" id="edit-instagram-link" name="instagram_link" value="{{drop.instagram_link}}" placeholder="https://instagram.com/yourusername" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-description-color">Subtitle Color</label>
+                                        <input type="color" id="edit-description-color" name="description_color" value="{{drop.description_color}}" class="form-input file-input">
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label for="edit-twitter-link" class="block text-sm font-medium text-gray-700">Twitter/X</label>
-                                            <input type="url" id="edit-twitter-link" name="twitter_link" value="{{drop.twitter_link}}" placeholder="https://twitter.com/yourusername" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-spotify-link" class="block text-sm font-medium text-gray-700">Spotify URL</label>
-                                            <input type="url" id="edit-spotify-link" name="spotify_link" value="{{drop.spotify_link}}" placeholder="https://open.spotify.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-button-color">Button Background</label>
+                                        <input type="color" id="edit-button-color" name="button_color" value="{{drop.button_color}}" class="form-input file-input">
                                     </div>
 
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label for="edit-apple-music-url" class="block text-sm font-medium text-gray-700">Apple Music URL</label>
-                                            <input type="url" id="edit-apple-music-url" name="apple_music_url" value="{{drop.apple_music_url}}" placeholder="https://music.apple.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-youtube-link" class="block text-sm font-medium text-gray-700">YouTube URL</label>
-                                            <input type="url" id="edit-youtube-link" name="youtube_link" value="{{drop.youtube_link}}" placeholder="https://youtube.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label for="edit-soundcloud-url" class="block text-sm font-medium text-gray-700">SoundCloud URL</label>
-                                            <input type="url" id="edit-soundcloud-url" name="soundcloud_url" value="{{drop.soundcloud_url}}" placeholder="https://soundcloud.com/..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
-
-                                        <div>
-                                            <label for="edit-tiktok-link" class="block text-sm font-medium text-gray-700">TikTok</label>
-                                            <input type="url" id="edit-tiktok-link" name="tiktok_link" value="{{drop.tiktok_link}}" placeholder="https://tiktok.com/@yourusername" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="edit-button-text-color">Button Text Color</label>
+                                        <input type="color" id="edit-button-text-color" name="button_text_color" value="{{drop.button_text_color}}" class="form-input file-input">
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Form Collection Settings -->
-                            <div class="border-t border-gray-200 pt-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Form Collection</h3>
-                                <p class="text-sm text-gray-500 mb-4">Configure what information to collect from fans</p>
+                                <!-- Social & Platform Links Section -->
+                                <div class="form-section">
+                                    <h4>Social & Platform Links</h4>
 
-                                <div class="space-y-4">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <label for="edit-collect-email" class="text-sm font-medium text-gray-900">Collect Email</label>
-                                            <p class="text-sm text-gray-500">Require email address for signups</p>
-                                        </div>
-                                        <input type="checkbox" id="edit-collect-email" name="collect_email" {{#if drop.collect_email}}checked{{/if}} class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                    <div class="form-group">
+                                        <label for="edit-website-link">Website</label>
+                                        <input type="url" id="edit-website-link" name="website_link" value="{{drop.website_link}}" placeholder="https://yourwebsite.com" class="form-input">
+                                        {{#if errors.website_link}}<p class="error">{{errors.website_link}}</p>{{/if}}
                                     </div>
 
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <label for="edit-collect-phone" class="text-sm font-medium text-gray-900">Collect Phone</label>
-                                            <p class="text-sm text-gray-500">Require phone number for signups</p>
-                                        </div>
-                                        <input type="checkbox" id="edit-collect-phone" name="collect_phone" {{#if drop.collect_phone}}checked{{/if}} class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                    <div class="form-group">
+                                        <label for="edit-instagram-link">Instagram</label>
+                                        <input type="url" id="edit-instagram-link" name="instagram_link" value="{{drop.instagram_link}}" placeholder="https://instagram.com/yourusername" class="form-input">
+                                        {{#if errors.instagram_link}}<p class="error">{{errors.instagram_link}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-twitter-link">Twitter/X</label>
+                                        <input type="url" id="edit-twitter-link" name="twitter_link" value="{{drop.twitter_link}}" placeholder="https://twitter.com/yourusername" class="form-input">
+                                        {{#if errors.twitter_link}}<p class="error">{{errors.twitter_link}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-youtube-link">YouTube</label>
+                                        <input type="url" id="edit-youtube-link" name="youtube_link" value="{{drop.youtube_link}}" placeholder="https://youtube.com/@yourusername" class="form-input">
+                                        {{#if errors.youtube_link}}<p class="error">{{errors.youtube_link}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-spotify-link">Spotify</label>
+                                        <input type="url" id="edit-spotify-link" name="spotify_link" value="{{drop.spotify_link}}" placeholder="https://open.spotify.com/artist/..." class="form-input">
+                                        {{#if errors.spotify_link}}<p class="error">{{errors.spotify_link}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-tiktok-link">TikTok</label>
+                                        <input type="url" id="edit-tiktok-link" name="tiktok_link" value="{{drop.tiktok_link}}" placeholder="https://tiktok.com/@yourusername" class="form-input">
+                                        {{#if errors.tiktok_link}}<p class="error">{{errors.tiktok_link}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-apple-music-url">Apple Music</label>
+                                        <input type="url" id="edit-apple-music-url" name="apple_music_url" value="{{drop.apple_music_url}}" placeholder="https://music.apple.com/..." class="form-input">
+                                        {{#if errors.apple_music_url}}<p class="error">{{errors.apple_music_url}}</p>{{/if}}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-soundcloud-url">SoundCloud</label>
+                                        <input type="url" id="edit-soundcloud-url" name="soundcloud_url" value="{{drop.soundcloud_url}}" placeholder="https://soundcloud.com/..." class="form-input">
+                                        {{#if errors.soundcloud_url}}<p class="error">{{errors.soundcloud_url}}</p>{{/if}}
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Status Control -->
-                            <div class="border-t border-gray-200 pt-6">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-lg font-medium text-gray-900">Drop Status</h3>
-                                        <p class="text-sm text-gray-500">Control whether your drop is live and accessible to fans</p>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <input type="checkbox" id="edit-is-active" name="is_active" {{#if drop.is_active}}checked{{/if}} class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                        <label for="edit-is-active" class="ml-2 block text-sm text-gray-900">
-                                            Active
+                                <!-- Form Settings Section -->
+                                <div class="form-section">
+                                    <h4>Form Settings</h4>
+
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="edit-collect-email" name="collect_email" {{#if drop.collect_email}}checked{{/if}} class="checkbox-input">
+                                            <span class="checkbox-text">Collect Email Addresses</span>
                                         </label>
+                                        <small class="form-help">Required for sending notifications when the drop goes live</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="edit-collect-phone" name="collect_phone" {{#if drop.collect_phone}}checked{{/if}} class="checkbox-input">
+                                            <span class="checkbox-text">Collect Phone Numbers</span>
+                                        </label>
+                                        <small class="form-help">Optional: Collect phone numbers for SMS notifications</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="edit-thank-you-message">Thank You Message</label>
+                                        <textarea id="edit-thank-you-message" name="thank_you_message" rows="3" placeholder="Thank you for signing up! You'll be notified when this drop goes live." class="form-input">{{drop.thank_you_message}}</textarea>
+                                        <small class="form-help">Message shown after successful signup</small>
+                                        {{#if errors.thank_you_message}}<p class="error">{{errors.thank_you_message}}</p>{{/if}}
+                                    </div>
+                                </div>
+
+                                <!-- Status & Visibility Section -->
+                                <div class="form-section">
+                                    <h4>Status & Visibility</h4>
+
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="edit-is-active" name="is_active" {{#if drop.is_active}}checked{{/if}} class="checkbox-input">
+                                            <span class="checkbox-text">Active Drop</span>
+                                        </label>
+                                        <small class="form-help">When active, your drop is publicly accessible and accepts signups. When inactive, the drop URL will show a "Drop Inactive" page and block all signups.</small>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Form Actions -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="btn-text">Save Changes</span>
+                                    <span class="btn-loader" style="display: none;">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- Response Area -->
+                            <div id="drop-edit-response" class="form-response"></div>
                         </div>
                     </div>
+
+
+
+
 
                     <!-- MESSAGING TAB CONTENT -->
                     <div class="tab-content p-6" data-tab-content="messaging">
@@ -535,25 +437,6 @@
                         </div>
                     </div>
                 </form>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="mt-6 flex items-center justify-end space-x-3">
-                <!-- Debug Test Button -->
-                <button type="button" id="debug-test-btn" class="px-3 py-1 border border-gray-300 rounded text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                    🔧 Debug
-                </button>
-
-                <button type="button" id="cancel-btn" onclick="navigateBack()" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                    Cancel
-                </button>
-                <button type="submit" id="save-btn" form="drop-edit-form" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                    <span id="save-btn-text">Save Changes</span>
-                    <svg id="save-btn-spinner" class="hidden animate-spin -mr-1 ml-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
             </div>
         </div>
 
@@ -2555,6 +2438,255 @@ async function loadAnalytics() {
     }
 }
 </script>
+
+<style>
+/* Home Editor Styling Patterns for Drop Edit Page */
+
+/* Override admin form styles for modern dashboard integration */
+.home-settings-form {
+    max-width: none;
+}
+
+.home-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-section {
+    background: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.form-section h4 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-help {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.error {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+/* Slug input wrapper */
+.slug-input-wrapper {
+    display: flex;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #d1d5db;
+    transition: all 0.2s ease;
+}
+
+.slug-input-wrapper:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.slug-prefix {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f3f4f6;
+    border-right: 1px solid #d1d5db;
+    font-size: 0.875rem;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.slug-input-wrapper .form-input {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+.slug-input-wrapper .form-input:focus {
+    box-shadow: none;
+}
+
+/* Checkbox styling */
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+
+.checkbox-input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.checkbox-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Button styling */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.form-actions {
+    text-align: center;
+    padding: 1.5rem 0 0 0;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 2rem;
+}
+
+.success-message {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.error-message {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* File input styling for color pickers */
+.file-input {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    height: 3rem;
+}
+
+.file-input::-webkit-file-upload-button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    margin-right: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.file-input::-webkit-file-upload-button:hover {
+    background: #2563eb;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .home-settings-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .form-section {
+        padding: 1.25rem;
+    }
+
+    .form-actions {
+        padding: 20px 0;
+    }
+}
+
+/* Form response area */
+#drop-edit-response {
+    margin-top: 1.25rem;
+}
+
+/* Animation for form submission */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.form-submitting .btn-primary {
+    animation: pulse 1s infinite;
+}
+
+/* Focus management */
+.form-input:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .form-input {
+        border-width: 3px;
+    }
+
+    .btn-primary {
+        background: #000;
+        border: 2px solid #fff;
+    }
+}
+</style>
 
 <style>
 .tab-content {
