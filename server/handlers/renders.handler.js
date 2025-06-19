@@ -159,7 +159,8 @@ async function home(req, res) {
             layout: "layouts/home",
             title: "BOUNCE2BOUNCE - Home",
             homeSettings: homeSettings,
-            formattedDate: formattedDate
+            formattedDate: formattedDate,
+            isPreview: req.query.preview === 'true'
         });
     } catch (error) {
         console.error("Error rendering home page:", error);
@@ -181,7 +182,8 @@ async function home(req, res) {
             layout: "layouts/home",
             title: "BOUNCE2BOUNCE - Home",
             homeSettings: defaultSettings,
-            formattedDate: "March 29th, 9:00 P.M."
+            formattedDate: "March 29th, 9:00 P.M.",
+            isPreview: req.query.preview === 'true'
         });
     }
 }

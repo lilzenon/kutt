@@ -252,11 +252,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Reset form state on response
-        form.addEventListener('htmx:afterRequest', function() {
+        form.addEventListener('htmx:afterRequest', function(event) {
             submitBtn.disabled = false;
             btnText.style.opacity = '1';
             btnLoader.style.display = 'none';
             form.classList.remove('form-submitting');
+
+            // If the request was successful, refresh the preview
+            if (event.detail.xhr.status === 200) {
+                console.log('✅ Form submitted successfully, refreshing preview');
+                if (window.refreshPreview) {
+                    setTimeout(window.refreshPreview, 500);
+                }
+            }
         });
     }
 

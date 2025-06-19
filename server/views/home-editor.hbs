@@ -23,9 +23,56 @@
 </div>
 
 <!-- Home Editor Form Section -->
-<div class="bg-white shadow rounded-lg">
-    <div class="px-4 py-5 sm:p-6">
-        {{> admin/home_settings/form}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Form Section -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Home Page Content</h3>
+            {{> admin/home_settings/form}}
+        </div>
+    </div>
+
+    <!-- Live Preview Section -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Live Preview</h3>
+                <div class="flex items-center space-x-2">
+                    <button type="button" onclick="togglePreviewMode()" id="preview-mode-btn" class="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        <svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        Mobile
+                    </button>
+                    <button type="button" onclick="refreshPreview()" class="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        <svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview Container -->
+            <div id="preview-viewport" class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 desktop">
+                <div id="preview-loading" class="flex items-center justify-center h-96 text-gray-500">
+                    <div class="text-center">
+                        <svg class="mx-auto h-8 w-8 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p class="mt-2 text-sm">Loading preview...</p>
+                    </div>
+                </div>
+                <iframe id="preview-iframe" src="/home?preview=true" class="w-full h-96 border-0 hidden"></iframe>
+            </div>
+
+            <!-- Preview Info -->
+            <div class="mt-3 flex items-center justify-between text-xs text-gray-500">
+                <span>Updates automatically as you type</span>
+                <span id="preview-status" class="text-green-600">Connected</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -209,19 +256,381 @@
 </style>
 
 <script>
+// Home Editor Live Preview System
+let previewIframe;
+let previewDocument;
+let previewMode = 'desktop';
+let updateTimeout;
+
+// Form input elements
+let eventTitleInput, artistNameInput, eventDateInput, eventAddressInput;
+let ticketsUrlInput, instagramUrlInput, tiktokUrlInput, twitterUrlInput, emailUrlInput;
+let eventImageInput;
+
+// Preview elements (will be found in iframe)
+let previewEventTitle, previewArtistName, previewEventDate, previewEventAddress;
+let previewEventImage, previewTicketsButton;
+let previewInstagramLink, previewTiktokLink, previewTwitterLink, previewEmailLink;
+
 // Initialize the home editor page
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🏠 Home Editor page initializing...');
+
     // Set the current page for navigation highlighting
     window.currentPage = 'home-editor';
-    
-    // Update navigation active states
-    document.querySelectorAll('.laylo-nav-item, .laylo-mobile-nav-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('href') === '/home-editor') {
-            item.classList.add('active');
+
+    // Initialize form elements
+    initializeFormElements();
+
+    // Initialize preview system
+    initializePreviewSystem();
+
+    // Initialize real-time updates
+    initializeRealTimeUpdates();
+
+    console.log('✅ Home Editor page initialized');
+});
+
+function initializeFormElements() {
+    // Get form input elements
+    eventTitleInput = document.getElementById('event_title');
+    artistNameInput = document.getElementById('artist_name');
+    eventDateInput = document.getElementById('event_date');
+    eventAddressInput = document.getElementById('event_address');
+    ticketsUrlInput = document.getElementById('tickets_url');
+    instagramUrlInput = document.getElementById('instagram_url');
+    tiktokUrlInput = document.getElementById('tiktok_url');
+    twitterUrlInput = document.getElementById('twitter_url');
+    emailUrlInput = document.getElementById('email_url');
+    eventImageInput = document.getElementById('event_image');
+
+    console.log('📝 Form elements initialized:', {
+        eventTitle: !!eventTitleInput,
+        artistName: !!artistNameInput,
+        eventDate: !!eventDateInput,
+        eventAddress: !!eventAddressInput,
+        ticketsUrl: !!ticketsUrlInput,
+        socialLinks: !!(instagramUrlInput && tiktokUrlInput && twitterUrlInput && emailUrlInput),
+        eventImage: !!eventImageInput
+    });
+}
+
+function initializePreviewSystem() {
+    previewIframe = document.getElementById('preview-iframe');
+    const previewLoading = document.getElementById('preview-loading');
+
+    if (!previewIframe) {
+        console.error('❌ Preview iframe not found');
+        return;
+    }
+
+    // Handle iframe load
+    previewIframe.addEventListener('load', function() {
+        console.log('🖼️ Preview iframe loaded');
+
+        try {
+            // Try to access iframe content
+            previewDocument = previewIframe.contentDocument || previewIframe.contentWindow.document;
+
+            if (previewDocument) {
+                // Find preview elements in the iframe
+                findPreviewElements();
+
+                // Hide loading, show iframe
+                previewLoading.classList.add('hidden');
+                previewIframe.classList.remove('hidden');
+
+                // Update preview with current form values
+                updatePreviewContent();
+
+                // Update status
+                updatePreviewStatus('Connected', 'text-green-600');
+
+                console.log('✅ Preview system connected successfully');
+            } else {
+                throw new Error('Cannot access iframe document');
+            }
+        } catch (error) {
+            console.warn('⚠️ Preview iframe access restricted:', error.message);
+            console.log('🔄 Using refresh-based preview updates');
+
+            // Hide loading, show iframe anyway
+            previewLoading.classList.add('hidden');
+            previewIframe.classList.remove('hidden');
+
+            // Update status
+            updatePreviewStatus('Refresh Mode', 'text-yellow-600');
         }
     });
-    
-    console.log('Home Editor page initialized');
-});
+
+    // Handle iframe error
+    previewIframe.addEventListener('error', function() {
+        console.error('❌ Preview iframe failed to load');
+        updatePreviewStatus('Error', 'text-red-600');
+    });
+
+    // Initial load
+    if (previewIframe.src) {
+        setTimeout(() => {
+            if (previewIframe.classList.contains('hidden')) {
+                console.log('🔄 Iframe taking too long, showing anyway');
+                previewLoading.classList.add('hidden');
+                previewIframe.classList.remove('hidden');
+            }
+        }, 3000);
+    }
+}
+
+function findPreviewElements() {
+    if (!previewDocument) return;
+
+    // Find elements in the home page preview
+    previewEventTitle = previewDocument.querySelector('.figma-event-title, .event-title, h1');
+    previewArtistName = previewDocument.querySelector('.figma-artist-name, .artist-name');
+    previewEventDate = previewDocument.querySelector('.figma-event-date, .event-date');
+    previewEventAddress = previewDocument.querySelector('.figma-event-address, .event-address');
+    previewEventImage = previewDocument.querySelector('.figma-event-image, .event-image, .hero-image img');
+    previewTicketsButton = previewDocument.querySelector('.figma-tickets-button, .tickets-button, .cta-button');
+
+    // Social media links
+    previewInstagramLink = previewDocument.querySelector('a[href*="instagram"]');
+    previewTiktokLink = previewDocument.querySelector('a[href*="tiktok"]');
+    previewTwitterLink = previewDocument.querySelector('a[href*="twitter"], a[href*="x.com"]');
+    previewEmailLink = previewDocument.querySelector('a[href*="mailto"], a[href*="email"]');
+
+    console.log('🔍 Preview elements found:', {
+        eventTitle: !!previewEventTitle,
+        artistName: !!previewArtistName,
+        eventDate: !!previewEventDate,
+        eventAddress: !!previewEventAddress,
+        eventImage: !!previewEventImage,
+        ticketsButton: !!previewTicketsButton,
+        socialLinks: {
+            instagram: !!previewInstagramLink,
+            tiktok: !!previewTiktokLink,
+            twitter: !!previewTwitterLink,
+            email: !!previewEmailLink
+        }
+    });
+}
+
+function initializeRealTimeUpdates() {
+    // Add event listeners for real-time updates
+    if (eventTitleInput) {
+        eventTitleInput.addEventListener('input', debounceUpdate(updatePreviewContent, 300));
+    }
+    if (artistNameInput) {
+        artistNameInput.addEventListener('input', debounceUpdate(updatePreviewContent, 300));
+    }
+    if (eventDateInput) {
+        eventDateInput.addEventListener('input', debounceUpdate(updatePreviewContent, 300));
+    }
+    if (eventAddressInput) {
+        eventAddressInput.addEventListener('input', debounceUpdate(updatePreviewContent, 300));
+    }
+    if (ticketsUrlInput) {
+        ticketsUrlInput.addEventListener('input', debounceUpdate(updatePreviewContent, 500));
+    }
+    if (instagramUrlInput) {
+        instagramUrlInput.addEventListener('input', debounceUpdate(updatePreviewContent, 500));
+    }
+    if (tiktokUrlInput) {
+        tiktokUrlInput.addEventListener('input', debounceUpdate(updatePreviewContent, 500));
+    }
+    if (twitterUrlInput) {
+        twitterUrlInput.addEventListener('input', debounceUpdate(updatePreviewContent, 500));
+    }
+    if (emailUrlInput) {
+        emailUrlInput.addEventListener('input', debounceUpdate(updatePreviewContent, 500));
+    }
+    if (eventImageInput) {
+        eventImageInput.addEventListener('change', debounceUpdate(updatePreviewContent, 500));
+    }
+
+    console.log('🔄 Real-time updates initialized');
+}
+
+function updatePreviewContent() {
+    try {
+        if (!previewDocument) {
+            console.log('📱 No direct iframe access, using refresh method');
+            refreshPreview();
+            return;
+        }
+
+        // Update event title
+        if (previewEventTitle && eventTitleInput) {
+            previewEventTitle.textContent = eventTitleInput.value || 'EVENT TITLE';
+        }
+
+        // Update artist name
+        if (previewArtistName && artistNameInput) {
+            previewArtistName.textContent = artistNameInput.value || 'Artist Name';
+        }
+
+        // Update event date
+        if (previewEventDate && eventDateInput) {
+            if (eventDateInput.value) {
+                const date = new Date(eventDateInput.value);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                previewEventDate.textContent = formattedDate;
+            } else {
+                previewEventDate.textContent = 'March 29th, 9:00 P.M.';
+            }
+        }
+
+        // Update event address
+        if (previewEventAddress && eventAddressInput) {
+            previewEventAddress.textContent = eventAddressInput.value || '101 Address Drive, Asbury Park, NJ';
+        }
+
+        // Update tickets button
+        if (previewTicketsButton && ticketsUrlInput) {
+            if (ticketsUrlInput.value) {
+                previewTicketsButton.href = ticketsUrlInput.value;
+                previewTicketsButton.style.display = 'inline-flex';
+            } else {
+                previewTicketsButton.style.display = 'none';
+            }
+        }
+
+        // Update social media links
+        updateSocialMediaLinks();
+
+        console.log('📝 Preview content updated via direct manipulation');
+        updatePreviewStatus('Updated', 'text-green-600');
+
+    } catch (error) {
+        console.warn('⚠️ Direct preview update failed:', error.message);
+        console.log('🔄 Falling back to refresh method');
+        refreshPreview();
+    }
+}
+
+function updateSocialMediaLinks() {
+    // Update Instagram link
+    if (previewInstagramLink && instagramUrlInput) {
+        if (instagramUrlInput.value) {
+            previewInstagramLink.href = instagramUrlInput.value;
+            previewInstagramLink.style.display = 'inline-flex';
+        } else {
+            previewInstagramLink.style.display = 'none';
+        }
+    }
+
+    // Update TikTok link
+    if (previewTiktokLink && tiktokUrlInput) {
+        if (tiktokUrlInput.value) {
+            previewTiktokLink.href = tiktokUrlInput.value;
+            previewTiktokLink.style.display = 'inline-flex';
+        } else {
+            previewTiktokLink.style.display = 'none';
+        }
+    }
+
+    // Update Twitter link
+    if (previewTwitterLink && twitterUrlInput) {
+        if (twitterUrlInput.value) {
+            previewTwitterLink.href = twitterUrlInput.value;
+            previewTwitterLink.style.display = 'inline-flex';
+        } else {
+            previewTwitterLink.style.display = 'none';
+        }
+    }
+
+    // Update Email link
+    if (previewEmailLink && emailUrlInput) {
+        if (emailUrlInput.value) {
+            previewEmailLink.href = emailUrlInput.value;
+            previewEmailLink.style.display = 'inline-flex';
+        } else {
+            previewEmailLink.style.display = 'none';
+        }
+    }
+}
+
+function refreshPreview() {
+    const iframe = document.getElementById('preview-iframe');
+    if (!iframe) return;
+
+    console.log('🔄 Refreshing preview...');
+    updatePreviewStatus('Refreshing...', 'text-yellow-600');
+
+    // Add cache busting parameter
+    const url = new URL('/home', window.location.origin);
+    url.searchParams.set('preview', 'true');
+    url.searchParams.set('t', Date.now());
+
+    iframe.src = url.toString();
+
+    // Update status after a delay
+    setTimeout(() => {
+        updatePreviewStatus('Refreshed', 'text-green-600');
+    }, 1000);
+}
+
+function togglePreviewMode() {
+    const viewport = document.getElementById('preview-viewport');
+    const iframe = document.getElementById('preview-iframe');
+    const button = document.getElementById('preview-mode-btn');
+
+    if (previewMode === 'desktop') {
+        // Switch to mobile
+        previewMode = 'mobile';
+        viewport.classList.remove('desktop');
+        viewport.classList.add('mobile');
+        iframe.style.width = '375px';
+        iframe.style.height = '667px';
+        iframe.style.margin = '0 auto';
+        button.innerHTML = `
+            <svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Desktop
+        `;
+        console.log('📱 Switched to mobile preview');
+    } else {
+        // Switch to desktop
+        previewMode = 'desktop';
+        viewport.classList.remove('mobile');
+        viewport.classList.add('desktop');
+        iframe.style.width = '100%';
+        iframe.style.height = '600px';
+        iframe.style.margin = '0';
+        button.innerHTML = `
+            <svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            Mobile
+        `;
+        console.log('🖥️ Switched to desktop preview');
+    }
+}
+
+function updatePreviewStatus(message, className) {
+    const status = document.getElementById('preview-status');
+    if (status) {
+        status.textContent = message;
+        status.className = className;
+    }
+}
+
+function debounceUpdate(func, delay) {
+    return function(...args) {
+        clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+// Global functions for buttons
+window.refreshPreview = refreshPreview;
+window.togglePreviewMode = togglePreviewMode;
 </script>
