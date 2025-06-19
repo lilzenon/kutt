@@ -310,11 +310,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Debug element selection
     console.log('🔍 Element Debug:', {
         carouselTrack: !!carouselTrack,
+        carouselTrackElement: carouselTrack,
         carouselPrev: !!carouselPrev,
         carouselNext: !!carouselNext,
         carouselDotsCount: carouselDots.length,
         totalSlides: totalSlides
     });
+
+    // Carousel track validation
+    if (!carouselTrack) {
+        console.error('❌ Carousel track NOT found! Touch functionality will not work.');
+        return;
+    }
 
     // Handle dynamic share and tickets buttons
     document.addEventListener('click', function(e) {
@@ -687,7 +694,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('carouselTrack element:', carouselTrack);
 
     if (carouselTrack) {
-        console.log('✅ carouselTrack found, adding document-level event listeners');
+        console.log('✅ Attaching touch event listeners for carousel swipe functionality');
 
         // iOS Safari Fix: Use document-level event delegation
         document.addEventListener('touchstart', function(e) {
@@ -724,12 +731,16 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
         }, { passive: false });
 
-        // iOS Safari specific: Prevent default on the element itself
-        carouselTrack.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-        }, { passive: false });
+        // Note: Removed direct touchstart preventDefault to avoid conflicts with document-level event delegation
 
         console.log('🎯 All iOS Safari touch event listeners attached successfully');
+
+        // Test touch event detection
+        console.log('🧪 Testing touch event detection...');
+        const testTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        console.log('📱 Touch support detected:', testTouch);
+
+        // Touch events are handled by document-level event delegation above
 
         // Add simple click handlers as fallback for testing
         carouselTrack.addEventListener('click', (e) => {
