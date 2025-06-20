@@ -75,9 +75,6 @@ body {
 .carousel-slide {
     flex: 0 0 100%;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
     /* Prevent text selection during swipe */
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -98,7 +95,6 @@ body {
     padding: 0;
     width: 100%;
     max-width: 360px;
-    margin: 0 auto;
     overflow: hidden;
     border: 1px solid #333;
     position: relative;
@@ -269,27 +265,22 @@ body {
 }
 
 
-/* Figma Button Base Styles */
+/* Drop Button Styles - Match existing figma-tickets-btn and figma-share-btn */
 
 .figma-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    text-decoration: none;
-    border: none;
-    border-radius: 16px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    min-height: 48px;
-    padding: 12px 24px;
-    font-size: 16px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 .figma-btn:focus {
@@ -302,9 +293,12 @@ body {
 }
 
 .figma-btn-primary {
-    background: #ff3333;
-    color: #fff;
     flex: 1;
+    height: 48px;
+    background: #ff3333;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 16px;
 }
 
 .figma-btn-primary:hover {
@@ -318,14 +312,14 @@ body {
 }
 
 .figma-btn-secondary {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.9);
-    min-width: 48px;
-    height: 48px;
-    min-height: 48px;
-    padding: 12px 16px;
-    border-radius: 16px;
+    font-size: 14px;
+    padding: 0;
 }
 
 .figma-btn-secondary:hover {
@@ -1132,22 +1126,6 @@ body {
         font-size: 18px;
         border-radius: 18px;
     }
-    .figma-btn {
-        min-height: 56px;
-        padding: 14px 24px;
-        font-size: 18px;
-        border-radius: 18px;
-    }
-    .figma-btn-primary {
-        height: 56px;
-    }
-    .figma-btn-secondary {
-        min-width: 56px;
-        height: 56px;
-        min-height: 56px;
-        padding: 14px 18px;
-        border-radius: 18px;
-    }
     .figma-text-us {
         padding: 30px 24px;
         margin: 0 24px;
@@ -1269,22 +1247,6 @@ body {
     .figma-tickets-btn {
         height: 64px;
         font-size: 20px;
-        border-radius: 20px;
-    }
-    .figma-btn {
-        min-height: 64px;
-        padding: 18px 32px;
-        font-size: 20px;
-        border-radius: 20px;
-    }
-    .figma-btn-primary {
-        height: 64px;
-    }
-    .figma-btn-secondary {
-        min-width: 64px;
-        height: 64px;
-        min-height: 64px;
-        padding: 18px 24px;
         border-radius: 20px;
     }
     .figma-text-us {
