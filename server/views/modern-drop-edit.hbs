@@ -2288,6 +2288,28 @@ function initializeFormSubmission() {
 
                 showToast('✅ Drop styling updated successfully!', 'success');
 
+                // 🚀 CHECK FOR HOMEPAGE REFRESH NEEDED
+                if (result.homepageRefreshNeeded) {
+                    console.log('🏠 Homepage refresh needed - show_on_homepage toggle changed');
+                    showToast('🔄 Homepage updated with your changes!', 'info', 3000);
+
+                    // Try to refresh homepage if it's open in another tab
+                    try {
+                        // Use BroadcastChannel API to communicate with homepage
+                        if (typeof BroadcastChannel !== 'undefined') {
+                            const channel = new BroadcastChannel('homepage-updates');
+                            channel.postMessage({
+                                type: 'refresh-cards',
+                                dropId: parseInt('{{drop.id}}'),
+                                timestamp: Date.now()
+                            });
+                            console.log('📡 Sent homepage refresh message via BroadcastChannel');
+                        }
+                    } catch (broadcastError) {
+                        console.warn('⚠️ BroadcastChannel not available:', broadcastError.message);
+                    }
+                }
+
                 // Refresh preview after a short delay
                 setTimeout(() => {
                     console.log('🔄 Refreshing preview...');

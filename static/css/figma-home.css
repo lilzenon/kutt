@@ -920,6 +920,7 @@ body {
 }
 
 .carousel-dot {
+    /* Original dot styling - will be overridden by enhanced version below */
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -944,6 +945,70 @@ body {
     outline: 2px solid #00ff88;
     outline-offset: 2px;
 }
+
+
+/* 🚀 ENHANCED MOBILE TOUCH SUPPORT */
+
+.carousel-container {
+    /* iOS Safari Fix: Prevent momentum scrolling conflicts */
+    -webkit-overflow-scrolling: auto;
+    /* Enhanced touch action for better swipe detection */
+    touch-action: pan-y pinch-zoom;
+    /* Prevent text selection during swipe */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* Prevent context menu on long press */
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.carousel-track {
+    /* Enhanced GPU acceleration for smoother animations */
+    will-change: transform;
+    /* Prevent subpixel rendering issues */
+    transform-style: preserve-3d;
+    /* iOS Safari Fix: Force hardware acceleration */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Better touch handling */
+    touch-action: pan-y pinch-zoom;
+}
+
+.figma-event-card {
+    /* Prevent image dragging during swipe */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    /* Prevent text selection */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* Enhanced rendering */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.figma-event-image img {
+    /* Prevent image dragging */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    /* Prevent context menu */
+    -webkit-touch-callout: none;
+}
+
+
+/* Enhanced button touch targets for mobile */
+
+
+/* Note: Carousel dots use the original styling above for consistency */
 
 
 /* Responsive Design */

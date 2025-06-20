@@ -133,9 +133,50 @@ async function get(req, res) {
     }
 }
 
+// 🚀 GET COMPLETE HOMEPAGE DATA FOR REFRESH
+async function getHomepageData(req, res) {
+    try {
+        console.log('🔄 Fetching complete homepage data for refresh...');
+
+        // Get home settings
+        const homeSettings = await query.homeSettings.get();
+
+        // Get featured drops
+        const featuredDrops = await query.drop.getFeaturedDrops({ limit: 6 });
+
+        // Format the date for display
+        let formattedDate = "March 29th, 9:00 P.M.";
+        if (homeSettings.event_date) {
+            const eventDate = new Date(homeSettings.event_date);
+            const options = {
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            };
+            formattedDate = eventDate.toLocaleDateString('en-US', options)
+                .replace(',', 'th,'); // Add 'th' suffix
+        }
+
+        console.log(`✅ Homepage data refreshed: ${featuredDrops.length} featured drops`);
+
+        return res.status(200).send({
+            homeSettings,
+            featuredDrops,
+            formattedDate,
+            totalCards: 1 + featuredDrops.length // 1 default + featured drops
+        });
+    } catch (error) {
+        console.error("Error fetching homepage data:", error);
+        return res.status(500).send({ error: "Failed to load homepage data" });
+    }
+}
+
 module.exports = {
     getAdmin,
     update,
     get,
+    getHomepageData,
     upload
 };

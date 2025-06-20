@@ -374,14 +374,44 @@ async function updateDrop(req, res) {
 
         console.log(`🔄 Updating drop ${id} with data:`, Object.keys(sanitizedData));
 
+        // 🚀 DETECT HOMEPAGE TOGGLE CHANGES FOR REAL-TIME UPDATES
+        const homepageToggleChanged = 'show_on_homepage' in sanitizedData &&
+            sanitizedData.show_on_homepage !== existingDrop.show_on_homepage;
+
+        if (homepageToggleChanged) {
+            console.log(`🏠 Homepage toggle changed for drop ${id}: ${existingDrop.show_on_homepage} → ${sanitizedData.show_on_homepage}`);
+        }
+
         const updatedDrop = await drop.update(id, sanitizedData);
         const dropWithStats = await drop.findWithStats({ id: updatedDrop.id });
 
         console.log(`✅ Drop ${id} updated successfully`);
 
+        // 🚀 TRIGGER HOMEPAGE REFRESH IF TOGGLE CHANGED
+        if (homepageToggleChanged) {
+            try {
+                // Broadcast homepage refresh event to all connected clients
+                const io = req.app.get('io'); // Socket.io instance
+                if (io) {
+                    console.log(`📡 Broadcasting homepage refresh event...`);
+                    io.emit('homepage-refresh', {
+                        action: sanitizedData.show_on_homepage ? 'card-added' : 'card-removed',
+                        dropId: parseInt(id),
+                        dropData: sanitizedData.show_on_homepage ? dropWithStats : null
+                    });
+                } else {
+                    console.log(`⚠️ Socket.io not available - skipping real-time update`);
+                }
+            } catch (broadcastError) {
+                console.warn(`⚠️ Failed to broadcast homepage refresh:`, broadcastError.message);
+                // Don't fail the update if broadcast fails
+            }
+        }
+
         res.json({
             success: true,
-            data: dropWithStats
+            data: dropWithStats,
+            homepageRefreshNeeded: homepageToggleChanged // Flag for client-side handling
         });
     } catch (error) {
         console.error(`❌ Error updating drop ${id}:`, error);

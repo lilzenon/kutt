@@ -430,6 +430,89 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`🏠 Homepage loaded with ${totalSlides} total slides`);
     }
 
+    // 🚀 CAROUSEL REINITIALIZATION FOR DYNAMIC CARD UPDATES
+    function reinitializeCarousel(newTotalSlides) {
+        console.log(`🔄 Reinitializing carousel: ${totalSlides} → ${newTotalSlides} slides`);
+
+        const oldTotalSlides = totalSlides;
+        totalSlides = newTotalSlides;
+
+        // Update carousel track width
+        if (carouselTrack && totalSlides > 0) {
+            const trackWidth = totalSlides * 100;
+            carouselTrack.style.width = `${trackWidth}%`;
+            console.log(`🎨 Updated carousel track width to ${trackWidth}%`);
+        }
+
+        // Regenerate dots
+        generateCarouselDots();
+
+        // Adjust current slide if necessary
+        if (currentSlide >= totalSlides) {
+            currentSlide = Math.max(0, totalSlides - 1);
+            console.log(`📍 Adjusted current slide to ${currentSlide}`);
+        }
+
+        // Update carousel position
+        updateCarousel(currentSlide, false);
+
+        console.log(`✅ Carousel reinitialized successfully`);
+    }
+
+    // 🚀 REFRESH HOMEPAGE CARDS FROM SERVER
+    async function refreshHomepageCards() {
+        try {
+            console.log('🔄 Refreshing homepage cards from server...');
+
+            const response = await fetch('/api/home-settings/refresh');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('📦 Received homepage data:', data);
+
+            // Update the carousel with new data
+            await updateCarouselWithNewData(data);
+
+            console.log('✅ Homepage cards refreshed successfully');
+        } catch (error) {
+            console.error('❌ Failed to refresh homepage cards:', error);
+        }
+    }
+
+    // 🚀 UPDATE CAROUSEL WITH NEW DATA
+    async function updateCarouselWithNewData(data) {
+        const { homeSettings, featuredDrops, formattedDate, totalCards } = data;
+
+        console.log(`🎯 Updating carousel with ${totalCards} total cards`);
+
+        // Get carousel track
+        const track = document.getElementById('carouselTrack');
+        if (!track) {
+            console.error('❌ Carousel track not found');
+            return;
+        }
+
+        // Clear existing slides
+        track.innerHTML = '';
+
+        // Add home settings card (always first)
+        if (homeSettings.event_title) {
+            const homeCard = createHomeSettingsCard(homeSettings, formattedDate);
+            track.appendChild(homeCard);
+        }
+
+        // Add featured drops cards
+        featuredDrops.forEach((drop, index) => {
+            const dropCard = createDropCard(drop, index + 1);
+            track.appendChild(dropCard);
+        });
+
+        // Reinitialize carousel
+        reinitializeCarousel(totalCards);
+    }
+
     // Generate dots after DOM is ready
     generateCarouselDots();
 
@@ -512,7 +595,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Don't preventDefault here - let the browser handle page scrolling initially
+        // iOS Safari Fix: Only handle single touch
+        if (e.touches.length > 1) {
+            console.log('🚫 Multi-touch detected, ignoring');
+            return;
+        }
 
         const touch = e.touches[0];
         startX = touch.clientX;
@@ -531,11 +618,15 @@ document.addEventListener('DOMContentLoaded', function() {
             touchesLength: e.touches.length,
             target: e.target,
             touchClientX: touch.clientX,
-            touchClientY: touch.clientY
+            touchClientY: touch.clientY,
+            userAgent: navigator.userAgent.includes('Safari') ? 'Safari' : 'Other'
         });
 
         // Disable transitions for immediate feedback
         carouselTrack.style.transition = 'none';
+
+        // iOS Safari Fix: Add touch-action CSS to prevent default behaviors
+        carouselTrack.style.touchAction = 'pan-y pinch-zoom';
     }
 
     function handleTouchMove(e) {
@@ -551,6 +642,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!e.touches || e.touches.length === 0) {
             console.error('❌ No touches found in touchmove event');
+            return;
+        }
+
+        // iOS Safari Fix: Only handle single touch
+        if (e.touches.length > 1) {
+            console.log('🚫 Multi-touch detected during move, cancelling');
+            isDragging = false;
+            carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
+            updateCarousel(currentSlide);
             return;
         }
 
@@ -571,22 +671,26 @@ document.addEventListener('DOMContentLoaded', function() {
             isHorizontalSwipe: isHorizontalSwipe
         });
 
-        // iOS Safari Fix: Simplified horizontal detection
+        // iOS Safari Fix: Enhanced horizontal detection with better thresholds
         const absDeltaX = Math.abs(deltaX);
         const absDeltaY = Math.abs(deltaY);
 
-        // Detect horizontal swipe with lower threshold for iOS Safari
-        if (!isHorizontalSwipe && absDeltaX > 5) {
-            isHorizontalSwipe = true;
-            console.log('🔄 Horizontal swipe detected (iOS Safari):', {
-                deltaX: deltaX,
-                deltaY: deltaY,
-                absDeltaX: absDeltaX,
-                absDeltaY: absDeltaY
-            });
+        // Detect horizontal swipe with iOS Safari optimized thresholds
+        if (!isHorizontalSwipe) {
+            // More sensitive horizontal detection for iOS Safari
+            if (absDeltaX > 3 && (absDeltaY === 0 || absDeltaX / absDeltaY > 1.5)) {
+                isHorizontalSwipe = true;
+                console.log('🔄 Horizontal swipe detected (iOS Safari optimized):', {
+                    deltaX: deltaX,
+                    deltaY: deltaY,
+                    absDeltaX: absDeltaX,
+                    absDeltaY: absDeltaY,
+                    ratio: absDeltaY > 0 ? absDeltaX / absDeltaY : 'infinite'
+                });
+            }
         }
 
-        // iOS Safari: Always prevent default once we start dragging
+        // iOS Safari: Prevent default and apply drag effect for horizontal swipes
         if (isHorizontalSwipe) {
             e.preventDefault();
             e.stopPropagation();
@@ -599,12 +703,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Apply drag effect with resistance at boundaries
             let newTranslate = currentTranslate + dragPercent;
 
-            // Add resistance at boundaries
+            // Add resistance at boundaries with iOS Safari optimized values
             if (newTranslate > 0) {
-                newTranslate = newTranslate * 0.3;
+                newTranslate = newTranslate * 0.25; // Stronger resistance
             } else if (newTranslate < -(totalSlides - 1) * 100) {
                 const excess = newTranslate + (totalSlides - 1) * 100;
-                newTranslate = -(totalSlides - 1) * 100 + excess * 0.3;
+                newTranslate = -(totalSlides - 1) * 100 + excess * 0.25; // Stronger resistance
             }
 
             carouselTrack.style.transform = `translateX(${newTranslate}%)`;
@@ -720,27 +824,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Dot navigation is now handled during dot generation
 
-    // iOS Safari Fix: Document-level event delegation
+    // iOS Safari Fix: Enhanced touch event setup with better compatibility
     console.log('🔧 Setting up iOS Safari compatible touch events...');
     console.log('carouselTrack element:', carouselTrack);
+    console.log('🍎 iOS Safari detected:', /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
 
     if (carouselTrack) {
         console.log('✅ Attaching touch event listeners for carousel swipe functionality');
 
-        // iOS Safari Fix: Use document-level event delegation
+        // iOS Safari Fix: Enhanced event delegation with better target detection
         document.addEventListener('touchstart', function(e) {
-            if (carouselTrack.contains(e.target)) {
+            // Check if touch is within carousel area
+            if (carouselTrack.contains(e.target) || e.target.closest('.carousel-container')) {
                 handleTouchStart(e);
             }
         }, { passive: false });
-        console.log('✅ document touchstart listener added');
+        console.log('✅ document touchstart listener added with enhanced targeting');
 
         document.addEventListener('touchmove', function(e) {
-            if (carouselTrack.contains(e.target) || isDragging) {
+            // Continue handling if we're dragging or if touch is in carousel area
+            if (isDragging || (carouselTrack.contains(e.target) || e.target.closest('.carousel-container'))) {
                 handleTouchMove(e);
             }
         }, { passive: false });
-        console.log('✅ document touchmove listener added');
+        console.log('✅ document touchmove listener added with enhanced targeting');
 
         document.addEventListener('touchend', function(e) {
             if (isDragging) {
@@ -749,22 +856,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: false });
         console.log('✅ document touchend listener added');
 
-        // Handle touch cancellation
+        // Handle touch cancellation with better cleanup
         document.addEventListener('touchcancel', function(e) {
             if (isDragging) {
-                console.log('🚫 Touch cancelled');
-                handleTouchEnd(e);
+                console.log('🚫 Touch cancelled - cleaning up');
+                isDragging = false;
+                isHorizontalSwipe = false;
+                carouselTrack.style.transition = 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)';
+                carouselTrack.style.touchAction = '';
+                updateCarousel(currentSlide);
             }
         }, { passive: false });
 
-        // Prevent context menu only on carousel elements
+        // iOS Safari Fix: Prevent context menu and selection on carousel
         carouselTrack.addEventListener('contextmenu', (e) => {
             e.preventDefault();
         }, { passive: false });
 
-        // Note: Removed direct touchstart preventDefault to avoid conflicts with document-level event delegation
+        // iOS Safari Fix: Prevent text selection during swipe
+        carouselTrack.addEventListener('selectstart', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
-        console.log('🎯 All iOS Safari touch event listeners attached successfully');
+        // iOS Safari Fix: Add CSS touch-action to carousel container
+        carouselTrack.style.touchAction = 'pan-y pinch-zoom';
+
+        console.log('🎯 All iOS Safari touch event listeners attached successfully with enhanced compatibility');
 
         // Test touch event detection
         console.log('🧪 Testing touch event detection...');
@@ -825,6 +944,134 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('🧪 Manual goToSlide test:', index);
         updateCarousel(index);
     };
+
+    // 🚀 CARD CREATION HELPER FUNCTIONS
+    function createHomeSettingsCard(homeSettings, formattedDate) {
+        const card = document.createElement('div');
+        card.className = 'figma-event-card carousel-slide';
+        card.setAttribute('data-slide', '0');
+
+        card.innerHTML = `
+            <!-- Event Image with Gradient Background -->
+            <div class="figma-event-image">
+                ${homeSettings.event_image ?
+                    `<img src="${homeSettings.event_image}" alt="${homeSettings.event_title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" />` :
+                    `<div class="figma-image-placeholder">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>`
+                }
+            </div>
+
+            <!-- Event Information -->
+            <div class="figma-event-info">
+                <h1 class="figma-event-title">${homeSettings.event_title}</h1>
+                <h2 class="figma-event-artist">${homeSettings.artist_name}</h2>
+                <p class="figma-event-date">${formattedDate}</p>
+                <p class="figma-event-address">${homeSettings.event_address}</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="figma-action-buttons">
+                <button class="figma-btn figma-btn-primary" id="tickets-btn">
+                    <span>Get Tickets</span>
+                </button>
+                <button class="figma-btn figma-btn-secondary" id="share-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Share</span>
+                </button>
+            </div>
+        `;
+
+        return card;
+    }
+
+    function createDropCard(drop, slideIndex) {
+        const card = document.createElement('div');
+        card.className = 'figma-event-card carousel-slide';
+        card.setAttribute('data-slide', slideIndex.toString());
+
+        // Format drop date
+        let dropFormattedDate = "Event Date TBD";
+        if (drop.event_date) {
+            const eventDate = new Date(drop.event_date);
+            const options = {
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            };
+            dropFormattedDate = eventDate.toLocaleDateString('en-US', options)
+                .replace(',', 'th,');
+        }
+
+        card.innerHTML = `
+            <!-- Event Image with Gradient Background -->
+            <div class="figma-event-image">
+                ${drop.cover_image ?
+                    `<img src="${drop.cover_image}" alt="${drop.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" />` :
+                    `<div class="figma-image-placeholder" style="${drop.background_color ? `background: ${drop.background_color};` : ''}${drop.gradient_data ? `background: ${drop.gradient_data};` : ''}">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>`
+                }
+            </div>
+
+            <!-- Event Information -->
+            <div class="figma-event-info">
+                <h1 class="figma-event-title">${drop.title}</h1>
+                <h2 class="figma-event-artist">${drop.artist_name || 'Artist Name'}</h2>
+                <p class="figma-event-date">${dropFormattedDate}</p>
+                <p class="figma-event-address">${drop.event_address || 'Event Address'}</p>
+                ${drop.description ? `<p class="figma-event-description">${drop.description}</p>` : ''}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="figma-action-buttons">
+                <button class="figma-btn figma-btn-primary" onclick="window.open('/drop/${drop.slug}', '_blank')">
+                    <span>${drop.button_text || 'Get Notified'}</span>
+                </button>
+                <button class="figma-btn figma-btn-secondary drop-share-btn" data-drop-title="${drop.title}" data-drop-slug="${drop.slug}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Share</span>
+                </button>
+            </div>
+        `;
+
+        return card;
+    }
+
+    // 🚀 EXPOSE REFRESH FUNCTION GLOBALLY FOR REAL-TIME UPDATES
+    window.refreshHomepageCards = refreshHomepageCards;
+
+    // 🚀 REAL-TIME HOMEPAGE UPDATES VIA BROADCASTCHANNEL
+    if (typeof BroadcastChannel !== 'undefined') {
+        try {
+            const channel = new BroadcastChannel('homepage-updates');
+
+            channel.addEventListener('message', (event) => {
+                console.log('📡 Received homepage update message:', event.data);
+
+                if (event.data.type === 'refresh-cards') {
+                    console.log('🔄 Refreshing homepage cards due to drop update...');
+                    refreshHomepageCards();
+                }
+            });
+
+            console.log('✅ BroadcastChannel listener setup for real-time homepage updates');
+        } catch (error) {
+            console.warn('⚠️ Failed to setup BroadcastChannel:', error.message);
+        }
+    } else {
+        console.log('ℹ️ BroadcastChannel not supported - real-time updates disabled');
+    }
 
     // Modal functionality for tickets (home settings)
     if (ticketsBtn) {

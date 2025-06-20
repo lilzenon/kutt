@@ -37,4 +37,10 @@ router.get(
     asyncHandler(homeSettings.get)
 );
 
+// 🚀 HOMEPAGE REFRESH ENDPOINT - Get updated homepage data
+router.get(
+    "/refresh",
+    asyncHandler(homeSettings.getHomepageData)
+);
+
 module.exports = router;
