@@ -43,4 +43,36 @@ router.get(
     asyncHandler(homeSettings.getHomepageData)
 );
 
+// 🚀 DEBUG ENDPOINT - Check drops status
+router.get(
+    "/debug-drops",
+    asyncHandler(async(req, res) => {
+        try {
+            const allDrops = await query.drop.find({});
+            const featuredDrops = await query.drop.getFeaturedDrops({ limit: 10 });
+
+            res.json({
+                totalDrops: allDrops.length,
+                featuredDrops: featuredDrops.length,
+                allDropsData: allDrops.map(drop => ({
+                    id: drop.id,
+                    title: drop.title,
+                    show_on_homepage: drop.show_on_homepage,
+                    is_active: drop.is_active,
+                    created_at: drop.created_at
+                })),
+                featuredDropsData: featuredDrops.map(drop => ({
+                    id: drop.id,
+                    title: drop.title,
+                    show_on_homepage: drop.show_on_homepage,
+                    is_active: drop.is_active
+                }))
+            });
+        } catch (error) {
+            console.error('Debug drops error:', error);
+            res.status(500).json({ error: error.message });
+        }
+    })
+);
+
 module.exports = router;

@@ -143,6 +143,38 @@ async function home(req, res) {
         // Fetch featured drops for homepage display
         const featuredDrops = await query.drop.getFeaturedDrops({ limit: 6 });
 
+        // 🚀 DEBUG: Log detailed information about featured drops
+        console.log(`🏠 Homepage loading...`);
+        console.log(`📊 Home settings:`, {
+            event_title: homeSettings.event_title,
+            artist_name: homeSettings.artist_name,
+            event_date: homeSettings.event_date
+        });
+        console.log(`🎯 Featured drops query result:`, {
+            count: featuredDrops.length,
+            drops: featuredDrops.map(drop => ({
+                id: drop.id,
+                title: drop.title,
+                show_on_homepage: drop.show_on_homepage,
+                is_active: drop.is_active
+            }))
+        });
+
+        // If no featured drops, let's check if there are any drops at all
+        if (featuredDrops.length === 0) {
+            console.log(`⚠️ No featured drops found. Checking all drops...`);
+            try {
+                const allDrops = await query.drop.find({});
+                console.log(`📋 Total drops in database: ${allDrops.length}`);
+                const dropsWithHomepage = allDrops.filter(drop => drop.show_on_homepage);
+                console.log(`🏠 Drops with show_on_homepage=true: ${dropsWithHomepage.length}`);
+                const activeDrops = allDrops.filter(drop => drop.is_active);
+                console.log(`✅ Active drops: ${activeDrops.length}`);
+            } catch (debugError) {
+                console.error(`❌ Debug query failed:`, debugError);
+            }
+        }
+
         // Format the date for display
         let formattedDate = "March 29th, 9:00 P.M.";
         if (homeSettings.event_date) {
