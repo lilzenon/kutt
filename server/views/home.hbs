@@ -531,11 +531,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const oldTotalSlides = totalSlides;
         totalSlides = newTotalSlides;
 
-        // Update carousel track width
+        // Update carousel track width and slide widths
         if (carouselTrack && totalSlides > 0) {
             const trackWidth = totalSlides * 100;
             carouselTrack.style.width = `${trackWidth}%`;
-            console.log(`🎨 Updated carousel track width to ${trackWidth}%`);
+
+            // Update individual slide widths
+            const slides = carouselTrack.querySelectorAll('.carousel-slide');
+            const slideWidth = 100 / totalSlides;
+            console.log(`🔄 Reinitializing ${slides.length} slides to ${slideWidth}% width each`);
+            slides.forEach((slide, index) => {
+                slide.style.width = `${slideWidth}%`;
+                slide.style.flexBasis = `${slideWidth}%`;
+                slide.setAttribute('data-slide', index.toString());
+                console.log(`📐 Reinit Slide ${index}: width=${slideWidth}%, data-slide=${index}`);
+            });
+
+            console.log(`🎨 Updated carousel track width to ${trackWidth}% with ${totalSlides} slides at ${100 / totalSlides}% each`);
         }
 
         // Regenerate dots
@@ -648,9 +660,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Set carousel track width dynamically based on number of slides
         if (track && totalSlides > 0) {
-            const trackWidth = totalSlides * 100; // Each slide is 100% of container width
+            // Each slide should be 100% of the container width, so track width = totalSlides * 100%
+            // But we need to set individual slide widths to be 100% / totalSlides of the track
+            const trackWidth = totalSlides * 100;
             track.style.width = `${trackWidth}%`;
-            console.log(`🎨 Set carousel track width to ${trackWidth}% for ${totalSlides} slides`);
+
+            // Set each slide to be exactly 1/totalSlides of the track width
+            const slides = track.querySelectorAll('.carousel-slide');
+            const slideWidth = 100 / totalSlides;
+            console.log(`🎨 Setting ${slides.length} slides to ${slideWidth}% width each`);
+            slides.forEach((slide, index) => {
+                slide.style.width = `${slideWidth}%`;
+                slide.style.flexBasis = `${slideWidth}%`;
+                slide.setAttribute('data-slide', index.toString());
+                console.log(`📐 Slide ${index}: width=${slideWidth}%, data-slide=${index}`);
+            });
+
+            console.log(`🎨 Set carousel track width to ${trackWidth}% with ${totalSlides} slides at ${slideWidth}% each`);
+            console.log(`🧮 Carousel math: Track=${trackWidth}%, SlideWidth=${slideWidth}%, Slide0=${0}%, Slide1=${-slideWidth}%, Slide2=${-slideWidth*2}%`);
         }
 
         // Generate dots after totalSlides is properly set
@@ -705,7 +732,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         currentSlide = Math.max(0, Math.min(slideIndex, totalSlides - 1));
-        const translateX = -currentSlide * 100;
+        // FIXED: Calculate correct translation based on slide width
+        // Each slide is (100 / totalSlides)% wide, so translation should be currentSlide * slideWidth
+        const slideWidth = 100 / totalSlides;
+        const translateX = -currentSlide * slideWidth;
+
+        console.log(`🎯 updateCarousel: slideIndex=${slideIndex}, currentSlide=${currentSlide}, totalSlides=${totalSlides}, slideWidth=${slideWidth}%, translateX=${translateX}%`);
 
         // Ensure transition is properly set with improved easing
         if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -861,7 +893,7 @@ document.addEventListener('DOMContentLoaded', function() {
             isHorizontalSwipe: false,
             startTime: Date.now(),
             touchId: touch.identifier,
-            initialTransform: -currentSlide * 100
+            initialTransform: -currentSlide * (100 / totalSlides)
         };
 
         console.log('🚀 Touch Start Data:', {
@@ -878,7 +910,7 @@ document.addEventListener('DOMContentLoaded', function() {
         carouselTrack.style.transition = 'none';
 
         // Store initial transform for smooth dragging
-        touchState.initialTransform = -currentSlide * 100;
+        touchState.initialTransform = -currentSlide * (100 / totalSlides);
     }
 
     function resetTouchState() {
@@ -982,8 +1014,9 @@ document.addEventListener('DOMContentLoaded', function() {
             let newTranslate = touchState.initialTransform + dragPercent;
 
             // Apply natural boundary resistance
+            const slideWidth = 100 / totalSlides;
             const maxTranslate = 0;
-            const minTranslate = -(totalSlides - 1) * 100;
+            const minTranslate = -(totalSlides - 1) * slideWidth;
             const resistanceFactor = 0.3;
 
             if (newTranslate > maxTranslate) {
