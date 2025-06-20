@@ -401,14 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let totalSlides = document.querySelectorAll('.carousel-slide').length;
     let isTransitioning = false;
 
-    console.log(`🎠 Carousel initialized with ${totalSlides} slides`);
-
-    // Set carousel track width dynamically based on number of slides
-    if (carouselTrack && totalSlides > 0) {
-        const trackWidth = totalSlides * 100; // Each slide is 100% of container width
-        carouselTrack.style.width = `${trackWidth}%`;
-        console.log(`🎨 Set carousel track width to ${trackWidth}% for ${totalSlides} slides`);
-    }
+    // Carousel initialization moved to initializeCarousel() function
 
     // Generate carousel dots dynamically to ensure correct indexing
     function generateCarouselDots() {
@@ -528,8 +521,25 @@ document.addEventListener('DOMContentLoaded', function() {
         reinitializeCarousel(totalCards);
     }
 
-    // Generate dots after DOM is ready
-    generateCarouselDots();
+    // Initialize carousel after DOM elements are ready
+    function initializeCarousel() {
+        // Recalculate totalSlides from actual DOM elements
+        totalSlides = document.querySelectorAll('.carousel-slide').length;
+        console.log(`🎠 Carousel initialized with ${totalSlides} slides`);
+
+        // Set carousel track width dynamically based on number of slides
+        if (carouselTrack && totalSlides > 0) {
+            const trackWidth = totalSlides * 100; // Each slide is 100% of container width
+            carouselTrack.style.width = `${trackWidth}%`;
+            console.log(`🎨 Set carousel track width to ${trackWidth}% for ${totalSlides} slides`);
+        }
+
+        // Generate dots after totalSlides is properly set
+        generateCarouselDots();
+    }
+
+    // Initialize carousel after a short delay to ensure DOM is ready
+    setTimeout(initializeCarousel, 100);
 
     // Update carousel position
     function updateCarousel(slideIndex, animate = true) {
