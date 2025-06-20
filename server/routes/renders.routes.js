@@ -9,13 +9,13 @@ const env = require("../env");
 
 const router = Router();
 
-// pages
+// pages - 🚀 FIXED: Use home template for root route
 router.get(
     "/",
     asyncHandler(auth.jwtLoosePage),
     asyncHandler(helpers.adminSetup),
     asyncHandler(locals.user),
-    asyncHandler(renders.homepage)
+    asyncHandler(renders.home)
 );
 
 // Home page with modern navigation
@@ -25,6 +25,15 @@ router.get(
     asyncHandler(helpers.adminSetup),
     asyncHandler(locals.user),
     asyncHandler(renders.home)
+);
+
+// 🚀 BACKUP: Original URL shortener homepage
+router.get(
+    "/shortener",
+    asyncHandler(auth.jwtLoosePage),
+    asyncHandler(helpers.adminSetup),
+    asyncHandler(locals.user),
+    asyncHandler(renders.homepage)
 );
 
 // Home Editor dashboard page
