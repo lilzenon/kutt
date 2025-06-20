@@ -1328,14 +1328,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    shareBtn.addEventListener('click', async function() {
-        const shareData = {
-            title: '{{homeSettings.event_title}} - {{homeSettings.artist_name}}',
-            text: 'Join us for an amazing event! {{formattedDate}} at {{homeSettings.event_address}}',
-            url: window.location.href
-        };
-        await handleShare(this, shareData);
-    });
+    // Add null check for shareBtn before adding event listener
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async function() {
+            const shareData = {
+                title: '{{homeSettings.event_title}} - {{homeSettings.artist_name}}',
+                text: 'Join us for an amazing event! {{formattedDate}} at {{homeSettings.event_address}}',
+                url: window.location.href
+            };
+            await handleShare(this, shareData);
+        });
+    }
 
     // Share functionality is now handled by the dynamic event listener above
 
@@ -1561,24 +1564,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Enhanced validation state management
     function updateValidationState(state, message = '', type = 'neutral') {
+        if (!phoneInput) return;
+
         const container = phoneInput.closest('.phone-input-container');
         const messageElement = document.getElementById('phone-validation-message');
         const phoneInputElement = document.getElementById('phoneInput');
 
         // Clear existing states
-        container.classList.remove('valid', 'invalid', 'loading', 'shake');
-        messageElement.classList.remove('show', 'error', 'success', 'help');
+        if (container) {
+            container.classList.remove('valid', 'invalid', 'loading', 'shake');
+        }
+        if (messageElement) {
+            messageElement.classList.remove('show', 'error', 'success', 'help');
+        }
 
         // Set ARIA attributes
-        phoneInputElement.setAttribute('aria-invalid', state === 'invalid' ? 'true' : 'false');
+        if (phoneInputElement) {
+            phoneInputElement.setAttribute('aria-invalid', state === 'invalid' ? 'true' : 'false');
+        }
 
         // Apply new state
-        if (state !== 'neutral') {
+        if (state !== 'neutral' && container) {
             container.classList.add(state);
         }
 
         // Show message if provided
-        if (message) {
+        if (message && messageElement) {
             messageElement.textContent = message;
             messageElement.classList.add('show', type);
 
@@ -1593,7 +1604,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Add shake animation for errors
-        if (state === 'invalid' && type === 'error') {
+        if (state === 'invalid' && type === 'error' && container) {
             container.classList.add('shake');
             setTimeout(() => {
                 container.classList.remove('shake');
@@ -1603,14 +1614,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function hideValidationMessage() {
         const messageElement = document.getElementById('phone-validation-message');
-        messageElement.classList.remove('show', 'error', 'success', 'help');
+        if (messageElement) {
+            messageElement.classList.remove('show', 'error', 'success', 'help');
+        }
     }
 
     function showValidationMessage(message, type = 'help') {
         const messageElement = document.getElementById('phone-validation-message');
-        messageElement.textContent = message;
-        messageElement.classList.remove('error', 'success', 'help');
-        messageElement.classList.add('show', type);
+        if (messageElement) {
+            messageElement.textContent = message;
+            messageElement.classList.remove('error', 'success', 'help');
+            messageElement.classList.add('show', type);
+        }
     }
 
     // Debounced validation function
@@ -1656,66 +1671,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Country selection functionality
-    countrySelect.addEventListener('change', function() {
-        const selectedCode = this.value;
-        const selectedOption = this.options[this.selectedIndex];
+    if (countrySelect) {
+        countrySelect.addEventListener('change', function() {
+            const selectedCode = this.value;
+            const selectedOption = this.options[this.selectedIndex];
 
-        // Update flag display
-        const flagImg = countryFlagDisplay.querySelector('img');
-        if (flagImg && countryFlags[selectedCode]) {
-            flagImg.src = countryFlags[selectedCode];
-            flagImg.alt = selectedOption.dataset.name || 'Country flag';
-        }
-
-        // Update current country code
-        currentCountryCode = selectedCode;
-
-        // Update phone input placeholder and maxlength based on country
-        if (phoneInput && phonePatterns[selectedCode]) {
-            const pattern = phonePatterns[selectedCode];
-            phoneInput.placeholder = pattern.placeholder;
-            phoneInput.maxLength = pattern.maxLength;
-
-            // Clear and reformat existing phone number for new country
-            if (phoneInput.value) {
-                const cleanNumber = phoneInput.value.replace(/[^\d]/g, '');
-                phoneInput.value = formatPhoneNumber(cleanNumber, selectedCode);
-            }
-        }
-
-        // Focus phone input after country selection for better UX
-        if (phoneInput) {
-            phoneInput.focus();
-
-            // Re-validate with new country if there's existing input
-            const currentValue = phoneInput.value.trim();
-            if (currentValue.length > 0) {
-                // Clear validation state first
-                updateValidationState('neutral');
-
-                // Re-format and validate with new country
-                const cleanNumber = currentValue.replace(/[^\d]/g, '');
-                if (cleanNumber.length > 0) {
-                    const newFormattedValue = formatPhoneNumber(cleanNumber, selectedCode);
-                    phoneInput.value = newFormattedValue;
-                    validatePhoneWithDelay(newFormattedValue, selectedCode);
+            // Update flag display
+            if (countryFlagDisplay) {
+                const flagImg = countryFlagDisplay.querySelector('img');
+                if (flagImg && countryFlags[selectedCode]) {
+                    flagImg.src = countryFlags[selectedCode];
+                    flagImg.alt = selectedOption.dataset.name || 'Country flag';
                 }
             }
-        }
-    });
+
+            // Update current country code
+            currentCountryCode = selectedCode;
+
+            // Update phone input placeholder and maxlength based on country
+            if (phoneInput && phonePatterns[selectedCode]) {
+                const pattern = phonePatterns[selectedCode];
+                phoneInput.placeholder = pattern.placeholder;
+                phoneInput.maxLength = pattern.maxLength;
+
+                // Clear and reformat existing phone number for new country
+                if (phoneInput.value) {
+                    const cleanNumber = phoneInput.value.replace(/[^\d]/g, '');
+                    phoneInput.value = formatPhoneNumber(cleanNumber, selectedCode);
+                }
+            }
+
+            // Focus phone input after country selection for better UX
+            if (phoneInput) {
+                phoneInput.focus();
+
+                // Re-validate with new country if there's existing input
+                const currentValue = phoneInput.value.trim();
+                if (currentValue.length > 0) {
+                    // Clear validation state first
+                    updateValidationState('neutral');
+
+                    // Re-format and validate with new country
+                    const cleanNumber = currentValue.replace(/[^\d]/g, '');
+                    if (cleanNumber.length > 0) {
+                        const newFormattedValue = formatPhoneNumber(cleanNumber, selectedCode);
+                        phoneInput.value = newFormattedValue;
+                        validatePhoneWithDelay(newFormattedValue, selectedCode);
+                    }
+                }
+            }
+        });
+    }
 
     // Enhanced input handler with robust formatting and cursor management
-    let isComposing = false;
-    let lastInputType = '';
+    if (phoneInput) {
+        let isComposing = false;
+        let lastInputType = '';
 
-    phoneInput.addEventListener('compositionstart', () => { isComposing = true; });
-    phoneInput.addEventListener('compositionend', () => { isComposing = false; });
+        phoneInput.addEventListener('compositionstart', () => { isComposing = true; });
+        phoneInput.addEventListener('compositionend', () => { isComposing = false; });
 
-    phoneInput.addEventListener('beforeinput', function(e) {
-        lastInputType = e.inputType || '';
-    });
+        phoneInput.addEventListener('beforeinput', function(e) {
+            lastInputType = e.inputType || '';
+        });
 
-    phoneInput.addEventListener('input', function(e) {
+        phoneInput.addEventListener('input', function(e) {
         // Skip processing during composition (for international keyboards)
         if (isComposing) return;
 
@@ -1859,65 +1879,75 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             updateValidationState('neutral');
         }
-    });
+        });
+
+        // Ensure mobile font size is 16px to prevent zoom
+        if (window.innerWidth <= 767) {
+            phoneInput.style.fontSize = '16px';
+        }
+    }
 
     // Send button functionality with enhanced validation
-    sendBtn.addEventListener('click', function(e) {
-        e.preventDefault();
+    if (sendBtn) {
+        sendBtn.addEventListener('click', function(e) {
+            e.preventDefault();
 
-        const phoneValue = phoneInput.value.trim();
-        const countryCode = currentCountryCode;
+            if (!phoneInput) {
+                console.error('Phone input not found');
+                return;
+            }
 
-        if (!phoneValue) {
-            updateValidationState('invalid', 'Please enter a phone number', 'error');
-            phoneInput.focus();
-            return;
-        }
+            const phoneValue = phoneInput.value.trim();
+            const countryCode = currentCountryCode;
 
-        // Use international validation
-        if (!isValidPhoneNumber(phoneValue, countryCode)) {
-            const pattern = phonePatterns[countryCode];
-            const countryOption = document.querySelector(`option[value="${countryCode}"]`);
-            const countryName = countryOption && countryOption.dataset.name ? countryOption.dataset.name : countryCode;
-            const exampleFormat = pattern ? pattern.placeholder : 'valid format';
+            if (!phoneValue) {
+                updateValidationState('invalid', 'Please enter a phone number', 'error');
+                phoneInput.focus();
+                return;
+            }
 
-            updateValidationState('invalid',
-                `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
-                'error'
-            );
-            phoneInput.focus();
-            return;
-        }
+            // Use international validation
+            if (!isValidPhoneNumber(phoneValue, countryCode)) {
+                const pattern = phonePatterns[countryCode];
+                const countryOption = document.querySelector(`option[value="${countryCode}"]`);
+                const countryName = countryOption && countryOption.dataset.name ? countryOption.dataset.name : countryCode;
+                const exampleFormat = pattern ? pattern.placeholder : 'valid format';
 
-        // Show loading state
-        updateValidationState('loading', 'Sending...', 'help');
+                updateValidationState('invalid',
+                    `Please enter a valid ${countryName} phone number (e.g., ${exampleFormat})`,
+                    'error'
+                );
+                phoneInput.focus();
+                return;
+            }
 
-        // Show success state
-        const originalText = this.textContent;
-        this.textContent = 'SENT!';
-        this.style.backgroundColor = '#10b981';
-        this.disabled = true;
+            // Show loading state
+            updateValidationState('loading', 'Sending...', 'help');
 
-        // Simulate success
-        setTimeout(() => {
-            updateValidationState('valid', '✓ Message sent successfully!', 'success');
+            // Show success state
+            const originalText = this.textContent;
+            this.textContent = 'SENT!';
+            this.style.backgroundColor = '#10b981';
+            this.disabled = true;
 
-            // Reset after 3 seconds
+            // Simulate success
             setTimeout(() => {
-                this.textContent = originalText;
-                this.style.backgroundColor = '';
-                this.disabled = false;
-                phoneInput.value = '';
-                updateValidationState('neutral');
-            }, 3000);
-        }, 1000);
+                updateValidationState('valid', '✓ Message sent successfully!', 'success');
 
-        console.log('Phone submission:', { phone: phoneValue, country: countryCode });
-    });
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.backgroundColor = '';
+                    this.disabled = false;
+                    if (phoneInput) {
+                        phoneInput.value = '';
+                    }
+                    updateValidationState('neutral');
+                }, 3000);
+            }, 1000);
 
-    // Ensure mobile font size is 16px to prevent zoom
-    if (window.innerWidth <= 767) {
-        phoneInput.style.fontSize = '16px';
+            console.log('Phone submission:', { phone: phoneValue, country: countryCode });
+        });
     }
 });
 </script>
