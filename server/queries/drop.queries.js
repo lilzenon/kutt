@@ -579,6 +579,7 @@ async function getFeaturedDrops(options = {}) {
                 "drops.artist_name",
                 "drops.event_date",
                 "drops.event_address",
+                "drops.posh_embed_url",
                 knex.raw("COALESCE(COUNT(drop_signups.id), 0) as signup_count")
             ])
             .leftJoin("drop_signups", "drops.id", "drop_signups.drop_id")
@@ -604,7 +605,8 @@ async function getFeaturedDrops(options = {}) {
                 "drops.updated_at",
                 "drops.artist_name",
                 "drops.event_date",
-                "drops.event_address"
+                "drops.event_address",
+                "drops.posh_embed_url"
             ])
             .orderBy("drops.created_at", "desc")
             .limit(limit);
