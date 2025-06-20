@@ -61,6 +61,7 @@
         "passport-localapikey-update": "0.6.0",
         "pg": "8.13.1",
         "pg-query-stream": "4.7.1",
+        "puppeteer": "^24.10.2",
         "rate-limit-redis": "4.2.0",
         "twilio": "5.3.5",
         "useragent": "2.3.0"

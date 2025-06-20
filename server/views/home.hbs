@@ -388,6 +388,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log(`🎠 Carousel initialized with ${totalSlides} slides`);
 
+    // Set carousel track width dynamically based on number of slides
+    if (carouselTrack && totalSlides > 0) {
+        const trackWidth = totalSlides * 100; // Each slide is 100% of container width
+        carouselTrack.style.width = `${trackWidth}%`;
+        console.log(`🎨 Set carousel track width to ${trackWidth}% for ${totalSlides} slides`);
+    }
+
     // Generate carousel dots dynamically to ensure correct indexing
     function generateCarouselDots() {
         const indicatorsContainer = document.getElementById('carouselIndicators');
@@ -417,10 +424,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         console.log(`🎯 Generated ${totalSlides} carousel dots with correct indexing`);
-    console.log(`🏠 Homepage loaded with ${totalSlides} total slides`);
 
         // Update carouselDots array
         carouselDots = document.querySelectorAll('.carousel-dot');
+        console.log(`🏠 Homepage loaded with ${totalSlides} total slides`);
     }
 
     // Generate dots after DOM is ready
