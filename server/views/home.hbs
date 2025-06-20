@@ -115,14 +115,14 @@
                         </button>
                         <button class="figma-tickets-btn" data-tickets-url="{{this.posh_embed_url}}">Tickets</button>
                         {{else}}
-                        <button class="figma-btn figma-btn-primary" onclick="window.open('/drop/{{this.slug}}', '_blank')">
-                            <span>{{#if this.button_text}}{{this.button_text}}{{else}}Get Notified{{/if}}</span>
-                        </button>
-                        <button class="figma-btn figma-btn-secondary drop-share-btn" data-drop-title="{{this.title}}" data-drop-slug="{{this.slug}}">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <button class="figma-share-btn" onclick="navigator.share ? navigator.share({title: '{{this.title}}', url: window.location.href + 'drop/{{this.slug}}'}) : navigator.clipboard.writeText(window.location.href + 'drop/{{this.slug}}')">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 16L12 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
+                        <button class="figma-tickets-btn" onclick="window.open('/drop/{{this.slug}}', '_blank')">{{#if this.button_text}}{{this.button_text}}{{else}}Get Notified{{/if}}</button>
                         {{/if}}
                     </div>
                 </div>
@@ -387,23 +387,40 @@ document.addEventListener('DOMContentLoaded', function() {
             const ticketsUrl = ticketsBtn.getAttribute('data-tickets-url');
             const dropUrl = ticketsBtn.getAttribute('data-drop-url');
 
+            console.log('🎫 Tickets button clicked:', {
+                ticketsUrl: ticketsUrl,
+                dropUrl: dropUrl,
+                hasOnclick: ticketsBtn.hasAttribute('onclick'),
+                buttonElement: ticketsBtn
+            });
+
             if (ticketsUrl && ticketsUrl.trim() !== '' && ticketsUrl !== 'null') {
+                console.log('✅ Opening tickets modal with URL:', ticketsUrl);
                 // Update modal iframe source and open modal
                 const poshIframe = document.getElementById('poshIframe');
                 if (poshIframe) {
                     poshIframe.src = ticketsUrl;
+                    console.log('🎯 Updated iframe src to:', ticketsUrl);
                 }
 
                 if (modalOverlay) {
                     modalOverlay.style.display = 'flex';
                     document.body.style.overflow = 'hidden';
+                    console.log('🎪 Modal opened successfully');
                 }
             } else if (dropUrl) {
+                console.log('🔗 Navigating to drop page:', dropUrl);
                 // Navigate to drop page
                 window.location.href = dropUrl;
             } else {
-                // No valid URL available
-                console.log('No valid tickets URL available');
+                // Check if button has onclick handler (for non-tickets buttons)
+                if (ticketsBtn.hasAttribute('onclick')) {
+                    console.log('🎯 Button has onclick handler, letting it execute');
+                    // Don't prevent default, let onclick handler execute
+                    return;
+                } else {
+                    console.log('❌ No valid tickets URL or onclick handler available');
+                }
             }
         }
 
@@ -1404,14 +1421,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </button>
                     <button class="figma-tickets-btn" data-tickets-url="${drop.posh_embed_url}">Tickets</button>
                 ` : `
-                    <button class="figma-btn figma-btn-primary" onclick="window.open('/drop/${drop.slug}', '_blank')">
-                        <span>${drop.button_text || 'Get Notified'}</span>
-                    </button>
-                    <button class="figma-btn figma-btn-secondary drop-share-btn" data-drop-title="${drop.title}" data-drop-slug="${drop.slug}">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <button class="figma-share-btn" onclick="navigator.share ? navigator.share({title: '${drop.title}', url: window.location.href + 'drop/${drop.slug}'}) : navigator.clipboard.writeText(window.location.href + 'drop/${drop.slug}')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 12L8 21L16 21L16 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 16L12 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 7L12 3L16 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
+                    <button class="figma-tickets-btn" onclick="window.open('/drop/${drop.slug}', '_blank')">${drop.button_text || 'Get Notified'}</button>
                 `}
             </div>
         `;
