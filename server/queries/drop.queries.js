@@ -553,23 +553,86 @@ async function getFeaturedDrops(options = {}) {
     const { limit = 6 } = options;
 
     try {
-        // Simplified query without visits join to avoid PostgreSQL issues
+        console.log('🔍 getFeaturedDrops: Starting query with options:', options);
+
+        // Enhanced query with explicit field selection for homepage display
         const query = knex("drops")
             .select([
-                "drops.*",
+                "drops.id",
+                "drops.title",
+                "drops.description",
+                "drops.slug",
+                "drops.cover_image",
+                "drops.background_color",
+                "drops.gradient_data",
+                "drops.text_color",
+                "drops.button_color",
+                "drops.button_text",
+                "drops.button_text_color",
+                "drops.background_type",
+                "drops.card_background_type",
+                "drops.is_active",
+                "drops.show_on_homepage",
+                "drops.created_at",
+                "drops.updated_at",
+                // 🎪 Event-specific fields for homepage display
+                "drops.artist_name",
+                "drops.event_date",
+                "drops.event_address",
                 knex.raw("COALESCE(COUNT(drop_signups.id), 0) as signup_count")
             ])
             .leftJoin("drop_signups", "drops.id", "drop_signups.drop_id")
             .where("drops.show_on_homepage", true)
             .where("drops.is_active", true)
-            .groupBy("drops.id")
+            .groupBy([
+                "drops.id",
+                "drops.title",
+                "drops.description",
+                "drops.slug",
+                "drops.cover_image",
+                "drops.background_color",
+                "drops.gradient_data",
+                "drops.text_color",
+                "drops.button_color",
+                "drops.button_text",
+                "drops.button_text_color",
+                "drops.background_type",
+                "drops.card_background_type",
+                "drops.is_active",
+                "drops.show_on_homepage",
+                "drops.created_at",
+                "drops.updated_at",
+                "drops.artist_name",
+                "drops.event_date",
+                "drops.event_address"
+            ])
             .orderBy("drops.created_at", "desc")
             .limit(limit);
 
+        console.log('🔍 getFeaturedDrops: Executing query...');
         const result = await query;
+
+        console.log('🎯 getFeaturedDrops: Query completed', {
+            resultCount: result.length,
+            drops: result.map(drop => ({
+                id: drop.id,
+                title: drop.title,
+                artist_name: drop.artist_name,
+                event_date: drop.event_date,
+                event_address: drop.event_address,
+                cover_image: drop.cover_image,
+                show_on_homepage: drop.show_on_homepage,
+                is_active: drop.is_active
+            }))
+        });
+
         return result;
     } catch (error) {
         console.error('❌ Error in getFeaturedDrops:', error);
+        console.error('❌ Error details:', {
+            message: error.message,
+            stack: error.stack
+        });
         // Return empty array as fallback
         return [];
     }
