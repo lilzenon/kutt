@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Carousel functionality
     let currentSlide = 0;
-    const totalSlides = document.querySelectorAll('.carousel-slide').length;
+    let totalSlides = document.querySelectorAll('.carousel-slide').length;
     let isTransitioning = false;
 
     console.log(`🎠 Carousel initialized with ${totalSlides} slides`);

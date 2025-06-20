@@ -6,6 +6,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const locals = require("../handlers/locals.handler");
 const homeSettings = require("../handlers/home_settings.handler");
 const auth = require("../handlers/auth.handler");
+const query = require("../queries");
 
 const router = Router();
 
