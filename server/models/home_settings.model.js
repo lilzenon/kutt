@@ -8,7 +8,7 @@ async function createHomeSettingsTable(knex) {
             table.dateTime("event_date").notNullable().defaultTo(knex.fn.now());
             table.string("event_address", 100).notNullable().defaultTo("101 Address Drive, Asbury Park, NJ");
             table.string("event_image").nullable(); // File path for uploaded image
-            table.string("tickets_url", 500).notNullable().defaultTo("https://embed.posh.vip/ticket-iframe/680fb268087c97aeac2468cb/");
+            table.string("tickets_url", 500).nullable();
             table.string("instagram_url", 200).nullable();
             table.string("tiktok_url", 200).nullable();
             table.string("twitter_url", 200).nullable();
@@ -32,7 +32,7 @@ async function createHomeSettingsTable(knex) {
             artist_name: "Artist Name",
             event_date: new Date("2025-03-29T21:00:00"),
             event_address: "101 Address Drive, Asbury Park, NJ",
-            tickets_url: "https://embed.posh.vip/ticket-iframe/680fb268087c97aeac2468cb/",
+            tickets_url: null,
             instagram_url: null,
             tiktok_url: null,
             twitter_url: null,

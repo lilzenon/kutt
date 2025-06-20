@@ -5,14 +5,14 @@ async function get() {
         .select("*")
         .orderBy("id", "desc")
         .limit(1);
-    
+
     return settings || {
         event_title: "EVENT TITLE",
         artist_name: "Artist Name",
         event_date: new Date("2025-03-29T21:00:00"),
         event_address: "101 Address Drive, Asbury Park, NJ",
         event_image: null,
-        tickets_url: "https://embed.posh.vip/ticket-iframe/680fb268087c97aeac2468cb/",
+        tickets_url: null,
         instagram_url: null,
         tiktok_url: null,
         twitter_url: null,
@@ -29,7 +29,7 @@ async function update(params, userId) {
 
     // Check if settings exist
     const existing = await knex("home_settings").first();
-    
+
     if (existing) {
         // Update existing settings
         const [updated] = await knex("home_settings")
@@ -46,12 +46,12 @@ async function update(params, userId) {
 
 async function getForAdmin() {
     const settings = await get();
-    
+
     // Format date for admin form
     if (settings.event_date) {
         settings.event_date_formatted = new Date(settings.event_date).toISOString().slice(0, 16);
     }
-    
+
     return settings;
 }
 

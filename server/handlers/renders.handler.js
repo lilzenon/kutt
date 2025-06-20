@@ -209,7 +209,7 @@ async function home(req, res) {
             artist_name: "Artist Name",
             event_address: "101 Address Drive, Asbury Park, NJ",
             event_image: null,
-            tickets_url: "https://embed.posh.vip/ticket-iframe/680fb268087c97aeac2468cb/",
+            tickets_url: null,
             instagram_url: null,
             tiktok_url: null,
             twitter_url: null,
