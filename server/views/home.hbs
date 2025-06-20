@@ -728,17 +728,47 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Update dot indicators
-        carouselDots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentSlide);
-            dot.setAttribute('aria-selected', index === currentSlide ? 'true' : 'false');
-        });
+        // Update dot indicators with performance optimization
+        if (carouselDots && carouselDots.length > 0) {
+            carouselDots.forEach((dot, index) => {
+                const isActive = index === currentSlide;
+                dot.classList.toggle('active', isActive);
+                dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                // Add aria-label for better screen reader support
+                dot.setAttribute('aria-label', `Go to slide ${index + 1} of ${totalSlides}`);
+            });
+        }
 
-        // Update ARIA attributes
+        // Update ARIA attributes with performance optimization
         const slides = document.querySelectorAll('.carousel-slide');
-        slides.forEach((slide, index) => {
-            slide.setAttribute('aria-hidden', index !== currentSlide ? 'true' : 'false');
-        });
+        if (slides.length > 0) {
+            slides.forEach((slide, index) => {
+                const isVisible = index === currentSlide;
+                slide.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+                // Add role and aria-label for better accessibility
+                slide.setAttribute('role', 'tabpanel');
+                slide.setAttribute('aria-label', `Slide ${index + 1} of ${totalSlides}`);
+                if (isVisible) {
+                    slide.setAttribute('aria-current', 'true');
+                } else {
+                    slide.removeAttribute('aria-current');
+                }
+            });
+        }
+
+        // Announce slide change to screen readers
+        if (animate && window.speechSynthesis) {
+            const announcement = `Slide ${currentSlide + 1} of ${totalSlides}`;
+            // Use a subtle announcement that doesn't interrupt user flow
+            const utterance = new SpeechSynthesisUtterance(announcement);
+            utterance.volume = 0.1;
+            utterance.rate = 1.5;
+            setTimeout(() => {
+                if (!window.speechSynthesis.speaking) {
+                    window.speechSynthesis.speak(utterance);
+                }
+            }, 100);
+        }
     }
 
     // Previous slide
@@ -777,14 +807,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Mobile browser optimized touch handling
-    let startX = 0;
-    let startY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let isDragging = false;
-    let isHorizontalSwipe = false;
-    let startTime = 0;
+    // Modern mobile touch handling with iOS Safari optimization
+    let touchState = {
+        startX: 0,
+        startY: 0,
+        currentX: 0,
+        currentY: 0,
+        isDragging: false,
+        isHorizontalSwipe: false,
+        startTime: 0,
+        touchId: null,
+        initialTransform: 0
+    };
 
     function handleTouchStart(e) {
         console.log('🚀 TOUCH START EVENT FIRED!', e);
@@ -800,47 +834,66 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // iOS Safari Fix: Only handle single touch
+        // iOS Safari Fix: Only handle single touch to avoid conflicts
         if (e.touches.length > 1) {
             console.log('🚫 Multi-touch detected, ignoring');
+            resetTouchState();
             return;
         }
 
         const touch = e.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-        currentX = startX;
-        currentY = startY;
-        isDragging = true;
-        isHorizontalSwipe = false;
-        startTime = Date.now();
+
+        // Reset and initialize touch state
+        touchState = {
+            startX: touch.clientX,
+            startY: touch.clientY,
+            currentX: touch.clientX,
+            currentY: touch.clientY,
+            isDragging: true,
+            isHorizontalSwipe: false,
+            startTime: Date.now(),
+            touchId: touch.identifier,
+            initialTransform: -currentSlide * 100
+        };
 
         console.log('🚀 Touch Start Data:', {
-            startX: startX,
-            startY: startY,
+            startX: touchState.startX,
+            startY: touchState.startY,
             currentSlide: currentSlide,
             totalSlides: totalSlides,
-            touchesLength: e.touches.length,
-            target: e.target,
-            touchClientX: touch.clientX,
-            touchClientY: touch.clientY,
+            touchId: touchState.touchId,
+            target: e.target.tagName,
             userAgent: navigator.userAgent.includes('Safari') ? 'Safari' : 'Other'
         });
 
-        // Disable transitions for immediate feedback
+        // Disable transitions for immediate feedback during drag
         carouselTrack.style.transition = 'none';
 
-        // iOS Safari Fix: Add touch-action CSS to prevent default behaviors
-        carouselTrack.style.touchAction = 'pan-y pinch-zoom';
+        // Store initial transform for smooth dragging
+        touchState.initialTransform = -currentSlide * 100;
+    }
+
+    function resetTouchState() {
+        touchState = {
+            startX: 0,
+            startY: 0,
+            currentX: 0,
+            currentY: 0,
+            isDragging: false,
+            isHorizontalSwipe: false,
+            startTime: 0,
+            touchId: null,
+            initialTransform: 0
+        };
     }
 
     function handleTouchMove(e) {
         console.log('🔄 TOUCH MOVE EVENT FIRED!', {
-            isDragging: isDragging,
+            isDragging: touchState.isDragging,
             touchesLength: e.touches ? e.touches.length : 0
         });
 
-        if (!isDragging) {
+        if (!touchState.isDragging) {
             console.log('❌ Not dragging, returning');
             return;
         }
@@ -850,84 +903,97 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // iOS Safari Fix: Only handle single touch
+        // iOS Safari Fix: Only handle single touch and verify it's the same touch
         if (e.touches.length > 1) {
             console.log('🚫 Multi-touch detected during move, cancelling');
-            isDragging = false;
+            resetTouchState();
             carouselTrack.style.transition = 'transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             updateCarousel(currentSlide);
             return;
         }
 
         const touch = e.touches[0];
-        currentX = touch.clientX;
-        currentY = touch.clientY;
 
-        const deltaX = currentX - startX;
-        const deltaY = currentY - startY;
+        // Verify we're tracking the same touch point
+        if (touchState.touchId !== null && touch.identifier !== touchState.touchId) {
+            console.log('🚫 Different touch detected, ignoring');
+            return;
+        }
+
+        touchState.currentX = touch.clientX;
+        touchState.currentY = touch.clientY;
+
+        const deltaX = touchState.currentX - touchState.startX;
+        const deltaY = touchState.currentY - touchState.startY;
+        const absDeltaX = Math.abs(deltaX);
+        const absDeltaY = Math.abs(deltaY);
 
         console.log('📏 Touch Move Delta:', {
             deltaX: deltaX,
             deltaY: deltaY,
-            absDeltaX: Math.abs(deltaX),
-            absDeltaY: Math.abs(deltaY),
-            startX: startX,
-            currentX: currentX,
-            isHorizontalSwipe: isHorizontalSwipe
+            absDeltaX: absDeltaX,
+            absDeltaY: absDeltaY,
+            isHorizontalSwipe: touchState.isHorizontalSwipe
         });
 
-        // iOS Safari Fix: Enhanced horizontal detection with better thresholds
-        const absDeltaX = Math.abs(deltaX);
-        const absDeltaY = Math.abs(deltaY);
+        // Modern swipe detection with improved thresholds
+        if (!touchState.isHorizontalSwipe) {
+            // More conservative threshold to prevent accidental swipes
+            const minHorizontalDistance = 20;
+            const horizontalToVerticalRatio = 2.5;
 
-        // Detect horizontal swipe with improved thresholds for better UX
-        if (!isHorizontalSwipe) {
-            // Increased threshold to prevent accidental swipes and improved ratio detection
-            if (absDeltaX > 15 && (absDeltaY === 0 || absDeltaX / absDeltaY > 2.0)) {
-                isHorizontalSwipe = true;
-                console.log('🔄 Horizontal swipe detected (improved UX):', {
+            if (absDeltaX > minHorizontalDistance &&
+                (absDeltaY === 0 || absDeltaX / absDeltaY > horizontalToVerticalRatio)) {
+                touchState.isHorizontalSwipe = true;
+                console.log('🔄 Horizontal swipe detected:', {
                     deltaX: deltaX,
                     deltaY: deltaY,
-                    absDeltaX: absDeltaX,
-                    absDeltaY: absDeltaY,
-                    ratio: absDeltaY > 0 ? absDeltaX / absDeltaY : 'infinite'
+                    ratio: absDeltaY > 0 ? (absDeltaX / absDeltaY).toFixed(2) : 'infinite'
                 });
             }
         }
 
-        // Apply drag effect for horizontal swipes with selective preventDefault
-        if (isHorizontalSwipe) {
-            // Only prevent default for horizontal movement to allow vertical scrolling
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Apply drag effect for confirmed horizontal swipes
+        if (touchState.isHorizontalSwipe) {
+            // Prevent default only for horizontal movement to preserve vertical scrolling
+            if (absDeltaX > absDeltaY) {
                 e.preventDefault();
             }
 
             console.log('✅ Processing horizontal swipe');
 
-            // Safety check: Ensure totalSlides is properly initialized
+            // Safety check: Ensure carousel is properly initialized
             if (typeof totalSlides === 'undefined' || totalSlides === 0) {
-                console.warn('⚠️ totalSlides not properly initialized, cannot apply drag effect');
+                console.warn('⚠️ Carousel not properly initialized, cannot apply drag effect');
                 return;
             }
 
-            const currentTranslate = -currentSlide * 100;
-            // Improved drag calculation with better sensitivity
-            const dragPercent = (deltaX / carouselTrack.offsetWidth) * 80; // Reduced sensitivity for more control
+            // Calculate drag with improved sensitivity and natural feel
+            // Cache container width for performance
+            const containerWidth = carouselTrack.offsetWidth || 320; // fallback for edge cases
+            const dragPercent = (deltaX / containerWidth) * 100;
+            let newTranslate = touchState.initialTransform + dragPercent;
 
-            // Apply drag effect with improved resistance at boundaries
-            let newTranslate = currentTranslate + dragPercent;
+            // Apply natural boundary resistance with performance optimization
+            const maxTranslate = 0;
+            const minTranslate = -(totalSlides - 1) * 100;
+            const resistanceFactor = 0.3;
 
-            // Smoother boundary resistance that feels more natural
-            if (newTranslate > 0) {
-                // Gentle resistance at start boundary
-                newTranslate = newTranslate * 0.4;
-            } else if (newTranslate < -(totalSlides - 1) * 100) {
-                // Gentle resistance at end boundary
-                const excess = newTranslate + (totalSlides - 1) * 100;
-                newTranslate = -(totalSlides - 1) * 100 + excess * 0.4;
+            if (newTranslate > maxTranslate) {
+                // Resistance at start boundary
+                const excess = newTranslate - maxTranslate;
+                newTranslate = maxTranslate + excess * resistanceFactor;
+            } else if (newTranslate < minTranslate) {
+                // Resistance at end boundary
+                const excess = newTranslate - minTranslate;
+                newTranslate = minTranslate + excess * resistanceFactor;
             }
 
-            carouselTrack.style.transform = `translateX(${newTranslate}%)`;
+            // Use requestAnimationFrame for smooth performance
+            requestAnimationFrame(() => {
+                carouselTrack.style.transform = `translateX(${newTranslate}%)`;
+            });
+
             console.log('🎨 Applied transform:', `translateX(${newTranslate}%)`);
         } else {
             console.log('⏸️ Not a horizontal swipe yet');
@@ -937,55 +1003,59 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleTouchEnd(e) {
         console.log('🏁 TOUCH END EVENT FIRED!');
 
-        // Only prevent default if we actually processed a significant horizontal swipe
-        if (isHorizontalSwipe && Math.abs(currentX - startX) > 30) {
+        // Only prevent default if we processed a significant horizontal swipe
+        if (touchState.isHorizontalSwipe && Math.abs(touchState.currentX - touchState.startX) > 30) {
             e.preventDefault();
         }
 
-        if (!isDragging) {
+        if (!touchState.isDragging) {
             console.log('❌ Not dragging, returning');
             return;
         }
 
-        isDragging = false;
+        // Restore smooth transitions
         carouselTrack.style.transition = 'transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
         // Only process horizontal swipes
-        if (isHorizontalSwipe) {
+        if (touchState.isHorizontalSwipe) {
             // Safety check: Ensure carousel variables are initialized
             if (typeof totalSlides === 'undefined' || typeof currentSlide === 'undefined') {
                 console.warn('⚠️ Carousel variables not initialized, cannot process touch end');
+                resetTouchState();
                 return;
             }
 
-            const deltaX = currentX - startX;
-            const deltaTime = Date.now() - startTime;
-            const velocity = Math.abs(deltaX) / deltaTime;
+            const deltaX = touchState.currentX - touchState.startX;
+            const deltaTime = Date.now() - touchState.startTime;
+            const velocity = deltaTime > 0 ? Math.abs(deltaX) / deltaTime : 0;
 
             // DEBUG: Log all touch end values
             console.log('🔍 Touch End Debug:', {
                 deltaX: deltaX,
                 currentSlide: currentSlide,
                 totalSlides: totalSlides,
-                velocity: velocity,
+                velocity: velocity.toFixed(3),
                 deltaTime: deltaTime,
-                startX: startX,
-                currentX: currentX,
-                isHorizontalSwipe: isHorizontalSwipe,
+                touchId: touchState.touchId,
                 'deltaX > 0 (right swipe)': deltaX > 0,
                 'deltaX < 0 (left swipe)': deltaX < 0,
                 'Math.abs(deltaX)': Math.abs(deltaX)
             });
 
-            // Improved swipe threshold for better user experience
-            // Higher base threshold to prevent accidental swipes, but still responsive to fast gestures
-            const threshold = velocity > 0.3 ? 50 : 100; // More conservative thresholds
+            // Modern threshold calculation with velocity consideration
+            // Base threshold: 80px for deliberate swipes
+            // Fast swipe threshold: 40px for quick gestures (velocity > 0.5px/ms)
+            const baseThreshold = 80;
+            const fastSwipeThreshold = 40;
+            const fastSwipeVelocity = 0.5;
+
+            const threshold = velocity > fastSwipeVelocity ? fastSwipeThreshold : baseThreshold;
             console.log('📏 Threshold:', threshold, 'Distance:', Math.abs(deltaX), 'Velocity:', velocity.toFixed(3));
 
             if (Math.abs(deltaX) > threshold) {
                 console.log('✅ Swipe distance sufficient');
 
-                // More explicit condition checking
+                // Determine swipe direction and validate boundaries
                 const swipingRight = deltaX > 0;
                 const swipingLeft = deltaX < 0;
                 const canGoBack = currentSlide > 0;
@@ -1000,6 +1070,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     totalSlides: totalSlides
                 });
 
+                // Execute navigation based on swipe direction and boundaries
                 if (swipingRight && canGoBack) {
                     console.log('👈 Swiping right (previous slide) - calling prevSlide()');
                     prevSlide();
@@ -1007,14 +1078,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('👉 Swiping left (next slide) - calling nextSlide()');
                     nextSlide();
                 } else {
-                    console.log('🚫 At boundary or invalid condition - snapping back');
-                    if (swipingRight && !canGoBack) {
-                        console.log('Cannot go back - already at first slide');
-                    } else if (swipingLeft && !canGoForward) {
-                        console.log('Cannot go forward - already at last slide');
-                    } else {
-                        console.log('Unknown condition');
-                    }
+                    console.log('🚫 At boundary - snapping back to current slide');
                     updateCarousel(currentSlide);
                 }
             } else {
@@ -1026,13 +1090,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCarousel(currentSlide);
         }
 
-        // Reset all touch state
-        startX = 0;
-        startY = 0;
-        currentX = 0;
-        currentY = 0;
-        isHorizontalSwipe = false;
-        startTime = 0;
+        // Reset touch state
+        resetTouchState();
     }
 
     // Event listeners
@@ -1052,40 +1111,38 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🍎 iOS Safari detected:', /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
 
     if (carouselTrack) {
-        console.log('✅ Attaching touch event listeners for carousel swipe functionality');
+        console.log('✅ Attaching modern touch event listeners for carousel swipe functionality');
 
-        // Enhanced event delegation with better target detection and passive handling
+        // Modern touch event handling with proper iOS Safari support
         document.addEventListener('touchstart', function(e) {
             // Check if touch is within carousel area
             if (carouselTrack.contains(e.target) || e.target.closest('.carousel-container')) {
                 handleTouchStart(e);
             }
-        }, { passive: true }); // Use passive for better performance
-        console.log('✅ document touchstart listener added with enhanced targeting');
+        }, { passive: false }); // Non-passive for preventDefault capability
+        console.log('✅ document touchstart listener added with modern targeting');
 
         document.addEventListener('touchmove', function(e) {
             // Continue handling if we're dragging or if touch is in carousel area
-            if (isDragging || (carouselTrack.contains(e.target) || e.target.closest('.carousel-container'))) {
+            if (touchState.isDragging || (carouselTrack.contains(e.target) || e.target.closest('.carousel-container'))) {
                 handleTouchMove(e);
             }
-        }, { passive: false }); // Keep non-passive for preventDefault capability
-        console.log('✅ document touchmove listener added with enhanced targeting');
+        }, { passive: false }); // Non-passive for preventDefault capability
+        console.log('✅ document touchmove listener added with modern targeting');
 
         document.addEventListener('touchend', function(e) {
-            if (isDragging) {
+            if (touchState.isDragging) {
                 handleTouchEnd(e);
             }
         }, { passive: false });
         console.log('✅ document touchend listener added');
 
-        // Handle touch cancellation with better cleanup
+        // Handle touch cancellation with proper cleanup
         document.addEventListener('touchcancel', function(e) {
-            if (isDragging) {
+            if (touchState.isDragging) {
                 console.log('🚫 Touch cancelled - cleaning up');
-                isDragging = false;
-                isHorizontalSwipe = false;
+                resetTouchState();
                 carouselTrack.style.transition = 'transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                carouselTrack.style.touchAction = '';
                 updateCarousel(currentSlide);
             }
         }, { passive: false });
@@ -1097,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // iOS Safari Fix: Prevent text selection during swipe
         carouselTrack.addEventListener('selectstart', (e) => {
-            if (isDragging) {
+            if (touchState.isDragging) {
                 e.preventDefault();
             }
         }, { passive: false });
@@ -1151,11 +1208,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 100);
 
-    // DEBUG: Add manual test buttons (temporary)
+    // DEBUG: Add comprehensive test functions for mobile testing
     console.log('🧪 Debug functions available:');
     console.log('- window.testNextSlide() - manually trigger next slide');
     console.log('- window.testPrevSlide() - manually trigger previous slide');
     console.log('- window.testGoToSlide(index) - go to specific slide');
+    console.log('- window.getCarouselState() - get current carousel state');
+    console.log('- window.simulateSwipe(direction) - simulate swipe gesture');
 
     window.testNextSlide = () => {
         console.log('🧪 Manual nextSlide test');
@@ -1170,6 +1229,32 @@ document.addEventListener('DOMContentLoaded', function() {
     window.testGoToSlide = (index) => {
         console.log('🧪 Manual goToSlide test:', index);
         updateCarousel(index);
+    };
+
+    window.getCarouselState = () => {
+        const state = {
+            currentSlide: currentSlide,
+            totalSlides: totalSlides,
+            carouselInitialized: carouselInitialized,
+            isTransitioning: isTransitioning,
+            touchState: touchState,
+            currentTransform: carouselTrack.style.transform,
+            userAgent: navigator.userAgent,
+            touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0
+        };
+        console.log('🔍 Current Carousel State:', state);
+        return state;
+    };
+
+    window.simulateSwipe = (direction) => {
+        console.log('🧪 Simulating swipe:', direction);
+        if (direction === 'left') {
+            nextSlide();
+        } else if (direction === 'right') {
+            prevSlide();
+        } else {
+            console.log('❌ Invalid direction. Use "left" or "right"');
+        }
     };
 
     // 🚀 CARD CREATION HELPER FUNCTIONS
