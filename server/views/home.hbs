@@ -756,17 +756,25 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Announce slide change to screen readers
-        if (animate && window.speechSynthesis) {
-            const announcement = `Slide ${currentSlide + 1} of ${totalSlides}`;
-            // Use a subtle announcement that doesn't interrupt user flow
-            const utterance = new SpeechSynthesisUtterance(announcement);
-            utterance.volume = 0.1;
-            utterance.rate = 1.5;
+        // Update live region for screen readers (more reliable than speech synthesis)
+        if (animate) {
+            const liveRegion = document.getElementById('carousel-live-region') || (() => {
+                const region = document.createElement('div');
+                region.id = 'carousel-live-region';
+                region.setAttribute('aria-live', 'polite');
+                region.setAttribute('aria-atomic', 'true');
+                region.style.position = 'absolute';
+                region.style.left = '-10000px';
+                region.style.width = '1px';
+                region.style.height = '1px';
+                region.style.overflow = 'hidden';
+                document.body.appendChild(region);
+                return region;
+            })();
+
+            // Update live region content for screen readers
             setTimeout(() => {
-                if (!window.speechSynthesis.speaking) {
-                    window.speechSynthesis.speak(utterance);
-                }
+                liveRegion.textContent = `Slide ${currentSlide + 1} of ${totalSlides}`;
             }, 100);
         }
     }
@@ -936,11 +944,11 @@ document.addEventListener('DOMContentLoaded', function() {
             isHorizontalSwipe: touchState.isHorizontalSwipe
         });
 
-        // Modern swipe detection with improved thresholds
+        // Conservative swipe detection to ensure reliable one-slide navigation
         if (!touchState.isHorizontalSwipe) {
-            // More conservative threshold to prevent accidental swipes
-            const minHorizontalDistance = 20;
-            const horizontalToVerticalRatio = 2.5;
+            // Very conservative thresholds to prevent accidental swipes and ensure deliberate gestures
+            const minHorizontalDistance = 25; // Increased from 20px
+            const horizontalToVerticalRatio = 3.0; // Increased from 2.5 for stricter horizontal detection
 
             if (absDeltaX > minHorizontalDistance &&
                 (absDeltaY === 0 || absDeltaX / absDeltaY > horizontalToVerticalRatio)) {
@@ -969,12 +977,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Calculate drag with improved sensitivity and natural feel
-            // Cache container width for performance
             const containerWidth = carouselTrack.offsetWidth || 320; // fallback for edge cases
             const dragPercent = (deltaX / containerWidth) * 100;
             let newTranslate = touchState.initialTransform + dragPercent;
 
-            // Apply natural boundary resistance with performance optimization
+            // Apply natural boundary resistance
             const maxTranslate = 0;
             const minTranslate = -(totalSlides - 1) * 100;
             const resistanceFactor = 0.3;
@@ -989,11 +996,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 newTranslate = minTranslate + excess * resistanceFactor;
             }
 
-            // Use requestAnimationFrame for smooth performance
-            requestAnimationFrame(() => {
-                carouselTrack.style.transform = `translateX(${newTranslate}%)`;
-            });
-
+            // Apply transform immediately for smooth dragging (no requestAnimationFrame delay)
+            carouselTrack.style.transform = `translateX(${newTranslate}%)`;
             console.log('🎨 Applied transform:', `translateX(${newTranslate}%)`);
         } else {
             console.log('⏸️ Not a horizontal swipe yet');
@@ -1042,12 +1046,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Math.abs(deltaX)': Math.abs(deltaX)
             });
 
-            // Modern threshold calculation with velocity consideration
-            // Base threshold: 80px for deliberate swipes
-            // Fast swipe threshold: 40px for quick gestures (velocity > 0.5px/ms)
-            const baseThreshold = 80;
-            const fastSwipeThreshold = 40;
-            const fastSwipeVelocity = 0.5;
+            // Conservative threshold calculation for reliable one-slide-per-swipe navigation
+            // Base threshold: 60px for deliberate swipes (reduced from 80px)
+            // Fast swipe threshold: 30px for quick gestures (reduced from 40px)
+            // Velocity threshold: 0.4px/ms (reduced from 0.5px/ms)
+            const baseThreshold = 60;
+            const fastSwipeThreshold = 30;
+            const fastSwipeVelocity = 0.4;
 
             const threshold = velocity > fastSwipeVelocity ? fastSwipeThreshold : baseThreshold;
             console.log('📏 Threshold:', threshold, 'Distance:', Math.abs(deltaX), 'Velocity:', velocity.toFixed(3));
