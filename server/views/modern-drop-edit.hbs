@@ -248,10 +248,10 @@
                                         </div>
 
                                         <!-- Hidden input to store gradient data -->
-                                        <input type="hidden" id="gradient-data" name="gradient_data" value="{{drop.gradient_data}}">
+                                        <input type="hidden" id="gradient-data" name="gradient_data" value="{{{drop.gradient_data}}}">
 
                                         <!-- Script tag for gradient data loading -->
-                                        <script type="application/json" id="gradient-data-json">{{drop.gradient_data}}</script>
+                                        <script type="application/json" id="gradient-data-json">{{{drop.gradient_data}}}</script>
                                     </div>
 
                                     <div class="form-group">
@@ -1543,7 +1543,13 @@ function loadExistingGradientData() {
         console.log('🎨 Script tag raw content:', `"${scriptContent}"`);
 
         if (scriptContent && scriptContent !== 'null' && scriptContent !== '' && scriptContent !== 'undefined') {
-            existingGradientData = scriptContent;
+            // Check if content contains HTML entities and decode them
+            let cleanContent = scriptContent;
+            if (scriptContent.includes('&quot;')) {
+                cleanContent = scriptContent.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                console.log('🎨 Decoded HTML entities in script content');
+            }
+            existingGradientData = cleanContent;
             dataSource = 'script-tag';
             console.log('🎨 ✅ Using script tag data');
         }
@@ -1555,7 +1561,13 @@ function loadExistingGradientData() {
         console.log('🎨 Hidden input raw value:', `"${inputValue}"`);
 
         if (inputValue && inputValue !== 'null' && inputValue !== '' && inputValue !== 'undefined') {
-            existingGradientData = inputValue;
+            // Check if content contains HTML entities and decode them
+            let cleanValue = inputValue;
+            if (inputValue.includes('&quot;')) {
+                cleanValue = inputValue.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                console.log('🎨 Decoded HTML entities in input value');
+            }
+            existingGradientData = cleanValue;
             dataSource = 'hidden-input';
             console.log('🎨 ✅ Using hidden input data');
         }
@@ -1607,6 +1619,48 @@ function loadExistingGradientData() {
         } catch (error) {
             console.error('🎨 ❌ Failed to parse gradient data:', error);
             console.error('🎨 Raw data that failed:', existingGradientData);
+
+            // Try to provide more specific error information
+            if (error.message.includes('Unexpected token')) {
+                console.error('🎨 💡 Hint: Data might still contain HTML entities or invalid JSON characters');
+
+                // Try one more time with additional cleaning
+                try {
+                    const extraCleanData = existingGradientData
+                        .replace(/&quot;/g, '"')
+                        .replace(/&amp;/g, '&')
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&#39;/g, "'")
+                        .replace(/&nbsp;/g, ' ')
+                        .trim();
+
+                    console.log('🎨 Attempting extra cleaning:', extraCleanData);
+                    const retryParsed = JSON.parse(extraCleanData);
+
+                    if (retryParsed && typeof retryParsed === 'object' && retryParsed.stops) {
+                        console.log('🎨 ✅ Extra cleaning successful!');
+                        gradientData = {
+                            type: (retryParsed.type === 'linear' || retryParsed.type === 'radial') ? retryParsed.type : 'linear',
+                            angle: (typeof retryParsed.angle === 'number' && retryParsed.angle >= 0 && retryParsed.angle <= 360) ? retryParsed.angle : 90,
+                            stops: retryParsed.stops.filter(stop =>
+                                stop &&
+                                typeof stop === 'object' &&
+                                typeof stop.color === 'string' &&
+                                typeof stop.position === 'number'
+                            )
+                        };
+
+                        if (gradientData.stops.length >= 2) {
+                            window.gradientDataLoaded = true;
+                            console.log('🎨 ✅ RECOVERED gradient data with extra cleaning:', gradientData);
+                            return true;
+                        }
+                    }
+                } catch (retryError) {
+                    console.error('🎨 ❌ Extra cleaning also failed:', retryError.message);
+                }
+            }
         }
     } else {
         console.log('🎨 ℹ️ No gradient data found in any source');
