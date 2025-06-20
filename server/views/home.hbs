@@ -52,6 +52,12 @@
                 </div>
                 {{/if}}
 
+                <!-- 🚀 DEBUG: Featured Drops Data -->
+                <script>
+                    console.log('🎯 Template Debug - Featured Drops:', {{{json featuredDrops}}});
+                    console.log('🎯 Template Debug - Featured Drops Length:', {{featuredDrops.length}});
+                </script>
+
                 <!-- Featured Drops Cards -->
                 {{#each featuredDrops}}
                 <div class="figma-event-card carousel-slide" data-slide="{{math @index '+' 1}}">
@@ -97,6 +103,14 @@
                             <span>Share</span>
                         </button>
                     </div>
+                </div>
+                {{else}}
+                <!-- 🚀 DEBUG: No Featured Drops Found -->
+                <div class="figma-event-card carousel-slide" data-slide="1" style="background: #ff6b6b; color: white; padding: 20px; text-align: center;">
+                    <h2>🔍 DEBUG: No Featured Drops</h2>
+                    <p>No drops found with show_on_homepage=true</p>
+                    <p>Total drops in template: {{featuredDrops.length}}</p>
+                    <p>Check /api/home-settings/debug-drops for details</p>
                 </div>
                 {{/each}}
             </div>

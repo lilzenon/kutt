@@ -75,4 +75,49 @@ router.get(
     })
 );
 
+// 🚀 TEST ENDPOINT - Enable homepage for first drop
+router.get(
+    "/test-enable-homepage",
+    asyncHandler(async(req, res) => {
+        try {
+            // Get the first drop
+            const firstDrop = await query.drop.find({}, { limit: 1 });
+
+            if (firstDrop.length === 0) {
+                return res.json({ error: "No drops found to test with" });
+            }
+
+            // Enable show_on_homepage for the first drop
+            await query.drop.update(firstDrop[0].id, {
+                show_on_homepage: true,
+                is_active: true
+            });
+
+            // Get updated data
+            const updatedDrop = await query.drop.findOne({ id: firstDrop[0].id });
+            const featuredDrops = await query.drop.getFeaturedDrops({ limit: 10 });
+
+            res.json({
+                message: "Test completed - enabled homepage for first drop",
+                updatedDrop: {
+                    id: updatedDrop.id,
+                    title: updatedDrop.title,
+                    show_on_homepage: updatedDrop.show_on_homepage,
+                    is_active: updatedDrop.is_active
+                },
+                featuredDropsCount: featuredDrops.length,
+                featuredDrops: featuredDrops.map(drop => ({
+                    id: drop.id,
+                    title: drop.title,
+                    show_on_homepage: drop.show_on_homepage,
+                    is_active: drop.is_active
+                }))
+            });
+        } catch (error) {
+            console.error('Test enable homepage error:', error);
+            res.status(500).json({ error: error.message });
+        }
+    })
+);
+
 module.exports = router;
