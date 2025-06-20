@@ -91,6 +91,12 @@ const createDropValidation = [
     .optional()
     .isBoolean()
     .withMessage("Show on homepage must be a boolean"),
+    body("posh_embed_url")
+    .optional()
+    .isURL()
+    .withMessage("Posh embed URL must be a valid URL")
+    .isLength({ max: 2040 })
+    .withMessage("Posh embed URL must be less than 2040 characters"),
 ];
 
 const updateDropValidation = [
@@ -470,7 +476,8 @@ function validateAndSanitizeDropData(data) {
         'artist_name',
         'event_date',
         'event_address',
-        'show_on_homepage'
+        'show_on_homepage',
+        'posh_embed_url'
     ];
 
     const sanitizedData = {};

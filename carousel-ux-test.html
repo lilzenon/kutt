@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎠 Carousel UX Test - Improved Swipe Experience</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .test-section {
+            margin-bottom: 30px;
+        }
+        .test-result {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .test-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .test-card h3 {
+            margin-top: 0;
+            color: #00ff88;
+        }
+        .device-info {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+        .improvement-list {
+            list-style: none;
+            padding: 0;
+        }
+        .improvement-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .improvement-list li:before {
+            content: "✨ ";
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎠 Carousel UX Test - Improved Swipe Experience</h1>
+    
+    <div class="device-info" id="device-info">
+        <strong>Device Information:</strong><br>
+        Loading device details...
+    </div>
+
+    <div class="test-container">
+        <h2>🚀 Carousel Improvements Implemented</h2>
+        <ul class="improvement-list">
+            <li><strong>Swipe Sensitivity:</strong> Increased threshold from 3px to 15px to prevent accidental swipes</li>
+            <li><strong>Transition Timing:</strong> Improved from 300ms to 350ms with natural easing curve</li>
+            <li><strong>Boundary Resistance:</strong> Smoother resistance (40% vs 25%) for better feel</li>
+            <li><strong>Drag Sensitivity:</strong> Reduced from 100% to 80% for more controlled movement</li>
+            <li><strong>Velocity Threshold:</strong> More conservative thresholds (50px/100px vs 30px/80px)</li>
+            <li><strong>Touch Handling:</strong> Less aggressive preventDefault for better compatibility</li>
+            <li><strong>CSS Optimization:</strong> Consolidated styles and improved GPU acceleration</li>
+        </ul>
+    </div>
+
+    <div class="test-container">
+        <h2>📱 Test Instructions</h2>
+        <div class="test-grid">
+            <div class="test-card">
+                <h3>Desktop Testing</h3>
+                <p>1. Open homepage in new tab</p>
+                <p>2. Use mouse to drag carousel cards</p>
+                <p>3. Test navigation dots</p>
+                <p>4. Try keyboard arrow keys</p>
+                <button onclick="testDesktop()">Test Desktop</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>Mobile Testing</h3>
+                <p>1. Open on actual mobile device</p>
+                <p>2. Test gentle swipe gestures</p>
+                <p>3. Test fast swipe gestures</p>
+                <p>4. Test boundary resistance</p>
+                <button onclick="testMobile()">Test Mobile</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>Cross-Browser Testing</h3>
+                <p>1. Test in Chrome Mobile</p>
+                <p>2. Test in iOS Safari</p>
+                <p>3. Test in Firefox Mobile</p>
+                <p>4. Compare smoothness</p>
+                <button onclick="testBrowsers()">Test Browsers</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // Display device information
+        function updateDeviceInfo() {
+            const info = document.getElementById('device-info');
+            const userAgent = navigator.userAgent;
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            const touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            info.innerHTML = `
+                <strong>Device Information:</strong><br>
+                User Agent: ${userAgent}<br>
+                Mobile Device: ${isMobile ? 'Yes' : 'No'}<br>
+                iOS Device: ${isIOS ? 'Yes' : 'No'}<br>
+                Touch Support: ${touchSupport ? 'Yes' : 'No'}<br>
+                Screen Size: ${window.screen.width}x${window.screen.height}<br>
+                Viewport: ${window.innerWidth}x${window.innerHeight}<br>
+                Device Pixel Ratio: ${window.devicePixelRatio || 1}
+            `;
+        }
+
+        function addTestResult(type, message) {
+            const results = document.getElementById('test-results');
+            const result = document.createElement('div');
+            result.className = `test-result ${type}`;
+            result.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            results.appendChild(result);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        function testDesktop() {
+            addTestResult('info', '🖥️ Opening homepage for desktop testing...');
+            window.open('http://localhost:3000', '_blank');
+            
+            setTimeout(() => {
+                addTestResult('info', '✅ Desktop test checklist:');
+                addTestResult('info', '• Smooth mouse drag transitions');
+                addTestResult('info', '• No "launching" or jerky movements');
+                addTestResult('info', '• Proper boundary resistance');
+                addTestResult('info', '• Working navigation dots');
+                addTestResult('info', '• Keyboard arrow key navigation');
+            }, 1000);
+        }
+
+        function testMobile() {
+            addTestResult('info', '📱 Mobile testing instructions:');
+            addTestResult('warning', '⚠️ Test on ACTUAL mobile device, not browser dev tools');
+            addTestResult('info', '1. Open http://localhost:3000 on mobile');
+            addTestResult('info', '2. Test gentle horizontal swipes');
+            addTestResult('info', '3. Test fast swipe gestures');
+            addTestResult('info', '4. Verify smooth transitions');
+            addTestResult('info', '5. Check boundary resistance feels natural');
+            
+            // Copy URL to clipboard for easy mobile access
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText('http://localhost:3000').then(() => {
+                    addTestResult('success', '📋 URL copied to clipboard for mobile testing');
+                });
+            }
+        }
+
+        function testBrowsers() {
+            addTestResult('info', '🌐 Cross-browser testing checklist:');
+            addTestResult('info', '• Chrome Mobile: Test swipe responsiveness');
+            addTestResult('info', '• iOS Safari: Test touch event handling');
+            addTestResult('info', '• Firefox Mobile: Test transition smoothness');
+            addTestResult('info', '• Edge Mobile: Test overall compatibility');
+            addTestResult('warning', '⚠️ Pay attention to differences in swipe sensitivity');
+        }
+
+        // Initialize
+        updateDeviceInfo();
+        addTestResult('success', '🎠 Carousel UX Test Page Loaded');
+        addTestResult('info', 'Ready to test improved carousel experience');
+        
+        // Update device info on resize
+        window.addEventListener('resize', updateDeviceInfo);
+    </script>
+</body>
+</html>
