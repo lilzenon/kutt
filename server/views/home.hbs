@@ -307,20 +307,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const countrySelect = document.getElementById('country-select');
     const countryFlagDisplay = document.getElementById('country-flag-display');
 
+    // Carousel functionality - Initialize variables first to avoid temporal dead zone
+    let currentSlide = 0;
+    let totalSlides = 0; // Will be calculated after DOM is ready
+    let isTransitioning = false;
+    let carouselInitialized = false; // Flag to prevent multiple initializations
+
     // Carousel elements
     const carouselTrack = document.getElementById('carouselTrack');
     const carouselPrev = document.getElementById('carouselPrev');
     const carouselNext = document.getElementById('carouselNext');
     let carouselDots = []; // Will be populated after dots are generated
 
-    // Debug element selection
+    // Debug element selection - now safe to access totalSlides
     console.log('🔍 Element Debug:', {
         carouselTrack: !!carouselTrack,
         carouselTrackElement: carouselTrack,
         carouselPrev: !!carouselPrev,
         carouselNext: !!carouselNext,
         carouselDotsCount: carouselDots.length,
-        totalSlides: totalSlides
+        totalSlides: totalSlides,
+        carouselInitialized: carouselInitialized
     });
 
     // Carousel track validation
@@ -396,14 +403,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Carousel functionality - Initialize variables without DOM queries
-    let currentSlide = 0;
-    let totalSlides = 0; // Will be calculated after DOM is ready
-    let isTransitioning = false;
-    let carouselInitialized = false; // Flag to prevent multiple initializations
+
 
     // Generate carousel dots dynamically to ensure correct indexing
     function generateCarouselDots() {
+        // Safety check: Ensure variables are properly initialized
+        if (typeof totalSlides === 'undefined') {
+            console.error('❌ totalSlides variable not initialized! Cannot generate dots.');
+            return;
+        }
+
         const indicatorsContainer = document.getElementById('carouselIndicators');
         if (!indicatorsContainer) {
             console.error('❌ Carousel indicators container not found!');
@@ -413,7 +422,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ensure totalSlides is properly set before generating dots
         if (totalSlides === 0) {
             console.warn('⚠️ totalSlides is 0, recalculating from DOM...');
-            totalSlides = document.querySelectorAll('.carousel-slide').length;
+            const slides = document.querySelectorAll('.carousel-slide');
+            totalSlides = slides.length;
+            console.log(`🔢 Recalculated totalSlides: ${totalSlides}`);
+        }
+
+        // Additional safety check after recalculation
+        if (totalSlides === 0) {
+            console.warn('⚠️ No slides found in DOM, cannot generate dots');
+            return;
         }
 
         // Clear existing dots
@@ -705,6 +722,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleTouchStart(e) {
         console.log('🚀 TOUCH START EVENT FIRED!', e);
 
+        // Safety check: Ensure carousel variables are initialized
+        if (typeof totalSlides === 'undefined' || typeof currentSlide === 'undefined') {
+            console.warn('⚠️ Carousel variables not initialized, ignoring touch start');
+            return;
+        }
+
         if (!e.touches || e.touches.length === 0) {
             console.error('❌ No touches found in touchstart event');
             return;
@@ -812,6 +835,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
             console.log('✅ Processing horizontal swipe');
 
+            // Safety check: Ensure totalSlides is properly initialized
+            if (typeof totalSlides === 'undefined' || totalSlides === 0) {
+                console.warn('⚠️ totalSlides not properly initialized, cannot apply drag effect');
+                return;
+            }
+
             const currentTranslate = -currentSlide * 100;
             const dragPercent = (deltaX / carouselTrack.offsetWidth) * 100;
 
@@ -852,6 +881,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Only process horizontal swipes
         if (isHorizontalSwipe) {
+            // Safety check: Ensure carousel variables are initialized
+            if (typeof totalSlides === 'undefined' || typeof currentSlide === 'undefined') {
+                console.warn('⚠️ Carousel variables not initialized, cannot process touch end');
+                return;
+            }
+
             const deltaX = currentX - startX;
             const deltaTime = Date.now() - startTime;
             const velocity = Math.abs(deltaX) / deltaTime;
