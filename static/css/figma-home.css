@@ -35,6 +35,7 @@ body {
     align-items: center;
     max-width: 400px;
     margin: 0 auto;
+    width: 100%;
 }
 
 
@@ -87,7 +88,7 @@ body {
 }
 
 
-/* Event Card - Exact Figma Match */
+/* Event Card - Responsive Design */
 
 .figma-event-card {
     background: #1a1a1a;
@@ -98,6 +99,7 @@ body {
     overflow: hidden;
     border: 1px solid #333;
     position: relative;
+    margin: 0 auto;
     /* Mobile browser optimizations */
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -108,7 +110,7 @@ body {
 }
 
 
-/* Event Image - Exact Gradient Match */
+/* Event Image - Responsive Design */
 
 .figma-event-image {
     width: 280px;
@@ -121,6 +123,7 @@ body {
     position: relative;
     border-radius: 20px;
     margin: 16px auto 0 auto;
+    max-width: calc(100% - 32px);
 }
 
 .figma-image-placeholder {
@@ -966,7 +969,7 @@ body {
 }
 
 .carousel-dot {
-    /* Original dot styling - will be overridden by enhanced version below */
+    /* Enhanced responsive dot styling with proper touch targets */
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -975,14 +978,29 @@ body {
     cursor: pointer;
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    /* Ensure minimum touch target size for mobile */
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.carousel-dot:hover {
+.carousel-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-dot:hover::before {
     background: rgba(255, 255, 255, 0.5);
     transform: scale(1.2);
 }
 
-.carousel-dot.active {
+.carousel-dot.active::before {
     background: #00ff88;
     transform: scale(1.3);
 }
@@ -1000,6 +1018,7 @@ body {
     max-width: 360px;
     position: relative;
     overflow: hidden;
+    margin: 0 auto;
     /* Optimized touch handling for smooth swipes */
     touch-action: pan-y pinch-zoom;
     -webkit-overflow-scrolling: touch;
@@ -1075,56 +1094,103 @@ body {
 
 @media (min-width: 768px) {
     .figma-home-container {
-        max-width: 500px;
-        padding: 24px;
+        max-width: 700px;
+        padding: 32px;
     }
     .figma-header {
-        padding: 26px 24px 32px;
+        padding: 32px 32px 40px;
     }
     .figma-logo {
-        height: 44px;
-        max-width: 352px;
+        height: 48px;
+        max-width: 400px;
     }
     .figma-main {
-        padding: 0 24px 40px;
-        margin-bottom: 16px;
+        padding: 0 32px 48px;
+        margin-bottom: 20px;
     }
     .carousel-container {
-        max-width: 480px;
+        max-width: 600px;
     }
     .figma-event-card {
-        max-width: 480px;
+        max-width: 600px;
     }
     .figma-event-image {
-        width: 320px;
-        height: 320px;
+        width: 380px;
+        height: 380px;
+        margin: 20px auto 0 auto;
     }
     .figma-event-info {
-        padding: 32px 32px 24px;
+        padding: 36px 36px 28px;
     }
     .figma-event-title {
-        font-size: 32px;
+        font-size: 34px;
+        line-height: 1.1;
+        margin-bottom: 10px;
     }
     .figma-event-artist {
         font-size: 20px;
+        margin-bottom: 18px;
+    }
+    .figma-event-date,
+    .figma-event-address {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    .figma-event-description {
+        font-size: 15px;
+        margin-top: 14px;
+        max-height: 66px;
+        line-height: 1.4;
     }
     .figma-action-buttons {
-        padding: 0 32px 32px;
-        gap: 16px;
+        padding: 0 36px 36px;
+        gap: 18px;
     }
     .figma-share-btn {
-        width: 56px;
-        height: 56px;
+        width: 60px;
+        height: 60px;
         border-radius: 18px;
     }
     .figma-share-btn svg {
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
     }
     .figma-tickets-btn {
-        height: 56px;
+        height: 60px;
         font-size: 18px;
         border-radius: 18px;
+        font-weight: 600;
+    }
+    .figma-btn-primary {
+        height: 60px;
+        font-size: 18px;
+        border-radius: 18px;
+    }
+    .figma-btn-secondary {
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+    }
+    .figma-btn-secondary svg {
+        width: 24px;
+        height: 24px;
+    }
+    /* Carousel navigation responsive styles */
+    .carousel-nav {
+        margin-top: 28px;
+        margin-bottom: 4px;
+        padding-bottom: 4px;
+    }
+    .carousel-indicators {
+        gap: 14px;
+    }
+    .carousel-dot {
+        min-width: 48px;
+        min-height: 48px;
+    }
+    .carousel-dot::before {
+        width: 10px;
+        height: 10px;
     }
     .figma-text-us {
         padding: 30px 24px;
@@ -1181,73 +1247,123 @@ body {
 }
 
 
-/* Desktop Styles (1024px+) */
+/* Desktop Styles (1024px+) - Enhanced for Large Screens */
 
 @media (min-width: 1024px) {
     .figma-home-container {
-        max-width: 600px;
-        padding: 32px;
+        max-width: 900px;
+        padding: 40px;
     }
     .figma-header {
-        padding: 32px 32px 38px;
+        padding: 40px 40px 48px;
     }
     .figma-logo {
-        height: 53px;
-        max-width: 440px;
+        height: 56px;
+        max-width: 500px;
     }
     .figma-main {
-        padding: 0 32px 24px;
+        padding: 0 40px 32px;
         margin-bottom: 0px;
     }
     .carousel-container {
-        max-width: 560px;
+        max-width: 800px;
     }
     .carousel-btn {
         opacity: 1;
         pointer-events: auto;
+        width: 48px;
+        height: 48px;
     }
     .figma-event-card {
-        max-width: 560px;
+        max-width: 800px;
     }
     .figma-event-image {
-        width: 360px;
-        height: 360px;
+        width: 480px;
+        height: 480px;
+        margin: 24px auto 0 auto;
+        border-radius: 24px;
     }
     .figma-event-info {
-        padding: 40px 40px 24px;
+        padding: 48px 48px 32px;
     }
     .figma-event-title {
-        font-size: 36px;
+        font-size: 42px;
+        line-height: 1.1;
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
     }
     .figma-event-artist {
-        font-size: 22px;
+        font-size: 24px;
+        margin-bottom: 20px;
     }
     .figma-event-date,
     .figma-event-address {
         font-size: 18px;
+        margin-bottom: 12px;
     }
     .figma-event-description {
         font-size: 16px;
-        margin-top: 16px;
-        max-height: 72px;
+        margin-top: 18px;
+        max-height: 80px;
+        line-height: 1.5;
     }
     .figma-action-buttons {
-        padding: 0 40px 40px;
-        gap: 24px;
+        padding: 0 48px 48px;
+        gap: 28px;
     }
     .figma-share-btn {
-        width: 64px;
-        height: 64px;
-        border-radius: 20px;
+        width: 72px;
+        height: 72px;
+        border-radius: 22px;
     }
     .figma-share-btn svg {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
     }
     .figma-tickets-btn {
-        height: 64px;
-        font-size: 20px;
-        border-radius: 20px;
+        height: 72px;
+        font-size: 22px;
+        border-radius: 22px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .figma-btn-primary {
+        height: 72px;
+        font-size: 22px;
+        border-radius: 22px;
+        font-weight: 700;
+    }
+    .figma-btn-secondary {
+        width: 72px;
+        height: 72px;
+        border-radius: 22px;
+    }
+    .figma-btn-secondary svg {
+        width: 28px;
+        height: 28px;
+    }
+    /* Enhanced carousel navigation for desktop */
+    .carousel-nav {
+        margin-top: 32px;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+    }
+    .carousel-indicators {
+        gap: 16px;
+    }
+    .carousel-dot {
+        min-width: 52px;
+        min-height: 52px;
+    }
+    .carousel-dot::before {
+        width: 12px;
+        height: 12px;
+    }
+    .carousel-btn {
+        left: -80px;
+    }
+    .carousel-next {
+        right: -80px;
     }
     .figma-text-us {
         padding: 24px 32px;
@@ -1291,6 +1407,122 @@ body {
     .figma-social-link {
         width: 64px;
         height: 64px;
+    }
+}
+
+
+/* Extra Large Desktop Styles (1440px+) - Premium Experience */
+
+@media (min-width: 1440px) {
+    .figma-home-container {
+        max-width: 1100px;
+        padding: 48px;
+    }
+    .figma-header {
+        padding: 48px 48px 56px;
+    }
+    .figma-logo {
+        height: 64px;
+        max-width: 600px;
+    }
+    .figma-main {
+        padding: 0 48px 40px;
+    }
+    .carousel-container {
+        max-width: 1000px;
+    }
+    .carousel-btn {
+        width: 52px;
+        height: 52px;
+    }
+    .figma-event-card {
+        max-width: 1000px;
+    }
+    .figma-event-image {
+        width: 560px;
+        height: 560px;
+        margin: 28px auto 0 auto;
+        border-radius: 28px;
+    }
+    .figma-event-info {
+        padding: 56px 56px 40px;
+    }
+    .figma-event-title {
+        font-size: 48px;
+        line-height: 1.05;
+        margin-bottom: 14px;
+    }
+    .figma-event-artist {
+        font-size: 26px;
+        margin-bottom: 24px;
+    }
+    .figma-event-date,
+    .figma-event-address {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+    .figma-event-description {
+        font-size: 18px;
+        margin-top: 20px;
+        max-height: 90px;
+        line-height: 1.5;
+    }
+    .figma-action-buttons {
+        padding: 0 56px 56px;
+        gap: 32px;
+    }
+    .figma-share-btn {
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+    }
+    .figma-share-btn svg {
+        width: 40px;
+        height: 40px;
+    }
+    .figma-tickets-btn {
+        height: 80px;
+        font-size: 24px;
+        border-radius: 24px;
+        font-weight: 700;
+    }
+    .figma-btn-primary {
+        height: 80px;
+        font-size: 24px;
+        border-radius: 24px;
+        font-weight: 700;
+    }
+    .figma-btn-secondary {
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+    }
+    .figma-btn-secondary svg {
+        width: 32px;
+        height: 32px;
+    }
+    /* Premium carousel navigation for extra large screens */
+    .carousel-nav {
+        margin-top: 36px;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+    }
+    .carousel-indicators {
+        gap: 18px;
+    }
+    .carousel-dot {
+        min-width: 56px;
+        min-height: 56px;
+    }
+    .carousel-dot::before {
+        width: 14px;
+        height: 14px;
+    }
+    .carousel-prev {
+        left: -100px;
+    }
+    .carousel-next {
+        right: -100px;
     }
 }
 
