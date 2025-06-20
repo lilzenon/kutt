@@ -60,7 +60,7 @@
 
                 <!-- Featured Drops Cards -->
                 {{#each featuredDrops}}
-                <div class="figma-event-card carousel-slide" data-slide="{{math @index '+' 1}}">
+                <div class="figma-event-card carousel-slide" data-slide="{{#if ../homeSettings.event_title}}{{math @index '+' 1}}{{else}}{{@index}}{{/if}}">
                     <!-- Event Image with Gradient Background -->
                     <div class="figma-event-image">
                         {{#if this.cover_image}}
@@ -116,7 +116,7 @@
                 </div>
                 {{else}}
                 <!-- 🚀 DEBUG: No Featured Drops Found -->
-                <div class="figma-event-card carousel-slide" data-slide="1" style="background: #ff6b6b; color: white; padding: 20px; text-align: center;">
+                <div class="figma-event-card carousel-slide" data-slide="{{#if homeSettings.event_title}}1{{else}}0{{/if}}" style="background: #ff6b6b; color: white; padding: 20px; text-align: center;">
                     <h2>🔍 DEBUG: No Featured Drops</h2>
                     <p>No drops found with show_on_homepage=true</p>
                     <p>Total drops in template: {{featuredDrops.length}}</p>
@@ -577,14 +577,16 @@ document.addEventListener('DOMContentLoaded', function() {
         track.innerHTML = '';
 
         // Add home settings card (always first)
+        let slideOffset = 0;
         if (homeSettings.event_title) {
             const homeCard = createHomeSettingsCard(homeSettings, formattedDate);
             track.appendChild(homeCard);
+            slideOffset = 1; // Featured drops start at index 1
         }
 
         // Add featured drops cards
         featuredDrops.forEach((drop, index) => {
-            const dropCard = createDropCard(drop, index + 1);
+            const dropCard = createDropCard(drop, index + slideOffset);
             track.appendChild(dropCard);
         });
 
