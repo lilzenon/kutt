@@ -396,12 +396,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Carousel functionality
+    // Carousel functionality - Initialize variables without DOM queries
     let currentSlide = 0;
-    let totalSlides = document.querySelectorAll('.carousel-slide').length;
+    let totalSlides = 0; // Will be calculated after DOM is ready
     let isTransitioning = false;
-
-    // Carousel initialization moved to initializeCarousel() function
+    let carouselInitialized = false; // Flag to prevent multiple initializations
 
     // Generate carousel dots dynamically to ensure correct indexing
     function generateCarouselDots() {
@@ -409,6 +408,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!indicatorsContainer) {
             console.error('❌ Carousel indicators container not found!');
             return;
+        }
+
+        // Ensure totalSlides is properly set before generating dots
+        if (totalSlides === 0) {
+            console.warn('⚠️ totalSlides is 0, recalculating from DOM...');
+            totalSlides = document.querySelectorAll('.carousel-slide').length;
         }
 
         // Clear existing dots
@@ -523,27 +528,98 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize carousel after DOM elements are ready
     function initializeCarousel() {
-        // Recalculate totalSlides from actual DOM elements
-        totalSlides = document.querySelectorAll('.carousel-slide').length;
+        // Prevent multiple initializations
+        if (carouselInitialized) {
+            console.log('🔄 Carousel already initialized, skipping...');
+            return;
+        }
+
+        console.log('🚀 Starting carousel initialization...');
+
+        // Wait for DOM elements to be available
+        const slides = document.querySelectorAll('.carousel-slide');
+        const track = document.getElementById('carouselTrack');
+        const indicators = document.getElementById('carouselIndicators');
+
+        if (!track) {
+            console.error('❌ Carousel track not found, retrying in 50ms...');
+            setTimeout(initializeCarousel, 50);
+            return;
+        }
+
+        if (!indicators) {
+            console.error('❌ Carousel indicators not found, retrying in 50ms...');
+            setTimeout(initializeCarousel, 50);
+            return;
+        }
+
+        if (slides.length === 0) {
+            console.error('❌ No carousel slides found, retrying in 50ms...');
+            setTimeout(initializeCarousel, 50);
+            return;
+        }
+
+        // Calculate totalSlides from actual DOM elements
+        totalSlides = slides.length;
         console.log(`🎠 Carousel initialized with ${totalSlides} slides`);
 
         // Set carousel track width dynamically based on number of slides
-        if (carouselTrack && totalSlides > 0) {
+        if (track && totalSlides > 0) {
             const trackWidth = totalSlides * 100; // Each slide is 100% of container width
-            carouselTrack.style.width = `${trackWidth}%`;
+            track.style.width = `${trackWidth}%`;
             console.log(`🎨 Set carousel track width to ${trackWidth}% for ${totalSlides} slides`);
         }
 
         // Generate dots after totalSlides is properly set
         generateCarouselDots();
+
+        // Mark as initialized
+        carouselInitialized = true;
+        console.log('✅ Carousel initialization completed successfully');
     }
 
-    // Initialize carousel after a short delay to ensure DOM is ready
-    setTimeout(initializeCarousel, 100);
+    // Initialize carousel with multiple fallback attempts
+    function attemptCarouselInitialization() {
+        console.log('🔧 Attempting carousel initialization...');
+
+        // Try immediate initialization
+        if (document.readyState === 'complete') {
+            console.log('📄 Document already loaded, initializing immediately');
+            initializeCarousel();
+        } else if (document.readyState === 'interactive') {
+            console.log('📄 Document interactive, initializing with short delay');
+            setTimeout(initializeCarousel, 50);
+        } else {
+            console.log('📄 Document still loading, waiting for DOMContentLoaded');
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('📄 DOMContentLoaded fired, initializing carousel');
+                setTimeout(initializeCarousel, 100);
+            });
+        }
+
+        // Fallback initialization after window load
+        window.addEventListener('load', () => {
+            console.log('🪟 Window load event fired');
+            if (!carouselInitialized) {
+                console.log('🔄 Carousel not yet initialized, attempting fallback initialization');
+                setTimeout(initializeCarousel, 200);
+            }
+        });
+    }
+
+    // Start initialization process
+    attemptCarouselInitialization();
 
     // Update carousel position
     function updateCarousel(slideIndex, animate = true) {
         if (isTransitioning && animate) return;
+
+        // Ensure carousel is initialized before updating
+        if (!carouselInitialized || totalSlides === 0) {
+            console.warn('⚠️ Carousel not initialized yet, deferring update...');
+            setTimeout(() => updateCarousel(slideIndex, animate), 100);
+            return;
+        }
 
         currentSlide = Math.max(0, Math.min(slideIndex, totalSlides - 1));
         const translateX = -currentSlide * 100;
@@ -584,6 +660,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Previous slide
     function prevSlide() {
         console.log('🔙 prevSlide() called - currentSlide:', currentSlide);
+
+        // Ensure carousel is initialized
+        if (!carouselInitialized || totalSlides === 0) {
+            console.warn('⚠️ Carousel not initialized, cannot navigate');
+            return;
+        }
+
         if (currentSlide > 0) {
             console.log('✅ Moving to slide:', currentSlide - 1);
             updateCarousel(currentSlide - 1);
@@ -595,6 +678,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Next slide
     function nextSlide() {
         console.log('🔜 nextSlide() called - currentSlide:', currentSlide);
+
+        // Ensure carousel is initialized
+        if (!carouselInitialized || totalSlides === 0) {
+            console.warn('⚠️ Carousel not initialized, cannot navigate');
+            return;
+        }
+
         if (currentSlide < totalSlides - 1) {
             console.log('✅ Moving to slide:', currentSlide + 1);
             updateCarousel(currentSlide + 1);
