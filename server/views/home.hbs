@@ -290,17 +290,6 @@
         </div>
     </footer>
 
-    <!-- 🔍 DEBUG: Home Settings Data -->
-    <div style="display: none;" id="debug-data">
-        <h3>Debug: Home Settings</h3>
-        <p>tickets_url: {{homeSettings.tickets_url}}</p>
-        <p>event_title: {{homeSettings.event_title}}</p>
-        <h3>Debug: Featured Drops</h3>
-        {{#each featuredDrops}}
-        <p>Drop {{@index}}: {{this.title}} - posh_embed_url: {{this.posh_embed_url}}</p>
-        {{/each}}
-    </div>
-
     <!-- Modal Overlay -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
@@ -340,24 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const countrySelect = document.getElementById('country-select');
     const countryFlagDisplay = document.getElementById('country-flag-display');
 
-    // 🔍 DEBUG: Log current page data
-    console.log('🏠 Home page loaded with data:');
-    console.log('📋 Home settings tickets_url:', '{{homeSettings.tickets_url}}');
-    console.log('🎪 Featured drops count:', {{featuredDrops.length}});
-    {{#each featuredDrops}}
-    console.log('🎯 Drop {{@index}}: {{this.title}} - posh_embed_url:', '{{this.posh_embed_url}}');
-    {{/each}}
-
-    // Check for tickets buttons
-    const ticketsButtons = document.querySelectorAll('.figma-tickets-btn');
-    console.log('🎫 Found', ticketsButtons.length, 'tickets buttons on page');
-    ticketsButtons.forEach((btn, index) => {
-        console.log(`🎫 Button ${index}:`, {
-            'data-tickets-url': btn.getAttribute('data-tickets-url'),
-            'onclick': btn.getAttribute('onclick'),
-            'text': btn.textContent.trim()
-        });
-    });
+    // Tickets button functionality handled by event delegation below
 
     // Carousel functionality - Initialize variables first to avoid temporal dead zone
     let currentSlide = 0;
