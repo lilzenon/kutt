@@ -134,6 +134,12 @@ router.get(
     "/test-create-sample-drops",
     asyncHandler(async(req, res) => {
         try {
+            // Get the first user to assign drops to
+            const firstUser = await query.user.find({}, { limit: 1 });
+            const userId = firstUser.length > 0 ? firstUser[0].id : 1; // Fallback to user ID 1
+
+            console.log(`🔧 Creating sample drops with user_id: ${userId}`);
+
             const sampleDrops = [{
                     title: "Summer Music Festival 2025",
                     description: "Join us for an amazing summer music festival featuring top artists!",
@@ -144,7 +150,8 @@ router.get(
                     background_color: "#ff6b6b",
                     button_text: "Get Tickets",
                     show_on_homepage: true,
-                    is_active: true
+                    is_active: true,
+                    user_id: userId
                 },
                 {
                     title: "Electronic Dance Night",
@@ -156,7 +163,8 @@ router.get(
                     background_color: "#4ecdc4",
                     button_text: "Join the Party",
                     show_on_homepage: true,
-                    is_active: true
+                    is_active: true,
+                    user_id: userId
                 },
                 {
                     title: "Jazz & Blues Evening",
@@ -168,7 +176,8 @@ router.get(
                     background_color: "#45b7d1",
                     button_text: "Reserve Seat",
                     show_on_homepage: true,
-                    is_active: true
+                    is_active: true,
+                    user_id: userId
                 }
             ];
 
@@ -180,21 +189,33 @@ router.get(
                     if (!existingDrop) {
                         const newDrop = await query.drop.create(dropData);
                         createdDrops.push(newDrop);
-                        console.log(`✅ Created sample drop: ${dropData.title}`);
+                        console.log(`✅ Created sample drop: ${dropData.title} with user_id: ${userId}`);
                     } else {
-                        console.log(`ℹ️ Drop already exists: ${dropData.title}`);
-                        createdDrops.push(existingDrop);
+                        // Update existing drop to ensure it has the correct flags
+                        await query.drop.update(existingDrop.id, {
+                            show_on_homepage: true,
+                            is_active: true,
+                            artist_name: dropData.artist_name,
+                            event_date: dropData.event_date,
+                            event_address: dropData.event_address
+                        });
+                        const updatedDrop = await query.drop.findOne({ id: existingDrop.id });
+                        createdDrops.push(updatedDrop);
+                        console.log(`🔄 Updated existing drop: ${dropData.title}`);
                     }
                 } catch (dropError) {
-                    console.error(`❌ Error creating drop ${dropData.title}:`, dropError);
+                    console.error(`❌ Error creating/updating drop ${dropData.title}:`, dropError);
                 }
             }
 
             // Get featured drops after creation
             const featuredDrops = await query.drop.getFeaturedDrops({ limit: 10 });
 
+            console.log(`🎯 Test completed: ${createdDrops.length} drops processed, ${featuredDrops.length} featured drops found`);
+
             res.json({
                 message: `Sample drops created/verified successfully`,
+                userId: userId,
                 createdCount: createdDrops.length,
                 featuredDropsCount: featuredDrops.length,
                 createdDrops: createdDrops.map(drop => ({
@@ -204,7 +225,8 @@ router.get(
                     event_date: drop.event_date,
                     event_address: drop.event_address,
                     show_on_homepage: drop.show_on_homepage,
-                    is_active: drop.is_active
+                    is_active: drop.is_active,
+                    user_id: drop.user_id
                 })),
                 featuredDrops: featuredDrops.map(drop => ({
                     id: drop.id,
@@ -213,11 +235,46 @@ router.get(
                     event_date: drop.event_date,
                     event_address: drop.event_address,
                     show_on_homepage: drop.show_on_homepage,
-                    is_active: drop.is_active
+                    is_active: drop.is_active,
+                    user_id: drop.user_id
                 }))
             });
         } catch (error) {
             console.error('Test create sample drops error:', error);
+            res.status(500).json({ error: error.message });
+        }
+    })
+);
+
+// 🚀 DIRECT TEST - Check what homepage render receives
+router.get(
+    "/test-homepage-data",
+    asyncHandler(async(req, res) => {
+        try {
+            // Simulate the exact same data fetching as the homepage render
+            const homeSettings = await query.homeSettings.get();
+            const featuredDrops = await query.drop.getFeaturedDrops({ limit: 6 });
+
+            console.log(`🏠 Homepage data test:`, {
+                homeSettingsExists: !!homeSettings,
+                featuredDropsCount: featuredDrops.length,
+                featuredDropsData: featuredDrops
+            });
+
+            res.json({
+                message: "Homepage data test completed",
+                homeSettings: {
+                    event_title: homeSettings.event_title,
+                    artist_name: homeSettings.artist_name,
+                    event_date: homeSettings.event_date,
+                    event_address: homeSettings.event_address
+                },
+                featuredDrops: featuredDrops,
+                featuredDropsCount: featuredDrops.length,
+                totalCards: 1 + featuredDrops.length
+            });
+        } catch (error) {
+            console.error('Test homepage data error:', error);
             res.status(500).json({ error: error.message });
         }
     })
